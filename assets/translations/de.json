@@ -1,0 +1,32 @@
+{
+  "common": {
+    "continue": "Weiter"
+  },
+  "language": {
+    "title": "Sprache wählen",
+    "subtitle": "Wähle unten deine bevorzugte Sprache aus.\nSo können wir dich besser unterstützen.",
+    "selected": "Du hast ausgewählt",
+    "all": "Alle Sprachen",
+    "search": "Suchen"
+  },
+  "onboarding": {
+    "next": "Weiter",
+    "discover": "Entdecken",
+    "page1": {
+      "title": "Finde die ideale Immobilie\nnoch heute",
+      "description": "Entdecke in wenigen Sekunden die besten Immobilienangebote\nabgestimmt auf deine Bedürfnisse und dein\nBudget."
+    },
+    "page2": {
+      "title": "Entdecke dein zukünftiges Zuhause\nmit Vertrauen",
+      "description": "Durchstöbere detaillierte Objekte mit immersiven Fotos\nund verlässlichen Informationen, um sicher zu wählen."
+    },
+    "page3": {
+      "title": "Plane deinen Besuch\nganz einfach",
+      "description": "Buche Besichtigungen schnell direkt in der App\nund organisiere deinen Immobilienweg mühelos."
+    },
+    "page4": {
+      "title": "Sicher bezahlen und\nentspannt bleiben",
+      "description": "Genieße einfache und sichere Zahlungen mit afrikanischen\nE-Payment-Lösungen wie Wave, Orange\nMoney und MTN Money."
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "common": {
+    "continue": "Continuer"
+  },
+  "language": {
+    "title": "Choisir la langue",
+    "subtitle": "Sélectionnez votre langue préférée ci-dessous.\nCela nous aide à mieux vous servir.",
+    "selected": "Vous avez selectionner",
+    "all": "Tous les langues",
+    "search": "Rechercher"
+  },
+  "onboarding": {
+    "next": "Suivant",
+    "discover": "Découvrir",
+    "page1": {
+      "title": "Trouvez la propriété\nidéal aujourd’hui",
+      "description": "Découvrez en quelques secondes les meilleures offres\nimmobilières adaptées à vos besoins et à votre\nbudget."
+    },
+    "page2": {
+      "title": "Explorez votre futur bien en\ntoute confiance",
+      "description": "Parcourez des propriétés détaillées avec photos\nimmersives et informations fiables pour choisir en toute\nconfiance."
+    },
+    "page3": {
+      "title": "Planifiez votre visite\nfacilement",
+      "description": "Réservez rapidement vos visites directement depuis\nl’application et organisez votre parcours immobilier sans\neffort."
+    },
+    "page4": {
+      "title": "Payez en toute sécurité et\nen toute tranquillité",
+      "description": "Profitez de paiements simples et sécurisés grâce aux\nsolutions électroniques africaines comme Wave, Orange\nMoney et MTN Money."
+    }
+  }
+}

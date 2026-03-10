@@ -1,0 +1,32 @@
+{
+  "common": {
+    "continue": "Continue"
+  },
+  "language": {
+    "title": "Choose language",
+    "subtitle": "Select your preferred language below.\nThis helps us serve you better.",
+    "selected": "You have selected",
+    "all": "All languages",
+    "search": "Search"
+  },
+  "onboarding": {
+    "next": "Next",
+    "discover": "Discover",
+    "page1": {
+      "title": "Find the ideal property\ntoday",
+      "description": "Discover in seconds the best real estate offers\nadapted to your needs and your\nbudget."
+    },
+    "page2": {
+      "title": "Explore your future home\nwith confidence",
+      "description": "Browse detailed properties with immersive photos\nand reliable information to choose with confidence."
+    },
+    "page3": {
+      "title": "Plan your visit\neasily",
+      "description": "Book your visits quickly directly from the app\nand organize your real estate journey effortlessly."
+    },
+    "page4": {
+      "title": "Pay securely and\nwith peace of mind",
+      "description": "Enjoy simple and secure payments with African\ne-payment solutions like Wave, Orange\nMoney and MTN Money."
+    }
+  }
+}

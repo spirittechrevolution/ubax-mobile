@@ -1,6 +1,28 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(const MyApp());
+import 'package:easy_localization/easy_localization.dart';
+
+import 'features/onboarding/app_start.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [
+        Locale('fr'),
+        Locale('en'),
+        Locale('es'),
+        Locale('de'),
+        Locale('hi'),
+      ],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('fr'),
+      child: const MyApp(),
+    ),
+  );
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -10,11 +32,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: _title,
+      locale: context.locale,
+      supportedLocales: context.supportedLocales,
+      localizationsDelegates: context.localizationDelegates,
       theme: ThemeData(
         // useMaterial3: false,
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(),
+      home: const AppStart(home: MyHomePage()),
     );
   }
 }

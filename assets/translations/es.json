@@ -1,0 +1,32 @@
+{
+  "common": {
+    "continue": "Continuar"
+  },
+  "language": {
+    "title": "Elegir idioma",
+    "subtitle": "Selecciona tu idioma preferido a continuación.\nEsto nos ayuda a atenderte mejor.",
+    "selected": "Has seleccionado",
+    "all": "Todos los idiomas",
+    "search": "Buscar"
+  },
+  "onboarding": {
+    "next": "Siguiente",
+    "discover": "Descubrir",
+    "page1": {
+      "title": "Encuentra la propiedad\nideal hoy",
+      "description": "Descubre en segundos las mejores ofertas inmobiliarias\nadaptadas a tus necesidades y tu\npresupuesto."
+    },
+    "page2": {
+      "title": "Explora tu futuro hogar\ncon confianza",
+      "description": "Explora propiedades detalladas con fotos inmersivas\ne información fiable para elegir con confianza."
+    },
+    "page3": {
+      "title": "Planifica tu visita\nfácilmente",
+      "description": "Reserva tus visitas rápidamente desde la app\ny organiza tu recorrido inmobiliario sin esfuerzo."
+    },
+    "page4": {
+      "title": "Paga de forma segura\ny con tranquilidad",
+      "description": "Disfruta de pagos simples y seguros con soluciones\nde pago electrónico africanas como Wave, Orange\nMoney y MTN Money."
+    }
+  }
+}
