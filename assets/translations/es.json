@@ -29,4 +29,29 @@
       "description": "Disfruta de pagos simples y seguros con soluciones\nde pago electrónico africanas como Wave, Orange\nMoney y MTN Money."
     }
   }
+  ,
+  "auth": {
+    "login_title": "Inicia sesión en tu cuenta",
+    "phone_hint": "07 12 34 56 78",
+    "password_hint": "Contraseña",
+    "forgot_password": "¿Olvidaste tu contraseña?",
+    "login_button": "Iniciar sesión",
+    "or_login_with": "- O inicia sesión con -",
+    "no_account": "¿No tienes una cuenta?",
+    "signup_link": "Registrarse",
+    "create_account": "Crea tu cuenta",
+    "signup_phone_title": "Introduce tu número de teléfono",
+    "signup_phone_subtitle": "Tu número de teléfono se usará para verificar tu identidad.\nSe enviará un código por SMS para confirmar que eres el propietario de este número.",
+    "or_signup_with": "- O regístrate con -",
+    "otp_title": "Verificación del código OTP",
+    "otp_subtitle": "Se ha enviado un código de 6 dígitos a {phone}.\nPor favor, introdúcelo abajo.",
+    "verify": "Verificar",
+    "signup_form_title": "Completa tu información",
+    "first_name": "Nombre",
+    "last_name": "Apellido",
+    "email": "Correo",
+    "account_type": "Tipo de cuenta",
+    "confirm_password": "Confirmar contraseña",
+    "signup_button": "Registrarse"
+  }
 }

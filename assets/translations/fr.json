@@ -29,4 +29,40 @@
       "description": "Profitez de paiements simples et sécurisés grâce aux\nsolutions électroniques africaines comme Wave, Orange\nMoney et MTN Money."
     }
   }
+  ,
+  "auth": {
+    "login_title": "Connectez-vous à votre compte",
+    "phone_hint": "07 12 34 56 78",
+    "password_hint": "Mot de passe",
+    "forgot_password": "Mot de passe oublié ?",
+    "login_button": "Se connecter",
+    "or_login_with": "- Ou connectez-vous avec -",
+    "no_account": "Vous n’avez pas de compte ?",
+    "signup_link": "S’inscrire",
+    "create_account": "Créer votre compte",
+    "signup_phone_title": "Entrez votre numéro de téléphone",
+    "signup_phone_subtitle": "Votre numéro de téléphone sera utilisé pour vérifier votre identité.\nUn code vous sera envoyé par SMS afin de confirmer que vous êtes bien le propriétaire de ce numéro.",
+    "or_signup_with": "- Ou Inscrivez-vous avec -",
+    "otp_title": "Vérification du code OTP",
+    "otp_subtitle": "Un code à 6 chiffres a été envoyé au {phone}.\nVeuillez le saisir ci-dessous.",
+    "verify": "Vérifier",
+    "signup_form_title": "Remplir vos informations",
+    "first_name": "Prenom",
+    "last_name": "Nom",
+    "email": "Email",
+    "account_type": "Type de compte",
+    "confirm_password": "Confirmer mot de passe",
+    "signup_button": "S’inscrire",
+    "reset_password_title": "Réinitialiser votre mot de passe",
+    "reset_password_subtitle": "Veuillez saisir votre numéro de téléphone afin de réinitialiser votre mot de passe",
+    "send": "Envoyer",
+    "verification": "Vérification",
+    "verification_subtitle": "Veuillez saisir le code reçu par SMS au {phone}",
+    "verify_code": "Vérifier le code",
+    "new_password_title": "Nouveau mot de passe",
+    "new_password_subtitle": "Veuillez créer un nouveau mot de passe pour sécuriser votre compte.",
+    "new_password_hint": "Nouveau mot de passe",
+    "confirm_password_hint": "Confirmer le mot de passe",
+    "validate": "Valider"
+  }
 }

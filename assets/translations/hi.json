@@ -29,4 +29,29 @@
       "description": "Wave, Orange Money और MTN Money जैसी अफ्रीकी\nइलेक्ट्रॉनिक पेमेंट सॉल्यूशंस के साथ सरल और सुरक्षित भुगतान करें।"
     }
   }
+  ,
+  "auth": {
+    "login_title": "अपने खाते में लॉग इन करें",
+    "phone_hint": "07 12 34 56 78",
+    "password_hint": "पासवर्ड",
+    "forgot_password": "पासवर्ड भूल गए?",
+    "login_button": "लॉग इन",
+    "or_login_with": "- या इसके साथ लॉग इन करें -",
+    "no_account": "क्या आपका खाता नहीं है?",
+    "signup_link": "साइन अप",
+    "create_account": "अपना खाता बनाएं",
+    "signup_phone_title": "अपना फ़ोन नंबर दर्ज करें",
+    "signup_phone_subtitle": "आपकी पहचान सत्यापित करने के लिए आपके फ़ोन नंबर का उपयोग किया जाएगा।\nयह पुष्टि करने के लिए कि यह नंबर आपका है, SMS से एक कोड भेजा जाएगा।",
+    "or_signup_with": "- या इसके साथ साइन अप करें -",
+    "otp_title": "OTP कोड सत्यापन",
+    "otp_subtitle": "{phone} पर 6 अंकों का कोड भेजा गया है।\nकृपया उसे नीचे दर्ज करें।",
+    "verify": "सत्यापित करें",
+    "signup_form_title": "अपनी जानकारी भरें",
+    "first_name": "पहला नाम",
+    "last_name": "अंतिम नाम",
+    "email": "ईमेल",
+    "account_type": "खाते का प्रकार",
+    "confirm_password": "पासवर्ड की पुष्टि करें",
+    "signup_button": "साइन अप"
+  }
 }

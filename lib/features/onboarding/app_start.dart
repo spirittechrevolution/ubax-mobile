@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../core/storage/app_prefs.dart';
+import '../auth/screens/login_screen.dart';
 import 'language_screen.dart';
 import 'onboarding_screen.dart';
 import 'splash_screen.dart';
@@ -34,6 +35,46 @@ class _AppStartState extends State<AppStart> {
     if (language != null && language.isNotEmpty) {
       await context.setLocale(Locale(language));
       if (!mounted) return;
+
+      if (!onboardingDone) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (onboardingRouteContext) => OnboardingScreen(
+              onDone: () async {
+                await AppPrefs.setOnboardingDone(true);
+                if (!onboardingRouteContext.mounted) return;
+                Navigator.of(onboardingRouteContext).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (loginRouteContext) => LoginScreen(
+                      onLoggedIn: () {
+                        if (!loginRouteContext.mounted) return;
+                        Navigator.of(loginRouteContext).pushReplacement(
+                          MaterialPageRoute(builder: (_) => widget.home),
+                        );
+                      },
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+        return;
+      }
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (loginRouteContext) => LoginScreen(
+            onLoggedIn: () {
+              if (!loginRouteContext.mounted) return;
+              Navigator.of(loginRouteContext).pushReplacement(
+                MaterialPageRoute(builder: (_) => widget.home),
+              );
+            },
+          ),
+        ),
+      );
+      return;
     }
 
     Navigator.of(context).pushReplacement(
@@ -45,11 +86,21 @@ class _AppStartState extends State<AppStart> {
             if (!onboardingDone) {
               Navigator.of(languageRouteContext).pushReplacement(
                 MaterialPageRoute(
-                  builder: (_) => OnboardingScreen(
+                  builder: (onboardingRouteContext) => OnboardingScreen(
                     onDone: () async {
                       await AppPrefs.setOnboardingDone(true);
-                      Navigator.of(languageRouteContext).pushReplacement(
-                        MaterialPageRoute(builder: (_) => widget.home),
+                      if (!onboardingRouteContext.mounted) return;
+                      Navigator.of(onboardingRouteContext).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (loginRouteContext) => LoginScreen(
+                            onLoggedIn: () {
+                              if (!loginRouteContext.mounted) return;
+                              Navigator.of(loginRouteContext).pushReplacement(
+                                MaterialPageRoute(builder: (_) => widget.home),
+                              );
+                            },
+                          ),
+                        ),
                       );
                     },
                   ),
@@ -59,7 +110,16 @@ class _AppStartState extends State<AppStart> {
             }
 
             Navigator.of(languageRouteContext).pushReplacement(
-              MaterialPageRoute(builder: (_) => widget.home),
+              MaterialPageRoute(
+                builder: (loginRouteContext) => LoginScreen(
+                  onLoggedIn: () {
+                    if (!loginRouteContext.mounted) return;
+                    Navigator.of(loginRouteContext).pushReplacement(
+                      MaterialPageRoute(builder: (_) => widget.home),
+                    );
+                  },
+                ),
+              ),
             );
           },
         ),
