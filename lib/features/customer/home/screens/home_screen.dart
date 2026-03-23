@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/advanced_search_screen.dart';
+
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
+import 'package:statefulclickcounter/features/customer/home/screens/proprety/property_details_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -26,50 +31,85 @@ class _HomeScreenState extends State<HomeScreen> {
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-        child: Container(
-          height: 72,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(26),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x14000000),
-                blurRadius: 18,
-                offset: Offset(0, 10),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          child: Container(
+            height: 72,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(26),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 18,
+                  offset: Offset(0, 10),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 6),
+              child: Row(
+                children: [
+                  Expanded(
+                    flex: _index == 0 ? 2 : 1,
+                    child: Center(
+                      child: _NavItem(
+                        icon: Icons.home_rounded,
+                        label: 'Accueil',
+                        selected: _index == 0,
+                        onTap: () => setState(() => _index = 0),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: _index == 1 ? 2 : 1,
+                    child: Center(
+                      child: _NavItem(
+                        icon: Icons.grid_view_rounded,
+                        label: 'Catégorie',
+                        selected: _index == 1,
+                        onTap: () => setState(() => _index = 1),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: _index == 2 ? 2 : 1,
+                    child: Center(
+                      child: _NavItem(
+                        icon: Icons.search_rounded,
+                        label: 'Rechercher',
+                        selected: _index == 2,
+                        onTap: () => setState(() => _index = 2),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: _index == 3 ? 2 : 1,
+                    child: Center(
+                      child: _NavItem(
+                        icon: Icons.favorite_rounded,
+                        label: 'Favoris',
+                        selected: _index == 3,
+                        onTap: () => setState(() => _index = 3),
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: _index == 4 ? 2 : 1,
+                    child: Center(
+                      child: _NavItem(
+                        icon: Icons.person_rounded,
+                        label: 'Profil',
+                        selected: _index == 4,
+                        onTap: () => setState(() => _index = 4),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: Icons.home_rounded,
-                selected: _index == 0,
-                onTap: () => setState(() => _index = 0),
-              ),
-              _NavItem(
-                icon: Icons.grid_view_rounded,
-                selected: _index == 1,
-                onTap: () => setState(() => _index = 1),
-              ),
-              _NavItem(
-                icon: Icons.search_rounded,
-                selected: _index == 2,
-                onTap: () => setState(() => _index = 2),
-              ),
-              _NavItem(
-                icon: Icons.favorite_rounded,
-                selected: _index == 3,
-                onTap: () => setState(() => _index = 3),
-              ),
-              _NavItem(
-                icon: Icons.person_rounded,
-                selected: _index == 4,
-                onTap: () => setState(() => _index = 4),
-              ),
-            ],
+            ),
           ),
         ),
       ),
@@ -80,11 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
 class _NavItem extends StatelessWidget {
   const _NavItem({
     required this.icon,
+    required this.label,
     required this.selected,
     required this.onTap,
   });
 
   final IconData icon;
+  final String label;
   final bool selected;
   final VoidCallback onTap;
 
@@ -92,19 +134,40 @@ class _NavItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(20),
+      borderRadius: BorderRadius.circular(22),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
-        width: selected ? 72 : 46,
         height: 46,
+        padding: selected
+            ? const EdgeInsets.symmetric(horizontal: 14)
+            : const EdgeInsets.symmetric(horizontal: 0),
         decoration: BoxDecoration(
           color: selected ? const Color(0xFF1E2D3C) : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
         ),
-        alignment: Alignment.center,
-        child: Icon(
-          icon,
-          color: selected ? Colors.white : const Color(0xFF8A97A6),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: selected ? Colors.white : const Color(0xFF8A97A6),
+            ),
+            if (selected) ...[
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 12,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ],
         ),
       ),
     );
@@ -134,7 +197,7 @@ class _HomeTab extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Bonjour 👋',
+                      'Bonjour',
                       style: TextStyle(
                         color: Color(0xFF6D6D6D),
                         fontWeight: FontWeight.w600,
@@ -179,7 +242,7 @@ class _HomeTab extends StatelessWidget {
               separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (_, i) {
                 return _PropertyCard(
-                  imagePath: 'assets/images/onb1.png',
+                  imagePath: 'assets/images/villa.jpg',
                   price: '49 990 000 Fcfa',
                   title: i == 0 ? 'Villa avec piscine' : 'Villa sur la côte',
                   location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
@@ -193,8 +256,8 @@ class _HomeTab extends StatelessWidget {
           const SizedBox(height: 18),
           const _SectionHeader(title: 'Biens recommandés'),
           const SizedBox(height: 12),
-          _RecommendedTile(
-            imagePath: 'assets/images/onb1.png',
+          const _RecommendedTile(
+            imagePath: 'assets/images/villa.jpg',
             title: 'Appartement Moderne à\nCocody',
             location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
             details: '3 Chambres   2 Salle de bains   1 Salon',
@@ -341,23 +404,16 @@ class _SearchCardState extends State<_SearchCard> {
             ],
           ),
           const SizedBox(height: 12),
-          SizedBox(
-            width: double.infinity,
+          OrangeButton(
             height: 52,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFE67E22),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18),
+            text: 'Rechercher les biens',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => AdvancedSearchScreen(initialRent: _rent),
                 ),
-                elevation: 0,
-              ),
-              onPressed: () {},
-              child: const Text(
-                'Rechercher les biens',
-                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-              ),
-            ),
+              );
+            },
           ),
         ],
       ),
@@ -496,128 +552,147 @@ class _PropertyCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 250,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
-        color: Colors.white,
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset(imagePath, fit: BoxFit.cover),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    Color(0x00000000),
-                    Color(0xAA000000),
-                  ],
-                ),
-              ),
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => PropertyDetailsScreen(
+              imagePath: imagePath,
+              title: title,
+              location: location,
+              price: price,
+              beds: beds,
+              baths: baths,
+              kitchens: kitchens,
             ),
           ),
-          Positioned(
-            left: 12,
-            top: 12,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF1E2D3C),
-                borderRadius: BorderRadius.circular(14),
-              ),
-              child: Text(
-                price,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w800,
-                ),
-              ),
+        );
+      },
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        width: 250,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(18),
+          color: Colors.white,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(imagePath, fit: BoxFit.cover),
             ),
-          ),
-          Positioned(
-            right: 10,
-            top: 10,
-            child: Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.35),
-                borderRadius: BorderRadius.circular(17),
-              ),
-              alignment: Alignment.center,
-              child: const Icon(Icons.favorite_border_rounded,
-                  color: Colors.white),
-            ),
-          ),
-          Positioned(
-            left: 12,
-            right: 12,
-            bottom: 12,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 16,
+            Positioned.fill(
+              child: Container(
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0x00000000),
+                      Color(0xAA000000),
+                    ],
                   ),
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  location,
-                  style: const TextStyle(color: Colors.white70, fontSize: 12),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Wrap(
-                        spacing: 10,
-                        runSpacing: 6,
-                        children: [
-                          _Info(
-                            icon: Icons.bed_rounded,
-                            text: '$beds Chambres',
-                          ),
-                          _Info(
-                            icon: Icons.bathtub_rounded,
-                            text: '$baths Salles de bains',
-                          ),
-                          _Info(
-                            icon: Icons.kitchen_rounded,
-                            text: '$kitchens Cuisines',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFE67E22),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.arrow_forward_rounded,
-                          color: Colors.white, size: 16),
-                    )
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            Positioned(
+              left: 12,
+              top: 12,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF1E2D3C),
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Text(
+                  price,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              right: 10,
+              top: 10,
+              child: Container(
+                width: 34,
+                height: 34,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.35),
+                  borderRadius: BorderRadius.circular(17),
+                ),
+                alignment: Alignment.center,
+                child: const Icon(Icons.favorite_border_rounded,
+                    color: Colors.white),
+              ),
+            ),
+            Positioned(
+              left: 12,
+              right: 12,
+              bottom: 12,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w900,
+                      fontSize: 16,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    location,
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Wrap(
+                          spacing: 10,
+                          runSpacing: 6,
+                          children: [
+                            _Info(
+                              icon: Icons.bed_rounded,
+                              text: '$beds Chambres',
+                            ),
+                            _Info(
+                              icon: Icons.bathtub_rounded,
+                              text: '$baths Salles de bains',
+                            ),
+                            _Info(
+                              icon: Icons.kitchen_rounded,
+                              text: '$kitchens Cuisines',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      Container(
+                        width: 30,
+                        height: 30,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFE67E22),
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.arrow_forward_rounded,
+                            color: Colors.white, size: 16),
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -667,69 +742,87 @@ class _RecommendedTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(14),
-            child: Image.asset(
-              imagePath,
-              width: 88,
-              height: 70,
-              fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => PropertyDetailsScreen(
+              imagePath: imagePath,
+              title: title,
+              location: location,
+              price: '250 000 Fcfa',
+              beds: 3,
+              baths: 2,
+              kitchens: 1,
             ),
           ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    color: Color(0xFF1E2D3C),
-                    fontWeight: FontWeight.w900,
-                  ),
-                ),
-                const SizedBox(height: 6),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined,
-                        size: 16, color: Color(0xFF8A97A6)),
-                    const SizedBox(width: 4),
-                    Expanded(
-                      child: Text(
-                        location,
-                        style: const TextStyle(
-                            color: Color(0xFF8A97A6), fontSize: 12),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+        );
+      },
+      borderRadius: BorderRadius.circular(18),
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(14),
+              child: Image.asset(
+                imagePath,
+                width: 88,
+                height: 70,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: const TextStyle(
+                      color: Color(0xFF1E2D3C),
+                      fontWeight: FontWeight.w900,
                     ),
-                  ],
-                ),
-                const SizedBox(height: 6),
-                Text(
-                  details,
-                  style: const TextStyle(
-                    color: Color(0xFF8A97A6),
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
+                  const SizedBox(height: 6),
+                  Row(
+                    children: [
+                      const Icon(Icons.location_on_outlined,
+                          size: 16, color: Color(0xFF8A97A6)),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                              color: Color(0xFF8A97A6), fontSize: 12),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    details,
+                    style: const TextStyle(
+                      color: Color(0xFF8A97A6),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
             ),
-          ),
-          const SizedBox(width: 6),
-          const Icon(Icons.favorite_rounded, color: Colors.red),
-        ],
+            const SizedBox(width: 6),
+            const Icon(Icons.favorite_rounded, color: Colors.red),
+          ],
+        ),
       ),
     );
   }

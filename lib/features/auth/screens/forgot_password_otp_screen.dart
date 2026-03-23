@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 import 'new_password_screen.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
@@ -9,12 +11,11 @@ class ForgotPasswordOtpScreen extends StatefulWidget {
   final String phoneDisplay;
 
   @override
-  State<ForgotPasswordOtpScreen> createState() => _ForgotPasswordOtpScreenState();
+  State<ForgotPasswordOtpScreen> createState() =>
+      _ForgotPasswordOtpScreenState();
 }
 
 class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
-  static const _orange = Color(0xFFE67E22);
-
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _nodes = List.generate(6, (_) => FocusNode());
@@ -48,8 +49,8 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).maybePop(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: Colors.white),
+          icon:
+              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
         ),
       ),
       body: SafeArea(
@@ -89,30 +90,14 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                 }),
               ),
               const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const NewPasswordScreen()),
-                    );
-                  },
-                  child: Text(
-                    'auth.verify_code'.tr(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
+              OrangeButton(
+                text: 'auth.verify_code'.tr(),
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const NewPasswordScreen()),
+                  );
+                },
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 import 'signup_form_screen.dart';
 
 class OtpScreen extends StatefulWidget {
@@ -13,7 +15,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  static const _orange = Color(0xFFE67E22);
   static const _textDark = Color(0xFF1E2D3C);
 
   final List<TextEditingController> _controllers =
@@ -169,32 +170,15 @@ class _OtpScreenState extends State<OtpScreen> {
                               }),
                             ),
                             const SizedBox(height: 18),
-                            SizedBox(
-                              width: double.infinity,
-                              height: 54,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: _orange,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(16),
+                            OrangeButton(
+                              text: 'auth.verify'.tr(),
+                              onPressed: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => const SignupFormScreen(),
                                   ),
-                                  elevation: 0,
-                                ),
-                                onPressed: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                      builder: (_) => const SignupFormScreen(),
-                                    ),
-                                  );
-                                },
-                                child: Text(
-                                  'auth.verify'.tr(),
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.w800,
-                                  ),
-                                ),
-                              ),
+                                );
+                              },
                             ),
                             SizedBox(
                               height: MediaQuery.of(context).padding.bottom + 6,

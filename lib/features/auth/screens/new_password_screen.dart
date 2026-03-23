@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
 
@@ -9,7 +11,6 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
-  static const _orange = Color(0xFFE67E22);
   static const _textDark = Color(0xFF1E2D3C);
 
   final _password = TextEditingController();
@@ -108,28 +109,11 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 18),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    Navigator.of(context).popUntil((r) => r.isFirst);
-                  },
-                  child: Text(
-                    'auth.validate'.tr(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
+              OrangeButton(
+                text: 'auth.validate'.tr(),
+                onPressed: () {
+                  Navigator.of(context).popUntil((r) => r.isFirst);
+                },
               ),
             ],
           ),

@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 import 'otp_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
 
@@ -12,7 +14,6 @@ class SignupPhoneScreen extends StatefulWidget {
 }
 
 class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
-  static const _orange = Color(0xFFE67E22);
   static const _textDark = Color(0xFF1E2D3C);
 
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
@@ -140,35 +141,18 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                             ],
                           ),
                           const SizedBox(height: 14),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 54,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _orange,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                elevation: 0,
-                              ),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => OtpScreen(
-                                      phoneDisplay:
-                                          '${_country.dialCode} ${_phoneController.text}',
-                                    ),
+                          OrangeButton(
+                            text: 'common.continue'.tr(),
+                            onPressed: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute(
+                                  builder: (_) => OtpScreen(
+                                    phoneDisplay:
+                                        '${_country.dialCode} ${_phoneController.text}',
                                   ),
-                                );
-                              },
-                              child: Text(
-                                'common.continue'.tr(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
                                 ),
-                              ),
-                            ),
+                              );
+                            },
                           ),
                           const SizedBox(height: 18),
                           _DividerLabel(text: 'auth.or_signup_with'.tr()),

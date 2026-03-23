@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 import '../widgets/africa_country_code_picker.dart';
 import 'forgot_password_otp_screen.dart';
 
@@ -13,7 +15,6 @@ class ForgotPasswordPhoneScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
-  static const _orange = Color(0xFFE67E22);
   static const _textDark = Color(0xFF1E2D3C);
 
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
@@ -96,36 +97,18 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
                 ],
               ),
               const Spacer(),
-              SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(18),
-                    ),
-                    elevation: 0,
-                  ),
-                  onPressed: () {
-                    final phone =
-                        '${_country.dialCode} ${_phoneController.text}';
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => ForgotPasswordOtpScreen(
-                          phoneDisplay: phone,
-                        ),
+              OrangeButton(
+                text: 'auth.send'.tr(),
+                onPressed: () {
+                  final phone = '${_country.dialCode} ${_phoneController.text}';
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ForgotPasswordOtpScreen(
+                        phoneDisplay: phone,
                       ),
-                    );
-                  },
-                  child: Text(
-                    'auth.send'.tr(),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w800,
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
             ],
           ),

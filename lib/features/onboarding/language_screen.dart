@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key, required this.onContinue});
 
@@ -60,18 +62,14 @@ class _LanguageScreenState extends State<LanguageScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded),
-                  ),
-                  const Spacer(),
-                  Image.asset('assets/icons/logoUbax.png',
-                      width: 40, height: 40),
-                  const Spacer(),
-                  const SizedBox(width: 48),
-                ],
+              Center(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/icons/logoubaxblue.png',
+                        width: 40, height: 40),
+                  ],
+                ),
               ),
               const SizedBox(height: 10),
               Text(
@@ -168,26 +166,13 @@ class _LanguageScreenState extends State<LanguageScreen> {
               ),
               const Spacer(),
               SizedBox(
-                width: double.infinity,
-                height: 54,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: _orange,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
+                child: OrangeButton(
+                  text: 'common.continue'.tr(),
                   onPressed: () async {
                     await context.setLocale(Locale(_selected));
                     if (!mounted) return;
                     widget.onContinue(_selected);
                   },
-                  child: Text(
-                    'common.continue'.tr(),
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w700),
-                  ),
                 ),
               ),
             ],
@@ -219,7 +204,7 @@ class _SelectedLanguageTile extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(50),
         border: Border.all(color: orange, width: 1.5),
       ),
       child: Row(

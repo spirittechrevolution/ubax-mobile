@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+
 import 'signup_phone_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
 import 'forgot_password_phone_screen.dart';
@@ -15,7 +17,6 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const _orange = Color(0xFFE67E22);
   static const _textDark = Color(0xFF1E2D3C);
 
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
@@ -163,26 +164,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                           const SizedBox(height: 6),
-                          SizedBox(
-                            width: double.infinity,
-                            height: 54,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: _orange,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                elevation: 0,
-                              ),
-                              onPressed: widget.onLoggedIn,
-                              child: Text(
-                                'auth.login_button'.tr(),
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                            ),
+                          OrangeButton(
+                            text: 'auth.login_button'.tr(),
+                            onPressed: widget.onLoggedIn,
                           ),
                           const SizedBox(height: 18),
                           _DividerLabel(text: 'auth.or_login_with'.tr()),

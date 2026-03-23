@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/home_screen.dart';
 
 import 'features/onboarding/app_start.dart';
-import 'features/home/screens/home_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
