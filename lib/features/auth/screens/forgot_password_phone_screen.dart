@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 import '../widgets/africa_country_code_picker.dart';
 import 'forgot_password_otp_screen.dart';
@@ -15,7 +16,7 @@ class ForgotPasswordPhoneScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
-  static const _textDark = Color(0xFF1E2D3C);
+  static const _textDark = AppColors.dark;
 
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
@@ -33,10 +34,23 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).maybePop(),
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF1E2D3C)),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Center(
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).maybePop(),
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: AppColors.dark, width: 1.5),
+                ),
+                child: const Icon(Icons.arrow_back_ios_new_rounded,
+                    color: AppColors.dark, size: 18),
+              ),
+            ),
+          ),
         ),
       ),
       body: SafeArea(

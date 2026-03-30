@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 class OrangeButton extends StatelessWidget {
   const OrangeButton({
@@ -7,7 +8,7 @@ class OrangeButton extends StatelessWidget {
     required this.onPressed,
     this.height = 54,
     this.borderRadius = 50,
-    this.backgroundColor = const Color(0xFFE67E22),
+    this.backgroundColor = AppColors.primary,
     this.textColor = Colors.white,
     this.textStyle,
   });

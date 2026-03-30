@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
 class AdvancedSearchScreen extends StatefulWidget {
   const AdvancedSearchScreen({super.key, required this.initialRent});
 
@@ -32,19 +34,19 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEEF3F7),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xFFEEF3F7),
+        backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: Color(0xFF1E2D3C)),
+              color: AppColors.dark),
         ),
         title: const Text(
           'Recherche avancée',
           style: TextStyle(
-            color: Color(0xFF1E2D3C),
+            color: AppColors.dark,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -108,10 +110,14 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
             Padding(
               padding: const EdgeInsets.only(top: 4),
               child: _MinMaxRow(
-                minLabel: _propertyType == 'Terrain' ? '5 Millions FCFA' : '100 000 FCFA',
-                maxLabel: _propertyType == 'Terrain' ? '500 Millions FCFA' : '2 MD FCFA',
+                minLabel: _propertyType == 'Terrain'
+                    ? '5 Millions FCFA'
+                    : '100 000 FCFA',
+                maxLabel: _propertyType == 'Terrain'
+                    ? '500 Millions FCFA'
+                    : '2 MD FCFA',
                 style: const TextStyle(
-                  color: Color(0xFF8A97A6),
+                  color: AppColors.muted,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -137,7 +143,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   minLabel: '150 m2',
                   maxLabel: '1000 m2',
                   style: const TextStyle(
-                    color: Color(0xFF8A97A6),
+                    color: AppColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -218,7 +224,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   minLabel: '100 m2',
                   maxLabel: '500 m2',
                   style: const TextStyle(
-                    color: Color(0xFF8A97A6),
+                    color: AppColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -239,7 +245,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               height: 56,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E2D3C),
+                  backgroundColor: AppColors.dark,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
@@ -294,7 +300,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               Text(
                 title,
                 style: const TextStyle(
-                  color: Color(0xFF1E2D3C),
+                  color: AppColors.dark,
                   fontWeight: FontWeight.w800,
                   fontSize: 16,
                 ),
@@ -306,13 +312,13 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   title: Text(
                     o,
                     style: const TextStyle(
-                      color: Color(0xFF1E2D3C),
+                      color: AppColors.dark,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   trailing: current == o
                       ? const Icon(Icons.check_circle_rounded,
-                          color: Color(0xFF1E2D3C))
+                          color: AppColors.dark)
                       : const Icon(Icons.circle_outlined,
                           color: Color(0xFFCBD5E1)),
                   onTap: () => Navigator.of(ctx).pop(o),
@@ -336,7 +342,7 @@ class _FieldLabel extends StatelessWidget {
     return Text(
       text,
       style: const TextStyle(
-        color: Color(0xFF1E2D3C),
+        color: AppColors.dark,
         fontWeight: FontWeight.w800,
         fontSize: 15,
       ),
@@ -410,13 +416,13 @@ class _SegmentButton extends StatelessWidget {
         duration: const Duration(milliseconds: 180),
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF1E2D3C) : Colors.transparent,
+          color: selected ? AppColors.dark : Colors.transparent,
           borderRadius: BorderRadius.circular(22),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : const Color(0xFF1E2D3C),
+            color: selected ? Colors.white : AppColors.dark,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -454,11 +460,11 @@ class _SelectField extends StatelessWidget {
               width: 34,
               height: 34,
               decoration: BoxDecoration(
-                color: const Color(0xFFEEF3F7),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(17),
               ),
               alignment: Alignment.center,
-              child: Icon(icon, color: const Color(0xFF1E2D3C), size: 18),
+              child: Icon(icon, color: AppColors.dark, size: 18),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -474,7 +480,7 @@ class _SelectField extends StatelessWidget {
               ),
             ),
             const Icon(Icons.keyboard_arrow_down_rounded,
-                color: Color(0xFF8A97A6)),
+                color: AppColors.muted),
           ],
         ),
       ),
@@ -493,9 +499,10 @@ class _RangeSlider extends StatelessWidget {
     return SliderTheme(
       data: SliderTheme.of(context).copyWith(
         trackHeight: 3,
-        activeTrackColor: const Color(0xFF1E2D3C),
-        inactiveTrackColor: const Color(0xFFD9E3EE),
-        rangeThumbShape: const RoundRangeSliderThumbShape(enabledThumbRadius: 9),
+        activeTrackColor: AppColors.dark,
+        inactiveTrackColor: AppColors.muted,
+        rangeThumbShape:
+            const RoundRangeSliderThumbShape(enabledThumbRadius: 9),
         overlayShape: SliderComponentShape.noOverlay,
       ),
       child: RangeSlider(
@@ -557,13 +564,14 @@ class _PillChoice extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF1E2D3C) : Colors.white,
+          color: selected ? AppColors.dark : Colors.white,
           borderRadius: BorderRadius.circular(14),
+          border: selected ? null : Border.all(color: const Color(0xFFE7E7E7)),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : const Color(0xFF1E2D3C),
+            color: selected ? Colors.white : AppColors.dark,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -592,14 +600,14 @@ class _RadioRow extends StatelessWidget {
       title: Text(
         label,
         style: const TextStyle(
-          color: Color(0xFF1E2D3C),
+          color: AppColors.dark,
           fontWeight: FontWeight.w700,
         ),
       ),
       trailing: Radio<int>(
         value: value,
         groupValue: groupValue,
-        activeColor: const Color(0xFF1E2D3C),
+        activeColor: AppColors.dark,
         onChanged: onChanged,
       ),
       onTap: () => onChanged(value),
@@ -665,13 +673,13 @@ class _SmallPill extends StatelessWidget {
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF1E2D3C) : Colors.white,
+          color: selected ? AppColors.dark : Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : const Color(0xFF1E2D3C),
+            color: selected ? Colors.white : AppColors.dark,
             fontWeight: FontWeight.w800,
           ),
         ),

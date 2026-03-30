@@ -1,7 +1,11 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/advanced_search_screen.dart';
+import 'package:statefulclickcounter/features/customer/favorites/screens/favorites_screen.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotels_tab.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/property_details_screen.dart';
 
@@ -18,15 +22,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFEEF3F7),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: IndexedStack(
           index: _index,
           children: const [
             _HomeTab(),
+            HotelsTab(),
             _PlaceholderTab(),
-            _PlaceholderTab(),
-            _PlaceholderTab(),
+            FavoritesTab(),
             _PlaceholderTab(),
           ],
         ),
@@ -67,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     flex: _index == 1 ? 2 : 1,
                     child: Center(
                       child: _NavItem(
-                        icon: Icons.grid_view_rounded,
-                        label: 'Catégorie',
+                        icon: Icons.apartment_rounded,
+                        label: 'Hôtels',
                         selected: _index == 1,
                         onTap: () => setState(() => _index = 1),
                       ),
@@ -142,7 +146,7 @@ class _NavItem extends StatelessWidget {
             ? const EdgeInsets.symmetric(horizontal: 14)
             : const EdgeInsets.symmetric(horizontal: 0),
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF1E2D3C) : Colors.transparent,
+          color: selected ? AppColors.dark : Colors.transparent,
           borderRadius: BorderRadius.circular(22),
         ),
         child: Row(
@@ -150,7 +154,7 @@ class _NavItem extends StatelessWidget {
           children: [
             Icon(
               icon,
-              color: selected ? Colors.white : const Color(0xFF8A97A6),
+              color: selected ? Colors.white : AppColors.muted,
             ),
             if (selected) ...[
               const SizedBox(width: 8),
@@ -177,6 +181,20 @@ class _NavItem extends StatelessWidget {
 class _HomeTab extends StatelessWidget {
   const _HomeTab();
 
+  static const _popularProperties = [
+    {'image': 'assets/images/villa.jpg', 'price': '49 990 000 Fcfa', 'title': 'Villa avec piscine', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '6', 'baths': '4', 'kitchens': '2'},
+    {'image': 'assets/images/villa.jpg', 'price': '35 000 000 Fcfa', 'title': 'Villa sur la côte', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '5', 'baths': '3', 'kitchens': '1'},
+    {'image': 'assets/images/villa.jpg', 'price': '28 500 000 Fcfa', 'title': 'Villa moderne', 'location': 'Marcory, Abidjan – Côte d\'Ivoire', 'beds': '4', 'baths': '2', 'kitchens': '1'},
+    {'image': 'assets/images/villa.jpg', 'price': '55 000 000 Fcfa', 'title': 'Villa de luxe', 'location': 'Riviera, Abidjan – Côte d\'Ivoire', 'beds': '7', 'baths': '5', 'kitchens': '2'},
+  ];
+
+  static const _recommendedProperties = [
+    {'image': 'assets/images/villa.jpg', 'title': 'Appartement Moderne à\nCocody', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '3', 'baths': '2', 'salons': '1'},
+    {'image': 'assets/images/villa.jpg', 'title': 'Studio meublé au\nPlateau', 'location': 'Plateau, Abidjan – Côte d\'Ivoire', 'beds': '1', 'baths': '1', 'salons': '1'},
+    {'image': 'assets/images/villa.jpg', 'title': 'Duplex à Marcory', 'location': 'Marcory, Abidjan – Côte d\'Ivoire', 'beds': '4', 'baths': '2', 'salons': '2'},
+    {'image': 'assets/images/villa.jpg', 'title': 'Appartement vue mer\nà Treichville', 'location': 'Treichville, Abidjan – Côte d\'Ivoire', 'beds': '2', 'baths': '1', 'salons': '1'},
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -189,7 +207,7 @@ class _HomeTab extends StatelessWidget {
               const CircleAvatar(
                 radius: 22,
                 backgroundColor: Color(0xFFD9E3EE),
-                child: Icon(Icons.person, color: Color(0xFF1E2D3C)),
+                child: Icon(Icons.person, color: AppColors.dark),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -205,9 +223,9 @@ class _HomeTab extends StatelessWidget {
                     ),
                     SizedBox(height: 2),
                     Text(
-                      'Arnoud Koffi',
+                      'Arnaud Koffi',
                       style: TextStyle(
-                        color: Color(0xFF1E2D3C),
+                        color: AppColors.dark,
                         fontWeight: FontWeight.w800,
                         fontSize: 16,
                       ),
@@ -218,14 +236,26 @@ class _HomeTab extends StatelessWidget {
               _NotifButton(count: 5, onTap: () {}),
               const SizedBox(width: 10),
               Container(
-                width: 44,
-                height: 44,
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(22),
                 ),
-                alignment: Alignment.center,
-                child: const Text('🇨🇮', style: TextStyle(fontSize: 18)),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ClipOval(
+                      child: CountryFlag.fromCountryCode(
+                        'CI',
+                        width: 28,
+                        height: 28,
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(Icons.keyboard_arrow_down_rounded,
+                        size: 16, color: AppColors.dark),
+                  ],
+                ),
               ),
             ],
           ),
@@ -238,17 +268,18 @@ class _HomeTab extends StatelessWidget {
             height: 190,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: 2,
+              itemCount: _popularProperties.length,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
               itemBuilder: (_, i) {
+                final p = _popularProperties[i];
                 return _PropertyCard(
-                  imagePath: 'assets/images/villa.jpg',
-                  price: '49 990 000 Fcfa',
-                  title: i == 0 ? 'Villa avec piscine' : 'Villa sur la côte',
-                  location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-                  beds: 6,
-                  baths: 4,
-                  kitchens: 2,
+                  imagePath: p['image']!,
+                  price: p['price']!,
+                  title: p['title']!,
+                  location: p['location']!,
+                  beds: int.parse(p['beds']!),
+                  baths: int.parse(p['baths']!),
+                  kitchens: int.parse(p['kitchens']!),
                 );
               },
             ),
@@ -256,11 +287,18 @@ class _HomeTab extends StatelessWidget {
           const SizedBox(height: 18),
           const _SectionHeader(title: 'Biens recommandés'),
           const SizedBox(height: 12),
-          const _RecommendedTile(
-            imagePath: 'assets/images/villa.jpg',
-            title: 'Appartement Moderne à\nCocody',
-            location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-            details: '3 Chambres   2 Salle de bains   1 Salon',
+          ..._recommendedProperties.map(
+            (p) => Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: _RecommendedTile(
+                imagePath: p['image']!,
+                title: p['title']!,
+                location: p['location']!,
+                beds: int.parse(p['beds']!),
+                baths: int.parse(p['baths']!),
+                salons: int.parse(p['salons']!),
+              ),
+            ),
           ),
         ],
       ),
@@ -291,7 +329,7 @@ class _NotifButton extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.notifications_none_rounded,
-                color: Color(0xFF1E2D3C)),
+                color: AppColors.dark),
           ),
           if (count > 0)
             Positioned(
@@ -301,7 +339,7 @@ class _NotifButton extends StatelessWidget {
                 width: 18,
                 height: 18,
                 decoration: BoxDecoration(
-                  color: Colors.red,
+                  color: AppColors.primary,
                   borderRadius: BorderRadius.circular(9),
                   border: Border.all(color: Colors.white, width: 2),
                 ),
@@ -353,7 +391,7 @@ class _SearchCardState extends State<_SearchCard> {
             height: 44,
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF3F7),
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(22),
             ),
             child: Row(
@@ -389,7 +427,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.meeting_room_outlined,
                   text: 'Nombre de pièces',
                   trailing: const Icon(Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF8A97A6)),
+                      color: AppColors.muted),
                 ),
               ),
               const SizedBox(width: 10),
@@ -398,7 +436,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.apartment_rounded,
                   text: 'Type',
                   trailing: const Icon(Icons.keyboard_arrow_down_rounded,
-                      color: Color(0xFF8A97A6)),
+                      color: AppColors.muted),
                 ),
               ),
             ],
@@ -439,14 +477,14 @@ class _Segment extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       child: Container(
         decoration: BoxDecoration(
-          color: selected ? const Color(0xFF1E2D3C) : Colors.transparent,
+          color: selected ? AppColors.dark : Colors.transparent,
           borderRadius: BorderRadius.circular(18),
         ),
         alignment: Alignment.center,
         child: Text(
           label,
           style: TextStyle(
-            color: selected ? Colors.white : const Color(0xFF1E2D3C),
+            color: selected ? Colors.white : AppColors.dark,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -478,13 +516,13 @@ class _InputChip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFF1E2D3C)),
+          Icon(icon, color: AppColors.dark),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
               style: const TextStyle(
-                color: Color(0xFF1E2D3C),
+                color: AppColors.dark,
                 fontWeight: FontWeight.w700,
               ),
               overflow: TextOverflow.ellipsis,
@@ -510,9 +548,11 @@ class _SectionHeader extends StatelessWidget {
           child: Text(
             title,
             style: const TextStyle(
-              color: Color(0xFF1E2D3C),
-              fontWeight: FontWeight.w800,
-              fontSize: 18,
+              color: AppColors.dark,
+              fontWeight: FontWeight.w600,
+              fontSize: 16,
+              height: 24 / 16,
+              letterSpacing: 0.08,
             ),
           ),
         ),
@@ -521,7 +561,7 @@ class _SectionHeader extends StatelessWidget {
           child: const Text(
             'Voir tout',
             style: TextStyle(
-              color: Color(0xFF1E2D3C),
+              color: AppColors.dark,
               fontWeight: FontWeight.w700,
             ),
           ),
@@ -602,7 +642,7 @@ class _PropertyCard extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1E2D3C),
+                  color: AppColors.dark,
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Text(
@@ -625,7 +665,7 @@ class _PropertyCard extends StatelessWidget {
                   borderRadius: BorderRadius.circular(17),
                 ),
                 alignment: Alignment.center,
-                child: const Icon(Icons.favorite_border_rounded,
+                child: const Icon(Icons.favorite_rounded,
                     color: Colors.white),
               ),
             ),
@@ -679,7 +719,7 @@ class _PropertyCard extends StatelessWidget {
                         width: 30,
                         height: 30,
                         decoration: BoxDecoration(
-                          color: const Color(0xFFE67E22),
+                          color: AppColors.primary,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         alignment: Alignment.center,
@@ -732,13 +772,17 @@ class _RecommendedTile extends StatelessWidget {
     required this.imagePath,
     required this.title,
     required this.location,
-    required this.details,
+    required this.beds,
+    required this.baths,
+    required this.salons,
   });
 
   final String imagePath;
   final String title;
   final String location;
-  final String details;
+  final int beds;
+  final int baths;
+  final int salons;
 
   @override
   Widget build(BuildContext context) {
@@ -784,7 +828,7 @@ class _RecommendedTile extends StatelessWidget {
                   Text(
                     title,
                     style: const TextStyle(
-                      color: Color(0xFF1E2D3C),
+                      color: AppColors.dark,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -792,13 +836,13 @@ class _RecommendedTile extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(Icons.location_on_outlined,
-                          size: 16, color: Color(0xFF8A97A6)),
+                          size: 16, color: AppColors.muted),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           location,
                           style: const TextStyle(
-                              color: Color(0xFF8A97A6), fontSize: 12),
+                              color: AppColors.muted, fontSize: 12),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -806,15 +850,14 @@ class _RecommendedTile extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 6),
-                  Text(
-                    details,
-                    style: const TextStyle(
-                      color: Color(0xFF8A97A6),
-                      fontSize: 12,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Wrap(
+                    spacing: 10,
+                    runSpacing: 4,
+                    children: [
+                      _Info(icon: Icons.bed_rounded, text: '$beds Chambres'),
+                      _Info(icon: Icons.bathtub_rounded, text: '$baths Salle de bains'),
+                      _Info(icon: Icons.weekend_rounded, text: '$salons Salon'),
+                    ],
                   ),
                 ],
               ),

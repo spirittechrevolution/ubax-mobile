@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
 class AppointmentBookingScreen extends StatefulWidget {
   const AppointmentBookingScreen({
     super.key,
@@ -16,9 +18,9 @@ class AppointmentBookingScreen extends StatefulWidget {
 }
 
 class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
-  static const _bg = Color(0xFFEEF3F7);
-  static const _dark = Color(0xFF1E2D3C);
-  static const _orange = Color(0xFFE67E22);
+  static const _bg = AppColors.background;
+  static const _dark = AppColors.dark;
+  static const _orange = AppColors.primary;
 
   DateTime _focusedMonth = DateTime(DateTime.now().year, DateTime.now().month);
   DateTime _selectedDate = DateTime.now();
@@ -388,11 +390,11 @@ class _AgencyCard extends StatelessWidget {
             width: 44,
             height: 44,
             decoration: BoxDecoration(
-              color: const Color(0xFFEEF3F7),
+              color: AppColors.background,
               borderRadius: BorderRadius.circular(22),
             ),
             alignment: Alignment.center,
-            child: const Icon(Icons.home_rounded, color: Color(0xFF1E2D3C)),
+            child: const Icon(Icons.home_rounded, color: AppColors.dark),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -402,7 +404,7 @@ class _AgencyCard extends StatelessWidget {
                 Text(
                   title,
                   style: const TextStyle(
-                    color: Color(0xFF1E2D3C),
+                    color: AppColors.dark,
                     fontWeight: FontWeight.w900,
                   ),
                   maxLines: 1,
@@ -447,7 +449,7 @@ class _MonthArrow extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
-        child: Icon(icon, color: const Color(0xFF1E2D3C)),
+        child: Icon(icon, color: AppColors.dark),
       ),
     );
   }
@@ -493,7 +495,7 @@ class _TimeDropdown extends StatelessWidget {
                   child: Text(
                     t,
                     style: const TextStyle(
-                      color: Color(0xFF1E2D3C),
+                      color: AppColors.dark,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -525,7 +527,7 @@ class _DateSelectorSheet extends StatefulWidget {
 }
 
 class _DateSelectorSheetState extends State<_DateSelectorSheet> {
-  static const _dark = Color(0xFF1E2D3C);
+  static const _dark = AppColors.dark;
 
   late DateTime _month;
   late DateTime _selected;
@@ -713,10 +715,10 @@ class _CalendarMonthView extends StatelessWidget {
     final firstDay = DateTime(month.year, month.month, 1);
     final daysInMonth = DateTime(month.year, month.month + 1, 0).day;
 
-    final startWeekday = (firstDay.weekday + 6) % 7; // Mon=0..Sun=6
+    final startWeekday = firstDay.weekday % 7; // Sun=0..Sat=6
     final totalCells = ((startWeekday + daysInMonth) / 7).ceil() * 7;
 
-    const weekDays = ['Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa', 'Di'];
+    const weekDays = ['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam'];
 
     final cellSize = compact ? 38.0 : 44.0;
 
@@ -730,7 +732,7 @@ class _CalendarMonthView extends StatelessWidget {
                     child: Text(
                       d,
                       style: const TextStyle(
-                        color: Color(0xFF1E2D3C),
+                        color: AppColors.dark,
                         fontWeight: FontWeight.w900,
                         fontSize: 12,
                       ),
@@ -768,15 +770,14 @@ class _CalendarMonthView extends StatelessWidget {
                 width: cellSize,
                 height: cellSize,
                 decoration: BoxDecoration(
-                  color:
-                      selected ? const Color(0xFFE67E22) : Colors.transparent,
+                  color: selected ? AppColors.primary : Colors.transparent,
                   borderRadius: BorderRadius.circular(cellSize / 2),
                 ),
                 alignment: Alignment.center,
                 child: Text(
                   '$dayNumber',
                   style: TextStyle(
-                    color: selected ? Colors.white : const Color(0xFF1E2D3C),
+                    color: selected ? Colors.white : AppColors.dark,
                     fontWeight: FontWeight.w900,
                     fontSize: 12,
                   ),
@@ -833,7 +834,7 @@ class _ConfirmationSheet extends StatelessWidget {
               'Votre rendez-vous a été confirmé avec succès',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFF1E2D3C),
+                color: AppColors.dark,
                 fontWeight: FontWeight.w900,
                 fontSize: 14,
               ),
@@ -844,7 +845,7 @@ class _ConfirmationSheet extends StatelessWidget {
               height: 52,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFE67E22),
+                  backgroundColor: AppColors.primary,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

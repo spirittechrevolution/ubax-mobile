@@ -1,8 +1,10 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key, required this.onContinue});
@@ -14,7 +16,7 @@ class LanguageScreen extends StatefulWidget {
 }
 
 class _LanguageScreenState extends State<LanguageScreen> {
-  static const _orange = Color(0xFFE67E22);
+  static const _orange = AppColors.primary;
 
   final TextEditingController _searchController = TextEditingController();
 
@@ -22,11 +24,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
   bool _syncedWithLocale = false;
 
   final List<_LanguageItem> _languages = const [
-    _LanguageItem(code: 'en', label: 'Anglais', flag: '🇺🇸'),
-    _LanguageItem(code: 'es', label: 'Espagnol', flag: '🇪🇸'),
-    _LanguageItem(code: 'fr', label: 'Français', flag: '🇫🇷'),
-    _LanguageItem(code: 'de', label: 'Allemand', flag: '🇩🇪'),
-    _LanguageItem(code: 'hi', label: 'Hindi', flag: '🇮🇳'),
+    _LanguageItem(code: 'en', label: 'Anglais', countryCode: 'US'),
+    _LanguageItem(code: 'es', label: 'Espagnol', countryCode: 'ES'),
+    _LanguageItem(code: 'fr', label: 'Français', countryCode: 'FR'),
+    _LanguageItem(code: 'de', label: 'Allemand', countryCode: 'DE'),
+    _LanguageItem(code: 'hi', label: 'Hindi', countryCode: 'IN'),
   ];
 
   @override
@@ -74,8 +76,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
               const SizedBox(height: 10),
               Text(
                 'language.title'.tr(),
-                style:
-                    const TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontStyle: FontStyle.normal,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
               const SizedBox(height: 6),
               Text(
@@ -105,55 +110,61 @@ class _LanguageScreenState extends State<LanguageScreen> {
                   border: Border.all(color: const Color(0xFFE7E7E7)),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                padding: const EdgeInsets.fromLTRB(12, 10, 12, 12),
                 child: Column(
                   children: [
-                    TextField(
-                      controller: _searchController,
-                      decoration: InputDecoration(
-                        hintText: 'language.search'.tr(),
-                        prefixIcon: const Icon(Icons.search),
-                        filled: true,
-                        fillColor: const Color(0xFFF5F5F5),
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(14),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          hintText: 'language.search'.tr(),
+                          prefixIcon: const Icon(Icons.search),
+                          filled: true,
+                          fillColor: const Color(0xFFF5F5F5),
+                          border: OutlineInputBorder(
+                            borderSide: BorderSide.none,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 12),
                         ),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 12, vertical: 12),
+                        onChanged: (_) => setState(() {}),
                       ),
-                      onChanged: (_) => setState(() {}),
                     ),
-                    const SizedBox(height: 10),
+                    const Divider(height: 1),
                     SizedBox(
-                      height: 220,
-                      child: ListView.separated(
+                      height: 230,
+                      child: ListView.builder(
+                        padding: EdgeInsets.zero,
                         itemCount: filtered.length,
-                        separatorBuilder: (_, __) => const Divider(height: 1),
+                        // separatorBuilder: (_, __) => const Divider(height: 1),
                         itemBuilder: (context, i) {
                           final item = filtered[i];
                           final selected = item.code == _selected;
+
                           return InkWell(
-                            onTap: () {
-                              setState(() => _selected = item.code);
-                            },
+                            onTap: () => setState(() => _selected = item.code),
                             child: Container(
                               color: selected ? const Color(0xFFFFF0E6) : null,
                               padding: const EdgeInsets.symmetric(
                                   horizontal: 12, vertical: 12),
                               child: Row(
                                 children: [
-                                  Text(item.flag,
-                                      style: const TextStyle(fontSize: 22)),
+                                  _FlagAvatar(countryCode: item.countryCode),
                                   const SizedBox(width: 12),
                                   Expanded(
                                     child: Text(
                                       item.label,
-                                      style: const TextStyle(fontSize: 16),
+                                      style: const TextStyle(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
                                   ),
                                   _RadioDot(
-                                      selected: selected, orange: _orange),
+                                    selected: selected,
+                                    orange: _orange,
+                                  ),
                                 ],
                               ),
                             ),
@@ -185,11 +196,11 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
 class _LanguageItem {
   const _LanguageItem(
-      {required this.code, required this.label, required this.flag});
+      {required this.code, required this.label, required this.countryCode});
 
   final String code;
   final String label;
-  final String flag;
+  final String countryCode;
 }
 
 class _SelectedLanguageTile extends StatelessWidget {
@@ -202,14 +213,14 @@ class _SelectedLanguageTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(50),
         border: Border.all(color: orange, width: 1.5),
       ),
       child: Row(
         children: [
-          Text(item.flag, style: const TextStyle(fontSize: 22)),
+          _FlagAvatar(countryCode: item.countryCode),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -240,26 +251,44 @@ class _RadioDot extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (selected) {
+      return Container(
+        width: 22,
+        height: 22,
+        decoration: BoxDecoration(
+          color: orange,
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: const Icon(Icons.check, size: 14, color: Colors.white),
+      );
+    }
+
     return Container(
-      width: 20,
-      height: 20,
+      width: 22,
+      height: 22,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        shape: BoxShape.circle,
         border: Border.all(color: const Color(0xFFD0D0D0)),
-        color: Colors.white,
+        color: Colors.transparent,
       ),
-      child: selected
-          ? Center(
-              child: Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  color: orange,
-                  borderRadius: BorderRadius.circular(5),
-                ),
-              ),
-            )
-          : null,
+    );
+  }
+}
+
+class _FlagAvatar extends StatelessWidget {
+  const _FlagAvatar({required this.countryCode});
+
+  final String countryCode;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: CountryFlag.fromCountryCode(
+        countryCode,
+        width: 34,
+        height: 34,
+      ),
     );
   }
 }

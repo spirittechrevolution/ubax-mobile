@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   const PropertyDetailsScreen({
@@ -23,11 +24,11 @@ class PropertyDetailsScreen extends StatelessWidget {
   final int baths;
   final int kitchens;
 
-  static const _bg = Color(0xFFEEF3F7);
-  static const _dark = Color(0xFF1E2D3C);
-  static const _orange = Color(0xFFE67E22);
+  static const _bg = AppColors.background;
+  static const _dark = AppColors.dark;
+  static const _orange = AppColors.primary;
 
-  static const _textMuted = Color(0xFF8A97A6);
+  static const _textMuted = AppColors.muted;
 
   static int _parseAmount(String raw) {
     final digits =
@@ -139,7 +140,7 @@ class _BottomActions extends StatelessWidget {
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                 ),
                 onPressed: onInterested,
@@ -159,7 +160,7 @@ class _BottomActions extends StatelessWidget {
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+                    borderRadius: BorderRadius.circular(50),
                   ),
                 ),
                 onPressed: onBookVisit,
@@ -610,7 +611,7 @@ class _SpecChip extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(icon, color: const Color(0xFFE67E22), size: 20),
+          Icon(icon, color: AppColors.primary, size: 20),
           const SizedBox(width: 8),
           Expanded(
             child: Column(
@@ -620,7 +621,7 @@ class _SpecChip extends StatelessWidget {
                 Text(
                   value,
                   style: const TextStyle(
-                    color: Color(0xFF1E2D3C),
+                    color: AppColors.dark,
                     fontWeight: FontWeight.w900,
                   ),
                 ),
@@ -628,7 +629,7 @@ class _SpecChip extends StatelessWidget {
                 Text(
                   label,
                   style: const TextStyle(
-                    color: Color(0xFF8A97A6),
+                    color: AppColors.muted,
                     fontWeight: FontWeight.w700,
                     fontSize: 11,
                   ),
@@ -655,7 +656,7 @@ class _MiniAction extends StatelessWidget {
       width: 44,
       height: 44,
       decoration: BoxDecoration(
-        color: const Color(0xFF1E2D3C),
+        color: AppColors.dark,
         borderRadius: BorderRadius.circular(14),
       ),
       alignment: Alignment.center,

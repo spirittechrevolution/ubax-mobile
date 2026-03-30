@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
 class AfricaCountry {
   const AfricaCountry({
     required this.name,
@@ -39,7 +41,8 @@ class AfricaCountryCodePicker extends StatefulWidget {
     AfricaCountry(name: 'Burundi', iso2: 'BI', dialCode: '+257'),
     AfricaCountry(name: 'Cabo Verde', iso2: 'CV', dialCode: '+238'),
     AfricaCountry(name: 'Cameroon', iso2: 'CM', dialCode: '+237'),
-    AfricaCountry(name: 'Central African Republic', iso2: 'CF', dialCode: '+236'),
+    AfricaCountry(
+        name: 'Central African Republic', iso2: 'CF', dialCode: '+236'),
     AfricaCountry(name: 'Chad', iso2: 'TD', dialCode: '+235'),
     AfricaCountry(name: 'Comoros', iso2: 'KM', dialCode: '+269'),
     AfricaCountry(name: 'Congo (DRC)', iso2: 'CD', dialCode: '+243'),
@@ -88,13 +91,14 @@ class AfricaCountryCodePicker extends StatefulWidget {
   ];
 
   static AfricaCountry byIso2(String iso2) {
-    final idx = countries.indexWhere(
-        (c) => c.iso2.toLowerCase() == iso2.toLowerCase());
+    final idx =
+        countries.indexWhere((c) => c.iso2.toLowerCase() == iso2.toLowerCase());
     return idx == -1 ? countries.first : countries[idx];
   }
 
   @override
-  State<AfricaCountryCodePicker> createState() => _AfricaCountryCodePickerState();
+  State<AfricaCountryCodePicker> createState() =>
+      _AfricaCountryCodePickerState();
 }
 
 class _AfricaCountryCodePickerState extends State<AfricaCountryCodePicker> {
@@ -235,7 +239,7 @@ class _PickerSheetState extends State<_PickerSheet> {
                       subtitle: Text(c.dialCode),
                       trailing: isSelected
                           ? const Icon(Icons.check_rounded,
-                              color: Color(0xFFE67E22))
+                              color: AppColors.primary)
                           : null,
                       onTap: () {
                         setState(() => _selected = c);

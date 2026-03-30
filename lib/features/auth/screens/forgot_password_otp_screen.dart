@@ -47,10 +47,23 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
       appBar: AppBar(
         backgroundColor: const Color(0xFF16324A),
         elevation: 0,
-        leading: IconButton(
-          onPressed: () => Navigator.of(context).maybePop(),
-          icon:
-              const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Center(
+            child: GestureDetector(
+              onTap: () => Navigator.of(context).maybePop(),
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Colors.white, width: 1.5),
+                ),
+                child: const Icon(Icons.arrow_back_ios_new_rounded,
+                    color: Colors.white, size: 18),
+              ),
+            ),
+          ),
         ),
       ),
       body: SafeArea(
@@ -70,9 +83,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'auth.verification_subtitle'.tr(namedArgs: {
-                  'phone': widget.phoneDisplay,
-                }),
+                'auth.verification_subtitle'.tr(),
                 style: const TextStyle(
                   color: Color(0xFFE2E8F0),
                   height: 1.35,

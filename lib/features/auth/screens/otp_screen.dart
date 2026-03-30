@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 import 'signup_form_screen.dart';
 
@@ -15,7 +16,7 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  static const _textDark = Color(0xFF1E2D3C);
+  static const _textDark = AppColors.dark;
 
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());

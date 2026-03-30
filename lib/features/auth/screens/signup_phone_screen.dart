@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 import 'otp_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
@@ -14,7 +15,7 @@ class SignupPhoneScreen extends StatefulWidget {
 }
 
 class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
-  static const _textDark = Color(0xFF1E2D3C);
+  static const _textDark = AppColors.dark;
 
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
@@ -135,7 +136,6 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                                 child: _Field(
                                   controller: _phoneController,
                                   hint: 'auth.phone_hint'.tr(),
-                                  prefixIcon: Icons.phone_rounded,
                                 ),
                               ),
                             ],
@@ -192,11 +192,10 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
 }
 
 class _Field extends StatelessWidget {
-  const _Field({required this.controller, required this.hint, this.prefixIcon});
+  const _Field({required this.controller, required this.hint});
 
   final TextEditingController controller;
   final String hint;
-  final IconData? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -211,9 +210,6 @@ class _Field extends StatelessWidget {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(18),
         ),
-        prefixIcon: prefixIcon == null
-            ? null
-            : Icon(prefixIcon, color: const Color(0xFF6D6D6D)),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       ),

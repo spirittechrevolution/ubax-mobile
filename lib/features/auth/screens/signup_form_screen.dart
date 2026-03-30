@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 
 class SignupFormScreen extends StatefulWidget {
   const SignupFormScreen({super.key});
@@ -11,7 +12,7 @@ class SignupFormScreen extends StatefulWidget {
 }
 
 class _SignupFormScreenState extends State<SignupFormScreen> {
-  static const _textDark = Color(0xFF1E2D3C);
+  static const _textDark = AppColors.dark;
 
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
@@ -146,7 +147,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                     child: _Field(
                                       controller: _firstName,
                                       hint: 'auth.first_name'.tr(),
-                                      prefixIcon: Icons.person_rounded,
                                     ),
                                   ),
                                 ],
@@ -155,7 +155,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                               _Field(
                                 controller: _lastName,
                                 hint: 'auth.last_name'.tr(),
-                                prefixIcon: Icons.badge_rounded,
                               ),
                               const SizedBox(height: 12),
                               Row(
@@ -165,7 +164,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                       controller: _email,
                                       hint: 'auth.email'.tr(),
                                       keyboardType: TextInputType.emailAddress,
-                                      prefixIcon: Icons.email_rounded,
                                     ),
                                   ),
                                   const SizedBox(width: 12),
@@ -185,7 +183,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                 controller: _password,
                                 hint: 'auth.password_hint'.tr(),
                                 obscureText: _obscure1,
-                                prefixIcon: Icons.lock_rounded,
                                 suffix: IconButton(
                                   onPressed: () =>
                                       setState(() => _obscure1 = !_obscure1),
@@ -202,7 +199,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                 controller: _confirmPassword,
                                 hint: 'auth.confirm_password'.tr(),
                                 obscureText: _obscure2,
-                                prefixIcon: Icons.lock_rounded,
                                 suffix: IconButton(
                                   onPressed: () =>
                                       setState(() => _obscure2 = !_obscure2),
@@ -269,7 +265,6 @@ class _Field extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.suffix,
-    this.prefixIcon,
   });
 
   final TextEditingController controller;
@@ -277,7 +272,6 @@ class _Field extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final Widget? suffix;
-  final IconData? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -293,9 +287,6 @@ class _Field extends StatelessWidget {
           borderSide: BorderSide.none,
           borderRadius: BorderRadius.circular(18),
         ),
-        prefixIcon: prefixIcon == null
-            ? null
-            : Icon(prefixIcon, color: const Color(0xFF6D6D6D)),
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
         suffixIcon: suffix,

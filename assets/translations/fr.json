@@ -13,7 +13,7 @@
     "next": "Suivant",
     "discover": "Découvrir",
     "page1": {
-      "title": "Trouvez la propriété\nidéal aujourd’hui",
+      "title": "Trouvez la propriété\nidéale aujourd’hui",
       "description": "Découvrez en quelques secondes les meilleures offres\nimmobilières adaptées à vos besoins et à votre\nbudget."
     },
     "page2": {
@@ -57,7 +57,7 @@
     "reset_password_subtitle": "Veuillez saisir votre numéro de téléphone afin de réinitialiser votre mot de passe",
     "send": "Envoyer",
     "verification": "Vérification",
-    "verification_subtitle": "Veuillez saisir le code reçu par SMS au {phone}",
+    "verification_subtitle": "Veuillez saisir le code reçu par email",
     "verify_code": "Vérifier le code",
     "new_password_title": "Nouveau mot de passe",
     "new_password_subtitle": "Veuillez créer un nouveau mot de passe pour sécuriser votre compte.",

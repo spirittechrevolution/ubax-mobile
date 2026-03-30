@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
-const Color _kBg = Color(0xFFEEF3F7);
-const Color _kDark = Color(0xFF1E2D3C);
-const Color _kOrange = Color(0xFFE67E22);
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
+const Color _kBg = AppColors.background;
+const Color _kDark = AppColors.dark;
+const Color _kOrange = AppColors.primary;
 
 const String _kIconWave = 'assets/icons/wave.png';
 const String _kIconOrangeMoney = 'assets/icons/orangemoney.png';
@@ -321,7 +323,7 @@ class _PropertyCard extends StatelessWidget {
                       child: Text(
                         title,
                         style: const TextStyle(
-                          color: Color(0xFF1E2D3C),
+                          color: _kDark,
                           fontWeight: FontWeight.w900,
                         ),
                         maxLines: 2,
@@ -336,13 +338,13 @@ class _PropertyCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 16, color: Color(0xFF8A97A6)),
+                        size: 16, color: AppColors.muted),
                     const SizedBox(width: 4),
                     Expanded(
                       child: Text(
                         location,
                         style: const TextStyle(
-                          color: Color(0xFF8A97A6),
+                          color: AppColors.muted,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
@@ -381,12 +383,12 @@ class _Meta extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.bed_rounded, size: 14, color: Color(0xFFE67E22)),
+        const Icon(Icons.bed_rounded, size: 14, color: AppColors.primary),
         const SizedBox(width: 4),
         Text(
           text,
           style: const TextStyle(
-            color: Color(0xFF8A97A6),
+            color: AppColors.muted,
             fontSize: 11,
             fontWeight: FontWeight.w700,
           ),
@@ -430,7 +432,7 @@ class _DropdownPill extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.keyboard_arrow_down_rounded,
-                color: Color(0xFFE67E22)),
+                color: AppColors.primary),
           ),
           items: items
               .map(
@@ -439,7 +441,7 @@ class _DropdownPill extends StatelessWidget {
                   child: Text(
                     t,
                     style: const TextStyle(
-                      color: Color(0xFF1E2D3C),
+                      color: AppColors.dark,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -475,7 +477,7 @@ class _PaymentLine extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: const Color(0xFF8A97A6),
+              color: AppColors.muted,
               fontWeight: bold ? FontWeight.w900 : FontWeight.w700,
               fontSize: bold ? 13 : 12,
             ),
@@ -484,7 +486,7 @@ class _PaymentLine extends StatelessWidget {
         Text(
           amount,
           style: TextStyle(
-            color: const Color(0xFF1E2D3C),
+            color: AppColors.dark,
             fontWeight: bold ? FontWeight.w900 : FontWeight.w800,
             fontSize: bold ? 16 : 13,
           ),
@@ -530,7 +532,7 @@ class _PaymentMethodField extends StatelessWidget {
             alignment: Alignment.center,
             child: method == null
                 ? const Icon(Icons.account_balance_wallet_outlined,
-                    color: Color(0xFF1E2D3C))
+                    color: AppColors.dark)
                 : Image.asset(
                     _paymentMethodIconAsset(method!),
                     width: 22,
@@ -543,7 +545,7 @@ class _PaymentMethodField extends StatelessWidget {
             child: Text(
               method == null ? '' : _methodLabel(method!),
               style: const TextStyle(
-                color: Color(0xFF1E2D3C),
+                color: AppColors.dark,
                 fontWeight: FontWeight.w800,
               ),
               maxLines: 1,
@@ -552,8 +554,8 @@ class _PaymentMethodField extends StatelessWidget {
           ),
           OutlinedButton(
             style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFFE67E22),
-              side: const BorderSide(color: Color(0xFFE67E22)),
+              foregroundColor: AppColors.primary,
+              side: const BorderSide(color: AppColors.primary),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(50),
               ),
@@ -796,7 +798,7 @@ class _MethodTile extends StatelessWidget {
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: selected ? Colors.white : const Color(0xFF1E2D3C),
+                color: selected ? Colors.white : AppColors.dark,
                 fontWeight: FontWeight.w900,
                 fontSize: 12,
                 height: 1.05,
@@ -843,7 +845,7 @@ class _MethodRow extends StatelessWidget {
               child: Text(
                 label,
                 style: const TextStyle(
-                  color: Color(0xFF1E2D3C),
+                  color: AppColors.dark,
                   fontWeight: FontWeight.w900,
                 ),
               ),
@@ -926,7 +928,7 @@ class _PaymentSuccessSheet extends StatelessWidget {
               'votre réservation a été effectuée avec succès.',
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: Color(0xFF1E2D3C),
+                color: AppColors.dark,
                 fontWeight: FontWeight.w800,
               ),
             ),
@@ -936,7 +938,7 @@ class _PaymentSuccessSheet extends StatelessWidget {
               height: 54,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF1E2D3C),
+                  backgroundColor: AppColors.dark,
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(

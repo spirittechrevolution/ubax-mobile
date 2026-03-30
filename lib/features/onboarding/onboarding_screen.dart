@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
 
+import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.onDone});
 
@@ -12,7 +15,7 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  static const _orange = Color(0xFFE67E22);
+  static const _orange = AppColors.primary;
   final _pageController = PageController();
   int _index = 0;
 
@@ -168,8 +171,8 @@ class _OnboardingPage extends StatelessWidget {
                   data.titleKey.tr(),
                   style: const TextStyle(
                     color: Colors.white,
-                    fontSize: 34,
-                    height: 1.06,
+                    fontSize: 35,
+                    height: 1.0,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
@@ -178,8 +181,9 @@ class _OnboardingPage extends StatelessWidget {
                   data.descriptionKey.tr(),
                   style: const TextStyle(
                     color: Color(0xFFEAEAEA),
-                    fontSize: 14,
-                    height: 1.4,
+                    fontSize: 18,
+                    height: 1.0,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 SizedBox(height: MediaQuery.of(context).padding.bottom + 92),
@@ -232,23 +236,9 @@ class _NextButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isLast) {
-      return SizedBox(
-        width: double.infinity,
-        height: 54,
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: const Color(0xFFE67E22),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-            elevation: 0,
-          ),
-          onPressed: onPressed,
-          child: Text(
-            'onboarding.discover'.tr(),
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
-          ),
-        ),
+      return OrangeButton(
+        text: 'onboarding.discover'.tr(),
+        onPressed: onPressed,
       );
     }
 
