@@ -1,6 +1,7 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -26,14 +27,16 @@ const _kPopulaires = [
     'rating': 4.5,
   },
   {
-    'image': 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    'image':
+        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
     'name': 'Résidence Lagune Prestige',
     'location': 'Zone 4, Marcory – Abidjan',
     'price': 65000,
     'rating': 4.7,
   },
   {
-    'image': 'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'image':
+        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
     'name': 'Palm Club Plateau',
     'location': 'Centre-ville – Abidjan',
     'price': 55000,
@@ -59,7 +62,8 @@ const _kRecommandesData = [
     'price': '250 000',
   },
   {
-    'image': 'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    'image':
+        'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
     'name': 'Studio meublé au Plateau',
     'location': 'Plateau, Abidjan – Côte d\'Ivoire',
     'beds': 1,
@@ -89,8 +93,17 @@ class HotelsTab extends StatefulWidget {
 
 class _HotelsTabState extends State<HotelsTab> {
   String _selectedType = 'Hotels';
+  String? _selectedAddress;
   DateTime _arrival = DateTime(2026, 3, 15);
   DateTime _departure = DateTime(2026, 3, 18);
+
+  Future<void> _pickAddress() async {
+    final result = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const AddressSearchScreen()),
+    );
+    if (!mounted || result == null) return;
+    setState(() => _selectedAddress = result);
+  }
 
   Future<void> _pickDate({required bool isArrival}) async {
     final picked = await showDatePicker(
@@ -120,355 +133,380 @@ class _HotelsTabState extends State<HotelsTab> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // ── Dark header
-        Container(
-          color: AppColors.dark,
-          padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
-          child: Row(
-            children: [
-              ClipOval(
-                child: Image.asset(
-                  'assets/images/pexels-ekrulila-2128329.jpg',
-                  width: 44,
-                  height: 44,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
+    return Container(
+      color: AppColors.background,
+      child: Column(
+        children: [
+          // ── Dark header
+          Container(
+            color: AppColors.dark,
+            padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
+            child: Row(
+              children: [
+                ClipOval(
+                  child: Image.asset(
+                    'assets/images/pexels-ekrulila-2128329.jpg',
                     width: 44,
                     height: 44,
-                    color: const Color(0xFF2D4A65),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.person, color: Colors.white),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 12),
-              const Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          'Bonjour ',
-                          style: TextStyle(
-                            color: Color(0xFF94A3B8),
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                          ),
-                        ),
-                        Text('👋', style: TextStyle(fontSize: 13)),
-                      ],
-                    ),
-                    SizedBox(height: 2),
-                    Text(
-                      'Arnaud Koffi',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              // Bell
-              Stack(
-                clipBehavior: Clip.none,
-                children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.notifications_rounded,
-                        color: AppColors.dark, size: 22),
-                  ),
-                  Positioned(
-                    top: -2,
-                    right: -2,
-                    child: Container(
-                      width: 18,
-                      height: 18,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary,
-                      ),
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 44,
+                      height: 44,
+                      color: const Color(0xFF2D4A65),
                       alignment: Alignment.center,
-                      child: const Text(
-                        '5',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800),
-                      ),
+                      child: const Icon(Icons.person, color: Colors.white),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(width: 10),
-              // CI flag
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(22),
                 ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    ClipOval(
-                      child: CountryFlag.fromCountryCode(
-                        'CI',
-                        width: 28,
-                        height: 28,
-                      ),
-                    ),
-                    const SizedBox(width: 4),
-                    const Icon(Icons.keyboard_arrow_down_rounded,
-                        size: 16, color: AppColors.dark),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-
-        // ── Body
-        Expanded(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // ── Search card
-                Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x14000000),
-                        blurRadius: 20,
-                        offset: Offset(0, 8),
-                      ),
-                    ],
-                  ),
+                const SizedBox(width: 12),
+                const Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Address
-                      Container(
-                        height: 52,
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 14),
-                        decoration: BoxDecoration(
-                          color: AppColors.background,
-                          borderRadius: BorderRadius.circular(28),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(Icons.location_on_outlined,
-                                size: 20, color: AppColors.muted),
-                            const SizedBox(width: 8),
-                            const Expanded(
-                              child: Text(
-                                'Sélectionner une adresse',
-                                style: TextStyle(
-                                  color: AppColors.muted,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: 34,
-                              height: 34,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(17),
-                              ),
-                              alignment: Alignment.center,
-                              child: const Icon(
-                                  Icons.keyboard_arrow_down_rounded,
-                                  color: Colors.white,
-                                  size: 20),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Type pills
-                      SizedBox(
-                        height: 42,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _kTypes.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 8),
-                          itemBuilder: (_, i) {
-                            final t = _kTypes[i];
-                            final selected = t.label == _selectedType;
-                            return GestureDetector(
-                              onTap: () => setState(
-                                  () => _selectedType = t.label),
-                              child: Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14, vertical: 10),
-                                decoration: BoxDecoration(
-                                  color: selected
-                                      ? AppColors.primary
-                                      : Colors.white,
-                                  borderRadius: BorderRadius.circular(22),
-                                  border: selected
-                                      ? null
-                                      : Border.all(
-                                          color:
-                                              const Color(0xFFE7E7E7)),
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Icon(t.icon,
-                                        size: 16,
-                                        color: selected
-                                            ? Colors.white
-                                            : AppColors.dark),
-                                    const SizedBox(width: 6),
-                                    Text(
-                                      t.label,
-                                      style: TextStyle(
-                                        color: selected
-                                            ? Colors.white
-                                            : AppColors.dark,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 13,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      // Date pickers
                       Row(
                         children: [
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () =>
-                                  _pickDate(isArrival: true),
-                              child: _DateCard(
-                                label: 'Arrivée',
-                                date: _arrival,
-                              ),
+                          Text(
+                            'Bonjour ',
+                            style: TextStyle(
+                              color: Color(0xFF94A3B8),
+                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
                             ),
                           ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: GestureDetector(
-                              onTap: () =>
-                                  _pickDate(isArrival: false),
-                              child: _DateCard(
-                                label: 'Départ',
-                                date: _departure,
-                              ),
-                            ),
-                          ),
+                          Text('👋', style: TextStyle(fontSize: 13)),
                         ],
                       ),
-                      const SizedBox(height: 14),
-                      // Search button
-                      SizedBox(
-                        width: double.infinity,
-                        height: 43,
-                        child: ElevatedButton.icon(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.primary,
-                            foregroundColor: Colors.white,
-                            elevation: 0,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                          ),
-                          onPressed: () {},
-                          icon: const Icon(Icons.search_rounded, size: 20),
-                          label: const Text(
-                            'Rechercher',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
-                            ),
-                          ),
+                      SizedBox(height: 2),
+                      Text(
+                        'Arnaud Koffi',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 16,
                         ),
                       ),
                     ],
                   ),
                 ),
-
-                const SizedBox(height: 24),
-
-                // ── Populaires
-                _SectionRow(
-                    title: 'Populaires', onMore: () {}),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 220,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _kPopulaires.length,
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(width: 12),
-                    itemBuilder: (_, i) {
-                      final p = _kPopulaires[i];
-                      return _PopularCard(
-                        imagePath: p['image'] as String,
-                        name: p['name'] as String,
-                        location: p['location'] as String,
-                        pricePerNight: p['price'] as int,
-                        rating: (p['rating'] as num).toDouble(),
-                      );
-                    },
-                  ),
-                ),
-
-                const SizedBox(height: 24),
-
-                // ── Recommandés
-                _SectionRow(
-                    title: 'Recommandés pour vous', onMore: () {}),
-                const SizedBox(height: 12),
-
-                // UBAX banner
-                _UbaxBanner(onTap: () {}),
-                const SizedBox(height: 12),
-
-                // Tiles
-                ..._kRecommandesData.map(
-                  (p) => Padding(
-                    padding: const EdgeInsets.only(bottom: 12),
-                    child: _RecommendedTile(
-                      imagePath: p['image'] as String,
-                      name: p['name'] as String,
-                      location: p['location'] as String,
-                      beds: p['beds'] as int,
-                      baths: p['baths'] as int,
-                      salons: p['salons'] as int,
-                      price: p['price'] as String,
+                // Bell
+                Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    Container(
+                      width: 42,
+                      height: 42,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.notifications_rounded,
+                          color: AppColors.dark, size: 22),
                     ),
+                    Positioned(
+                      top: -2,
+                      right: -2,
+                      child: Container(
+                        width: 18,
+                        height: 18,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: AppColors.primary,
+                        ),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          '5',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(width: 10),
+                // CI flag
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      ClipOval(
+                        child: CountryFlag.fromCountryCode(
+                          'CI',
+                          width: 28,
+                          height: 28,
+                        ),
+                      ),
+                      const SizedBox(width: 4),
+                      const Icon(Icons.keyboard_arrow_down_rounded,
+                          size: 16, color: AppColors.dark),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ],
+
+          // ── Body
+          Expanded(
+            child: Stack(
+              children: [
+                // Dark background extension behind search card
+                Container(
+                  height: 160,
+                  decoration: const BoxDecoration(
+                    color: AppColors.dark,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(16),
+                    ),
+                  ),
+                ),
+                SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // ── Search card
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(22),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x14000000),
+                              blurRadius: 20,
+                              offset: Offset(0, 8),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Address
+                            GestureDetector(
+                            onTap: _pickAddress,
+                            child: Container(
+                              height: 52,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 14),
+                              decoration: BoxDecoration(
+                                color: AppColors.background,
+                                borderRadius: BorderRadius.circular(28),
+                              ),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.location_on_outlined,
+                                      size: 20, color: AppColors.muted),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      _selectedAddress ?? 'Sélectionner une adresse',
+                                      style: TextStyle(
+                                        color: _selectedAddress != null
+                                            ? AppColors.dark
+                                            : AppColors.muted,
+                                        fontSize: 14,
+                                        fontWeight: _selectedAddress != null
+                                            ? FontWeight.w600
+                                            : FontWeight.w400,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Container(
+                                    width: 34,
+                                    height: 34,
+                                    decoration: BoxDecoration(
+                                      color: AppColors.primary,
+                                      borderRadius: BorderRadius.circular(17),
+                                    ),
+                                    alignment: Alignment.center,
+                                    child: const Icon(
+                                        Icons.keyboard_arrow_down_rounded,
+                                        color: Colors.white,
+                                        size: 20),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            ),
+                            const SizedBox(height: 12),
+                            // Type pills
+                            SizedBox(
+                              height: 42,
+                              child: ListView.separated(
+                                scrollDirection: Axis.horizontal,
+                                itemCount: _kTypes.length,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: 8),
+                                itemBuilder: (_, i) {
+                                  final t = _kTypes[i];
+                                  final selected = t.label == _selectedType;
+                                  return GestureDetector(
+                                    onTap: () =>
+                                        setState(() => _selectedType = t.label),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 14, vertical: 10),
+                                      decoration: BoxDecoration(
+                                        color: selected
+                                            ? AppColors.primary
+                                            : Colors.white,
+                                        borderRadius: BorderRadius.circular(22),
+                                        border: selected
+                                            ? null
+                                            : Border.all(
+                                                color: const Color(0xFFE7E7E7)),
+                                      ),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Icon(t.icon,
+                                              size: 16,
+                                              color: selected
+                                                  ? Colors.white
+                                                  : AppColors.dark),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            t.label,
+                                            style: TextStyle(
+                                              color: selected
+                                                  ? Colors.white
+                                                  : AppColors.dark,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 13,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            // Date pickers
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => _pickDate(isArrival: true),
+                                    child: _DateCard(
+                                      label: 'Arrivée',
+                                      date: _arrival,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => _pickDate(isArrival: false),
+                                    child: _DateCard(
+                                      label: 'Départ',
+                                      date: _departure,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 14),
+                            // Search button
+                            SizedBox(
+                              width: double.infinity,
+                              height: 43,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: Colors.white,
+                                  elevation: 0,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                ),
+                                onPressed: () {},
+                                icon:
+                                    const Icon(Icons.search_rounded, size: 20),
+                                label: const Text(
+                                  'Rechercher',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Populaires
+                      _SectionRow(title: 'Populaires', onMore: () {}),
+                      const SizedBox(height: 12),
+                      SizedBox(
+                        height: 220,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: _kPopulaires.length,
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 12),
+                          itemBuilder: (_, i) {
+                            final p = _kPopulaires[i];
+                            return _PopularCard(
+                              imagePath: p['image'] as String,
+                              name: p['name'] as String,
+                              location: p['location'] as String,
+                              pricePerNight: p['price'] as int,
+                              rating: (p['rating'] as num).toDouble(),
+                            );
+                          },
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // ── Recommandés
+                      _SectionRow(
+                          title: 'Recommandés pour vous', onMore: () {}),
+                      const SizedBox(height: 12),
+
+                      // UBAX banner
+                      _UbaxBanner(onTap: () {}),
+                      const SizedBox(height: 12),
+
+                      // Tiles
+                      ..._kRecommandesData.map(
+                        (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: _RecommendedTile(
+                            imagePath: p['image'] as String,
+                            name: p['name'] as String,
+                            location: p['location'] as String,
+                            beds: p['beds'] as int,
+                            baths: p['baths'] as int,
+                            salons: p['salons'] as int,
+                            price: p['price'] as String,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -482,14 +520,24 @@ class _DateCard extends StatelessWidget {
   final DateTime date;
 
   static const _months = [
-    '', 'Janv', 'Févr', 'Mars', 'Avr', 'Mai', 'Juin',
-    'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'
+    '',
+    'Janv',
+    'Févr',
+    'Mars',
+    'Avr',
+    'Mai',
+    'Juin',
+    'Juil',
+    'Août',
+    'Sept',
+    'Oct',
+    'Nov',
+    'Déc'
   ];
 
   @override
   Widget build(BuildContext context) {
-    final formatted =
-        '${date.day} ${_months[date.month]} ${date.year}';
+    final formatted = '${date.day} ${_months[date.month]} ${date.year}';
     return Container(
       height: 57,
       padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -914,15 +962,12 @@ class _RecommendedTile extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 3,
                   children: [
-                    _InfoChip(
-                        icon: Icons.bed_rounded,
-                        text: '$beds Chambres'),
+                    _InfoChip(icon: Icons.bed_rounded, text: '$beds Chambres'),
                     _InfoChip(
                         icon: Icons.bathtub_outlined,
                         text: '$baths Salle de bains'),
                     _InfoChip(
-                        icon: Icons.weekend_rounded,
-                        text: '$salons Salon'),
+                        icon: Icons.weekend_rounded, text: '$salons Salon'),
                   ],
                 ),
               ],
