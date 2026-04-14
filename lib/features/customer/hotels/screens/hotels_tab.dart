@@ -2,6 +2,7 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -462,12 +463,27 @@ class _HotelsTabState extends State<HotelsTab> {
                               const SizedBox(width: 12),
                           itemBuilder: (_, i) {
                             final p = _kPopulaires[i];
-                            return _PopularCard(
-                              imagePath: p['image'] as String,
-                              name: p['name'] as String,
-                              location: p['location'] as String,
-                              pricePerNight: p['price'] as int,
-                              rating: (p['rating'] as num).toDouble(),
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => HotelDetailsScreen(
+                                      imagePath: p['image'] as String,
+                                      name: p['name'] as String,
+                                      location: p['location'] as String,
+                                      price: p['price'] as int,
+                                      rating: (p['rating'] as num).toDouble(),
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: _PopularCard(
+                                imagePath: p['image'] as String,
+                                name: p['name'] as String,
+                                location: p['location'] as String,
+                                pricePerNight: p['price'] as int,
+                                rating: (p['rating'] as num).toDouble(),
+                              ),
                             );
                           },
                         ),

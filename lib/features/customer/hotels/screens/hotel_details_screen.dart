@@ -1,0 +1,864 @@
+import 'package:flutter/material.dart';
+
+import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_screen.dart';
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+class _Amenity {
+  const _Amenity(this.icon, this.label);
+  final IconData icon;
+  final String label;
+}
+
+const _kAmenities = [
+  _Amenity(Icons.ac_unit_rounded, 'Climatisation'),
+  _Amenity(Icons.restaurant_rounded, 'Restaurant'),
+  _Amenity(Icons.pool_rounded, 'Piscine'),
+  _Amenity(Icons.schedule_rounded, 'Reception\n24h/24'),
+];
+
+class _Review {
+  const _Review(this.name, this.avatar, this.rating, this.text);
+  final String name;
+  final String avatar;
+  final double rating;
+  final String text;
+}
+
+const _kReviews = [
+  _Review(
+    'Marie K',
+    'assets/images/sara1.jpg',
+    4.6,
+    "Emplacement parfait pour le travail. L'appartement est pratique et lumineux",
+  ),
+  _Review(
+    'Ali S',
+    'assets/images/sara2.jpg',
+    4.5,
+    'Appartement très confortable et bien situé. Tout était propre et fonctionnel.',
+  ),
+  _Review(
+    'Kim Borrdy',
+    'assets/images/pexels-ekrulila-2128329.jpg',
+    4.5,
+    'Super accueil et appartement moderne. Je recommande vivement !',
+  ),
+];
+
+class _RecommendedHotel {
+  const _RecommendedHotel({
+    required this.image,
+    required this.name,
+    required this.location,
+    required this.price,
+    required this.rating,
+  });
+  final String image;
+  final String name;
+  final String location;
+  final int price;
+  final double rating;
+}
+
+const _kRecommended = [
+  _RecommendedHotel(
+    image: 'assets/images/modern-elegant-bedroom-interior.jpg',
+    name: 'Hôtel Ébène City',
+    location: 'Plateau, Abidjan',
+    price: 70000,
+    rating: 4.6,
+  ),
+  _RecommendedHotel(
+    image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    name: 'Suite Prestige',
+    location: 'Cocody Riviera, Abidjan',
+    price: 85000,
+    rating: 4.8,
+  ),
+];
+
+// ─── Screen ───────────────────────────────────────────────────────────────────
+
+class HotelDetailsScreen extends StatelessWidget {
+  const HotelDetailsScreen({
+    super.key,
+    required this.imagePath,
+    required this.name,
+    required this.location,
+    required this.price,
+    required this.rating,
+  });
+
+  final String imagePath;
+  final String name;
+  final String location;
+  final int price;
+  final double rating;
+
+  @override
+  Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Hero image
+                  Stack(
+                    children: [
+                      Image.asset(
+                        imagePath,
+                        height: 280,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 280,
+                          color: const Color(0xFFD0DDE8),
+                        ),
+                      ),
+                      // Gradient overlay
+                      Container(
+                        height: 100,
+                        decoration: const BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [Color(0x88000000), Colors.transparent],
+                          ),
+                        ),
+                      ),
+                      // Back + title
+                      Positioned(
+                        top: topPadding + 8,
+                        left: 18,
+                        right: 18,
+                        child: Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => Navigator.of(context).pop(),
+                              child: const Icon(
+                                  Icons.arrow_back_ios_new_rounded,
+                                  color: Colors.white,
+                                  size: 20),
+                            ),
+                            const SizedBox(width: 12),
+                            const Text(
+                              'Détails du bien',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Thumbnail strip
+                      Positioned(
+                        top: 97,
+                        right: 14,
+                        child: Container(
+                          width: 44,
+                          height: 171,
+                          padding: const EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                            color: const Color(0x99000000),
+                            borderRadius: BorderRadius.circular(50),
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _ThumbCircle(
+                                image: imagePath,
+                              ),
+                              const _ThumbCircle(
+                                image: 'assets/images/modern-elegant-bedroom-interior.jpg',
+                              ),
+                              const _ThumbCircle(
+                                image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+                              ),
+                              _ThumbCircleMore(
+                                image: 'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+                                count: 4,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  // ── Content
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Name
+                        Text(
+                          name,
+                          style: const TextStyle(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 20,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        // Location + rating
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on,
+                                color: AppColors.primary, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              location,
+                              style: const TextStyle(
+                                color: AppColors.muted,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            const Icon(Icons.star_rounded,
+                                color: Color(0xFFFACC15), size: 16),
+                            const SizedBox(width: 2),
+                            Text(
+                              rating.toString(),
+                              style: const TextStyle(
+                                color: AppColors.dark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Installations
+                        Row(
+                          children: [
+                            const Text(
+                              'installations communes',
+                              style: TextStyle(
+                                color: AppColors.dark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Text(
+                                'Tout voir',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 14),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: _kAmenities
+                              .map((a) => _AmenityIcon(
+                                    icon: a.icon,
+                                    label: a.label,
+                                  ))
+                              .toList(),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Description
+                        const Text(
+                          'Description',
+                          style: TextStyle(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
+                          style: TextStyle(
+                            color: AppColors.muted,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w400,
+                            height: 1.5,
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Adresse
+                        Row(
+                          children: [
+                            const Text(
+                              'Adresse',
+                              style: TextStyle(
+                                color: AppColors.dark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Text(
+                                'Ouvrir la carte',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        // Map placeholder
+                        Container(
+                          height: 140,
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFE2E8F0),
+                            borderRadius: BorderRadius.circular(16),
+                            image: const DecorationImage(
+                              image: AssetImage('assets/images/l.jpg'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          alignment: Alignment.center,
+                          child: Container(
+                            width: 36,
+                            height: 36,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.primary,
+                            ),
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.location_on,
+                                color: Colors.white, size: 20),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const Icon(Icons.location_on_outlined,
+                                color: AppColors.primary, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              location,
+                              style: const TextStyle(
+                                color: AppColors.muted,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Reviews
+                        Row(
+                          children: [
+                            const Text(
+                              'Reviews',
+                              style: TextStyle(
+                                color: AppColors.dark,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 15,
+                              ),
+                            ),
+                            const Spacer(),
+                            GestureDetector(
+                              onTap: () {},
+                              child: const Text(
+                                'Tout voir',
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        ..._kReviews.map(
+                          (r) => Padding(
+                            padding: const EdgeInsets.only(bottom: 14),
+                            child: _ReviewCard(review: r),
+                          ),
+                        ),
+
+                        const SizedBox(height: 10),
+
+                        // ── Recommandés
+                        const Text(
+                          'Recommandés pour vous',
+                          style: TextStyle(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 15,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        ..._kRecommended.map(
+                          (h) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: _RecommendedCard(hotel: h),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          // ── Bottom bar
+          Container(
+            padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 10,
+                  offset: Offset(0, -4),
+                ),
+              ],
+            ),
+            child: SafeArea(
+              top: false,
+              child: Row(
+                children: [
+                  // Price
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Text(
+                        'Prix',
+                        style: TextStyle(
+                          color: AppColors.muted,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text.rich(
+                        TextSpan(
+                          children: [
+                            TextSpan(
+                              text: '${_fmt(price)} ',
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w900,
+                                fontSize: 20,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: 'fCFA ',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 13,
+                              ),
+                            ),
+                            const TextSpan(
+                              text: '/Nuit',
+                              style: TextStyle(
+                                color: AppColors.muted,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                  // Reserve button
+                  SizedBox(
+                    height: 48,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.dark,
+                        foregroundColor: Colors.white,
+                        elevation: 0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 32),
+                      ),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => HotelReservationScreen(
+                              imagePath: imagePath,
+                              name: name,
+                              location: location,
+                              price: price,
+                              rating: rating,
+                            ),
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'Reserver',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _fmt(int value) {
+    final s = value.toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      final fromEnd = s.length - i;
+      buf.write(s[i]);
+      if (fromEnd > 1 && fromEnd % 3 == 1) buf.write(' ');
+    }
+    return buf.toString().trim();
+  }
+}
+
+// ─── Amenity icon ─────────────────────────────────────────────────────────────
+
+class _AmenityIcon extends StatelessWidget {
+  const _AmenityIcon({required this.icon, required this.label});
+
+  final IconData icon;
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Container(
+          width: 56,
+          height: 56,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: const Color(0xFFE5E7EB)),
+          ),
+          alignment: Alignment.center,
+          child: Icon(icon, color: AppColors.dark, size: 26),
+        ),
+        const SizedBox(height: 6),
+        Text(
+          label,
+          textAlign: TextAlign.center,
+          style: const TextStyle(
+            color: AppColors.muted,
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            height: 1.2,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Review card ──────────────────────────────────────────────────────────────
+
+class _ReviewCard extends StatelessWidget {
+  const _ReviewCard({required this.review});
+
+  final _Review review;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        // Avatar
+        ClipOval(
+          child: Image.asset(
+            review.avatar,
+            width: 40,
+            height: 40,
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              width: 40,
+              height: 40,
+              color: const Color(0xFFD0DDE8),
+              child: const Icon(Icons.person, color: AppColors.muted),
+            ),
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Name + rating
+              Row(
+                children: [
+                  Text(
+                    review.name,
+                    style: const TextStyle(
+                      color: AppColors.dark,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const Spacer(),
+                  const Icon(Icons.star_rounded,
+                      color: Color(0xFFFACC15), size: 16),
+                  const SizedBox(width: 2),
+                  Text(
+                    review.rating.toString(),
+                    style: const TextStyle(
+                      color: AppColors.dark,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 4),
+              Text(
+                review.text,
+                style: const TextStyle(
+                  color: AppColors.muted,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w400,
+                  height: 1.4,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// ─── Recommended card ─────────────────────────────────────────────────────────
+
+class _RecommendedCard extends StatelessWidget {
+  const _RecommendedCard({required this.hotel});
+
+  final _RecommendedHotel hotel;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Row(
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(14),
+            child: Image.asset(
+              hotel.image,
+              width: 88,
+              height: 70,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: 88,
+                height: 70,
+                color: const Color(0xFFE2E8F0),
+              ),
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Name + rating
+                Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        hotel.name,
+                        style: const TextStyle(
+                          color: AppColors.dark,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 14,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    const Icon(Icons.star_rounded,
+                        color: Color(0xFFFACC15), size: 14),
+                    const SizedBox(width: 2),
+                    Text(
+                      hotel.rating.toString(),
+                      style: const TextStyle(
+                        color: AppColors.dark,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                // Location
+                Row(
+                  children: [
+                    const Icon(Icons.location_on_outlined,
+                        size: 13, color: AppColors.muted),
+                    const SizedBox(width: 3),
+                    Text(
+                      hotel.location,
+                      style: const TextStyle(
+                        color: AppColors.muted,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 6),
+                // Price
+                Text.rich(
+                  TextSpan(
+                    children: [
+                      TextSpan(
+                        text: '${_fmtPrice(hotel.price)} FCFA',
+                        style: const TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 13,
+                        ),
+                      ),
+                      const TextSpan(
+                        text: '/ nuit',
+                        style: TextStyle(
+                          color: AppColors.muted,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 11,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static String _fmtPrice(int value) {
+    final s = value.toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      final fromEnd = s.length - i;
+      buf.write(s[i]);
+      if (fromEnd > 1 && fromEnd % 3 == 1) buf.write(' ');
+    }
+    return buf.toString().trim();
+  }
+}
+
+// ─── Thumb circle ─────────────────────────────────────────────────────────────
+
+class _ThumbCircle extends StatelessWidget {
+  const _ThumbCircle({required this.image});
+
+  final String image;
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: Image.asset(
+        image,
+        width: 36,
+        height: 36,
+        fit: BoxFit.cover,
+        errorBuilder: (_, __, ___) => Container(
+          width: 36,
+          height: 36,
+          color: const Color(0xFFD0DDE8),
+        ),
+      ),
+    );
+  }
+}
+
+class _ThumbCircleMore extends StatelessWidget {
+  const _ThumbCircleMore({required this.image, required this.count});
+
+  final String image;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 36,
+      height: 36,
+      child: Stack(
+        children: [
+          ClipOval(
+            child: Image.asset(
+              image,
+              width: 36,
+              height: 36,
+              fit: BoxFit.cover,
+              errorBuilder: (_, __, ___) => Container(
+                width: 36,
+                height: 36,
+                color: const Color(0xFFD0DDE8),
+              ),
+            ),
+          ),
+          Container(
+            width: 36,
+            height: 36,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+              color: Color(0x99000000),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              '+$count',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 12,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -91,6 +92,20 @@ class SearchResultsScreen extends StatefulWidget {
 
 class _SearchResultsScreenState extends State<SearchResultsScreen> {
   bool _isGridView = true;
+
+  void _openDetails(BuildContext context, _PropertyResult item) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => HotelDetailsScreen(
+          imagePath: item.image,
+          name: item.name,
+          location: item.location,
+          price: item.price,
+          rating: item.rating,
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -240,19 +255,23 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       crossAxisCount: 2,
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: 0.72,
+                      childAspectRatio: 198 / 227,
                     ),
                     itemCount: _kResults.length,
-                    itemBuilder: (_, i) =>
-                        _GridCard(data: _kResults[i]),
+                    itemBuilder: (_, i) => GestureDetector(
+                      onTap: () => _openDetails(context, _kResults[i]),
+                      child: _GridCard(data: _kResults[i]),
+                    ),
                   )
                 : ListView.separated(
                     padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
                     itemCount: _kResults.length,
                     separatorBuilder: (_, __) =>
                         const SizedBox(height: 12),
-                    itemBuilder: (_, i) =>
-                        _ListCard(data: _kResults[i]),
+                    itemBuilder: (_, i) => GestureDetector(
+                      onTap: () => _openDetails(context, _kResults[i]),
+                      child: _ListCard(data: _kResults[i]),
+                    ),
                   ),
           ),
         ],
@@ -273,7 +292,7 @@ class _GridCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: const [
           BoxShadow(
             color: Color(0x10000000),
@@ -282,6 +301,7 @@ class _GridCard extends StatelessWidget {
           ),
         ],
       ),
+      clipBehavior: Clip.hardEdge,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -290,7 +310,7 @@ class _GridCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
+                    const BorderRadius.vertical(top: Radius.circular(25)),
                 child: Image.asset(
                   data.image,
                   height: 120,
@@ -433,10 +453,11 @@ class _ListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      height: 139,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: const [
           BoxShadow(
             color: Color(0x10000000),
@@ -450,15 +471,14 @@ class _ListCard extends StatelessWidget {
         children: [
           // Image
           ClipRRect(
-            borderRadius: BorderRadius.circular(12),
+            borderRadius: BorderRadius.circular(18),
             child: Image.asset(
               data.image,
-              width: 120,
-              height: 100,
+              width: 115,
+              height: double.infinity,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 120,
-                height: 100,
+                width: 115,
                 color: const Color(0xFFE2E8F0),
               ),
             ),
@@ -468,6 +488,7 @@ class _ListCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Name + heart
                 Row(
@@ -481,7 +502,8 @@ class _ListCard extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
-                        maxLines: 2,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -489,7 +511,6 @@ class _ListCard extends StatelessWidget {
                         color: Colors.red, size: 18),
                   ],
                 ),
-                const SizedBox(height: 6),
                 // Location
                 Row(
                   children: [
@@ -510,7 +531,6 @@ class _ListCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
                 // Price + rating
                 Row(
                   children: [

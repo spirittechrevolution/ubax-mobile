@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/advanced_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/favorites/screens/favorites_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotels_tab.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/profile_tab.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
             HotelsTab(),
             _PlaceholderTab(),
             FavoritesTab(),
-            _PlaceholderTab(),
+            ProfileTab(),
           ],
         ),
       ),
