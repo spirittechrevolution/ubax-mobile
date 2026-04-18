@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class OrangeButton extends StatelessWidget {
   const OrangeButton({
@@ -36,15 +37,14 @@ class OrangeButton extends StatelessWidget {
           elevation: 0,
         ),
         onPressed: onPressed,
-        child: Text(
-          text,
-          style: textStyle ??
-              TextStyle(
-                color: textColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w700,
-              ),
-        ),
+        child: Text(text,
+            style: textStyle ??
+                const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  height: 1.0,
+                  letterSpacing: 0,
+                )),
       ),
     );
   }

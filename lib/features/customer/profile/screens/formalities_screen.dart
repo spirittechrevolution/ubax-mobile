@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/profile/screens/etat_des_lieux_screen.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/invoice_detail_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -341,37 +343,44 @@ class _InvoiceCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               // Voir la facture
-              Container(
-                width: 97,
-                height: 33,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
-                ),
-                alignment: Alignment.center,
-                child: const Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(Icons.visibility_rounded,
-                        color: AppColors.muted, size: 14),
-                    SizedBox(width: 4),
-                    Text(
-                      'Voir la facture',
-                      style: TextStyle(
-                        color: AppColors.dark,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 10,
+              GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const InvoiceDetailScreen()),
+                  );
+                },
+                child: Container(
+                  width: 97,
+                  height: 33,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    border: Border.all(color: const Color(0xFFE5E7EB)),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(Icons.visibility_rounded,
+                          color: AppColors.muted, size: 14),
+                      SizedBox(width: 4),
+                      Text(
+                        'Voir la facture',
+                        style: TextStyle(
+                          color: AppColors.dark,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 10,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               // Télécharger
               Container(
                 height: 33,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
                   color: AppColors.dark,
                   borderRadius: BorderRadius.circular(20),
@@ -435,11 +444,17 @@ class _EtatDesLieuxTab extends StatelessWidget {
             const SizedBox(height: 14),
             // File row
             Container(
-              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.background,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xFFE5E7EB)),
+              ),
+              clipBehavior: Clip.hardEdge,
+              child: Container(
+              padding: const EdgeInsets.fromLTRB(15, 12, 12, 12),
+              decoration: const BoxDecoration(
+                border: Border(
+                  left: BorderSide(color: AppColors.primary, width: 3),
+                ),
               ),
               child: Row(
                 children: [
@@ -483,6 +498,7 @@ class _EtatDesLieuxTab extends StatelessWidget {
                 ],
               ),
             ),
+            ),
             const SizedBox(height: 20),
             // Telecharger button
             SizedBox(
@@ -517,7 +533,12 @@ class _EtatDesLieuxTab extends StatelessWidget {
                     borderRadius: BorderRadius.circular(50),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                        builder: (_) => const EtatDesLieuxScreen()),
+                  );
+                },
                 icon: const Icon(Icons.visibility_rounded, size: 18),
                 label: const Text(
                   'Voir le document',

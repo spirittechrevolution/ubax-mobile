@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
-import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'signup_form_screen.dart';
 
@@ -16,8 +16,6 @@ class OtpScreen extends StatefulWidget {
 }
 
 class _OtpScreenState extends State<OtpScreen> {
-  static const _textDark = AppColors.dark;
-
   final List<TextEditingController> _controllers =
       List.generate(6, (_) => TextEditingController());
   final List<FocusNode> _nodes = List.generate(6, (_) => FocusNode());
@@ -123,14 +121,13 @@ class _OtpScreenState extends State<OtpScreen> {
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
                         child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            Text(
-                              'auth.otp_title'.tr(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w800,
-                                color: _textDark,
+                            Center(
+                              child: Text(
+                                'auth.otp_title'.tr(),
+                                style: AppTextStyles.sectionTitle,
+                                textAlign: TextAlign.center,
                               ),
                             ),
                             const SizedBox(height: 8),
@@ -138,10 +135,8 @@ class _OtpScreenState extends State<OtpScreen> {
                               'auth.otp_subtitle'.tr(namedArgs: {
                                 'phone': widget.phoneDisplay,
                               }),
-                              style: const TextStyle(
-                                color: Color(0xFF6D6D6D),
-                                height: 1.35,
-                              ),
+                              style: AppTextStyles.regular12,
+                              textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 18),
                             Row(
@@ -170,7 +165,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 );
                               }),
                             ),
-                            const SizedBox(height: 18),
+                            const SizedBox(height: 25),
                             OrangeButton(
                               text: 'auth.verify'.tr(),
                               onPressed: () {

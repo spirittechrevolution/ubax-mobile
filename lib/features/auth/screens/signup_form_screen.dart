@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
-import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class SignupFormScreen extends StatefulWidget {
   const SignupFormScreen({super.key});
@@ -12,8 +12,6 @@ class SignupFormScreen extends StatefulWidget {
 }
 
 class _SignupFormScreenState extends State<SignupFormScreen> {
-  static const _textDark = AppColors.dark;
-
   final _firstName = TextEditingController();
   final _lastName = TextEditingController();
   final _email = TextEditingController();
@@ -91,42 +89,30 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                 Expanded(
                   child: Container(
                     width: double.infinity,
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(28),
-                          topRight: Radius.circular(28),
-                        ),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(28),
+                        topRight: Radius.circular(28),
                       ),
-                      child: Container(
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(28),
-                            topRight: Radius.circular(28),
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color(0x1A000000),
-                              blurRadius: 24,
-                              offset: Offset(0, -6),
-                            ),
-                          ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x1A000000),
+                          blurRadius: 24,
+                          offset: Offset(0, -6),
                         ),
-                        child: SingleChildScrollView(
-                          padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                      ],
+                    ),
+                    child: SingleChildScrollView(
+                      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'auth.signup_form_title'.tr(),
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w800,
-                                  color: _textDark,
+                              Center(
+                                child: Text(
+                                  'auth.signup_form_title'.tr(),
+                                  style: AppTextStyles.sectionTitle,
+                                  textAlign: TextAlign.center,
                                 ),
                               ),
                               const SizedBox(height: 14),
@@ -183,6 +169,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                 controller: _password,
                                 hint: 'auth.password_hint'.tr(),
                                 obscureText: _obscure1,
+                                fontSize: 22,
                                 suffix: IconButton(
                                   onPressed: () =>
                                       setState(() => _obscure1 = !_obscure1),
@@ -199,6 +186,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                 controller: _confirmPassword,
                                 hint: 'auth.confirm_password'.tr(),
                                 obscureText: _obscure2,
+                                fontSize: 22,
                                 suffix: IconButton(
                                   onPressed: () =>
                                       setState(() => _obscure2 = !_obscure2),
@@ -247,8 +235,6 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                         ),
                       ),
                     ),
-                  ),
-                ),
               ],
             ),
           ),
@@ -265,6 +251,7 @@ class _Field extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.suffix,
+    this.fontSize = 15,
   });
 
   final TextEditingController controller;
@@ -272,6 +259,7 @@ class _Field extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final Widget? suffix;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -279,16 +267,37 @@ class _Field extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w300,
+        height: 1.0,
+        letterSpacing: 0,
+      ),
       decoration: InputDecoration(
         hintText: hint,
+        hintStyle: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w300,
+          height: 1.0,
+          letterSpacing: 0,
+          color: Color(0xFF9E9E9E),
+        ),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
         ),
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         suffixIcon: suffix,
       ),
     );
@@ -311,10 +320,10 @@ class _DropdownField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
       decoration: BoxDecoration(
         color: const Color(0xFFF5F5F5),
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(40),
         border: Border.all(color: const Color(0xFFE7E7E7)),
       ),
       child: DropdownButtonHideUnderline(
@@ -322,11 +331,21 @@ class _DropdownField extends StatelessWidget {
           value: value,
           isExpanded: true,
           borderRadius: BorderRadius.circular(12),
-          hint: hint == null ? null : Text(hint!),
+          style: AppTextStyles.regular12
+              .copyWith(fontSize: 13, color: Colors.black),
+          hint: hint == null
+              ? null
+              : Text(
+                  hint!,
+                  style: AppTextStyles.regular12.copyWith(fontSize: 13),
+                ),
           items: items
               .map((e) => DropdownMenuItem<String>(
                     value: e,
-                    child: Text(e),
+                    child: Text(
+                      e,
+                      style: AppTextStyles.regular12.copyWith(fontSize: 13),
+                    ),
                   ))
               .toList(growable: false),
           onChanged: (v) {

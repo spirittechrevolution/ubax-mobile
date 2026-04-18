@@ -5,6 +5,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class LanguageScreen extends StatefulWidget {
   const LanguageScreen({super.key, required this.onContinue});
@@ -90,8 +91,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               const SizedBox(height: 18),
               Text(
                 'language.selected'.tr(),
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: AppTextStyles.sectionTitle,
               ),
               const SizedBox(height: 10),
               _SelectedLanguageTile(
@@ -101,8 +101,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               const SizedBox(height: 18),
               Text(
                 'language.all'.tr(),
-                style:
-                    const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
+                style: AppTextStyles.sectionTitle,
               ),
               const SizedBox(height: 10),
               Container(
@@ -155,10 +154,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                   Expanded(
                                     child: Text(
                                       item.label,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w500,
-                                      ),
+                                      style: AppTextStyles.regularlight16,
                                     ),
                                   ),
                                   _RadioDot(
@@ -225,7 +221,7 @@ class _SelectedLanguageTile extends StatelessWidget {
           Expanded(
             child: Text(
               item.label,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              style: AppTextStyles.regularlight16,
             ),
           ),
           Container(

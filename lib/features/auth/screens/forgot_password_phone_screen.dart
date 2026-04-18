@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import '../widgets/africa_country_code_picker.dart';
 import 'forgot_password_otp_screen.dart';
@@ -16,8 +17,6 @@ class ForgotPasswordPhoneScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
-  static const _textDark = AppColors.dark;
-
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
 
@@ -63,35 +62,30 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
               Center(
                 child: Column(
                   children: [
+                    const SizedBox(height: 18),
                     Image.asset(
                       "assets/images/lock.png",
                       width: 113,
                       height: 113,
                     ),
+                    const SizedBox(height: 38),
                     Image.asset(
-                      "assets/images/hidepoint.png",
-                      width: 100,
-                      height: 100,
+                      "assets/images/lockinterro.png",
+                      width: 247,
+                      height: 57,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 26),
+              const SizedBox(height: 30),
               Text(
                 'auth.reset_password_title'.tr(),
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: _textDark,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
               const SizedBox(height: 8),
               Text(
                 'auth.reset_password_subtitle'.tr(),
-                style: const TextStyle(
-                  color: Color(0xFF6D6D6D),
-                  height: 1.35,
-                ),
+                style: AppTextStyles.regular12,
               ),
               const SizedBox(height: 22),
               Row(
@@ -110,7 +104,10 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
                   ),
                 ],
               ),
-              const Spacer(),
+              // const Spacer(),
+              const SizedBox(
+                height: 20,
+              ),
               OrangeButton(
                 text: 'auth.send'.tr(),
                 onPressed: () {

@@ -53,5 +53,27 @@
     "account_type": "खाते का प्रकार",
     "confirm_password": "पासवर्ड की पुष्टि करें",
     "signup_button": "साइन अप"
+  },
+  "profile": {
+    "role": {
+      "tenant": "Locataire"
+    },
+    "myLocal": "Mon local",
+    "dashboard": {
+      "title": "Tableau de Bord",
+      "nextRent": "Prochain loyer le {date}",
+      "payRent": "Payer mon loyer",
+      "viewHistory": "Voir l'historique",
+      "paid": "Payés",
+      "pending": "En attente",
+      "unpaid": "Impayé"
+    },
+    "services": {
+      "formalities": "Formalités",
+      "documents": "Documents",
+      "sav": "SAV",
+      "ubaxServices": "Services UBAX",
+      "reservations": "Mes reservations"
+    }
   }
 }

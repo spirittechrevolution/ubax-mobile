@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
-import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'otp_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
@@ -15,8 +15,6 @@ class SignupPhoneScreen extends StatefulWidget {
 }
 
 class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
-  static const _textDark = AppColors.dark;
-
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
 
@@ -78,17 +76,10 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                     height: 86,
                   ),
                 ),
-                const Spacer(),
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(28),
-                      topRight: Radius.circular(28),
-                    ),
-                  ),
+                const SizedBox(height: 30),
+                Expanded(
                   child: Container(
+                    width: double.infinity,
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.only(
@@ -104,27 +95,22 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                       ],
                     ),
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
                       child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'auth.signup_phone_title'.tr(),
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w800,
-                              color: _textDark,
-                            ),
+                            style: AppTextStyles.sectionTitle,
+                            textAlign: TextAlign.center,
                           ),
                           const SizedBox(height: 8),
                           Text(
                             'auth.signup_phone_subtitle'.tr(),
-                            style: const TextStyle(
-                              color: Color(0xFF6D6D6D),
-                              height: 1.35,
-                            ),
+                            style: AppTextStyles.regular12,
+                            textAlign: TextAlign.center,
                           ),
-                          const SizedBox(height: 16),
+                          const SizedBox(height: 25),
                           Row(
                             children: [
                               AfricaCountryCodePicker(
@@ -140,7 +126,7 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 34),
                           OrangeButton(
                             text: 'common.continue'.tr(),
                             onPressed: () {
@@ -154,7 +140,7 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
                               );
                             },
                           ),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 208),
                           _DividerLabel(text: 'auth.or_signup_with'.tr()),
                           const SizedBox(height: 14),
                           Row(
@@ -202,16 +188,37 @@ class _Field extends StatelessWidget {
     return TextField(
       controller: controller,
       keyboardType: TextInputType.phone,
+      style: const TextStyle(
+        fontSize: 15,
+        fontWeight: FontWeight.w300,
+        height: 1.0,
+        letterSpacing: 0,
+      ),
       decoration: InputDecoration(
         hintText: hint,
+        hintStyle: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w300,
+          height: 1.0,
+          letterSpacing: 0,
+          color: Color(0xFF9E9E9E),
+        ),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
         ),
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       ),
     );
   }

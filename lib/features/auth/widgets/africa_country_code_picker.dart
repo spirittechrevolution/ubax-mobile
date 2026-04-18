@@ -1,6 +1,8 @@
+import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class AfricaCountry {
   const AfricaCountry({
@@ -113,7 +115,7 @@ class _AfricaCountryCodePickerState extends State<AfricaCountryCodePicker> {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(40),
       onTap: () async {
         final selected = await showModalBottomSheet<AfricaCountry>(
           context: context,
@@ -126,22 +128,35 @@ class _AfricaCountryCodePickerState extends State<AfricaCountryCodePicker> {
         widget.onChanged(selected);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+        width: 135,
+        height: 56,
+        padding: const EdgeInsets.symmetric(horizontal: 6),
         decoration: BoxDecoration(
           color: const Color(0xFFF5F5F5),
-          borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: const Color(0xFFE7E7E7)),
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(widget.value.flagEmoji, style: const TextStyle(fontSize: 18)),
-            const SizedBox(width: 8),
-            Text(
-              widget.value.dialCode,
-              style: const TextStyle(fontWeight: FontWeight.w700),
+            ClipOval(
+              child: CountryFlag.fromCountryCode(
+                widget.value.iso2,
+                width: 40,
+                height: 40,
+              ),
             ),
             const SizedBox(width: 6),
+            Text(
+              widget.value.dialCode,
+              style: const TextStyle(
+                fontSize: 15,
+                fontWeight: FontWeight.w300,
+                height: 1.0,
+                letterSpacing: 0,
+              ),
+            ),
+            const SizedBox(width: 2),
             const Icon(Icons.keyboard_arrow_down_rounded,
                 size: 18, color: Color(0xFF6D6D6D)),
           ],

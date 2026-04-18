@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class NewPasswordScreen extends StatefulWidget {
   const NewPasswordScreen({super.key});
@@ -12,8 +13,6 @@ class NewPasswordScreen extends StatefulWidget {
 }
 
 class _NewPasswordScreenState extends State<NewPasswordScreen> {
-  static const _textDark = AppColors.dark;
-
   final _password = TextEditingController();
   final _confirmPassword = TextEditingController();
   bool _obscure1 = true;
@@ -62,37 +61,32 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
               Center(
                 child: Column(
                   children: [
+                    const SizedBox(height: 18),
                     Image.asset(
                       "assets/images/lock.png",
                       width: 113,
                       height: 113,
                     ),
+                    const SizedBox(height: 38),
                     Image.asset(
-                      "assets/images/hidepoint.png",
-                      width: 100,
-                      height: 100,
+                      "assets/images/locktrue.png",
+                      width: 247,
+                      height: 57,
                     ),
                   ],
                 ),
               ),
-              const SizedBox(height: 26),
+              const SizedBox(height: 30),
               Text(
                 'auth.new_password_title'.tr(),
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.w800,
-                  color: _textDark,
-                ),
+                style: AppTextStyles.sectionTitle,
               ),
               const SizedBox(height: 8),
               Text(
                 'auth.new_password_subtitle'.tr(),
-                style: const TextStyle(
-                  color: Color(0xFF6D6D6D),
-                  height: 1.35,
-                ),
+                style: AppTextStyles.regular12,
               ),
-              const SizedBox(height: 22),
+              const SizedBox(height: 30),
               _Field(
                 controller: _password,
                 hint: 'auth.new_password_hint'.tr(),
@@ -107,7 +101,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
+              const SizedBox(height: 16),
               _Field(
                 controller: _confirmPassword,
                 hint: 'auth.confirm_password_hint'.tr(),
@@ -122,7 +116,7 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 18),
+              const SizedBox(height: 33),
               OrangeButton(
                 text: 'auth.validate'.tr(),
                 onPressed: () {

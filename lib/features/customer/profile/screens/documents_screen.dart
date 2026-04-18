@@ -1,0 +1,250 @@
+import 'package:flutter/material.dart';
+
+import 'package:statefulclickcounter/theme/app_colors.dart';
+
+// ─── Data ─────────────────────────────────────────────────────────────────────
+
+class _DocumentSection {
+  const _DocumentSection({
+    required this.title,
+    required this.fileName,
+    required this.fileSize,
+  });
+
+  final String title;
+  final String fileName;
+  final String fileSize;
+}
+
+const _kDocuments = [
+  _DocumentSection(
+    title: 'Piéce d\'identité',
+    fileName: 'Carte d\'identité .jpg',
+    fileSize: '169 KB',
+  ),
+  _DocumentSection(
+    title: 'Contrat de bail',
+    fileName: 'Contrat de bail.pdf',
+    fileSize: '147 KB',
+  ),
+];
+
+// ─── Screen ───────────────────────────────────────────────────────────────────
+
+class DocumentsScreen extends StatelessWidget {
+  const DocumentsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      backgroundColor: AppColors.background,
+      body: Column(
+        children: [
+          // ── Dark header
+          Container(
+            padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
+            decoration: const BoxDecoration(
+              color: AppColors.dark,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
+            ),
+            child: Column(
+              children: [
+                // Title
+                Row(
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: const Icon(Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white, size: 20),
+                    ),
+                    const Expanded(
+                      child: Center(
+                        child: Text(
+                          'Mes documents',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w900,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                // Search bar
+                Container(
+                  height: 44,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF243E55),
+                    borderRadius: BorderRadius.circular(22),
+                  ),
+                  child: const Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Rechercher un document',
+                          style: TextStyle(
+                            color: Color(0xFF94A3B8),
+                            fontSize: 13,
+                          ),
+                        ),
+                      ),
+                      Icon(Icons.search_rounded,
+                          color: Colors.white, size: 22),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          // ── Body
+          Expanded(
+            child: ListView.separated(
+              padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
+              itemCount: _kDocuments.length,
+              separatorBuilder: (_, __) => const SizedBox(height: 16),
+              itemBuilder: (_, i) =>
+                  _DocumentCard(doc: _kDocuments[i]),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ─── Document card ────────────────────────────────────────────────────────────
+
+class _DocumentCard extends StatelessWidget {
+  const _DocumentCard({required this.doc});
+
+  final _DocumentSection doc;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(18),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Section title
+          Text(
+            doc.title,
+            style: const TextStyle(
+              color: AppColors.dark,
+              fontWeight: FontWeight.w700,
+              fontSize: 16,
+            ),
+          ),
+          const SizedBox(height: 14),
+          // File row
+          Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(color: AppColors.primary),
+            ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 36,
+                    height: 36,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFFFF0E6),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.description_outlined,
+                        color: AppColors.primary, size: 20),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          doc.fileName,
+                          style: const TextStyle(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                          ),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          doc.fileSize,
+                          style: const TextStyle(
+                            color: AppColors.muted,
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Icon(Icons.check_circle_rounded,
+                      color: AppColors.primary, size: 22),
+                ],
+              ),
+            ),
+          const SizedBox(height: 16),
+          // Telecharger button
+          SizedBox(
+            width: double.infinity,
+            height: 46,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.dark,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              onPressed: () {},
+              child: const Text(
+                'Telecharger',
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 14),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          // Voir le document
+          SizedBox(
+            width: double.infinity,
+            height: 46,
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                foregroundColor: AppColors.dark,
+                side: const BorderSide(color: Color(0xFFE5E7EB)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
+              ),
+              onPressed: () {},
+              icon: const Icon(Icons.visibility_rounded, size: 18),
+              label: const Text(
+                'Voir le document',
+                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}

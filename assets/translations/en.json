@@ -64,5 +64,27 @@
     "new_password_hint": "New password",
     "confirm_password_hint": "Confirm password",
     "validate": "Validate"
+  },
+  "profile": {
+    "role": {
+      "tenant": "Locataire"
+    },
+    "myLocal": "Mon local",
+    "dashboard": {
+      "title": "Tableau de Bord",
+      "nextRent": "Prochain loyer le {date}",
+      "payRent": "Payer mon loyer",
+      "viewHistory": "Voir l'historique",
+      "paid": "Payés",
+      "pending": "En attente",
+      "unpaid": "Impayé"
+    },
+    "services": {
+      "formalities": "Formalités",
+      "documents": "Documents",
+      "sav": "SAV",
+      "ubaxServices": "Services UBAX",
+      "reservations": "Mes reservations"
+    }
   }
 }

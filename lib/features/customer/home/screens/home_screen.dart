@@ -7,6 +7,7 @@ import 'package:statefulclickcounter/features/customer/profile/screens/profile_t
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/property_details_screen.dart';
 
@@ -183,17 +184,77 @@ class _HomeTab extends StatelessWidget {
   const _HomeTab();
 
   static const _popularProperties = [
-    {'image': 'assets/images/villa.jpg', 'price': '49 990 000 Fcfa', 'title': 'Villa avec piscine', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '6', 'baths': '4', 'kitchens': '2'},
-    {'image': 'assets/images/villa.jpg', 'price': '35 000 000 Fcfa', 'title': 'Villa sur la côte', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '5', 'baths': '3', 'kitchens': '1'},
-    {'image': 'assets/images/villa.jpg', 'price': '28 500 000 Fcfa', 'title': 'Villa moderne', 'location': 'Marcory, Abidjan – Côte d\'Ivoire', 'beds': '4', 'baths': '2', 'kitchens': '1'},
-    {'image': 'assets/images/villa.jpg', 'price': '55 000 000 Fcfa', 'title': 'Villa de luxe', 'location': 'Riviera, Abidjan – Côte d\'Ivoire', 'beds': '7', 'baths': '5', 'kitchens': '2'},
+    {
+      'image': 'assets/images/villa.jpg',
+      'price': '49 990 000 Fcfa',
+      'title': 'Villa avec piscine',
+      'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+      'beds': '6',
+      'baths': '4',
+      'kitchens': '2'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'price': '35 000 000 Fcfa',
+      'title': 'Villa sur la côte',
+      'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+      'beds': '5',
+      'baths': '3',
+      'kitchens': '1'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'price': '28 500 000 Fcfa',
+      'title': 'Villa moderne',
+      'location': 'Marcory, Abidjan – Côte d\'Ivoire',
+      'beds': '4',
+      'baths': '2',
+      'kitchens': '1'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'price': '55 000 000 Fcfa',
+      'title': 'Villa de luxe',
+      'location': 'Riviera, Abidjan – Côte d\'Ivoire',
+      'beds': '7',
+      'baths': '5',
+      'kitchens': '2'
+    },
   ];
 
   static const _recommendedProperties = [
-    {'image': 'assets/images/villa.jpg', 'title': 'Appartement Moderne à\nCocody', 'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire', 'beds': '3', 'baths': '2', 'salons': '1'},
-    {'image': 'assets/images/villa.jpg', 'title': 'Studio meublé au\nPlateau', 'location': 'Plateau, Abidjan – Côte d\'Ivoire', 'beds': '1', 'baths': '1', 'salons': '1'},
-    {'image': 'assets/images/villa.jpg', 'title': 'Duplex à Marcory', 'location': 'Marcory, Abidjan – Côte d\'Ivoire', 'beds': '4', 'baths': '2', 'salons': '2'},
-    {'image': 'assets/images/villa.jpg', 'title': 'Appartement vue mer\nà Treichville', 'location': 'Treichville, Abidjan – Côte d\'Ivoire', 'beds': '2', 'baths': '1', 'salons': '1'},
+    {
+      'image': 'assets/images/villa.jpg',
+      'title': 'Appartement Moderne à\nCocody',
+      'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+      'beds': '3',
+      'baths': '2',
+      'salons': '1'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'title': 'Studio meublé au\nPlateau',
+      'location': 'Plateau, Abidjan – Côte d\'Ivoire',
+      'beds': '1',
+      'baths': '1',
+      'salons': '1'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'title': 'Duplex à Marcory',
+      'location': 'Marcory, Abidjan – Côte d\'Ivoire',
+      'beds': '4',
+      'baths': '2',
+      'salons': '2'
+    },
+    {
+      'image': 'assets/images/villa.jpg',
+      'title': 'Appartement vue mer\nà Treichville',
+      'location': 'Treichville, Abidjan – Côte d\'Ivoire',
+      'beds': '2',
+      'baths': '1',
+      'salons': '1'
+    },
   ];
 
   @override
@@ -226,9 +287,9 @@ class _HomeTab extends StatelessWidget {
                     Text(
                       'Arnaud Koffi',
                       style: TextStyle(
-                        color: AppColors.dark,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 16,
+                        color: AppColors.textBlack,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -237,7 +298,8 @@ class _HomeTab extends StatelessWidget {
               _NotifButton(count: 5, onTap: () {}),
               const SizedBox(width: 10),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(22),
@@ -266,7 +328,7 @@ class _HomeTab extends StatelessWidget {
           const _SectionHeader(title: 'Les plus populaires'),
           const SizedBox(height: 12),
           SizedBox(
-            height: 190,
+            height: 194,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: _popularProperties.length,
@@ -389,11 +451,11 @@ class _SearchCardState extends State<_SearchCard> {
       child: Column(
         children: [
           Container(
-            height: 44,
+            height: 57,
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
               color: AppColors.background,
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(40),
             ),
             child: Row(
               children: [
@@ -415,28 +477,30 @@ class _SearchCardState extends State<_SearchCard> {
             ),
           ),
           const SizedBox(height: 12),
-          _InputChip(
+          const _InputChip(
             icon: Icons.location_on_outlined,
             text: 'Abidjan, Cocody',
             trailing: null,
           ),
           const SizedBox(height: 10),
-          Row(
+          const Row(
             children: [
               Expanded(
+                flex: 222,
                 child: _InputChip(
                   icon: Icons.meeting_room_outlined,
                   text: 'Nombre de pièces',
-                  trailing: const Icon(Icons.keyboard_arrow_down_rounded,
+                  trailing: Icon(Icons.keyboard_arrow_down_rounded,
                       color: AppColors.muted),
                 ),
               ),
-              const SizedBox(width: 10),
+              SizedBox(width: 10),
               Expanded(
+                flex: 147,
                 child: _InputChip(
                   icon: Icons.apartment_rounded,
                   text: 'Type',
-                  trailing: const Icon(Icons.keyboard_arrow_down_rounded,
+                  trailing: Icon(Icons.keyboard_arrow_down_rounded,
                       color: AppColors.muted),
                 ),
               ),
@@ -444,7 +508,8 @@ class _SearchCardState extends State<_SearchCard> {
           ),
           const SizedBox(height: 12),
           OrangeButton(
-            height: 52,
+            height: 49,
+            borderRadius: 40,
             text: 'Rechercher les biens',
             onPressed: () {
               Navigator.of(context).push(
@@ -475,18 +540,18 @@ class _Segment extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(18),
+      borderRadius: BorderRadius.circular(40),
       child: Container(
+        height: 49,
         decoration: BoxDecoration(
           color: selected ? AppColors.dark : Colors.transparent,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(40),
         ),
         alignment: Alignment.center,
         child: Text(
           label,
-          style: TextStyle(
+          style: AppTextStyles.regularlight16.copyWith(
             color: selected ? Colors.white : AppColors.dark,
-            fontWeight: FontWeight.w800,
           ),
         ),
       ),
@@ -508,24 +573,23 @@ class _InputChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 46,
-      padding: const EdgeInsets.symmetric(horizontal: 12),
+      height: 44,
+      padding: const EdgeInsets.symmetric(horizontal: 14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: const Color(0xFFE7E7E7)),
+        borderRadius: BorderRadius.circular(40),
+        border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.dark),
+          Icon(
+            icon,
+          ),
           const SizedBox(width: 10),
           Expanded(
             child: Text(
               text,
-              style: const TextStyle(
-                color: AppColors.dark,
-                fontWeight: FontWeight.w700,
-              ),
+              style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -548,13 +612,7 @@ class _SectionHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: const TextStyle(
-              color: AppColors.dark,
-              fontWeight: FontWeight.w600,
-              fontSize: 16,
-              height: 24 / 16,
-              letterSpacing: 0.08,
-            ),
+            style: AppTextStyles.regular20.copyWith(color: AppColors.dark),
           ),
         ),
         TextButton(
@@ -562,8 +620,8 @@ class _SectionHeader extends StatelessWidget {
           child: const Text(
             'Voir tout',
             style: TextStyle(
-              color: AppColors.dark,
-              fontWeight: FontWeight.w700,
+              color: AppColors.textBlack,
+              fontWeight: FontWeight.w600,
             ),
           ),
         )
@@ -611,7 +669,7 @@ class _PropertyCard extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(18),
       child: Container(
-        width: 250,
+        width: 266,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Colors.white,
@@ -629,76 +687,63 @@ class _PropertyCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color(0x00000000),
-                      Color(0xAA000000),
+                      Color(0x55000000),
+                      Color(0xDD000000),
                     ],
                   ),
                 ),
               ),
             ),
             Positioned(
-              left: 12,
+              left: 10,
               top: 12,
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-                decoration: BoxDecoration(
-                  color: AppColors.dark,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Text(
-                  price,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
+              child: Text(
+                price,
+                style: AppTextStyles.regularlight16.copyWith(
+                  fontSize: 13,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w900,
                 ),
               ),
             ),
-            Positioned(
+            const Positioned(
               right: 10,
               top: 10,
-              child: Container(
-                width: 34,
-                height: 34,
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.35),
-                  borderRadius: BorderRadius.circular(17),
-                ),
-                alignment: Alignment.center,
-                child: const Icon(Icons.favorite_rounded,
-                    color: Colors.white),
-              ),
+              child: const Icon(Icons.favorite_rounded, color: Colors.white),
             ),
             Positioned(
               left: 12,
               right: 12,
-              bottom: 12,
+              bottom: 7,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: AppTextStyles.regularlight16.copyWith(
+                      fontSize: 13,
                       color: Colors.white,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
                     location,
-                    style: const TextStyle(color: Colors.white70, fontSize: 12),
+                    style: AppTextStyles.regular12.copyWith(
+                      fontSize: 9,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w400,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 6),
+                  // const SizedBox(height: 4),
                   Row(
                     children: [
                       Expanded(
                         child: Wrap(
-                          spacing: 10,
-                          runSpacing: 6,
+                          spacing: 4,
+                          runSpacing: 2,
                           children: [
                             _Info(
                               icon: Icons.bed_rounded,
@@ -717,8 +762,8 @@ class _PropertyCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        width: 30,
-                        height: 30,
+                        width: 25,
+                        height: 25,
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(12),
@@ -740,10 +785,15 @@ class _PropertyCard extends StatelessWidget {
 }
 
 class _Info extends StatelessWidget {
-  const _Info({required this.icon, required this.text});
+  const _Info({
+    required this.icon,
+    required this.text,
+    this.textColor = Colors.white,
+  });
 
   final IconData icon;
   final String text;
+  final Color textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -752,12 +802,16 @@ class _Info extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, color: const Color(0xFFD1D5DB), size: 16),
+          Icon(icon, color: AppColors.primary, size: 11),
           const SizedBox(width: 4),
           Flexible(
             child: Text(
               text,
-              style: const TextStyle(color: Color(0xFFD1D5DB), fontSize: 11),
+              style: AppTextStyles.regular12.copyWith(
+                fontSize: 8,
+                color: textColor,
+                fontWeight: FontWeight.w400,
+              ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -805,6 +859,7 @@ class _RecommendedTile extends StatelessWidget {
       },
       borderRadius: BorderRadius.circular(18),
       child: Container(
+        height: 119,
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
           color: Colors.white,
@@ -816,8 +871,8 @@ class _RecommendedTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(14),
               child: Image.asset(
                 imagePath,
-                width: 88,
-                height: 70,
+                width: 95,
+                height: 95,
                 fit: BoxFit.cover,
               ),
             ),
@@ -828,10 +883,10 @@ class _RecommendedTile extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
-                      color: AppColors.dark,
-                      fontWeight: FontWeight.w900,
-                    ),
+                    style: AppTextStyles.regularlight16.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.dark),
                   ),
                   const SizedBox(height: 6),
                   Row(
@@ -842,22 +897,34 @@ class _RecommendedTile extends StatelessWidget {
                       Expanded(
                         child: Text(
                           location,
-                          style: const TextStyle(
-                              color: AppColors.muted, fontSize: 12),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                          style: AppTextStyles.regularlight16.copyWith(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w400,
+                            color: AppColors.muted,
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 10),
                   Wrap(
                     spacing: 10,
                     runSpacing: 4,
                     children: [
-                      _Info(icon: Icons.bed_rounded, text: '$beds Chambres'),
-                      _Info(icon: Icons.bathtub_rounded, text: '$baths Salle de bains'),
-                      _Info(icon: Icons.weekend_rounded, text: '$salons Salon'),
+                      _Info(
+                        icon: Icons.bed_rounded,
+                        text: '$beds Chambres',
+                        textColor: Color(0xFF343434),
+                      ),
+                      _Info(
+                          icon: Icons.bathtub_rounded,
+                          text: '$baths Salle de bains',
+                          textColor: Color(0xFF343434)),
+                      _Info(
+                        icon: Icons.weekend_rounded,
+                        text: '$salons Salon',
+                        textColor: Color(0xFF343434),
+                      ),
                     ],
                   ),
                 ],

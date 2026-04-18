@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'signup_phone_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
@@ -18,10 +19,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static const _textDark = AppColors.dark;
-
   final _phoneController = TextEditingController(text: '07 12 34 56 78');
-  final _passwordController = TextEditingController();
+  final _passwordController = TextEditingController(text: 'password1');
   bool _obscure = true;
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
 
@@ -62,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
           SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 58),
+                const SizedBox(height: 60),
                 Center(
                   child: Image.asset(
                     'assets/icons/logoUbaxWhite.png',
@@ -70,20 +69,13 @@ class _LoginScreenState extends State<LoginScreen> {
                     height: 86,
                   ),
                 ),
-                const Spacer(),
-                Container(
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(28),
-                      topRight: Radius.circular(28),
-                    ),
-                  ),
+                const SizedBox(height: 70),
+                Expanded(
                   child: Container(
-                    decoration: BoxDecoration(
+                    width: double.infinity,
+                    decoration: const BoxDecoration(
                       color: Colors.white,
-                      borderRadius: const BorderRadius.only(
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(28),
                         topRight: Radius.circular(28),
                       ),
@@ -96,17 +88,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
                     child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'auth.login_title'.tr(),
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: _textDark,
-                            ),
+                          Center(
+                            child: Text('auth.login_title'.tr(),
+                                style: AppTextStyles.sectionTitle),
                           ),
                           const SizedBox(height: 18),
                           Row(
@@ -130,6 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             controller: _passwordController,
                             hint: 'auth.password_hint'.tr(),
                             obscureText: _obscure,
+                            fontSize: 22,
                             suffix: IconButton(
                               onPressed: () =>
                                   setState(() => _obscure = !_obscure),
@@ -156,9 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 'auth.forgot_password'.tr(),
                                 style: const TextStyle(
-                                  color: _textDark,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                    color: AppColors.dark,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12),
                               ),
                             ),
                           ),
@@ -167,9 +156,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: 'auth.login_button'.tr(),
                             onPressed: widget.onLoggedIn,
                           ),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 60),
                           _DividerLabel(text: 'auth.or_login_with'.tr()),
-                          const SizedBox(height: 14),
+                          const SizedBox(height: 40),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
@@ -187,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                             ],
                           ),
-                          const SizedBox(height: 18),
+                          const SizedBox(height: 60),
                           Center(
                             child: RichText(
                               text: TextSpan(
@@ -211,7 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Text(
                                         'auth.signup_link'.tr(),
                                         style: const TextStyle(
-                                          color: _textDark,
+                                          color: AppColors.textBlack,
                                           fontWeight: FontWeight.w800,
                                         ),
                                       ),
@@ -245,6 +234,7 @@ class _Field extends StatelessWidget {
     this.keyboardType,
     this.obscureText = false,
     this.suffix,
+    this.fontSize = 15,
   });
 
   final TextEditingController controller;
@@ -252,6 +242,7 @@ class _Field extends StatelessWidget {
   final TextInputType? keyboardType;
   final bool obscureText;
   final Widget? suffix;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -259,16 +250,37 @@ class _Field extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       obscureText: obscureText,
+      style: TextStyle(
+        fontSize: fontSize,
+        fontWeight: FontWeight.w300,
+        height: 1.0,
+        letterSpacing: 0,
+      ),
       decoration: InputDecoration(
         hintText: hint,
+        hintStyle: const TextStyle(
+          fontSize: 15,
+          fontWeight: FontWeight.w300,
+          height: 1.0,
+          letterSpacing: 0,
+          color: Color(0xFF9E9E9E),
+        ),
         filled: true,
         fillColor: const Color(0xFFF5F5F5),
         border: OutlineInputBorder(
           borderSide: BorderSide.none,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(40),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+          borderRadius: BorderRadius.circular(40),
         ),
         contentPadding:
-            const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+            const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         suffixIcon: suffix,
       ),
     );

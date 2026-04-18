@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'new_password_screen.dart';
 
@@ -68,29 +69,31 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
       ),
       body: SafeArea(
         top: false,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
+        bottom: false,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 74),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
                 'auth.verification'.tr(),
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 26,
-                  fontWeight: FontWeight.w800,
-                ),
+                style: AppTextStyles.sectionTitle.copyWith(color: Colors.white),
               ),
-              const SizedBox(height: 8),
-              Text(
+            ),
+            const SizedBox(height: 8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
                 'auth.verification_subtitle'.tr(),
-                style: const TextStyle(
-                  color: Color(0xFFE2E8F0),
-                  height: 1.35,
-                ),
+                style: AppTextStyles.regular12
+                    .copyWith(color: const Color(0xFFE2E8F0)),
               ),
-              const SizedBox(height: 26),
-              Row(
+            ),
+            const SizedBox(height: 60),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(6, (i) {
                   return _OtpDotField(
@@ -100,8 +103,11 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                   );
                 }),
               ),
-              const Spacer(),
-              OrangeButton(
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: OrangeButton(
                 text: 'auth.verify_code'.tr(),
                 onPressed: () {
                   Navigator.of(context).push(
@@ -110,8 +116,9 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
                   );
                 },
               ),
-            ],
-          ),
+            ),
+            SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+          ],
         ),
       ),
     );
@@ -132,11 +139,11 @@ class _OtpDotField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 52,
-      height: 58,
-      decoration: BoxDecoration(
-        color: const Color(0xFF1B3A55),
-        borderRadius: BorderRadius.circular(18),
+      width: 50,
+      height: 50,
+      decoration: const BoxDecoration(
+        color: Color(0xFF1B3A55),
+        shape: BoxShape.circle,
       ),
       alignment: Alignment.center,
       child: TextField(

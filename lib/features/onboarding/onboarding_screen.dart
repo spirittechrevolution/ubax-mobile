@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key, required this.onDone});
@@ -36,7 +37,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           descriptionKey: 'onboarding.page3.description',
         ),
         _OnboardingPageData(
-          imageAsset: 'assets/images/onb4.png',
+          imageAsset: 'assets/images/mobilemoney.png',
           titleKey: 'onboarding.page4.title',
           descriptionKey: 'onboarding.page4.description',
         ),
@@ -169,22 +170,12 @@ class _OnboardingPage extends StatelessWidget {
                 const Spacer(),
                 Text(
                   data.titleKey.tr(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 35,
-                    height: 1.0,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: AppTextStyles.semibold30.copyWith(color: Colors.white),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 22),
                 Text(
                   data.descriptionKey.tr(),
-                  style: const TextStyle(
-                    color: Color(0xFFEAEAEA),
-                    fontSize: 18,
-                    height: 1.0,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTextStyles.light15.copyWith(color: Colors.white),
                 ),
                 SizedBox(height: MediaQuery.of(context).padding.bottom + 92),
               ],
