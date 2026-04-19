@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class ChatScreen extends StatefulWidget {
   const ChatScreen({super.key});
@@ -49,12 +50,10 @@ class _ChatHeader extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Message',
-            style: TextStyle(
+            style: AppTextStyles.sectionTitle.copyWith(
               color: Colors.white,
-              fontWeight: FontWeight.w900,
-              fontSize: 16,
             ),
           ),
           const SizedBox(height: 16),
@@ -81,11 +80,10 @@ class _ChatHeader extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Aigle Immobilière',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
                         fontSize: 15,
                       ),
                     ),
@@ -101,11 +99,10 @@ class _ChatHeader extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 5),
-                        const Text(
+                        Text(
                           'en ligne',
-                          style: TextStyle(
-                            color: Color(0xFF94A3B8),
-                            fontSize: 12,
+                          style: AppTextStyles.regular12.copyWith(
+                            color: const Color(0xFF94A3B8),
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -181,7 +178,7 @@ class _DateSeparator extends StatelessWidget {
     return Center(
       child: Text(
         label,
-        style: const TextStyle(
+        style: AppTextStyles.regular12.copyWith(
           color: AppColors.muted,
           fontWeight: FontWeight.w700,
           fontSize: 13,
@@ -301,9 +298,8 @@ class _SharedPropertyCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         name,
-                        style: const TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: AppColors.dark,
-                          fontWeight: FontWeight.w900,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -327,9 +323,8 @@ class _SharedPropertyCard extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   location,
-                  style: const TextStyle(
+                  style: AppTextStyles.regular12.copyWith(
                     color: AppColors.muted,
-                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -422,7 +417,7 @@ class _BubbleMessage extends StatelessWidget {
         const SizedBox(height: 4),
         Text(
           time,
-          style: const TextStyle(
+          style: AppTextStyles.regular12.copyWith(
             color: AppColors.muted,
             fontSize: 11,
             fontWeight: FontWeight.w500,

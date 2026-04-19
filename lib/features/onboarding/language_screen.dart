@@ -86,7 +86,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
               const SizedBox(height: 6),
               Text(
                 'language.subtitle'.tr(),
-                style: const TextStyle(color: Color(0xFF6D6D6D), height: 1.3),
+                style: const TextStyle(color: Color(0xFF6D6D6D), height: 1.4),
               ),
               const SizedBox(height: 18),
               Text(

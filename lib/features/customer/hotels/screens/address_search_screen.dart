@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/features/customer/hotels/screens/search_results_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -112,11 +113,10 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
+                      Text(
                         'Adresse',
-                        style: TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
                       ),
@@ -191,20 +191,18 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                             children: [
                               Text(
                                 item.title,
-                                style: const TextStyle(
+                                style: AppTextStyles.sectionTitle.copyWith(
                                   color: AppColors.dark,
-                                  fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                 ),
                               ),
                               const SizedBox(height: 4),
                               Text(
                                 item.subtitle,
-                                style: const TextStyle(
-                                  color: Color(0xFF858585),
+                                style: AppTextStyles.regular12.copyWith(
+                                  color: const Color(0xFF858585),
                                   fontSize: 11,
                                   fontWeight: FontWeight.w400,
-                                  height: 1.0,
                                 ),
                                 maxLines: 3,
                               ),

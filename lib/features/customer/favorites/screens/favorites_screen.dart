@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -187,11 +188,10 @@ class _FavoritesTabState extends State<FavoritesTab> {
                   ),
                 ),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   'Favoris',
-                  style: TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w900,
                     fontSize: 22,
                   ),
                 ),
@@ -288,10 +288,8 @@ class _FavoritesTabState extends State<FavoritesTab> {
             children: [
               Text(
                 '${displayed.length} favoris',
-                style: const TextStyle(
+                style: AppTextStyles.sectionTitle.copyWith(
                   color: AppColors.dark,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
                 ),
               ),
               const Spacer(),
@@ -705,9 +703,8 @@ class _PropertyListCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         data.name,
-                        style: const TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: AppColors.dark,
-                          fontWeight: FontWeight.w900,
                           fontSize: 14,
                         ),
                         maxLines: 2,
@@ -741,7 +738,7 @@ class _PropertyListCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         data.location,
-                        style: const TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
                           fontSize: 11,
                           fontWeight: FontWeight.w500,

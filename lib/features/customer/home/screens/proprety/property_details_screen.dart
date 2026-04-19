@@ -3,6 +3,7 @@ import 'package:statefulclickcounter/features/customer/home/screens/appointment_
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class PropertyDetailsScreen extends StatelessWidget {
   const PropertyDetailsScreen({
@@ -131,9 +132,58 @@ class _BottomActions extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Container(
+              height: 61,
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 44,
+                    height: 44,
+                    decoration: BoxDecoration(
+                      // color: PropertyDetailsScreen._bg,
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.home_rounded,
+                        color: PropertyDetailsScreen._dark),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Aigle Immobilier',
+                          style: AppTextStyles.sectionTitle.copyWith(
+                              color: PropertyDetailsScreen._dark, fontSize: 13),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Agence Immobilière',
+                          style: AppTextStyles.regular12.copyWith(
+                            color: PropertyDetailsScreen._textMuted,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  _MiniAction(icon: Icons.chat_bubble_outline),
+                  const SizedBox(width: 10),
+                  _MiniAction(icon: Icons.person_outline_rounded),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
-              height: 54,
+              height: 49,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PropertyDetailsScreen._orange,
@@ -146,14 +196,14 @@ class _BottomActions extends StatelessWidget {
                 onPressed: onInterested,
                 child: const Text(
                   'Je suis intéressée',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),
             const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
-              height: 54,
+              height: 49,
               child: ElevatedButton.icon(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: PropertyDetailsScreen._dark,
@@ -164,10 +214,13 @@ class _BottomActions extends StatelessWidget {
                   ),
                 ),
                 onPressed: onBookVisit,
-                icon: const Icon(Icons.calendar_month_rounded),
+                icon: const Icon(
+                  Icons.calendar_month_rounded,
+                  size: 24,
+                ),
                 label: const Text(
                   'Réserver une visite',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),
@@ -233,12 +286,10 @@ class _Header extends StatelessWidget {
                     onTap: onBack,
                   ),
                   const Spacer(),
-                  const Text(
+                  Text(
                     'Détails',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 16,
                     ),
                   ),
                   const Spacer(),
@@ -343,10 +394,11 @@ class _Content extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             Container(
-              padding: const EdgeInsets.all(14),
+              height: 132,
+              padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
+                borderRadius: BorderRadius.circular(15),
                 boxShadow: const [
                   BoxShadow(
                     color: Color(0x14000000),
@@ -363,10 +415,8 @@ class _Content extends StatelessWidget {
                       Expanded(
                         child: Text(
                           title,
-                          style: const TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: PropertyDetailsScreen._dark,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -388,19 +438,18 @@ class _Content extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 4),
                   Row(
                     children: [
                       const Icon(Icons.location_on,
-                          color: PropertyDetailsScreen._orange, size: 18),
+                          color: PropertyDetailsScreen._orange, size: 16),
                       const SizedBox(width: 6),
                       Expanded(
                         child: Text(
                           location,
-                          style: const TextStyle(
+                          style: AppTextStyles.regular12.copyWith(
                             color: PropertyDetailsScreen._textMuted,
                             fontWeight: FontWeight.w700,
-                            fontSize: 12,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -408,7 +457,7 @@ class _Content extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       Expanded(
@@ -440,71 +489,18 @@ class _Content extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            const Text(
+            Text(
               'Description',
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: PropertyDetailsScreen._orange,
-                fontWeight: FontWeight.w900,
-                fontSize: 16,
               ),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels, cet appartement 3 pièces offre un cadre de vie exceptionnel, pensé pour répondre aux besoins d\'une famille, d\'un cadre ou d\'un investisseur à la recherche d\'un bien de qualité.',
-              style: TextStyle(
+              style: AppTextStyles.regular12.copyWith(
                 color: PropertyDetailsScreen._textMuted,
                 fontWeight: FontWeight.w600,
-                height: 1.5,
-              ),
-            ),
-            const SizedBox(height: 18),
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 44,
-                    height: 44,
-                    decoration: BoxDecoration(
-                      color: PropertyDetailsScreen._bg,
-                      borderRadius: BorderRadius.circular(22),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.home_rounded,
-                        color: PropertyDetailsScreen._dark),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aigle Immobilier',
-                          style: TextStyle(
-                            color: PropertyDetailsScreen._dark,
-                            fontWeight: FontWeight.w900,
-                          ),
-                        ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Agence Immobilière',
-                          style: TextStyle(
-                            color: PropertyDetailsScreen._textMuted,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  _MiniAction(icon: Icons.chat_bubble_outline),
-                  const SizedBox(width: 10),
-                  _MiniAction(icon: Icons.person_outline_rounded),
-                ],
               ),
             ),
           ],
@@ -602,39 +598,46 @@ class _SpecChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      height: 38,
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       decoration: BoxDecoration(
-        color: const Color(0xFFF8FAFC),
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFFE5E7EB)),
+        color: const Color(0xFFECF2F7),
+        borderRadius: BorderRadius.circular(5),
       ),
       child: Row(
         children: [
-          Icon(icon, color: AppColors.primary, size: 20),
-          const SizedBox(width: 8),
+          Container(
+            width: 31,
+            height: 30,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(2.5),
+            ),
+            alignment: Alignment.center,
+            child: Icon(icon, color: AppColors.primary, size: 21),
+          ),
+          const SizedBox(width: 6),
           Expanded(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Text(
                   value,
-                  style: const TextStyle(
+                  style: AppTextStyles.regular12.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w900,
                   ),
                 ),
-                const SizedBox(height: 2),
-                Text(
-                  label,
-                  style: const TextStyle(
-                    color: AppColors.muted,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 11,
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    label,
+                    style: AppTextStyles.regular12.copyWith(
+                        color: AppColors.muted,
+                        fontWeight: FontWeight.w300,
+                        fontSize: 9),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
@@ -653,14 +656,18 @@ class _MiniAction extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 44,
-      height: 44,
+      width: 41,
+      height: 36,
       decoration: BoxDecoration(
         color: AppColors.dark,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.circular(5),
       ),
       alignment: Alignment.center,
-      child: Icon(icon, color: Colors.white),
+      child: Icon(
+        icon,
+        color: Colors.white,
+        size: 17,
+      ),
     );
   }
 }

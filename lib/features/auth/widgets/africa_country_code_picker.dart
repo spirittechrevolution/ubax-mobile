@@ -152,7 +152,7 @@ class _AfricaCountryCodePickerState extends State<AfricaCountryCodePicker> {
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w300,
-                height: 1.0,
+                height: 1.4,
                 letterSpacing: 0,
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class View360Screen extends StatefulWidget {
   const View360Screen({
@@ -153,11 +154,10 @@ class _View360ScreenState extends State<View360Screen>
                           ),
                         ),
                       ),
-                      const Text(
+                      Text(
                         "Vue 360°",
-                        style: TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 17,
                           letterSpacing: 0.2,
                         ),
@@ -348,11 +348,9 @@ class _PropertyCard extends StatelessWidget {
                         title,
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w700,
+                        style: AppTextStyles.sectionTitle.copyWith(
                           fontSize: 13,
-                          height: 1.3,
-                          color: Color(0xFF1A1A1A),
+                          color: const Color(0xFF1A1A1A),
                         ),
                       ),
                     ),
@@ -387,8 +385,8 @@ class _PropertyCard extends StatelessWidget {
                         location,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF888888),
+                        style: AppTextStyles.regular12.copyWith(
+                          color: const Color(0xFF888888),
                           fontSize: 11,
                         ),
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class AppointmentBookingScreen extends StatefulWidget {
   const AppointmentBookingScreen({
@@ -67,12 +68,10 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
+                  Text(
                     'Prise de rendez - vous',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: _dark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
                     ),
                   ),
                   const Spacer(),
@@ -88,12 +87,10 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                   children: [
                     _AgencyCard(title: widget.title, location: widget.location),
                     const SizedBox(height: 18),
-                    const Text(
+                    Text(
                       'Choisir une date',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _orange,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -119,9 +116,8 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                               children: [
                                 Text(
                                   monthLabel,
-                                  style: const TextStyle(
+                                  style: AppTextStyles.sectionTitle.copyWith(
                                     color: _dark,
-                                    fontWeight: FontWeight.w900,
                                     fontSize: 14,
                                   ),
                                 ),
@@ -150,12 +146,10 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                       ),
                     ),
                     const SizedBox(height: 18),
-                    const Text(
+                    Text(
                       'Choisir une heure',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _orange,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -264,7 +258,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                     onPressed: _confirm,
                     child: const Text(
                       'Prendre un rendez - vous',
-                      style: TextStyle(fontWeight: FontWeight.w900),
+                      style: AppTextStyles.button,
                     ),
                   ),
                 ),
@@ -403,9 +397,8 @@ class _AgencyCard extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w900,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -413,10 +406,9 @@ class _AgencyCard extends StatelessWidget {
                 const SizedBox(height: 2),
                 Text(
                   location,
-                  style: const TextStyle(
-                    color: Color(0xFF8A97A6),
+                  style: AppTextStyles.regular12.copyWith(
+                    color: const Color(0xFF8A97A6),
                     fontWeight: FontWeight.w700,
-                    fontSize: 12,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -561,12 +553,10 @@ class _DateSelectorSheetState extends State<_DateSelectorSheet> {
               ),
             ),
             const SizedBox(height: 16),
-            const Text(
+            Text(
               'Selectionner Date',
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: _dark,
-                fontWeight: FontWeight.w900,
-                fontSize: 16,
               ),
             ),
             const SizedBox(height: 14),
@@ -627,11 +617,10 @@ class _DateSelectorSheetState extends State<_DateSelectorSheet> {
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text(
+                    child: Text(
                       'Annuler',
-                      style: TextStyle(
-                        color: Color(0xFFFF2D55),
-                        fontWeight: FontWeight.w900,
+                      style: AppTextStyles.button.copyWith(
+                        color: const Color(0xFFFF2D55),
                       ),
                     ),
                   ),
@@ -651,7 +640,7 @@ class _DateSelectorSheetState extends State<_DateSelectorSheet> {
                       onPressed: () => Navigator.of(context).pop(_selected),
                       child: const Text(
                         'Appliquer',
-                        style: TextStyle(fontWeight: FontWeight.w900),
+                        style: AppTextStyles.button,
                       ),
                     ),
                   ),
@@ -830,12 +819,11 @@ class _ConfirmationSheet extends StatelessWidget {
                   width: 90, height: 90),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Votre rendez-vous a été confirmé avec succès',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: AppColors.dark,
-                fontWeight: FontWeight.w900,
                 fontSize: 14,
               ),
             ),
@@ -855,7 +843,7 @@ class _ConfirmationSheet extends StatelessWidget {
                 onPressed: onBackHome,
                 child: const Text(
                   'Retour à l’accueil',
-                  style: TextStyle(fontWeight: FontWeight.w900),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),

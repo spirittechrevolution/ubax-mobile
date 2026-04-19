@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/invoice_detail_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/invoice_payment_sheet.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -103,14 +104,12 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
                       color: AppColors.dark, size: 20),
                 ),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Text(
                       'Paiement Facture',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: AppColors.dark,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
                       ),
                     ),
                   ),
@@ -153,34 +152,32 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
+                        Text(
                           'Appartement Moderne à Cocody',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(height: 6),
-                        const Row(
+                        Row(
                           children: [
-                            Icon(Icons.location_on,
+                            const Icon(Icons.location_on,
                                 color: AppColors.primary, size: 14),
-                            SizedBox(width: 3),
+                            const SizedBox(width: 3),
                             Expanded(
                               child: Text(
                                 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-                                style: TextStyle(
+                                style: AppTextStyles.regular12.copyWith(
                                   color: AppColors.muted,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w400,
-                                  height: 1.0,
                                 ),
                                 maxLines: 2,
                               ),
@@ -188,7 +185,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                           ],
                         ),
                         const SizedBox(height: 6),
-                        Wrap(
+                        const Wrap(
                           spacing: 8,
                           runSpacing: 4,
                           children: [
@@ -257,10 +254,10 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
           // ── Invoice list
           Expanded(
             child: _filtered.isEmpty
-                ? const Center(
+                ? Center(
                     child: Text(
                       'Aucune facture',
-                      style: TextStyle(
+                      style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
                         fontSize: 14,
                       ),
@@ -375,18 +372,16 @@ class _InvoiceCard extends StatelessWidget {
                   children: [
                     Text(
                       '${invoice.month} ${invoice.year}',
-                      style: const TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: AppColors.dark,
-                        fontWeight: FontWeight.w700,
                         fontSize: 15,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       invoice.number,
-                      style: const TextStyle(
+                      style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
-                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -416,7 +411,7 @@ class _InvoiceCard extends StatelessWidget {
               if ((isUnpaid || isEnAttente) && invoice.dueDate != null)
                 Text(
                   invoice.dueDate!,
-                  style: const TextStyle(
+                  style: AppTextStyles.regular12.copyWith(
                     color: AppColors.muted,
                     fontSize: 11,
                     fontWeight: FontWeight.w400,

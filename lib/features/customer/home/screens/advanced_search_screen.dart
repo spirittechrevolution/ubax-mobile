@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/dark_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class AdvancedSearchScreen extends StatefulWidget {
   const AdvancedSearchScreen({super.key, required this.initialRent});
@@ -218,12 +220,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                 values: _area,
                 onChanged: (v) => setState(() => _area = v),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4),
+              const Padding(
+                padding: EdgeInsets.only(top: 4),
                 child: _MinMaxRow(
                   minLabel: '100 m2',
                   maxLabel: '500 m2',
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: AppColors.muted,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
@@ -240,26 +242,11 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               ),
             ],
             const SizedBox(height: 22),
-            SizedBox(
-              width: double.infinity,
+            DarkButton(
+              text: 'Appliquer',
+              onPressed: () => Navigator.of(context).pop(),
               height: 56,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.dark,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: const Text(
-                  'Appliquer',
-                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
-                ),
-              ),
+              borderRadius: 24,
             ),
           ],
         ),
@@ -341,11 +328,7 @@ class _FieldLabel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(
       text,
-      style: const TextStyle(
-        color: AppColors.dark,
-        fontWeight: FontWeight.w800,
-        fontSize: 15,
-      ),
+      style: AppTextStyles.sectionTitle,
     );
   }
 }
@@ -368,11 +351,11 @@ class _Segmented extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 52,
+      height: 57,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(26),
+        borderRadius: BorderRadius.circular(40),
       ),
       child: Row(
         children: [
@@ -411,19 +394,19 @@ class _SegmentButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(22),
+      borderRadius: BorderRadius.circular(40),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
+        height: 49,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: selected ? AppColors.dark : Colors.transparent,
-          borderRadius: BorderRadius.circular(22),
+          borderRadius: BorderRadius.circular(40),
         ),
         child: Text(
           label,
-          style: TextStyle(
+          style: AppTextStyles.regularlight16.copyWith(
             color: selected ? Colors.white : AppColors.dark,
-            fontWeight: FontWeight.w800,
           ),
         ),
       ),
@@ -446,35 +429,23 @@ class _SelectField extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(26),
+      borderRadius: BorderRadius.circular(40),
       child: Container(
-        height: 56,
+        height: 44,
         padding: const EdgeInsets.symmetric(horizontal: 14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(26),
+          borderRadius: BorderRadius.circular(40),
+          border: Border.all(color: const Color(0xFFE7E7E7), width: 1),
         ),
         child: Row(
           children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(17),
-              ),
-              alignment: Alignment.center,
-              child: Icon(icon, color: AppColors.dark, size: 18),
-            ),
-            const SizedBox(width: 12),
+            Icon(icon, color: AppColors.dark),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
                 value,
-                style: const TextStyle(
-                  color: Color(0xFF6D6D6D),
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
+                style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -570,10 +541,12 @@ class _PillChoice extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: selected ? Colors.white : AppColors.dark,
-            fontWeight: FontWeight.w800,
-          ),
+          style: selected
+              ? const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                )
+              : AppTextStyles.regular12.copyWith(color: AppColors.dark),
         ),
       ),
     );
@@ -599,10 +572,7 @@ class _RadioRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         label,
-        style: const TextStyle(
-          color: AppColors.dark,
-          fontWeight: FontWeight.w700,
-        ),
+        style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
       ),
       trailing: Radio<int>(
         value: value,
@@ -633,19 +603,23 @@ class _CountChoices extends StatelessWidget {
     return Row(
       children: [
         ...values.take(4).map(
-              (v) => Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: _SmallPill(
-                  label: '$v',
-                  selected: selected == v,
-                  onTap: () => onSelect(v),
+              (v) => Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 10),
+                  child: _SmallPill(
+                    label: '$v',
+                    selected: selected == v,
+                    onTap: () => onSelect(v),
+                  ),
                 ),
               ),
             ),
-        _SmallPill(
-          label: plusLabel,
-          selected: selected >= 5,
-          onTap: () => onSelect(5),
+        Expanded(
+          child: _SmallPill(
+            label: plusLabel,
+            selected: selected >= 5,
+            onTap: () => onSelect(5),
+          ),
         ),
       ],
     );
@@ -669,7 +643,6 @@ class _SmallPill extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(16),
       child: Container(
-        width: 54,
         height: 44,
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -678,10 +651,12 @@ class _SmallPill extends StatelessWidget {
         ),
         child: Text(
           label,
-          style: TextStyle(
-            color: selected ? Colors.white : AppColors.dark,
-            fontWeight: FontWeight.w800,
-          ),
+          style: selected
+              ? const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.w800,
+                )
+              : AppTextStyles.regular12.copyWith(color: AppColors.dark),
         ),
       ),
     );

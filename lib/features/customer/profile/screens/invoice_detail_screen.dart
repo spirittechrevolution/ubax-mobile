@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class InvoiceDetailScreen extends StatelessWidget {
   const InvoiceDetailScreen({super.key});
@@ -58,38 +59,34 @@ class InvoiceDetailScreen extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 8),
-                            const Text(
+                            Text(
                               'Arnaud Koffi',
-                              style: TextStyle(
+                              style: AppTextStyles.sectionTitle.copyWith(
                                 color: AppColors.dark,
-                                fontWeight: FontWeight.w900,
-                                fontSize: 16,
                               ),
                             ),
                             const SizedBox(height: 10),
                             // Contact info
-                            const Row(
+                            Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.phone_rounded,
+                                const Icon(Icons.phone_rounded,
                                     color: AppColors.muted, size: 14),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   '+225 01 02 03 04 05',
-                                  style: TextStyle(
+                                  style: AppTextStyles.regular12.copyWith(
                                     color: AppColors.muted,
-                                    fontSize: 12,
                                   ),
                                 ),
-                                SizedBox(width: 16),
-                                Icon(Icons.mail_outlined,
+                                const SizedBox(width: 16),
+                                const Icon(Icons.mail_outlined,
                                     color: AppColors.muted, size: 14),
-                                SizedBox(width: 4),
+                                const SizedBox(width: 4),
                                 Text(
                                   'arnaud@gmail.com',
-                                  style: TextStyle(
+                                  style: AppTextStyles.regular12.copyWith(
                                     color: AppColors.muted,
-                                    fontSize: 12,
                                   ),
                                 ),
                               ],
@@ -248,14 +245,12 @@ class InvoiceDetailScreen extends StatelessWidget {
                         child: const Icon(Icons.arrow_back_ios_new_rounded,
                             color: Colors.white, size: 20),
                       ),
-                      const Expanded(
+                      Expanded(
                         child: Center(
                           child: Text(
                             'Ma Facture',
-                            style: TextStyle(
+                            style: AppTextStyles.sectionTitle.copyWith(
                               color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
                             ),
                           ),
                         ),
@@ -287,7 +282,7 @@ class InvoiceDetailScreen extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     'Télécharger',
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                    style: AppTextStyles.button,
                   ),
                 ),
               ),
@@ -325,16 +320,15 @@ class _DateBox extends StatelessWidget {
             children: [
               Text(
                 label,
-                style: const TextStyle(
+                style: AppTextStyles.sectionTitle.copyWith(
                   color: AppColors.dark,
-                  fontWeight: FontWeight.w700,
                   fontSize: 13,
                 ),
               ),
               const SizedBox(height: 2),
               Text(
                 date,
-                style: const TextStyle(
+                style: AppTextStyles.regular12.copyWith(
                   color: AppColors.muted,
                   fontSize: 11,
                 ),
@@ -362,7 +356,7 @@ class _InfoItem extends StatelessWidget {
       children: [
         Text(
           label,
-          style: const TextStyle(
+          style: AppTextStyles.regular12.copyWith(
             color: AppColors.muted,
             fontSize: 10,
             fontWeight: FontWeight.w400,
@@ -371,7 +365,7 @@ class _InfoItem extends StatelessWidget {
         const SizedBox(height: 3),
         Text(
           value,
-          style: const TextStyle(
+          style: AppTextStyles.regular12.copyWith(
             color: AppColors.dark,
             fontSize: 11,
             fontWeight: FontWeight.w600,

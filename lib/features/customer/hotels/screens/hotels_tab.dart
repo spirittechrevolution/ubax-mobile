@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -438,10 +439,7 @@ class _HotelsTabState extends State<HotelsTab> {
                                     const Icon(Icons.search_rounded, size: 20),
                                 label: const Text(
                                   'Rechercher',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.w900,
-                                    fontSize: 16,
-                                  ),
+                                  style: AppTextStyles.button,
                                 ),
                               ),
                             ),
@@ -587,7 +585,7 @@ class _DateCard extends StatelessWidget {
                     color: AppColors.dark,
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
-                    height: 1.3,
+                    height: 1.4,
                   ),
                 ),
                 Text(
@@ -741,7 +739,7 @@ class _PopularCard extends StatelessWidget {
                       color: Color(0xCCFFFFFF),
                       fontWeight: FontWeight.w400,
                       fontSize: 12,
-                      height: 1.0,
+                      height: 1.4,
                     ),
                     maxLines: 2,
                   ),
@@ -1014,7 +1012,7 @@ class _InfoChip extends StatelessWidget {
             color: AppColors.muted,
             fontSize: 12,
             fontWeight: FontWeight.w400,
-            height: 1.0,
+            height: 1.4,
           ),
         ),
       ],

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/profile/screens/create_ticket_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -47,7 +49,7 @@ const _kTickets = [
     apartment: 'Appartement 0025',
     number: 'UBX-SAV-0261',
     date: '',
-    status: _TicketStatus.enCours,
+    status: _TicketStatus.resolu,
   ),
 ];
 
@@ -81,14 +83,12 @@ class SavScreen extends StatelessWidget {
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
                       color: Colors.white, size: 20),
                 ),
-                const Expanded(
+                Expanded(
                   child: Center(
                     child: Text(
                       'Service après-vente (SAV)',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
                       ),
                     ),
                   ),
@@ -120,27 +120,23 @@ class SavScreen extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Center(
+                  Center(
                     child: Text(
                       'Pour tout problème lié à votre local, merci de créer\nun ticket afin d\'assurer un suivi rapide.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
+                      style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
-                        fontSize: 12,
                         fontWeight: FontWeight.w400,
-                        height: 1.5,
                       ),
                     ),
                   ),
                   const SizedBox(height: 24),
 
                   // Mes tickets
-                  const Text(
+                  Text(
                     'Mes tickets',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.dark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -174,11 +170,16 @@ class SavScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const CreateTicketScreen(),
+                      ),
+                    );
+                  },
                   child: const Text(
                     'Créer un ticket',
-                    style:
-                        TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                    style: AppTextStyles.button,
                   ),
                 ),
               ),
@@ -200,125 +201,142 @@ class _TicketCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isResolu = ticket.status == _TicketStatus.resolu;
+    final accent = isResolu ? const Color(0xFF22C55E) : AppColors.primary;
+    final accentBg =
+        isResolu ? const Color(0xFFDCFCE7) : const Color(0xFFFFE7D3);
 
     return Container(
-      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: const Border(
-          top: BorderSide(color: AppColors.primary, width: 3),
-        ),
+        borderRadius: BorderRadius.circular(10),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Category + number
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
+      clipBehavior: Clip.antiAlias,
+      child: IntrinsicHeight(
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Left colored strip
+            Container(width: 5, color: accent),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(14, 12, 14, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      ticket.category,
-                      style: const TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 14,
-                      ),
+                    // Category + number
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                ticket.category,
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                ticket.residence,
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.dark,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 13,
+                                ),
+                              ),
+                              Text(
+                                ticket.apartment,
+                                style: AppTextStyles.regular12.copyWith(
+                                  color: AppColors.muted,
+                                  fontSize: 11,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Text(
+                          ticket.number,
+                          style: AppTextStyles.regular12.copyWith(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 2),
-                    Text(
-                      ticket.residence,
-                      style: const TextStyle(
-                        color: AppColors.dark,
-                        fontWeight: FontWeight.w700,
-                        fontSize: 13,
-                      ),
-                    ),
-                    Text(
-                      ticket.apartment,
-                      style: const TextStyle(
-                        color: AppColors.muted,
-                        fontSize: 11,
-                      ),
+                    const SizedBox(height: 12),
+                    // Date + status + details
+                    Row(
+                      children: [
+                        if (ticket.date.isNotEmpty) ...[
+                          Container(
+                            width: 22,
+                            height: 22,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFF3F4F6),
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.calendar_month_rounded,
+                              color: AppColors.muted,
+                              size: 14,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            ticket.date,
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.dark,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                        const Spacer(),
+                        // Status pill (filled)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: accentBg,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            isResolu ? 'Résolu' : 'En cour',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: accent,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        // Details button
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 14, vertical: 6),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(color: const Color(0xFFE5E7EB)),
+                          ),
+                          child: Text(
+                            'Détails',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.dark,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),
               ),
-              Text(
-                ticket.number,
-                style: const TextStyle(
-                  color: AppColors.dark,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 10),
-          // Date + status + details
-          Row(
-            children: [
-              if (ticket.date.isNotEmpty) ...[
-                const Icon(Icons.calendar_month_rounded,
-                    color: AppColors.muted, size: 14),
-                const SizedBox(width: 4),
-                Text(
-                  ticket.date,
-                  style: const TextStyle(
-                    color: AppColors.muted,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-              const Spacer(),
-              // Status pill
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(
-                    color: isResolu
-                        ? const Color(0xFF22C55E)
-                        : AppColors.primary,
-                  ),
-                ),
-                child: Text(
-                  isResolu ? 'Résolu' : 'En cour',
-                  style: TextStyle(
-                    color: isResolu
-                        ? const Color(0xFF22C55E)
-                        : AppColors.primary,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 11,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 8),
-              // Details button
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  border: Border.all(color: const Color(0xFFE5E7EB)),
-                ),
-                child: const Text(
-                  'Détails',
-                  style: TextStyle(
-                    color: AppColors.dark,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 11,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

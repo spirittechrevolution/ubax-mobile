@@ -191,7 +191,7 @@ class _Field extends StatelessWidget {
       style: const TextStyle(
         fontSize: 15,
         fontWeight: FontWeight.w300,
-        height: 1.0,
+        height: 1.4,
         letterSpacing: 0,
       ),
       decoration: InputDecoration(
@@ -199,7 +199,7 @@ class _Field extends StatelessWidget {
         hintStyle: const TextStyle(
           fontSize: 15,
           fontWeight: FontWeight.w300,
-          height: 1.0,
+          height: 1.4,
           letterSpacing: 0,
           color: Color(0xFF9E9E9E),
         ),

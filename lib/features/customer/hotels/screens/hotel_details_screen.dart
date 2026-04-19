@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_screen.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
@@ -204,9 +205,8 @@ class HotelDetailsScreen extends StatelessWidget {
                         // Name
                         Text(
                           name,
-                          style: const TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w900,
                             fontSize: 20,
                           ),
                         ),
@@ -219,7 +219,7 @@ class HotelDetailsScreen extends StatelessWidget {
                             const SizedBox(width: 4),
                             Text(
                               location,
-                              style: const TextStyle(
+                              style: AppTextStyles.regular12.copyWith(
                                 color: AppColors.muted,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w400,
@@ -245,11 +245,10 @@ class HotelDetailsScreen extends StatelessWidget {
                         // ── Installations
                         Row(
                           children: [
-                            const Text(
+                            Text(
                               'installations communes',
-                              style: TextStyle(
+                              style: AppTextStyles.sectionTitle.copyWith(
                                 color: AppColors.dark,
-                                fontWeight: FontWeight.w700,
                                 fontSize: 15,
                               ),
                             ),
@@ -281,22 +280,20 @@ class HotelDetailsScreen extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // ── Description
-                        const Text(
+                        Text(
                           'Description',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
                         ),
                         const SizedBox(height: 10),
-                        const Text(
+                        Text(
                           'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
-                          style: TextStyle(
+                          style: AppTextStyles.regular12.copyWith(
                             color: AppColors.muted,
                             fontSize: 13,
                             fontWeight: FontWeight.w400,
-                            height: 1.5,
                           ),
                         ),
 
@@ -305,11 +302,10 @@ class HotelDetailsScreen extends StatelessWidget {
                         // ── Adresse
                         Row(
                           children: [
-                            const Text(
+                            Text(
                               'Adresse',
-                              style: TextStyle(
+                              style: AppTextStyles.sectionTitle.copyWith(
                                 color: AppColors.dark,
-                                fontWeight: FontWeight.w700,
                                 fontSize: 15,
                               ),
                             ),
@@ -360,7 +356,7 @@ class HotelDetailsScreen extends StatelessWidget {
                             const SizedBox(width: 4),
                             Text(
                               location,
-                              style: const TextStyle(
+                              style: AppTextStyles.regular12.copyWith(
                                 color: AppColors.muted,
                                 fontSize: 13,
                               ),
@@ -373,11 +369,10 @@ class HotelDetailsScreen extends StatelessWidget {
                         // ── Reviews
                         Row(
                           children: [
-                            const Text(
+                            Text(
                               'Reviews',
-                              style: TextStyle(
+                              style: AppTextStyles.sectionTitle.copyWith(
                                 color: AppColors.dark,
-                                fontWeight: FontWeight.w700,
                                 fontSize: 15,
                               ),
                             ),
@@ -406,11 +401,10 @@ class HotelDetailsScreen extends StatelessWidget {
                         const SizedBox(height: 10),
 
                         // ── Recommandés
-                        const Text(
+                        Text(
                           'Recommandés pour vous',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 15,
                           ),
                         ),
@@ -451,11 +445,10 @@ class HotelDetailsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text(
+                      Text(
                         'Prix',
-                        style: TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
-                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -522,10 +515,7 @@ class HotelDetailsScreen extends StatelessWidget {
                       },
                       child: const Text(
                         'Reserver',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 15,
-                        ),
+                        style: AppTextStyles.button,
                       ),
                     ),
                   ),
@@ -581,7 +571,7 @@ class _AmenityIcon extends StatelessWidget {
             color: AppColors.muted,
             fontSize: 11,
             fontWeight: FontWeight.w500,
-            height: 1.2,
+            height: 1.4,
           ),
         ),
       ],
@@ -626,9 +616,8 @@ class _ReviewCard extends StatelessWidget {
                 children: [
                   Text(
                     review.name,
-                    style: const TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.dark,
-                      fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),
                   ),
@@ -649,11 +638,9 @@ class _ReviewCard extends StatelessWidget {
               const SizedBox(height: 4),
               Text(
                 review.text,
-                style: const TextStyle(
+                style: AppTextStyles.regular12.copyWith(
                   color: AppColors.muted,
-                  fontSize: 12,
                   fontWeight: FontWeight.w400,
-                  height: 1.4,
                 ),
               ),
             ],
@@ -706,9 +693,8 @@ class _RecommendedCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         hotel.name,
-                        style: const TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: AppColors.dark,
-                          fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -738,9 +724,8 @@ class _RecommendedCard extends StatelessWidget {
                     const SizedBox(width: 3),
                     Text(
                       hotel.location,
-                      style: const TextStyle(
+                      style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
-                        fontSize: 12,
                       ),
                     ),
                   ],

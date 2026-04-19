@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class EtatDesLieuxScreen extends StatelessWidget {
   const EtatDesLieuxScreen({super.key});
@@ -36,12 +37,11 @@ class EtatDesLieuxScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         //
-                        const Center(
+                        Center(
                           child: Text(
                             'État des lieux',
-                            style: TextStyle(
+                            style: AppTextStyles.sectionTitle.copyWith(
                               color: AppColors.primary,
-                              fontWeight: FontWeight.w900,
                               fontSize: 22,
                             ),
                           ),
@@ -49,11 +49,10 @@ class EtatDesLieuxScreen extends StatelessWidget {
                         const SizedBox(height: 24),
 
                         // Informations générales
-                        const Text(
+                        Text(
                           'Informations générales',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
                         ),
@@ -67,11 +66,10 @@ class EtatDesLieuxScreen extends StatelessWidget {
                         const SizedBox(height: 28),
 
                         // Installations & équipements
-                        const Text(
+                        Text(
                           'Installations & équipements',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 14,
                           ),
                         ),
@@ -132,14 +130,12 @@ class EtatDesLieuxScreen extends StatelessWidget {
                         child: const Icon(Icons.arrow_back_ios_new_rounded,
                             color: Colors.white, size: 20),
                       ),
-                      const Expanded(
+                      Expanded(
                         child: Center(
                           child: Text(
                             'Etat des lieux',
-                            style: TextStyle(
+                            style: AppTextStyles.sectionTitle.copyWith(
                               color: Colors.white,
-                              fontWeight: FontWeight.w900,
-                              fontSize: 16,
                             ),
                           ),
                         ),
@@ -172,7 +168,7 @@ class EtatDesLieuxScreen extends StatelessWidget {
                   onPressed: () {},
                   child: const Text(
                     'Télécharger',
-                    style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                    style: AppTextStyles.button,
                   ),
                 ),
               ),

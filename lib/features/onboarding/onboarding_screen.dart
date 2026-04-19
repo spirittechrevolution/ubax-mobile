@@ -250,10 +250,8 @@ class _NextButton extends StatelessWidget {
           children: [
             Text(
               'onboarding.next'.tr(),
-              style: const TextStyle(
+              style: AppTextStyles.button.copyWith(
                 color: Colors.white,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
               ),
             ),
             const SizedBox(width: 10),

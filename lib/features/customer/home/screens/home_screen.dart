@@ -670,6 +670,7 @@ class _PropertyCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       child: Container(
         width: 266,
+        height: 200,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(18),
           color: Colors.white,
@@ -696,11 +697,11 @@ class _PropertyCard extends StatelessWidget {
             ),
             Positioned(
               left: 10,
-              top: 12,
+              top: 14,
               child: Text(
                 price,
                 style: AppTextStyles.regularlight16.copyWith(
-                  fontSize: 13,
+                  fontSize: 14,
                   color: Colors.white,
                   fontWeight: FontWeight.w900,
                 ),
@@ -764,6 +765,7 @@ class _PropertyCard extends StatelessWidget {
                       Container(
                         width: 25,
                         height: 25,
+                        margin: const EdgeInsets.only(bottom: 4),
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(12),
@@ -789,11 +791,13 @@ class _Info extends StatelessWidget {
     required this.icon,
     required this.text,
     this.textColor = Colors.white,
+    this.fontSize = 8,
   });
 
   final IconData icon;
   final String text;
   final Color textColor;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -807,10 +811,13 @@ class _Info extends StatelessWidget {
           Flexible(
             child: Text(
               text,
+              textAlign: TextAlign.center,
               style: AppTextStyles.regular12.copyWith(
-                fontSize: 8,
+                fontSize: fontSize,
                 color: textColor,
-                fontWeight: FontWeight.w400,
+                fontWeight: FontWeight.w300,
+                height: 1.4,
+                letterSpacing: 0,
               ),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
@@ -868,11 +875,11 @@ class _RecommendedTile extends StatelessWidget {
         child: Row(
           children: [
             ClipRRect(
-              borderRadius: BorderRadius.circular(14),
+              borderRadius: BorderRadius.circular(20),
               child: Image.asset(
                 imagePath,
-                width: 95,
-                height: 95,
+                width: 120,
+                height: 120,
                 fit: BoxFit.cover,
               ),
             ),
@@ -881,32 +888,46 @@ class _RecommendedTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    title,
-                    style: AppTextStyles.regularlight16.copyWith(
-                        fontSize: 13,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.dark),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          style: AppTextStyles.regularlight16.copyWith(
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                              height: 1.4,
+                              color: AppColors.dark),
+                        ),
+                      ),
+                      const Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.red,
+                        size: 20,
+                      ),
+                    ],
                   ),
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 15),
                   Row(
                     children: [
                       const Icon(Icons.location_on_outlined,
-                          size: 16, color: AppColors.muted),
+                          size: 14, color: AppColors.muted),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           location,
                           style: AppTextStyles.regularlight16.copyWith(
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w500,
                             color: AppColors.muted,
                           ),
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 16),
                   Wrap(
                     spacing: 10,
                     runSpacing: 4,
@@ -914,24 +935,26 @@ class _RecommendedTile extends StatelessWidget {
                       _Info(
                         icon: Icons.bed_rounded,
                         text: '$beds Chambres',
-                        textColor: Color(0xFF343434),
+                        textColor: const Color(0xFF343434),
+                        fontSize: 8,
                       ),
                       _Info(
-                          icon: Icons.bathtub_rounded,
-                          text: '$baths Salle de bains',
-                          textColor: Color(0xFF343434)),
+                        icon: Icons.bathtub_rounded,
+                        text: '$baths Salle de bains',
+                        textColor: const Color(0xFF343434),
+                        fontSize: 8,
+                      ),
                       _Info(
                         icon: Icons.weekend_rounded,
                         text: '$salons Salon',
-                        textColor: Color(0xFF343434),
+                        textColor: const Color(0xFF343434),
+                        fontSize: 8,
                       ),
                     ],
                   ),
                 ],
               ),
             ),
-            const SizedBox(width: 6),
-            const Icon(Icons.favorite_rounded, color: Colors.red),
           ],
         ),
       ),

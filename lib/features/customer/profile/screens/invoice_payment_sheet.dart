@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Payment icons ────────────────────────────────────────────────────────────
 
@@ -58,13 +59,11 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             // Title + close
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Paiement Facture de location',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.dark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -82,20 +81,18 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                 const Icon(Icons.language_rounded,
                     color: AppColors.muted, size: 24),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   'Montant',
-                  style: TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
                 ),
                 const Spacer(),
                 Text(
                   '${_fmt(widget.amount)} FCFA',
-                  style: const TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
                 ),
@@ -108,20 +105,18 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                 const Icon(Icons.language_rounded,
                     color: AppColors.muted, size: 24),
                 const SizedBox(width: 10),
-                const Text(
+                Text(
                   'Montant total',
-                  style: TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontWeight: FontWeight.w500,
                     fontSize: 14,
                   ),
                 ),
                 const Spacer(),
                 Text(
                   '${_fmt(widget.amount)} FCFA',
-                  style: const TextStyle(
+                  style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.primary,
-                    fontWeight: FontWeight.w700,
                     fontSize: 15,
                   ),
                 ),
@@ -131,11 +126,10 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             const Divider(color: Color(0xFFE5E7EB)),
             const SizedBox(height: 14),
             // Payment methods title
-            const Text(
+            Text(
               'Selectionner votre methode de paiement',
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: AppColors.dark,
-                fontWeight: FontWeight.w600,
                 fontSize: 14,
               ),
             ),
@@ -213,7 +207,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                     : null,
                 child: const Text(
                   'Payer',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),

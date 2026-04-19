@@ -22,12 +22,22 @@ class ServicesGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
+      height: 212,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x1A000000),
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Wrap(
+        // alignment: WrapAlignment.center,
         spacing: 10,
         runSpacing: 10,
         children: services.map((s) => _ServiceCard(service: s)).toList(),
@@ -46,17 +56,26 @@ class _ServiceCard extends StatelessWidget {
     return GestureDetector(
       onTap: service.onTap,
       child: Container(
-        width: 100,
-        height: 80,
+        width: 110,
+        height: 84,
         decoration: BoxDecoration(
-          color: AppColors.background,
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: const Color(0xFFE5E7EB), width: 0.5),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 0.8),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(service.icon, color: AppColors.dark, size: 24),
+            Container(
+              width: 32,
+              height: 32,
+              decoration: const BoxDecoration(
+                color: AppColors.background,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Icon(service.icon, color: AppColors.dark, size: 18),
+            ),
             const SizedBox(height: 6),
             Text(
               service.labelKey.tr(),
@@ -65,7 +84,7 @@ class _ServiceCard extends StatelessWidget {
                 color: AppColors.dark,
                 fontWeight: FontWeight.w600,
                 fontSize: 11,
-                height: 1.2,
+                height: 1.4,
               ),
             ),
           ],

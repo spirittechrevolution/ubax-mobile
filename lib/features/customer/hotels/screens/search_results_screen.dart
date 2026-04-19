@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -134,14 +135,12 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                       child: const Icon(Icons.arrow_back_ios_new_rounded,
                           color: Colors.white, size: 20),
                     ),
-                    const Expanded(
+                    Expanded(
                       child: Center(
                         child: Text(
                           'Résultats',
-                          style: TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: Colors.white,
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -170,20 +169,18 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                           children: [
                             Text(
                               widget.addressTitle,
-                              style: const TextStyle(
+                              style: AppTextStyles.sectionTitle.copyWith(
                                 color: Colors.white,
-                                fontWeight: FontWeight.w700,
                                 fontSize: 14,
                               ),
                             ),
                             const SizedBox(height: 3),
                             Text(
                               widget.addressSubtitle,
-                              style: const TextStyle(
-                                color: Color(0xFF94A3B8),
+                              style: AppTextStyles.regular12.copyWith(
+                                color: const Color(0xFF94A3B8),
                                 fontSize: 11,
                                 fontWeight: FontWeight.w400,
-                                height: 1.3,
                               ),
                             ),
                           ],
@@ -204,18 +201,16 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
+                    Text(
                       'Résultats',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: AppColors.dark,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       '${_kResults.length} biens trouvés',
-                      style: const TextStyle(
+                      style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
@@ -374,9 +369,8 @@ class _GridCard extends StatelessWidget {
                       Expanded(
                         child: Text(
                           data.name,
-                          style: const TextStyle(
+                          style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontWeight: FontWeight.w700,
                             fontSize: 13,
                           ),
                           maxLines: 1,
@@ -401,7 +395,7 @@ class _GridCard extends StatelessWidget {
                   // Location
                   Text(
                     data.location,
-                    style: const TextStyle(
+                    style: AppTextStyles.regular12.copyWith(
                       color: AppColors.muted,
                       fontSize: 11,
                       fontWeight: FontWeight.w400,
@@ -497,9 +491,8 @@ class _ListCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         data.name,
-                        style: const TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: AppColors.dark,
-                          fontWeight: FontWeight.w700,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -520,9 +513,8 @@ class _ListCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         data.location,
-                        style: const TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
-                          fontSize: 12,
                           fontWeight: FontWeight.w400,
                         ),
                         maxLines: 1,

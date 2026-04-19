@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
+import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 const Color _kBg = AppColors.background;
 const Color _kDark = AppColors.dark;
@@ -90,12 +91,10 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                     ),
                   ),
                   const Spacer(),
-                  const Text(
+                  Text(
                     'Réservation',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: _kDark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
                     ),
                   ),
                   const Spacer(),
@@ -118,11 +117,10 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       kitchens: widget.kitchens,
                     ),
                     const SizedBox(height: 22),
-                    const Text(
+                    Text(
                       'Statut professionnel',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _kDark,
-                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                       ),
                     ),
@@ -133,11 +131,10 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       onChanged: (v) => setState(() => _jobStatus = v),
                     ),
                     const SizedBox(height: 18),
-                    const Text(
+                    Text(
                       'Durée du bail',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _kDark,
-                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                       ),
                     ),
@@ -148,11 +145,10 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       onChanged: (v) => setState(() => _leaseDuration = v),
                     ),
                     const SizedBox(height: 22),
-                    const Text(
+                    Text(
                       'Détails du paiement',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _kDark,
-                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                       ),
                     ),
@@ -175,11 +171,10 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       bold: true,
                     ),
                     const SizedBox(height: 22),
-                    const Text(
+                    Text(
                       'Payé avec',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: _kDark,
-                        fontWeight: FontWeight.w900,
                         fontSize: 14,
                       ),
                     ),
@@ -205,10 +200,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                         onPressed: payEnabled ? _pay : null,
                         child: const Text(
                           'Payer',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 16,
-                          ),
+                          style: AppTextStyles.button,
                         ),
                       ),
                     ),
@@ -343,9 +335,8 @@ class _PropertyCard extends StatelessWidget {
                     Expanded(
                       child: Text(
                         location,
-                        style: const TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
-                          fontSize: 12,
                           fontWeight: FontWeight.w700,
                         ),
                         maxLines: 1,
@@ -623,13 +614,11 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
           children: [
             Row(
               children: [
-                const Expanded(
+                Expanded(
                   child: Text(
                     'Selectionner votre methode\nde paiement',
-                    style: TextStyle(
+                    style: AppTextStyles.sectionTitle.copyWith(
                       color: _kDark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: 16,
                     ),
                   ),
                 ),
@@ -739,7 +728,7 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
                     : null,
                 child: const Text(
                   'Choisir',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),
@@ -801,7 +790,7 @@ class _MethodTile extends StatelessWidget {
                 color: selected ? Colors.white : AppColors.dark,
                 fontWeight: FontWeight.w900,
                 fontSize: 12,
-                height: 1.05,
+                height: 1.4,
               ),
             ),
           ],
@@ -902,13 +891,11 @@ class _PaymentSuccessSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            const Text(
+            Text(
               'Félicitations',
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: _kOrange,
-                fontWeight: FontWeight.w900,
                 fontSize: 22,
-                height: 1.1,
               ),
             ),
             const SizedBox(height: 18),
@@ -924,12 +911,11 @@ class _PaymentSuccessSheet extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'votre réservation a été effectuée avec succès.',
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: AppTextStyles.sectionTitle.copyWith(
                 color: AppColors.dark,
-                fontWeight: FontWeight.w800,
               ),
             ),
             const SizedBox(height: 16),
@@ -948,7 +934,7 @@ class _PaymentSuccessSheet extends StatelessWidget {
                 onPressed: onDashboard,
                 child: const Text(
                   'Voir mon tableau de bord',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),
@@ -968,7 +954,7 @@ class _PaymentSuccessSheet extends StatelessWidget {
                 onPressed: onInvoice,
                 child: const Text(
                   'Voir la facture',
-                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 16),
+                  style: AppTextStyles.button,
                 ),
               ),
             ),
