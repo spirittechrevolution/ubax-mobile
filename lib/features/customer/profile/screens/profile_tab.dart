@@ -5,6 +5,7 @@ import 'package:statefulclickcounter/features/customer/profile/data/mock_tenant_
 import 'package:statefulclickcounter/features/customer/profile/screens/documents_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/formalities_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/payment_invoice_screen.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/reservations_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/sav_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/services_ubax_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/dashboard_card.dart';
@@ -35,7 +36,9 @@ class _ProfileTabState extends State<ProfileTab> {
       ServiceItem(
         icon: Icons.apartment_rounded,
         labelKey: 'profile.services.reservations',
-        onTap: () => print('mes reservations'),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const ReservationsScreen()),
+        ),
       ),
     ];
     if (!_hasContract) return always;
