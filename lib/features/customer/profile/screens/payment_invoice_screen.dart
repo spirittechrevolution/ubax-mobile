@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import 'package:statefulclickcounter/features/customer/profile/screens/invoice_detail_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/invoice_payment_sheet.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/reservation_invoice_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -331,7 +331,7 @@ class _InvoiceCard extends StatelessWidget {
         amount: invoice.amount,
         onPaid: () {
           Navigator.of(context).push(
-            MaterialPageRoute(builder: (_) => const InvoiceDetailScreen()),
+            MaterialPageRoute(builder: (_) => const ReservationInvoiceScreen()),
           );
         },
       ),
@@ -340,7 +340,7 @@ class _InvoiceCard extends StatelessWidget {
 
   void _openInvoice(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(builder: (_) => const InvoiceDetailScreen()),
+      MaterialPageRoute(builder: (_) => const ReservationInvoiceScreen()),
     );
   }
 

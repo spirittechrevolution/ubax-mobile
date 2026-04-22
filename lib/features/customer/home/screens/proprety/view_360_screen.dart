@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class View360Screen extends StatefulWidget {
@@ -302,59 +303,58 @@ class _PropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      height: 119,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 20,
-            offset: const Offset(0, 8),
+            color: Color(0x40000000),
+            blurRadius: 4,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
-          // Miniature
           ClipRRect(
-            borderRadius: BorderRadius.circular(13),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               imagePath,
-              width: 68,
-              height: 64,
+              width: 125,
+              height: 102,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 68,
-                height: 64,
+                width: 125,
+                height: 102,
                 color: const Color(0xFFEEEEEE),
                 child: const Icon(Icons.home_outlined, color: Colors.grey),
               ),
             ),
           ),
-
           const SizedBox(width: 12),
-
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Titre + favori
+                const SizedBox(height: 14),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Text(
                         title,
+                        style: AppTextStyles.sectionTitle.copyWith(
+                          color: AppColors.dark,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          height: 1.2,
+                        ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.sectionTitle.copyWith(
-                          fontSize: 13,
-                          color: const Color(0xFF1A1A1A),
-                        ),
                       ),
                     ),
-                    const SizedBox(width: 6),
                     GestureDetector(
                       onTap: onFavoriteTap,
                       child: AnimatedSwitcher(
@@ -364,48 +364,47 @@ class _PropertyCard extends StatelessWidget {
                         child: Icon(
                           isFavorite ? Icons.favorite : Icons.favorite_border,
                           key: ValueKey(isFavorite),
-                          color: Colors.red,
-                          size: 20,
+                          color: const Color(0xFFEF4444),
+                          size: 16,
                         ),
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 4),
-
-                // Localisation
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 12, color: Color(0xFF888888)),
+                        size: 12, color: AppColors.primary),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
                         location,
+                        style: AppTextStyles.regular12.copyWith(
+                          color: AppColors.muted,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w500,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.regular12.copyWith(
-                          color: const Color(0xFF888888),
-                          fontSize: 11,
-                        ),
                       ),
                     ),
                   ],
                 ),
-
-                const SizedBox(height: 7),
-
-                // Badges
-                Row(
+                const SizedBox(height: 13),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 3,
                   children: [
-                    _Badge(icon: Icons.bed_outlined, label: "$beds Chambres"),
-                    const SizedBox(width: 8),
-                    _Badge(icon: Icons.bathtub_outlined, label: "$baths SDB"),
-                    const SizedBox(width: 8),
-                    _Badge(
-                        icon: Icons.kitchen_outlined,
-                        label: "$kitchens Cuisine"),
+                    _Meta(
+                        icon: Icons.bed_rounded,
+                        text: '$beds  Chambres'),
+                    _Meta(
+                        icon: Icons.bathtub_outlined,
+                        text: '$baths  Salle de bains'),
+                    _Meta(
+                        icon: Icons.kitchen_rounded,
+                        text: '$kitchens  Cuisine'),
                   ],
                 ),
               ],
@@ -418,24 +417,25 @@ class _PropertyCard extends StatelessWidget {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
-class _Badge extends StatelessWidget {
-  const _Badge({required this.icon, required this.label});
+class _Meta extends StatelessWidget {
+  const _Meta({required this.icon, required this.text});
   final IconData icon;
-  final String label;
+  final String text;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 13, color: const Color(0xFFE07B39)),
+        Icon(icon, size: 11, color: AppColors.primary),
         const SizedBox(width: 3),
         Text(
-          label,
+          text,
           style: const TextStyle(
-            fontSize: 10.5,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF444444),
+            fontFamily: 'Lexend',
+            color: AppColors.muted,
+            fontSize: 7,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],

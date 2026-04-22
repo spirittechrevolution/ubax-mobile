@@ -130,7 +130,8 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
               'Selectionner votre methode de paiement',
               style: AppTextStyles.sectionTitle.copyWith(
                 color: AppColors.dark,
-                fontSize: 14,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 14),
@@ -275,8 +276,8 @@ class _MethodTile extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: selected ? Colors.white : AppColors.dark,
-                fontWeight: FontWeight.w700,
-                fontSize: 11,
+                fontWeight: FontWeight.w500,
+                fontSize: 10,
               ),
             ),
           ],
@@ -320,7 +321,8 @@ class _MethodRow extends StatelessWidget {
                 label,
                 style: const TextStyle(
                   color: AppColors.dark,
-                  fontWeight: FontWeight.w700,
+                  fontSize: 13,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ),
@@ -373,7 +375,8 @@ class _AddCardRow extends StatelessWidget {
             'Ajouter une carte de débit',
             style: TextStyle(
               color: AppColors.dark,
-              fontWeight: FontWeight.w700,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ],

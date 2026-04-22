@@ -533,6 +533,8 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
                     'Selectionner votre methode de paiement',
                     style: AppTextStyles.sectionTitle.copyWith(
                       color: AppColors.dark,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -619,7 +621,7 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
                       style: TextStyle(
                         color: AppColors.dark,
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 13,
                       ),
                     ),
                   ],
@@ -710,7 +712,7 @@ class _PaymentTile extends StatelessWidget {
                 style: const TextStyle(
                   color: AppColors.dark,
                   fontWeight: FontWeight.w600,
-                  fontSize: 14,
+                  fontSize: 13,
                 ),
               ),
             ),

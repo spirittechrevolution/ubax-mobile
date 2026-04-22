@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_screen.dart'
+    show AddCardScreen;
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -116,7 +118,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       baths: widget.baths,
                       kitchens: widget.kitchens,
                     ),
-                    const SizedBox(height: 22),
+                    const SizedBox(height: 30),
                     Text(
                       'Statut professionnel',
                       style: AppTextStyles.sectionTitle.copyWith(
@@ -130,7 +132,7 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       items: _jobStatuses,
                       onChanged: (v) => setState(() => _jobStatus = v),
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 22),
                     Text(
                       'Durée du bail',
                       style: AppTextStyles.sectionTitle.copyWith(
@@ -281,26 +283,27 @@ class _PropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      height: 119,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 18,
-            offset: Offset(0, 10),
+            color: Color(0x40000000),
+            blurRadius: 4,
+            offset: Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               imagePath,
-              width: 96,
-              height: 74,
+              width: 125,
+              height: 102,
               fit: BoxFit.cover,
             ),
           ),
@@ -309,35 +312,40 @@ class _PropertyCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 14),
                 Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Expanded(
                       child: Text(
                         title,
-                        style: const TextStyle(
+                        style: AppTextStyles.sectionTitle.copyWith(
                           color: _kDark,
-                          fontWeight: FontWeight.w900,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          height: 1.2,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    const Icon(Icons.favorite_rounded, color: Colors.red),
+                    const Icon(Icons.favorite,
+                        color: Color(0xFFEF4444), size: 16),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 16, color: AppColors.muted),
-                    const SizedBox(width: 4),
+                        size: 12, color: AppColors.muted),
+                    const SizedBox(width: 3),
                     Expanded(
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w600,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -345,14 +353,18 @@ class _PropertyCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 13),
                 Wrap(
-                  spacing: 10,
-                  runSpacing: 6,
+                  spacing: 8,
+                  runSpacing: 3,
                   children: [
-                    _Meta(text: '$beds Chambres'),
-                    _Meta(text: '$baths Salle de bains'),
-                    _Meta(text: '$kitchens Cuisine'),
+                    _Meta(icon: Icons.bed_rounded, text: '$beds  Chambres'),
+                    _Meta(
+                        icon: Icons.bathtub_outlined,
+                        text: '$baths  Salle de bains'),
+                    _Meta(
+                        icon: Icons.kitchen_rounded,
+                        text: '$kitchens  Cuisine'),
                   ],
                 ),
               ],
@@ -365,8 +377,9 @@ class _PropertyCard extends StatelessWidget {
 }
 
 class _Meta extends StatelessWidget {
-  const _Meta({required this.text});
+  const _Meta({required this.icon, required this.text});
 
+  final IconData icon;
   final String text;
 
   @override
@@ -374,14 +387,15 @@ class _Meta extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.bed_rounded, size: 14, color: AppColors.primary),
-        const SizedBox(width: 4),
+        Icon(icon, size: 11, color: AppColors.primary),
+        const SizedBox(width: 3),
         Text(
           text,
           style: const TextStyle(
+            fontFamily: 'Lexend',
             color: AppColors.muted,
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
+            fontSize: 7,
+            fontWeight: FontWeight.w400,
           ),
         ),
       ],
@@ -429,13 +443,7 @@ class _DropdownPill extends StatelessWidget {
               .map(
                 (t) => DropdownMenuItem(
                   value: t,
-                  child: Text(
-                    t,
-                    style: const TextStyle(
-                      color: AppColors.dark,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
+                  child: Text(t, style: AppTextStyles.regular12),
                 ),
               )
               .toList(),
@@ -468,8 +476,8 @@ class _PaymentLine extends StatelessWidget {
           child: Text(
             label,
             style: TextStyle(
-              color: AppColors.muted,
-              fontWeight: bold ? FontWeight.w900 : FontWeight.w700,
+              color: bold ? AppColors.dark : AppColors.muted,
+              fontWeight: bold ? FontWeight.w500 : FontWeight.w400,
               fontSize: bold ? 13 : 12,
             ),
           ),
@@ -478,8 +486,8 @@ class _PaymentLine extends StatelessWidget {
           amount,
           style: TextStyle(
             color: AppColors.dark,
-            fontWeight: bold ? FontWeight.w900 : FontWeight.w800,
-            fontSize: bold ? 16 : 13,
+            fontWeight: bold ? FontWeight.w500 : FontWeight.w300,
+            fontSize: bold ? 14 : 11,
           ),
         ),
       ],
@@ -600,18 +608,23 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
   @override
   Widget build(BuildContext context) {
     final canChoose = _selected != null;
+    final screenH = MediaQuery.sizeOf(context).height;
 
     return SafeArea(
       top: false,
       child: Container(
+        height: screenH * 0.55,
         padding: const EdgeInsets.fromLTRB(18, 10, 18, 18),
         decoration: const BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.vertical(top: Radius.circular(26)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
         ),
         child: Column(
-          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            SizedBox(
+              height: 18,
+            ),
             Row(
               children: [
                 Expanded(
@@ -619,6 +632,8 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
                     'Selectionner votre methode\nde paiement',
                     style: AppTextStyles.sectionTitle.copyWith(
                       color: _kDark,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -636,79 +651,96 @@ class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
               ],
             ),
             const SizedBox(height: 12),
-            Row(
-              children: [
-                Expanded(
-                  child: _MethodTile(
-                    label: 'Wave',
-                    iconAsset: _kIconWave,
-                    selected: _selected == _PaymentMethod.wave,
-                    onTap: () =>
-                        setState(() => _selected = _PaymentMethod.wave),
-                  ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _MethodTile(
+                            label: 'Wave',
+                            iconAsset: _kIconWave,
+                            selected: _selected == _PaymentMethod.wave,
+                            onTap: () =>
+                                setState(() => _selected = _PaymentMethod.wave),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _MethodTile(
+                            label: 'Orange Money',
+                            iconAsset: _kIconOrangeMoney,
+                            selected: _selected == _PaymentMethod.orangeMoney,
+                            onTap: () => setState(
+                                () => _selected = _PaymentMethod.orangeMoney),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: _MethodTile(
+                            label: 'MTN',
+                            iconAsset: _kIconMtn,
+                            selected: _selected == _PaymentMethod.mtn,
+                            onTap: () =>
+                                setState(() => _selected = _PaymentMethod.mtn),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 12),
+                    _MethodRow(
+                      label: 'Visa',
+                      icon: Image.asset(
+                        _kIconVisa,
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
+                      ),
+                      selected: _selected == _PaymentMethod.visa,
+                      onTap: () =>
+                          setState(() => _selected = _PaymentMethod.visa),
+                    ),
+                    const SizedBox(height: 10),
+                    _MethodRow(
+                      label: 'Master Card',
+                      icon: Image.asset(
+                        _kIconMastercard,
+                        width: 32,
+                        height: 32,
+                        fit: BoxFit.contain,
+                      ),
+                      selected: _selected == _PaymentMethod.mastercard,
+                      onTap: () =>
+                          setState(() => _selected = _PaymentMethod.mastercard),
+                    ),
+                    const SizedBox(height: 10),
+                    _MethodRow(
+                      label: 'Ajouter une carte de débit',
+                      icon: Container(
+                        width: 28,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF2563EB).withOpacity(0.10),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.add, color: Color(0xFF2563EB)),
+                      ),
+                      selected: false,
+                      onTap: () {
+                        Navigator.of(context).pop();
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                              builder: (_) => const AddCardScreen()),
+                        );
+                      },
+                      trailing: const SizedBox.shrink(),
+                    ),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _MethodTile(
-                    label: 'Orange\nMoney',
-                    iconAsset: _kIconOrangeMoney,
-                    selected: _selected == _PaymentMethod.orangeMoney,
-                    onTap: () =>
-                        setState(() => _selected = _PaymentMethod.orangeMoney),
-                  ),
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: _MethodTile(
-                    label: 'MTN',
-                    iconAsset: _kIconMtn,
-                    selected: _selected == _PaymentMethod.mtn,
-                    onTap: () => setState(() => _selected = _PaymentMethod.mtn),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            _MethodRow(
-              label: 'Visa',
-              icon: Image.asset(
-                _kIconVisa,
-                width: 32,
-                height: 32,
-                fit: BoxFit.contain,
               ),
-              selected: _selected == _PaymentMethod.visa,
-              onTap: () => setState(() => _selected = _PaymentMethod.visa),
-            ),
-            const SizedBox(height: 10),
-            _MethodRow(
-              label: 'Master Card',
-              icon: Image.asset(
-                _kIconMastercard,
-                width: 32,
-                height: 32,
-                fit: BoxFit.contain,
-              ),
-              selected: _selected == _PaymentMethod.mastercard,
-              onTap: () =>
-                  setState(() => _selected = _PaymentMethod.mastercard),
-            ),
-            const SizedBox(height: 10),
-            _MethodRow(
-              label: 'Ajouter une carte de débit',
-              icon: Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2563EB).withOpacity(0.10),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                alignment: Alignment.center,
-                child: const Icon(Icons.add, color: Color(0xFF2563EB)),
-              ),
-              selected: false,
-              onTap: () {},
-              trailing: const SizedBox.shrink(),
             ),
             const SizedBox(height: 14),
             SizedBox(
@@ -758,7 +790,9 @@ class _MethodTile extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        height: 74,
+        height: 80,
+        width: 124,
+        // constraints: const BoxConstraints(maxWidth: 124),
         decoration: BoxDecoration(
           color: selected ? _kOrange : const Color(0xFFF1F5F9),
           borderRadius: BorderRadius.circular(12),
@@ -767,29 +801,20 @@ class _MethodTile extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
-              ),
-              alignment: Alignment.center,
-              child: Image.asset(
-                iconAsset,
-                width: 22,
-                height: 22,
-                fit: BoxFit.contain,
-              ),
+            Image.asset(
+              iconAsset,
+              width: 30,
+              height: 30,
+              fit: BoxFit.contain,
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 10),
             Text(
               label,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: selected ? Colors.white : AppColors.dark,
-                fontWeight: FontWeight.w900,
-                fontSize: 12,
+                fontWeight: FontWeight.w500,
+                fontSize: 10,
                 height: 1.4,
               ),
             ),
@@ -831,13 +856,7 @@ class _MethodRow extends StatelessWidget {
             SizedBox(width: 52, child: Center(child: icon)),
             const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  color: AppColors.dark,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
+              child: Text(label, style: AppTextStyles.regular12),
             ),
             trailing ??
                 Container(
@@ -915,8 +934,9 @@ class _PaymentSuccessSheet extends StatelessWidget {
               'votre réservation a été effectuée avec succès.',
               textAlign: TextAlign.center,
               style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.dark,
-              ),
+                  color: AppColors.dark,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13),
             ),
             const SizedBox(height: 16),
             SizedBox(

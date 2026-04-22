@@ -1,6 +1,7 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/advanced_search_screen.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/map_search_tab.dart';
 import 'package:statefulclickcounter/features/customer/favorites/screens/favorites_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotels_tab.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/profile_tab.dart';
@@ -31,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: const [
             _HomeTab(),
             HotelsTab(),
-            _PlaceholderTab(),
+            MapSearchTab(),
             FavoritesTab(),
             ProfileTab(),
           ],
@@ -962,16 +963,3 @@ class _RecommendedTile extends StatelessWidget {
   }
 }
 
-class _PlaceholderTab extends StatelessWidget {
-  const _PlaceholderTab();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(
-      child: Text(
-        'Coming soon',
-        style: TextStyle(fontWeight: FontWeight.w800),
-      ),
-    );
-  }
-}

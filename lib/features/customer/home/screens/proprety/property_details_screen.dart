@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/features/customer/chat/screens/chat_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
-class PropertyDetailsScreen extends StatelessWidget {
+class PropertyDetailsScreen extends StatefulWidget {
   const PropertyDetailsScreen({
     super.key,
     required this.imagePath,
@@ -31,6 +32,31 @@ class PropertyDetailsScreen extends StatelessWidget {
 
   static const _textMuted = AppColors.muted;
 
+  @override
+  State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
+}
+
+class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
+  static const _extraGallery = [
+    'assets/images/modern-elegant-living-room-interior-with-abstract-art.jpg',
+    'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    'assets/images/modern-luxurious-bedroom-interior-design.jpg',
+    'assets/images/modern-elegant-bedroom-interior.jpg',
+    'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'assets/images/appartements-luxe.jpg',
+  ];
+
+  late List<String> _gallery;
+  late String _currentImage;
+  bool _galleryExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _gallery = [widget.imagePath, ..._extraGallery];
+    _currentImage = widget.imagePath;
+  }
+
   static int _parseAmount(String raw) {
     final digits =
         RegExp(r'\d+').allMatches(raw).map((m) => m.group(0)!).join();
@@ -47,18 +73,18 @@ class PropertyDetailsScreen extends StatelessWidget {
       backgroundColor: Colors.white,
       bottomNavigationBar: _BottomActions(
         onInterested: () {
-          final rentAmount = _parseAmount(price);
+          final rentAmount = _parseAmount(widget.price);
           final advance = (rentAmount * 0.5).round();
           final deposit = (rentAmount * 0.5).round();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ReservationPaymentScreen(
-                imagePath: imagePath,
-                title: title,
-                location: location,
-                beds: beds,
-                baths: baths,
-                kitchens: kitchens,
+                imagePath: _currentImage,
+                title: widget.title,
+                location: widget.location,
+                beds: widget.beds,
+                baths: widget.baths,
+                kitchens: widget.kitchens,
                 advanceAmount: advance,
                 depositAmount: deposit,
               ),
@@ -69,8 +95,8 @@ class PropertyDetailsScreen extends StatelessWidget {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => AppointmentBookingScreen(
-                title: title,
-                location: location,
+                title: widget.title,
+                location: widget.location,
               ),
             ),
           );
@@ -80,19 +106,24 @@ class PropertyDetailsScreen extends StatelessWidget {
         children: [
           _Header(
             height: headerHeight,
-            imagePath: imagePath,
+            imagePath: _currentImage,
+            gallery: _gallery,
+            galleryExpanded: _galleryExpanded,
+            onToggleGallery: () =>
+                setState(() => _galleryExpanded = !_galleryExpanded),
+            onSelectImage: (path) => setState(() => _currentImage = path),
             onBack: () => Navigator.of(context).pop(),
             onFavorite: () {},
             onView360: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => View360Screen(
-                    imagePath: imagePath,
-                    title: title,
-                    location: location,
-                    beds: beds,
-                    baths: baths,
-                    kitchens: kitchens,
+                    imagePath: _currentImage,
+                    title: widget.title,
+                    location: widget.location,
+                    beds: widget.beds,
+                    baths: widget.baths,
+                    kitchens: widget.kitchens,
                   ),
                 ),
               );
@@ -100,14 +131,14 @@ class PropertyDetailsScreen extends StatelessWidget {
           ),
           Expanded(
             child: Transform.translate(
-              offset: const Offset(0, -18),
+              offset: const Offset(0, -8),
               child: _Content(
-                title: title,
-                price: price,
-                location: location,
-                beds: beds,
-                baths: baths,
-                kitchens: kitchens,
+                title: widget.title,
+                price: widget.price,
+                location: widget.location,
+                beds: widget.beds,
+                baths: widget.baths,
+                kitchens: widget.kitchens,
               ),
             ),
           ),
@@ -174,7 +205,12 @@ class _BottomActions extends StatelessWidget {
                       ],
                     ),
                   ),
-                  _MiniAction(icon: Icons.chat_bubble_outline),
+                  _MiniAction(
+                    icon: Icons.chat_bubble_outline,
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => const ChatScreen()),
+                    ),
+                  ),
                   const SizedBox(width: 10),
                   _MiniAction(icon: Icons.person_outline_rounded),
                 ],
@@ -235,6 +271,10 @@ class _Header extends StatelessWidget {
   const _Header({
     required this.height,
     required this.imagePath,
+    required this.gallery,
+    required this.galleryExpanded,
+    required this.onToggleGallery,
+    required this.onSelectImage,
     required this.onBack,
     required this.onFavorite,
     required this.onView360,
@@ -242,6 +282,10 @@ class _Header extends StatelessWidget {
 
   final double height;
   final String imagePath;
+  final List<String> gallery;
+  final bool galleryExpanded;
+  final VoidCallback onToggleGallery;
+  final ValueChanged<String> onSelectImage;
   final VoidCallback onBack;
   final VoidCallback onFavorite;
   final VoidCallback onView360;
@@ -303,47 +347,63 @@ class _Header extends StatelessWidget {
           ),
           Positioned(
             right: 10,
-            top: 130,
+            top: 135,
             child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              width: 50,
+              width: 54,
+              height: 211,
+              padding: const EdgeInsets.symmetric(vertical: 13),
               decoration: BoxDecoration(
                 color: Colors.black.withOpacity(0.22),
-                borderRadius: BorderRadius.circular(28),
+                borderRadius: BorderRadius.circular(50),
               ),
-              child: Column(
-                children: [
-                  _GalleryThumb(imagePath: imagePath),
-                  const SizedBox(height: 8),
-                  _GalleryThumb(imagePath: imagePath),
-                  const SizedBox(height: 8),
-                  _GalleryThumb(imagePath: imagePath),
-                  const SizedBox(height: 8),
-                  _GalleryMore(countText: '+4', onTap: () {}),
-                ],
+              child: ScrollConfiguration(
+                behavior: const _NoGlowBehavior(),
+                child: SingleChildScrollView(
+                  physics: galleryExpanded
+                      ? const BouncingScrollPhysics()
+                      : const NeverScrollableScrollPhysics(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      for (var i = 0;
+                          i < (galleryExpanded ? gallery.length : 3) &&
+                              i < gallery.length;
+                          i++) ...[
+                        _GalleryThumb(
+                          imagePath: gallery[i],
+                          onTap: () => onSelectImage(gallery[i]),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
+                      _GalleryMore(
+                        countText: '+${(gallery.length - 3).clamp(0, 99)}',
+                        onTap: onToggleGallery,
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
           Positioned(
-            left: 16,
-            bottom: 40,
+            left: 15,
+            bottom: 20,
             child: InkWell(
               onTap: onView360,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(22.5),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                width: 113,
+                height: 45,
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.66),
-                  borderRadius: BorderRadius.circular(16),
+                  color: const Color(0xA1000000),
+                  borderRadius: BorderRadius.circular(22.5),
                 ),
-                child: const Text(
-                  'Vue 360',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
+                child: Text('Vue 360',
+                    style: AppTextStyles.sectionTitle.copyWith(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.white)),
               ),
             ),
           ),
@@ -375,7 +435,7 @@ class _Content extends StatelessWidget {
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(15)),
       ),
       child: SingleChildScrollView(
         padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
@@ -536,21 +596,35 @@ class _CircleIcon extends StatelessWidget {
 }
 
 class _GalleryThumb extends StatelessWidget {
-  const _GalleryThumb({required this.imagePath});
+  const _GalleryThumb({required this.imagePath, this.onTap});
 
   final String imagePath;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Image.asset(
-        imagePath,
-        width: 30,
-        height: 30,
-        fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: ClipOval(
+        child: Image.asset(
+          imagePath,
+          width: 38,
+          height: 38,
+          fit: BoxFit.cover,
+        ),
       ),
     );
   }
+}
+
+class _NoGlowBehavior extends ScrollBehavior {
+  const _NoGlowBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+          BuildContext context, Widget child, ScrollableDetails details) =>
+      child;
 }
 
 class _GalleryMore extends StatelessWidget {
@@ -565,8 +639,8 @@ class _GalleryMore extends StatelessWidget {
       onTap: onTap,
       borderRadius: BorderRadius.circular(23),
       child: Container(
-        width: 30,
-        height: 30,
+        width: 38,
+        height: 38,
         decoration: BoxDecoration(
           color: Colors.black.withOpacity(0.35),
           shape: BoxShape.circle,
@@ -649,24 +723,29 @@ class _SpecChip extends StatelessWidget {
 }
 
 class _MiniAction extends StatelessWidget {
-  const _MiniAction({required this.icon});
+  const _MiniAction({required this.icon, this.onTap});
 
   final IconData icon;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 41,
-      height: 36,
-      decoration: BoxDecoration(
-        color: AppColors.dark,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      alignment: Alignment.center,
-      child: Icon(
-        icon,
-        color: Colors.white,
-        size: 17,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(5),
+      child: Container(
+        width: 41,
+        height: 36,
+        decoration: BoxDecoration(
+          color: AppColors.dark,
+          borderRadius: BorderRadius.circular(5),
+        ),
+        alignment: Alignment.center,
+        child: Icon(
+          icon,
+          color: Colors.white,
+          size: 17,
+        ),
       ),
     );
   }

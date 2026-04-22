@@ -146,13 +146,16 @@ class _ChatBody extends StatelessWidget {
         _DateSeparator(label: "Aujourd'hui"),
         SizedBox(height: 16),
         // Property card shared in chat
-        _SharedPropertyCard(
-          tag: 'Hôtel',
-          imagePath: 'assets/images/property1.png',
-          name: 'Palm Club Plateau',
-          location: 'Cocody Angré, Abidjan',
-          rating: 4.7,
-          pricePerNight: 45000,
+        Align(
+          alignment: AlignmentDirectional.centerStart,
+          child: _SharedPropertyCard(
+            tag: 'Hôtel',
+            imagePath: 'assets/images/property1.png',
+            name: 'Palm Club Plateau',
+            location: 'Cocody Angré, Abidjan',
+            rating: 4.7,
+            pricePerNight: 45000,
+          ),
         ),
         SizedBox(height: 12),
         // Message bubble
@@ -210,15 +213,16 @@ class _SharedPropertyCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 220,
+      width: 232,
+      height: 190,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(25),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x14000000),
-            blurRadius: 16,
-            offset: Offset(0, 6),
+            color: Color(0x1A000000),
+            blurRadius: 2,
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -230,14 +234,14 @@ class _SharedPropertyCard extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(18)),
+                    const BorderRadius.vertical(top: Radius.circular(25)),
                 child: Image.asset(
                   imagePath,
-                  height: 140,
+                  height: 105,
                   width: double.infinity,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
-                    height: 140,
+                    height: 105,
                     color: const Color(0xFFE2E8F0),
                     alignment: Alignment.center,
                     child: const Icon(Icons.image_rounded,

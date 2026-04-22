@@ -94,10 +94,32 @@ class HotelsTab extends StatefulWidget {
 }
 
 class _HotelsTabState extends State<HotelsTab> {
+  static const double _kDarkBgHeight = 160.0;
+
   String _selectedType = 'Hotels';
   String? _selectedAddress;
   DateTime _arrival = DateTime(2026, 3, 15);
   DateTime _departure = DateTime(2026, 3, 18);
+
+  final ScrollController _scrollController = ScrollController();
+  double _scrollOffset = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(() {
+      final clamped = _scrollController.offset.clamp(0.0, _kDarkBgHeight);
+      if (clamped != _scrollOffset) {
+        setState(() => _scrollOffset = clamped);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickAddress() async {
     final result = await Navigator.of(context).push<String>(
@@ -161,7 +183,7 @@ class _HotelsTabState extends State<HotelsTab> {
                   ),
                 ),
                 const SizedBox(width: 12),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -169,22 +191,24 @@ class _HotelsTabState extends State<HotelsTab> {
                         children: [
                           Text(
                             'Bonjour ',
-                            style: TextStyle(
-                              color: Color(0xFF94A3B8),
-                              fontWeight: FontWeight.w500,
-                              fontSize: 13,
+                            style: AppTextStyles.regular12.copyWith(
+                              color: const Color(0xFF94A3B8),
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
-                          Text('👋', style: TextStyle(fontSize: 13)),
+                          Text(
+                            '👋',
+                            style: AppTextStyles.regular12,
+                          ),
                         ],
                       ),
-                      SizedBox(height: 2),
+                      const SizedBox(height: 2),
                       Text(
                         'Arnaud Koffi',
-                        style: TextStyle(
+                        style: AppTextStyles.regularlight16.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 16,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ],
@@ -216,12 +240,13 @@ class _HotelsTabState extends State<HotelsTab> {
                           color: AppColors.primary,
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
+                        child: Text(
                           '5',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.w800),
+                          style: AppTextStyles.regular12.copyWith(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w800,
+                          ),
                         ),
                       ),
                     ),
@@ -260,9 +285,10 @@ class _HotelsTabState extends State<HotelsTab> {
           Expanded(
             child: Stack(
               children: [
-                // Dark background extension behind search card
+                // Dark background extension behind search card — folds on scroll
                 Container(
-                  height: 160,
+                  height: (_kDarkBgHeight - _scrollOffset)
+                      .clamp(0.0, _kDarkBgHeight),
                   decoration: const BoxDecoration(
                     color: AppColors.dark,
                     borderRadius: BorderRadius.vertical(
@@ -271,6 +297,7 @@ class _HotelsTabState extends State<HotelsTab> {
                   ),
                 ),
                 SingleChildScrollView(
+                  controller: _scrollController,
                   padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -294,106 +321,70 @@ class _HotelsTabState extends State<HotelsTab> {
                           children: [
                             // Address
                             GestureDetector(
-                            onTap: _pickAddress,
-                            child: Container(
-                              height: 52,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14),
-                              decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: BorderRadius.circular(28),
-                              ),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.location_on_outlined,
-                                      size: 20, color: AppColors.muted),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Text(
-                                      _selectedAddress ?? 'Sélectionner une adresse',
-                                      style: TextStyle(
-                                        color: _selectedAddress != null
-                                            ? AppColors.dark
-                                            : AppColors.muted,
-                                        fontSize: 14,
-                                        fontWeight: _selectedAddress != null
-                                            ? FontWeight.w600
-                                            : FontWeight.w400,
+                              onTap: _pickAddress,
+                              child: Container(
+                                height: 43,
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFECF2F7),
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.location_on_outlined,
+                                        size: 20, color: AppColors.muted),
+                                    const SizedBox(width: 8),
+                                    Expanded(
+                                      child: Text(
+                                        _selectedAddress ??
+                                            'Sélectionner une adresse',
+                                        style: AppTextStyles.regular12.copyWith(
+                                          color: AppColors.muted,
+                                          fontSize: 12,
+                                          fontWeight: _selectedAddress != null
+                                              ? FontWeight.w500
+                                              : FontWeight.w400,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
                                       ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
                                     ),
-                                  ),
-                                  Container(
-                                    width: 34,
-                                    height: 34,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.primary,
-                                      borderRadius: BorderRadius.circular(17),
-                                    ),
-                                    alignment: Alignment.center,
-                                    child: const Icon(
-                                        Icons.keyboard_arrow_down_rounded,
+                                    Container(
+                                      width: 34,
+                                      height: 34,
+                                      decoration: BoxDecoration(
                                         color: Colors.white,
-                                        size: 20),
-                                  ),
-                                ],
+                                        borderRadius: BorderRadius.circular(17),
+                                      ),
+                                      alignment: Alignment.center,
+                                      child: const Icon(
+                                          Icons.keyboard_arrow_down_rounded,
+                                          color: AppColors.primary,
+                                          size: 20),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
                             ),
                             const SizedBox(height: 12),
-                            // Type pills
-                            SizedBox(
-                              height: 42,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: _kTypes.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 8),
-                                itemBuilder: (_, i) {
-                                  final t = _kTypes[i];
-                                  final selected = t.label == _selectedType;
-                                  return GestureDetector(
-                                    onTap: () =>
-                                        setState(() => _selectedType = t.label),
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 14, vertical: 10),
-                                      decoration: BoxDecoration(
-                                        color: selected
-                                            ? AppColors.primary
-                                            : Colors.white,
-                                        borderRadius: BorderRadius.circular(22),
-                                        border: selected
-                                            ? null
-                                            : Border.all(
-                                                color: const Color(0xFFE7E7E7)),
-                                      ),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.min,
-                                        children: [
-                                          Icon(t.icon,
-                                              size: 16,
-                                              color: selected
-                                                  ? Colors.white
-                                                  : AppColors.dark),
-                                          const SizedBox(width: 6),
-                                          Text(
-                                            t.label,
-                                            style: TextStyle(
-                                              color: selected
-                                                  ? Colors.white
-                                                  : AppColors.dark,
-                                              fontWeight: FontWeight.w700,
-                                              fontSize: 13,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
+                            // Type pills — same style as Mes réservations
+                            Row(
+                              children: [
+                                for (var i = 0; i < _kTypes.length; i++) ...[
+                                  Expanded(
+                                    child: _TypePill(
+                                      data: _kTypes[i],
+                                      selected:
+                                          _kTypes[i].label == _selectedType,
+                                      onTap: () => setState(() =>
+                                          _selectedType = _kTypes[i].label),
                                     ),
-                                  );
-                                },
-                              ),
+                                  ),
+                                  if (i < _kTypes.length - 1)
+                                    const SizedBox(width: 10),
+                                ],
+                              ],
                             ),
                             const SizedBox(height: 12),
                             // Date pickers
@@ -437,9 +428,10 @@ class _HotelsTabState extends State<HotelsTab> {
                                 onPressed: () {},
                                 icon:
                                     const Icon(Icons.search_rounded, size: 20),
-                                label: const Text(
+                                label: Text(
                                   'Rechercher',
-                                  style: AppTextStyles.button,
+                                  style: AppTextStyles.button
+                                      .copyWith(fontSize: 15),
                                 ),
                               ),
                             ),
@@ -553,27 +545,27 @@ class _DateCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final formatted = '${date.day} ${_months[date.month]} ${date.year}';
     return Container(
-      height: 57,
-      padding: const EdgeInsets.symmetric(horizontal: 14),
+      height: 62,
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        color: AppColors.background,
+        color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE7E7E7), width: 0.5),
+        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
       ),
       child: Row(
         children: [
           Container(
-            width: 34,
-            height: 34,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
+              color: AppColors.background,
+              borderRadius: BorderRadius.circular(8),
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.primary, size: 18),
+                color: AppColors.muted, size: 16),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 8),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -581,20 +573,19 @@ class _DateCard extends StatelessWidget {
               children: [
                 Text(
                   label,
-                  style: const TextStyle(
+                  style: AppTextStyles.regular12.copyWith(
                     color: AppColors.dark,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    height: 1.4,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
+                const SizedBox(height: 3),
                 Text(
                   formatted,
-                  style: const TextStyle(
+                  style: AppTextStyles.regular12.copyWith(
                     color: AppColors.muted,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12,
-                    height: 1.4,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w300,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -622,23 +613,16 @@ class _SectionRow extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            color: AppColors.dark,
-            fontWeight: FontWeight.w600,
-            fontSize: 16,
-            height: 24 / 16,
-            letterSpacing: 0.08,
-          ),
+          style: AppTextStyles.regular20.copyWith(color: AppColors.dark),
         ),
         const Spacer(),
         GestureDetector(
           onTap: onMore,
-          child: const Text(
+          child: Text(
             'Tout voir',
-            style: TextStyle(
-              color: AppColors.dark,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
+            style: AppTextStyles.regular12.copyWith(
+              color: AppColors.textBlack,
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -670,6 +654,7 @@ class _PopularCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
         width: 156,
+        height: 220,
         child: Stack(
           fit: StackFit.expand,
           children: [
@@ -684,14 +669,14 @@ class _PopularCard extends StatelessWidget {
                     color: AppColors.muted, size: 40),
               ),
             ),
-            // Gradient overlay
+            // Gradient overlay: transparent → rgba(0,0,0,0.7)
             Container(
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
-                  colors: [Colors.transparent, Color(0xCC000000)],
-                  stops: [0.4, 1.0],
+                  colors: [Colors.transparent, Color(0xB3000000)],
+                  stops: [0.195, 1.0],
                 ),
               ),
             ),
@@ -700,79 +685,73 @@ class _PopularCard extends StatelessWidget {
               top: 10,
               right: 10,
               child: Container(
-                width: 32,
-                height: 32,
+                width: 20,
+                height: 20,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
                 alignment: Alignment.center,
                 child: const Icon(Icons.favorite_rounded,
-                    color: Colors.red, size: 16),
+                    color: Colors.red, size: 11),
               ),
             ),
             // Info at bottom
             Positioned(
               left: 10,
               right: 10,
-              bottom: 10,
+              bottom: 14,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
                     name,
-                    style: const TextStyle(
+                    style: AppTextStyles.regularlight16.copyWith(
                       color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 13,
-                      height: 22 / 13,
-                      letterSpacing: 0.065,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w500,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 3),
+                  const SizedBox(height: 8),
                   Text(
                     location,
-                    style: const TextStyle(
-                      color: Color(0xCCFFFFFF),
+                    style: AppTextStyles.regular12.copyWith(
+                      color: Colors.white,
+                      fontSize: 8,
                       fontWeight: FontWeight.w400,
-                      fontSize: 12,
-                      height: 1.4,
                     ),
                     maxLines: 2,
                   ),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       Text(
                         '${_fmt(pricePerNight)} ',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w600,
+                        style: AppTextStyles.regular12.copyWith(
+                          color: AppColors.background,
                           fontSize: 12,
-                          height: 20 / 12,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0.06,
                         ),
                       ),
-                      const Text(
+                      Text(
                         'FCFA/',
-                        style: TextStyle(
-                          color: Color(0xAAFFFFFF),
+                        style: AppTextStyles.regular12.copyWith(
+                          color: const Color(0xAAFFFFFF),
+                          fontSize: 7,
                           fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                          height: 20 / 10,
                           letterSpacing: 0.05,
                         ),
                       ),
-                      const Text(
+                      Text(
                         ' nuit',
-                        style: TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: Colors.white,
+                          fontSize: 7,
                           fontWeight: FontWeight.w600,
-                          fontSize: 10,
-                          height: 20 / 10,
                           letterSpacing: 0.05,
                         ),
                       ),
@@ -782,10 +761,10 @@ class _PopularCard extends StatelessWidget {
                       const SizedBox(width: 2),
                       Text(
                         rating.toString(),
-                        style: const TextStyle(
+                        style: AppTextStyles.regular12.copyWith(
                           color: Colors.white,
-                          fontWeight: FontWeight.w700,
                           fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -832,28 +811,27 @@ class _UbaxBanner extends StatelessWidget {
         child: Row(
           children: [
             // Text
-            const Expanded(
+            Expanded(
               child: Padding(
-                padding: EdgeInsets.all(18),
+                padding: const EdgeInsets.all(18),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
                       'Trouvez. Emménagez avec',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
                         fontSize: 16,
-                        height: 24 / 16,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                     Text(
                       'UBAX',
-                      style: TextStyle(
+                      style: AppTextStyles.sectionTitle.copyWith(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
                         fontSize: 22,
+                        fontWeight: FontWeight.w900,
                       ),
                     ),
                   ],
@@ -918,23 +896,31 @@ class _RecommendedTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      height: 119,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: const [
+          BoxShadow(
+            color: Color(0x40000000),
+            blurRadius: 4,
+            offset: Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               imagePath,
-              width: 88,
-              height: 70,
+              width: 125,
+              height: 102,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 88,
-                height: 70,
+                width: 125,
+                height: 102,
                 color: const Color(0xFFE2E8F0),
               ),
             ),
@@ -944,44 +930,61 @@ class _RecommendedTile extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  name,
-                  style: const TextStyle(
-                    color: AppColors.dark,
-                    fontWeight: FontWeight.w900,
-                    fontSize: 13,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
+                const SizedBox(height: 14),
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        name,
+                        style: AppTextStyles.sectionTitle.copyWith(
+                          color: AppColors.dark,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          height: 1.2,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Icon(Icons.favorite,
+                        color: Color(0xFFEF4444), size: 16),
+                  ],
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 14),
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.muted),
+                        size: 12, color: AppColors.primary),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
                         location,
-                        style: const TextStyle(
-                            color: AppColors.muted, fontSize: 11),
+                        style: AppTextStyles.regular12.copyWith(
+                          color: AppColors.muted,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w500,
+                        ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 13),
                 Wrap(
                   spacing: 8,
                   runSpacing: 3,
                   children: [
-                    _InfoChip(icon: Icons.bed_rounded, text: '$beds Chambres'),
-                    _InfoChip(
+                    _Meta(
+                        icon: Icons.bed_rounded,
+                        text: '$beds  Chambres'),
+                    _Meta(
                         icon: Icons.bathtub_outlined,
-                        text: '$baths Salle de bains'),
-                    _InfoChip(
-                        icon: Icons.weekend_rounded, text: '$salons Salon'),
+                        text: '$baths  Salle de bains'),
+                    _Meta(
+                        icon: Icons.weekend_rounded,
+                        text: '$salons  Salon'),
                   ],
                 ),
               ],
@@ -993,8 +996,8 @@ class _RecommendedTile extends StatelessWidget {
   }
 }
 
-class _InfoChip extends StatelessWidget {
-  const _InfoChip({required this.icon, required this.text});
+class _Meta extends StatelessWidget {
+  const _Meta({required this.icon, required this.text});
 
   final IconData icon;
   final String text;
@@ -1004,18 +1007,85 @@ class _InfoChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 12, color: AppColors.primary),
+        Icon(icon, size: 11, color: AppColors.primary),
         const SizedBox(width: 3),
         Text(
           text,
           style: const TextStyle(
+            fontFamily: 'Lexend',
             color: AppColors.muted,
-            fontSize: 12,
+            fontSize: 7,
             fontWeight: FontWeight.w400,
-            height: 1.4,
           ),
         ),
       ],
     );
   }
 }
+
+// ─── Type pill ────────────────────────────────────────────────────────────────
+
+class _TypePill extends StatelessWidget {
+  const _TypePill({
+    required this.data,
+    required this.selected,
+    required this.onTap,
+  });
+
+  final _TypeData data;
+  final bool selected;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(40),
+      child: Container(
+        height: 42,
+        padding: const EdgeInsets.symmetric(horizontal: 8),
+        decoration: BoxDecoration(
+          color: selected ? AppColors.primary : Colors.white,
+          borderRadius: BorderRadius.circular(40),
+          border: selected
+              ? null
+              : Border.all(color: const Color(0xFFE5E7EB), width: 1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 26,
+              height: 26,
+              decoration: BoxDecoration(
+                color: selected
+                    ? Colors.white.withValues(alpha: 0.25)
+                    : AppColors.background,
+                shape: BoxShape.circle,
+              ),
+              alignment: Alignment.center,
+              child: Icon(
+                data.icon,
+                color: selected ? Colors.white : AppColors.primary,
+                size: 14,
+              ),
+            ),
+            const SizedBox(width: 6),
+            Expanded(
+              child: Text(
+                data.label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTextStyles.regular12.copyWith(
+                  color: selected ? Colors.white : AppColors.dark,
+                  fontSize: 11,
+                  fontWeight: selected ? FontWeight.w400 : FontWeight.w300,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
