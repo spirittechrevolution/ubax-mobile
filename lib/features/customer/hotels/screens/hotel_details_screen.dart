@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
-import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_screen.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_details_screen.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -72,7 +72,8 @@ const _kRecommended = [
     rating: 4.6,
   ),
   _RecommendedHotel(
-    image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    image:
+        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
     name: 'Suite Prestige',
     location: 'Cocody Riviera, Abidjan',
     price: 85000,
@@ -82,7 +83,7 @@ const _kRecommended = [
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
-class HotelDetailsScreen extends StatelessWidget {
+class HotelDetailsScreen extends StatefulWidget {
   const HotelDetailsScreen({
     super.key,
     required this.imagePath,
@@ -97,6 +98,31 @@ class HotelDetailsScreen extends StatelessWidget {
   final String location;
   final int price;
   final double rating;
+
+  @override
+  State<HotelDetailsScreen> createState() => _HotelDetailsScreenState();
+}
+
+class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
+  static const _extraGallery = [
+    'assets/images/modern-elegant-bedroom-interior.jpg',
+    'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'assets/images/modern-luxurious-bedroom-interior-design.jpg',
+    'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    'assets/images/modern-elegant-living-room-interior-with-abstract-art.jpg',
+  ];
+
+  late List<String> _gallery;
+  late String _currentImage;
+  bool _galleryExpanded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _gallery = [widget.imagePath, ..._extraGallery];
+    _currentImage = widget.imagePath;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +141,7 @@ class HotelDetailsScreen extends StatelessWidget {
                   Stack(
                     children: [
                       Image.asset(
-                        imagePath,
+                        _currentImage,
                         height: 280,
                         width: double.infinity,
                         fit: BoxFit.cover,
@@ -163,33 +189,49 @@ class HotelDetailsScreen extends StatelessWidget {
                       ),
                       // Thumbnail strip
                       Positioned(
-                        top: 97,
-                        right: 14,
+                        top: 65,
+                        right: 18,
                         child: Container(
                           width: 44,
-                          height: 171,
-                          padding: const EdgeInsets.all(4),
+                          height: 190,
+                          padding: const EdgeInsets.symmetric(vertical: 13),
                           decoration: BoxDecoration(
-                            color: const Color(0x99000000),
+                            color: Colors.black.withValues(alpha: 0.22),
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              _ThumbCircle(
-                                image: imagePath,
+                          child: ScrollConfiguration(
+                            behavior: const _NoGlowBehavior(),
+                            child: SingleChildScrollView(
+                              physics: _galleryExpanded
+                                  ? const BouncingScrollPhysics()
+                                  : const NeverScrollableScrollPhysics(),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  for (var i = 0;
+                                      i <
+                                              (_galleryExpanded
+                                                  ? _gallery.length
+                                                  : 3) &&
+                                          i < _gallery.length;
+                                      i++) ...[
+                                    _ThumbCircle(
+                                      image: _gallery[i],
+                                      onTap: () => setState(
+                                          () => _currentImage = _gallery[i]),
+                                    ),
+                                    const SizedBox(height: 8),
+                                  ],
+                                  _ThumbCircleMore(
+                                    countText:
+                                        '+${(_gallery.length - 3).clamp(0, 99)}',
+                                    onTap: () => setState(() =>
+                                        _galleryExpanded = !_galleryExpanded),
+                                  ),
+                                ],
                               ),
-                              const _ThumbCircle(
-                                image: 'assets/images/modern-elegant-bedroom-interior.jpg',
-                              ),
-                              const _ThumbCircle(
-                                image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
-                              ),
-                              _ThumbCircleMore(
-                                image: 'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
-                                count: 4,
-                              ),
-                            ],
+                            ),
                           ),
                         ),
                       ),
@@ -197,225 +239,233 @@ class HotelDetailsScreen extends StatelessWidget {
                   ),
 
                   // ── Content
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Name
-                        Text(
-                          name,
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
-                            fontSize: 20,
+                  Transform.translate(
+                    offset: const Offset(0, -8),
+                    child: Container(
+                      decoration: const BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius:
+                            BorderRadius.vertical(top: Radius.circular(15)),
+                      ),
+                      padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Name
+                          Text(
+                            widget.name,
+                            style: AppTextStyles.sectionTitle.copyWith(
+                              color: AppColors.dark,
+                              fontSize: 20,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        // Location + rating
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on,
-                                color: AppColors.primary, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              location,
-                              style: AppTextStyles.regular12.copyWith(
-                                color: AppColors.muted,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w400,
+                          const SizedBox(height: 8),
+                          // Location + rating
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on,
+                                  color: AppColors.primary, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                widget.location,
+                                style: AppTextStyles.regular12.copyWith(
+                                  color: AppColors.muted,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: 12),
-                            const Icon(Icons.star_rounded,
-                                color: Color(0xFFFACC15), size: 16),
-                            const SizedBox(width: 2),
-                            Text(
-                              rating.toString(),
-                              style: const TextStyle(
-                                color: AppColors.dark,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // ── Installations
-                        Row(
-                          children: [
-                            Text(
-                              'installations communes',
-                              style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.dark,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Tout voir',
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
+                              const SizedBox(width: 12),
+                              const Icon(Icons.star_rounded,
+                                  color: Color(0xFFFACC15), size: 16),
+                              const SizedBox(width: 2),
+                              Text(
+                                widget.rating.toString(),
+                                style: const TextStyle(
+                                  color: AppColors.dark,
+                                  fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: _kAmenities
-                              .map((a) => _AmenityIcon(
-                                    icon: a.icon,
-                                    label: a.label,
-                                  ))
-                              .toList(),
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // ── Description
-                        Text(
-                          'Description',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
-                            fontSize: 15,
+                            ],
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
-                          style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.muted,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
 
-                        const SizedBox(height: 24),
+                          const SizedBox(height: 24),
 
-                        // ── Adresse
-                        Row(
-                          children: [
-                            Text(
-                              'Adresse',
-                              style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.dark,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Ouvrir la carte',
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
+                          // ── Installations
+                          Row(
+                            children: [
+                              Text(
+                                'installations communes',
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.dark,
+                                  fontSize: 15,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        // Map placeholder
-                        Container(
-                          height: 140,
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFE2E8F0),
-                            borderRadius: BorderRadius.circular(16),
-                            image: const DecorationImage(
-                              image: AssetImage('assets/images/l.jpg'),
-                              fit: BoxFit.cover,
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {},
+                                child: const Text(
+                                  'Tout voir',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: _kAmenities
+                                .map((a) => _AmenityIcon(
+                                      icon: a.icon,
+                                      label: a.label,
+                                    ))
+                                .toList(),
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // ── Description
+                          Text(
+                            'Description',
+                            style: AppTextStyles.sectionTitle.copyWith(
+                              color: AppColors.dark,
+                              fontSize: 15,
                             ),
                           ),
-                          alignment: Alignment.center,
-                          child: Container(
-                            width: 36,
-                            height: 36,
-                            decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.primary,
+                          const SizedBox(height: 10),
+                          Text(
+                            'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.muted,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // ── Adresse
+                          Row(
+                            children: [
+                              Text(
+                                'Adresse',
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.dark,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {},
+                                child: const Text(
+                                  'Ouvrir la carte',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          // Map placeholder
+                          Container(
+                            height: 140,
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFE2E8F0),
+                              borderRadius: BorderRadius.circular(16),
+                              image: const DecorationImage(
+                                image: AssetImage('assets/images/l.jpg'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             alignment: Alignment.center,
-                            child: const Icon(Icons.location_on,
-                                color: Colors.white, size: 20),
+                            child: Container(
+                              width: 36,
+                              height: 36,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.primary,
+                              ),
+                              alignment: Alignment.center,
+                              child: const Icon(Icons.location_on,
+                                  color: Colors.white, size: 20),
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on_outlined,
-                                color: AppColors.primary, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              location,
-                              style: AppTextStyles.regular12.copyWith(
-                                color: AppColors.muted,
-                                fontSize: 13,
-                              ),
-                            ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 24),
-
-                        // ── Reviews
-                        Row(
-                          children: [
-                            Text(
-                              'Reviews',
-                              style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.dark,
-                                fontSize: 15,
-                              ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {},
-                              child: const Text(
-                                'Tout voir',
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
+                          const SizedBox(height: 10),
+                          Row(
+                            children: [
+                              const Icon(Icons.location_on_outlined,
+                                  color: AppColors.primary, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                widget.location,
+                                style: AppTextStyles.regular12.copyWith(
+                                  color: AppColors.muted,
                                   fontSize: 13,
                                 ),
                               ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 24),
+
+                          // ── Reviews
+                          Row(
+                            children: [
+                              Text(
+                                'Reviews',
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.dark,
+                                  fontSize: 15,
+                                ),
+                              ),
+                              const Spacer(),
+                              GestureDetector(
+                                onTap: () {},
+                                child: const Text(
+                                  'Tout voir',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          ..._kReviews.map(
+                            (r) => Padding(
+                              padding: const EdgeInsets.only(bottom: 14),
+                              child: _ReviewCard(review: r),
                             ),
-                          ],
-                        ),
-                        const SizedBox(height: 12),
-                        ..._kReviews.map(
-                          (r) => Padding(
-                            padding: const EdgeInsets.only(bottom: 14),
-                            child: _ReviewCard(review: r),
                           ),
-                        ),
 
-                        const SizedBox(height: 10),
+                          const SizedBox(height: 10),
 
-                        // ── Recommandés
-                        Text(
-                          'Recommandés pour vous',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
-                            fontSize: 15,
+                          // ── Recommandés
+                          Text(
+                            'Recommandés pour vous',
+                            style: AppTextStyles.sectionTitle.copyWith(
+                              color: AppColors.dark,
+                              fontSize: 15,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        ..._kRecommended.map(
-                          (h) => Padding(
-                            padding: const EdgeInsets.only(bottom: 12),
-                            child: _RecommendedCard(hotel: h),
+                          const SizedBox(height: 12),
+                          ..._kRecommended.map(
+                            (h) => Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _RecommendedCard(hotel: h),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
@@ -457,7 +507,7 @@ class HotelDetailsScreen extends StatelessWidget {
                         TextSpan(
                           children: [
                             TextSpan(
-                              text: '${_fmt(price)} ',
+                              text: '${_fmt(widget.price)} ',
                               style: const TextStyle(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w900,
@@ -475,7 +525,7 @@ class HotelDetailsScreen extends StatelessWidget {
                             const TextSpan(
                               text: '/Nuit',
                               style: TextStyle(
-                                color: AppColors.muted,
+                                color: AppColors.primary,
                                 fontWeight: FontWeight.w400,
                                 fontSize: 13,
                               ),
@@ -497,18 +547,17 @@ class HotelDetailsScreen extends StatelessWidget {
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(50),
                         ),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 32),
+                        padding: const EdgeInsets.symmetric(horizontal: 32),
                       ),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
-                            builder: (_) => HotelReservationScreen(
-                              imagePath: imagePath,
-                              name: name,
-                              location: location,
-                              price: price,
-                              rating: rating,
+                            builder: (_) => HotelReservationDetailsScreen(
+                              imagePath: _currentImage,
+                              name: widget.name,
+                              location: widget.location,
+                              price: widget.price,
+                              rating: widget.rating,
                             ),
                           ),
                         );
@@ -777,22 +826,27 @@ class _RecommendedCard extends StatelessWidget {
 // ─── Thumb circle ─────────────────────────────────────────────────────────────
 
 class _ThumbCircle extends StatelessWidget {
-  const _ThumbCircle({required this.image});
+  const _ThumbCircle({required this.image, this.onTap});
 
   final String image;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: Image.asset(
-        image,
-        width: 36,
-        height: 36,
-        fit: BoxFit.cover,
-        errorBuilder: (_, __, ___) => Container(
-          width: 36,
-          height: 36,
-          color: const Color(0xFFD0DDE8),
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: ClipOval(
+        child: Image.asset(
+          image,
+          width: 38,
+          height: 38,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Container(
+            width: 38,
+            height: 38,
+            color: const Color(0xFFD0DDE8),
+          ),
         ),
       ),
     );
@@ -800,50 +854,41 @@ class _ThumbCircle extends StatelessWidget {
 }
 
 class _ThumbCircleMore extends StatelessWidget {
-  const _ThumbCircleMore({required this.image, required this.count});
+  const _ThumbCircleMore({required this.countText, required this.onTap});
 
-  final String image;
-  final int count;
+  final String countText;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: 36,
-      height: 36,
-      child: Stack(
-        children: [
-          ClipOval(
-            child: Image.asset(
-              image,
-              width: 36,
-              height: 36,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                width: 36,
-                height: 36,
-                color: const Color(0xFFD0DDE8),
-              ),
-            ),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(23),
+      child: Container(
+        width: 33,
+        height: 33,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          shape: BoxShape.circle,
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          countText,
+          style: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.w900,
           ),
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0x99000000),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              '+$count',
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.w700,
-                fontSize: 12,
-              ),
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
+}
+
+class _NoGlowBehavior extends ScrollBehavior {
+  const _NoGlowBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+          BuildContext context, Widget child, ScrollableDetails details) =>
+      child;
 }

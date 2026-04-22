@@ -26,7 +26,8 @@ class _PropertyResult {
 
 const _kResults = [
   _PropertyResult(
-    image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    image:
+        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -34,7 +35,8 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    image:
+        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -50,7 +52,8 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image: 'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    image:
+        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -261,8 +264,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                 : ListView.separated(
                     padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
                     itemCount: _kResults.length,
-                    separatorBuilder: (_, __) =>
-                        const SizedBox(height: 12),
+                    separatorBuilder: (_, __) => const SizedBox(height: 12),
                     itemBuilder: (_, i) => GestureDetector(
                       onTap: () => _openDetails(context, _kResults[i]),
                       child: _ListCard(data: _kResults[i]),
@@ -285,14 +287,16 @@ class _GridCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: 198,
+      height: 227,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x10000000),
-            blurRadius: 10,
-            offset: Offset(0, 4),
+            color: Color(0x1A000000),
+            blurRadius: 2,
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -301,65 +305,70 @@ class _GridCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Image
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(25)),
-                child: Image.asset(
-                  data.image,
-                  height: 120,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    height: 120,
-                    color: const Color(0xFFE2E8F0),
-                  ),
-                ),
-              ),
-              // Tag
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.dark,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    data.tag,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 10,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(6, 6, 6, 0),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    data.image,
+                    width: 185,
+                    height: 146,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 185,
+                      height: 146,
+                      color: const Color(0xFFE2E8F0),
                     ),
                   ),
                 ),
-              ),
-              // Heart
-              Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
+                // Tag
+
+                Positioned(
+                  top: 12,
+                  left: 10,
+                  child: Container(
+                    width: 46,
+                    height: 19,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0x40000000),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      data.tag,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 9,
+                      ),
+                    ),
                   ),
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.favorite_rounded,
-                      color: Colors.red, size: 16),
                 ),
-              ),
-            ],
+                // Heart
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Container(
+                    width: 22,
+                    height: 22,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    alignment: Alignment.center,
+                    child: const Icon(Icons.favorite_rounded,
+                        color: Colors.red, size: 12),
+                  ),
+                ),
+              ],
+            ),
           ),
           // Info
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 8, 10, 8),
+              padding: const EdgeInsets.fromLTRB(10, 4, 10, 6),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -370,9 +379,9 @@ class _GridCard extends StatelessWidget {
                         child: Text(
                           data.name,
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
-                            fontSize: 13,
-                          ),
+                              color: AppColors.dark,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -385,8 +394,8 @@ class _GridCard extends StatelessWidget {
                         data.rating.toString(),
                         style: const TextStyle(
                           color: AppColors.dark,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10,
                         ),
                       ),
                     ],
@@ -397,13 +406,16 @@ class _GridCard extends StatelessWidget {
                     data.location,
                     style: AppTextStyles.regular12.copyWith(
                       color: AppColors.muted,
-                      fontSize: 11,
+                      fontSize: 9,
                       fontWeight: FontWeight.w400,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const Spacer(),
+                  // const Spacer(),
+                  SizedBox(
+                    height: 7,
+                  ),
                   // Price
                   Text.rich(
                     TextSpan(
@@ -412,8 +424,8 @@ class _GridCard extends StatelessWidget {
                           text: '${_fmt(data.price)} FCFA',
                           style: const TextStyle(
                             color: AppColors.primary,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 10,
                           ),
                         ),
                         const TextSpan(
@@ -447,16 +459,18 @@ class _ListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       height: 139,
-      padding: const EdgeInsets.all(12),
+      margin: const EdgeInsets.only(left: 2),
+      padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
         boxShadow: const [
           BoxShadow(
-            color: Color(0x10000000),
-            blurRadius: 10,
-            offset: Offset(0, 4),
+            color: Color(0x1A000000),
+            blurRadius: 2,
+            offset: Offset(0, 2),
           ),
         ],
       ),
@@ -465,14 +479,15 @@ class _ListCard extends StatelessWidget {
         children: [
           // Image
           ClipRRect(
-            borderRadius: BorderRadius.circular(18),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               data.image,
-              width: 115,
-              height: double.infinity,
+              width: 159,
+              height: 127,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 115,
+                width: 159,
+                height: 127,
                 color: const Color(0xFFE2E8F0),
               ),
             ),
@@ -480,89 +495,107 @@ class _ListCard extends StatelessWidget {
           const SizedBox(width: 12),
           // Info
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Name + heart
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        data.name,
-                        style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
-                          fontSize: 14,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+            child: Padding(
+              padding: const EdgeInsets.only(right: 4, top: 6),
+              child: Stack(
+                children: [
+                  // Main content column (same text properties as _GridCard)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 37),
+                      // Title + star + rating (inline, like GridCard)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(right: 34),
+                              child: Text(
+                                data.name,
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                  color: AppColors.dark,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w300,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 6),
-                    const Icon(Icons.favorite_rounded,
-                        color: Colors.red, size: 18),
-                  ],
-                ),
-                // Location
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.muted),
-                    const SizedBox(width: 3),
-                    Expanded(
-                      child: Text(
+                      const SizedBox(height: 6),
+                      // Location (plain text, no icon — like GridCard)
+                      Text(
                         data.location,
                         style: AppTextStyles.regular12.copyWith(
                           color: AppColors.muted,
+                          fontSize: 9,
                           fontWeight: FontWeight.w400,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                    ),
-                  ],
-                ),
-                // Price + rating
-                Row(
-                  children: [
-                    Text.rich(
-                      TextSpan(
+                      const SizedBox(height: 17),
+                      // Price
+                      Row(
                         children: [
-                          TextSpan(
-                            text: '${_fmt(data.price)} FCFA',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 13,
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: '${_fmt(data.price)} FCFA',
+                                  style: const TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                                const TextSpan(
+                                  text: '/ nuit',
+                                  style: TextStyle(
+                                    color: AppColors.muted,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                          const TextSpan(
-                            text: '/ nuit',
-                            style: TextStyle(
-                              color: AppColors.muted,
+                          Spacer(),
+                          const Icon(Icons.star_rounded,
+                              color: Color(0xFFFACC15), size: 14),
+                          const SizedBox(width: 2),
+                          Text(
+                            data.rating.toString(),
+                            style: const TextStyle(
+                              color: AppColors.dark,
                               fontWeight: FontWeight.w400,
-                              fontSize: 11,
+                              fontSize: 10,
                             ),
                           ),
                         ],
                       ),
-                    ),
-                    const Spacer(),
-                    const Icon(Icons.star_rounded,
-                        color: Color(0xFFFACC15), size: 14),
-                    const SizedBox(width: 2),
-                    Text(
-                      data.rating.toString(),
-                      style: const TextStyle(
-                        color: AppColors.dark,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
+                    ],
+                  ),
+                  // Heart chip — floating top-right corner
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: Container(
+                      width: 26,
+                      height: 26,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color(0xFFECF2F7),
                       ),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.favorite_rounded,
+                          color: Color(0xFFEF4444), size: 13),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ],

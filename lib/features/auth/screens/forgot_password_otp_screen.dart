@@ -153,7 +153,7 @@ class _OtpDotField extends StatelessWidget {
         keyboardType: TextInputType.number,
         maxLength: 1,
         onChanged: onChanged,
-        style: const TextStyle(
+        style: AppTextStyles.sectionTitle.copyWith(
           color: Colors.white,
           fontSize: 20,
           fontWeight: FontWeight.w700,

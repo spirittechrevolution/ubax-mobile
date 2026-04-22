@@ -53,8 +53,7 @@ class HotelReservationScreen extends StatefulWidget {
   final double rating;
 
   @override
-  State<HotelReservationScreen> createState() =>
-      _HotelReservationScreenState();
+  State<HotelReservationScreen> createState() => _HotelReservationScreenState();
 }
 
 class _HotelReservationScreenState extends State<HotelReservationScreen> {
@@ -76,7 +75,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
   void _openCalendar() async {
     final result = await showDialog<List<DateTime>>(
       context: context,
-      builder: (_) => _CalendarDialog(
+      builder: (_) => HotelCalendarDialog(
         initialStart: _arrivalDate,
         initialEnd: _departureDate,
       ),
@@ -94,7 +93,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
-      builder: (_) => _PaymentMethodSheet(
+      builder: (_) => HotelPaymentMethodSheet(
         currentMethod: _paymentMethod,
       ),
     );
@@ -182,7 +181,8 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                     const SizedBox(height: 4),
                                     Text(
                                       _formatDate(_arrivalDate),
-                                      style: AppTextStyles.sectionTitle.copyWith(
+                                      style:
+                                          AppTextStyles.sectionTitle.copyWith(
                                         color: AppColors.dark,
                                         fontSize: 14,
                                       ),
@@ -211,7 +211,8 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                       const SizedBox(height: 4),
                                       Text(
                                         _formatDate(_departureDate),
-                                        style: AppTextStyles.sectionTitle.copyWith(
+                                        style:
+                                            AppTextStyles.sectionTitle.copyWith(
                                           color: AppColors.dark,
                                           fontSize: 14,
                                         ),
@@ -484,16 +485,17 @@ class _PaymentRow extends StatelessWidget {
 
 // ─── Screen 2: Payment Method Bottom Sheet ───────────────────────────────────
 
-class _PaymentMethodSheet extends StatefulWidget {
-  const _PaymentMethodSheet({required this.currentMethod});
+class HotelPaymentMethodSheet extends StatefulWidget {
+  const HotelPaymentMethodSheet({super.key, required this.currentMethod});
 
   final String currentMethod;
 
   @override
-  State<_PaymentMethodSheet> createState() => _PaymentMethodSheetState();
+  State<HotelPaymentMethodSheet> createState() =>
+      HotelPaymentMethodSheetState();
 }
 
-class _PaymentMethodSheetState extends State<_PaymentMethodSheet> {
+class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
   late String _selected;
 
   @override
@@ -722,7 +724,8 @@ class _PaymentTile extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : const Color(0xFFD0DDE8),
+                  color:
+                      isSelected ? AppColors.primary : const Color(0xFFD0DDE8),
                   width: 2,
                 ),
                 color: isSelected ? AppColors.primary : Colors.transparent,
@@ -1057,8 +1060,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
 
 // ─── Screen 4: Calendar Dialog ───────────────────────────────────────────────
 
-class _CalendarDialog extends StatefulWidget {
-  const _CalendarDialog({
+class HotelCalendarDialog extends StatefulWidget {
+  const HotelCalendarDialog({
+    super.key,
     required this.initialStart,
     required this.initialEnd,
   });
@@ -1067,10 +1071,10 @@ class _CalendarDialog extends StatefulWidget {
   final DateTime initialEnd;
 
   @override
-  State<_CalendarDialog> createState() => _CalendarDialogState();
+  State<HotelCalendarDialog> createState() => HotelCalendarDialogState();
 }
 
-class _CalendarDialogState extends State<_CalendarDialog> {
+class HotelCalendarDialogState extends State<HotelCalendarDialog> {
   late DateTime _displayMonth;
   late DateTime? _startDate;
   late DateTime? _endDate;
@@ -1138,8 +1142,8 @@ class _CalendarDialogState extends State<_CalendarDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      _displayMonth = DateTime(
-                          _displayMonth.year, _displayMonth.month - 1);
+                      _displayMonth =
+                          DateTime(_displayMonth.year, _displayMonth.month - 1);
                     });
                   },
                   child: const Icon(Icons.chevron_left,
@@ -1154,8 +1158,8 @@ class _CalendarDialogState extends State<_CalendarDialog> {
                 GestureDetector(
                   onTap: () {
                     setState(() {
-                      _displayMonth = DateTime(
-                          _displayMonth.year, _displayMonth.month + 1);
+                      _displayMonth =
+                          DateTime(_displayMonth.year, _displayMonth.month + 1);
                     });
                   },
                   child: const Icon(Icons.chevron_right,
@@ -1195,8 +1199,8 @@ class _CalendarDialogState extends State<_CalendarDialog> {
                   return const SizedBox();
                 }
                 final day = index - firstWeekday + 1;
-                final date = DateTime(
-                    _displayMonth.year, _displayMonth.month, day);
+                final date =
+                    DateTime(_displayMonth.year, _displayMonth.month, day);
 
                 final isStart = _startDate != null &&
                     date.year == _startDate!.year &&
@@ -1239,8 +1243,9 @@ class _CalendarDialogState extends State<_CalendarDialog> {
                       '$day',
                       style: TextStyle(
                         color: textColor,
-                        fontWeight:
-                            (isStart || isEnd) ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: (isStart || isEnd)
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                         fontSize: 14,
                       ),
                     ),
@@ -1484,69 +1489,86 @@ class HotelReservationSummaryScreen extends StatelessWidget {
 
                   const SizedBox(height: 24),
 
-                  // ── Votre réservation
-                  Text(
-                    'Votre réservation',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.primary,
+                  // ── Votre réservation + Détails du prix (unified card)
+                  Container(
+                    height: 362,
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(14),
+                      border:
+                          Border.all(color: const Color(0xFFE5E7EB), width: 1),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  _SummaryRow(label: 'Dates', value: dateRange),
-                  const SizedBox(height: 10),
-                  _SummaryRow(
-                    label: 'invité',
-                    value: '$guestCount Guests (1 Room)',
-                  ),
-                  const SizedBox(height: 10),
-                  const _SummaryRow(
-                    label: 'Type de chambre',
-                    value: 'Queen Room',
-                  ),
-                  const SizedBox(height: 10),
-                  const _SummaryRow(
-                    label: 'Téléphone',
-                    value: '+225 01 02 03 04 05',
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // Dashed divider
-                  SizedBox(
-                    width: double.infinity,
-                    height: 1,
-                    child: CustomPaint(
-                      painter: _DashedLinePainter(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Votre réservation',
+                          style: AppTextStyles.sectionTitle.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        _SummaryRow(
+                          icon: Icons.calendar_month_outlined,
+                          label: 'Dates',
+                          value: dateRange,
+                        ),
+                        const SizedBox(height: 10),
+                        _SummaryRow(
+                          icon: Icons.person_outline_rounded,
+                          label: 'invité',
+                          value: '$guestCount Guests (1 Room)',
+                        ),
+                        const SizedBox(height: 10),
+                        const _SummaryRow(
+                          icon: Icons.article_outlined,
+                          label: 'Type de chambre',
+                          value: 'Queen Room',
+                        ),
+                        const SizedBox(height: 10),
+                        const _SummaryRow(
+                          icon: Icons.phone_outlined,
+                          label: 'Téléphone',
+                          value: '+225 01 02 03 04 05',
+                        ),
+                        const SizedBox(height: 18),
+                        // Dashed divider
+                        SizedBox(
+                          width: double.infinity,
+                          height: 1,
+                          child: CustomPaint(
+                            painter: _DashedLinePainter(),
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        Text(
+                          'Détails du prix',
+                          style: AppTextStyles.sectionTitle.copyWith(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        _PaymentRow(
+                          label: 'Prix',
+                          value: '${_fmt(totalNights)} Fcfa',
+                        ),
+                        const SizedBox(height: 10),
+                        _PaymentRow(
+                          label: 'frais administratifs',
+                          value: '${_fmt(adminFees)} Fcfa',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child: Divider(color: Color(0xFFE5E7EB), height: 1),
+                        ),
+                        _PaymentRow(
+                          label: 'Prix total',
+                          value: '${_fmt(totalPayment)} Fcfa',
+                          isBold: true,
+                        ),
+                      ],
                     ),
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // ── Détails du prix
-                  Text(
-                    'Détails du prix',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.primary,
-                    ),
-                  ),
-                  const SizedBox(height: 14),
-                  _PaymentRow(
-                    label: 'Prix',
-                    value: '${_fmt(totalNights)} Fcfa',
-                  ),
-                  const SizedBox(height: 10),
-                  _PaymentRow(
-                    label: 'frais administratifs',
-                    value: '${_fmt(adminFees)} Fcfa',
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Divider(color: Color(0xFFE5E7EB)),
-                  ),
-                  _PaymentRow(
-                    label: 'Prix total',
-                    value: '${_fmt(totalPayment)} Fcfa',
-                    isBold: true,
                   ),
 
                   const SizedBox(height: 24),
@@ -1640,23 +1662,37 @@ class HotelReservationSummaryScreen extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({required this.label, required this.value});
+  const _SummaryRow({
+    required this.label,
+    required this.value,
+    this.icon,
+  });
 
   final String label;
   final String value;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(
-          label,
-          style: AppTextStyles.regular12.copyWith(
-            color: AppColors.muted,
-            fontWeight: FontWeight.w400,
-            fontSize: 14,
-          ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (icon != null) ...[
+              Icon(icon, color: const Color(0xFF171725), size: 16),
+              const SizedBox(width: 10),
+            ],
+            Text(
+              label,
+              style: AppTextStyles.regular12.copyWith(
+                color: const Color(0xFF171725),
+                fontWeight: FontWeight.w400,
+                fontSize: 14,
+              ),
+            ),
+          ],
         ),
         Text(
           value,
