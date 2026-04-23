@@ -39,7 +39,8 @@ const _kProperties = [
     tag: 'Location',
   ),
   _PropertyData(
-    imagePath: 'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    imagePath:
+        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
     name: 'Appartement Moderne à Cocody',
     location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
     beds: 3,
@@ -59,7 +60,8 @@ const _kProperties = [
     tag: 'Location',
   ),
   _PropertyData(
-    imagePath: 'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    imagePath:
+        'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
     name: 'Appartement Moderne à Cocody',
     location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
     beds: 3,
@@ -79,7 +81,8 @@ const _kProperties = [
     tag: 'Vente',
   ),
   _PropertyData(
-    imagePath: 'assets/images/3d-rendering-loft-luxury-living-room-with-shelf-near-dining-table-counter.jpg',
+    imagePath:
+        'assets/images/3d-rendering-loft-luxury-living-room-with-shelf-near-dining-table-counter.jpg',
     name: 'Loft Luxueux Plateau',
     location: 'Plateau, Abidjan – Côte d\'Ivoire',
     beds: 2,
@@ -192,7 +195,8 @@ class _FavoritesTabState extends State<FavoritesTab> {
                   'Favoris',
                   style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.dark,
-                    fontSize: 22,
+                    fontSize: 20,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 const Spacer(),
@@ -217,15 +221,15 @@ class _FavoritesTabState extends State<FavoritesTab> {
                             autofocus: true,
                             style: const TextStyle(
                               color: AppColors.dark,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w400,
                             ),
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: 'Rechercher un bien...',
                               hintStyle: TextStyle(
                                 color: AppColors.muted,
-                                fontSize: 14,
+                                fontSize: 13,
                               ),
                               isDense: true,
                               contentPadding: EdgeInsets.zero,
@@ -297,8 +301,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                 onTap: () => setState(() => _isGridView = false),
                 child: Icon(
                   Icons.format_list_bulleted_rounded,
-                  color:
-                      _isGridView ? AppColors.muted : AppColors.primary,
+                  color: _isGridView ? AppColors.muted : AppColors.primary,
                   size: 24,
                 ),
               ),
@@ -307,8 +310,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                 onTap: () => setState(() => _isGridView = true),
                 child: Icon(
                   Icons.grid_view_rounded,
-                  color:
-                      _isGridView ? AppColors.primary : AppColors.muted,
+                  color: _isGridView ? AppColors.primary : AppColors.muted,
                   size: 22,
                 ),
               ),
@@ -361,8 +363,8 @@ class _FavoritesTabState extends State<FavoritesTab> {
                                   'Supprimer',
                                   style: TextStyle(
                                     color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 12,
                                   ),
                                 ),
                               ],
@@ -404,9 +406,7 @@ class _CategoryPill extends StatelessWidget {
         decoration: BoxDecoration(
           color: selected ? AppColors.primary : Colors.white,
           borderRadius: BorderRadius.circular(22),
-          border: selected
-              ? null
-              : Border.all(color: const Color(0xFFE7E7E7)),
+          border: selected ? null : Border.all(color: const Color(0xFFE7E7E7)),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -420,9 +420,12 @@ class _CategoryPill extends StatelessWidget {
             Text(
               label,
               style: TextStyle(
+                fontFamily: 'Lexend',
                 color: selected ? Colors.white : AppColors.dark,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w300,
                 fontSize: 13,
+                height: 1.4,
+                letterSpacing: 0,
               ),
             ),
           ],
@@ -446,190 +449,194 @@ class _PropertyCard extends StatelessWidget {
         final w = constraints.maxWidth;
         // Scale proportionally to Figma reference (198px wide card)
         final scale = w / 198;
-        final imgH = 110 * scale;
-        final fs = (scale * 11).clamp(9.0, 14.0);
-        final fsSmall = (scale * 9).clamp(7.5, 12.0);
+        final fs = (scale * 10).clamp(8.5, 13.0);
+        final fsSmall = (scale * 8).clamp(7.0, 11.0);
         final iconSz = (scale * 11).clamp(9.0, 13.0);
         final hPad = (scale * 8).clamp(6.0, 12.0);
-        final vPad = (scale * 4).clamp(3.0, 7.0);
+        final vPad = (scale * 3).clamp(2.0, 5.0);
 
         return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x10000000),
-            blurRadius: 12,
-            offset: Offset(0, 6),
+          height: 201,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(
+              color: const Color(0xFFE5E7EB),
+              width: 0.3,
+            ),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x03000000),
+                blurRadius: 4,
+                offset: Offset(0, 4),
+              ),
+            ],
           ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // ── Image
-          Stack(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(18)),
-                child: Image.asset(
-                  data.imagePath,
-                  height: imgH,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    height: imgH,
-                    color: const Color(0xFFE2E8F0),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.image_rounded,
-                        color: AppColors.muted, size: 36),
-                  ),
-                ),
-              ),
-              // Tag
-              Positioned(
-                top: 8,
-                left: 8,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.dark,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    data.tag,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: fsSmall,
+              // ── Image
+              Padding(
+                padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+                child: Stack(
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        data.imagePath,
+                        height: 114,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          height: 114,
+                          color: const Color(0xFFE2E8F0),
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.image_rounded,
+                              color: AppColors.muted, size: 36),
+                        ),
+                      ),
                     ),
-                  ),
+                    // Tag
+                    Positioned(
+                      top: 12,
+                      left: 6,
+                      child: Container(
+                        width: 51,
+                        height: 15,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: AppColors.dark,
+                          borderRadius: BorderRadius.circular(50),
+                        ),
+                        child: Text(
+                          data.tag,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 7,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ),
+                    // Heart
+                    const Positioned(
+                      top: 12,
+                      right: 6,
+                      child: Icon(
+                        Icons.favorite_rounded,
+                        color: Colors.red,
+                        size: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              // Heart
-              Positioned(
-                top: 6,
-                right: 6,
-                child: Container(
-                  width: 28,
-                  height: 28,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.favorite_rounded,
-                    color: Colors.red,
-                    size: 16,
+
+              // ── Info
+              Expanded(
+                child: Padding(
+                  padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, vPad),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 4),
+                      // Name
+                      Text(
+                        data.name,
+                        style: const TextStyle(
+                          color: AppColors.dark,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 9,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(height: 3),
+                      // Location
+                      Row(
+                        children: [
+                          Icon(Icons.location_on_outlined,
+                              size: iconSz, color: AppColors.muted),
+                          const SizedBox(width: 2),
+                          Expanded(
+                            child: Text(
+                              data.location,
+                              style: const TextStyle(
+                                color: AppColors.muted,
+                                fontSize: 6,
+                                fontWeight: FontWeight.w400,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 4),
+                      // Meta
+                      Wrap(
+                        spacing: 5,
+                        runSpacing: 2,
+                        children: [
+                          _MetaInfo(
+                              icon: Icons.bed_rounded,
+                              fontSize: fsSmall,
+                              text: '${data.beds} Chambres'),
+                          _MetaInfo(
+                              icon: Icons.bathtub_outlined,
+                              fontSize: fsSmall,
+                              text: '${data.baths} Salle de bains'),
+                          _MetaInfo(
+                              icon: Icons.kitchen_rounded,
+                              fontSize: fsSmall,
+                              text: '${data.kitchens} Cuisine'),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 6,
+                      ),
+                      // Price + button
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              '${_fmt(data.price)} Fcfa',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 10,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ),
+                          Container(
+                            width: 77,
+                            height: 18,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(25),
+                            ),
+                            child: Text(
+                              'Voir les détails',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 7,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
             ],
           ),
-
-          // ── Info
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, vPad),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name
-                  Text(
-                    data.name,
-                    style: TextStyle(
-                      color: AppColors.dark,
-                      fontWeight: FontWeight.w900,
-                      fontSize: fs,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: vPad * 0.4),
-                  // Location
-                  Row(
-                    children: [
-                      Icon(Icons.location_on_outlined,
-                          size: iconSz, color: AppColors.muted),
-                      const SizedBox(width: 2),
-                      Expanded(
-                        child: Text(
-                          data.location,
-                          style: TextStyle(
-                            color: AppColors.muted,
-                            fontSize: fsSmall,
-                            fontWeight: FontWeight.w500,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: vPad * 0.6),
-                  // Meta
-                  Wrap(
-                    spacing: 5,
-                    runSpacing: 2,
-                    children: [
-                      _MetaInfo(
-                          icon: Icons.bed_rounded,
-                          fontSize: fsSmall,
-                          text: '${data.beds} Chambres'),
-                      _MetaInfo(
-                          icon: Icons.bathtub_outlined,
-                          fontSize: fsSmall,
-                          text: '${data.baths} Salle de bains'),
-                      _MetaInfo(
-                          icon: Icons.kitchen_rounded,
-                          fontSize: fsSmall,
-                          text: '${data.kitchens} Cuisine'),
-                    ],
-                  ),
-                  const Spacer(),
-                  // Price + button
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${_fmt(data.price)} Fcfa',
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w900,
-                            fontSize: fs,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: hPad * 0.9, vertical: vPad * 0.8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                        child: Text(
-                          'Voir les détails',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: fsSmall,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
         );
       },
     );
@@ -657,7 +664,9 @@ class _PropertyListCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      width: double.infinity,
+      height: 119,
+      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
@@ -674,15 +683,15 @@ class _PropertyListCard extends StatelessWidget {
         children: [
           // Image
           ClipRRect(
-            borderRadius: BorderRadius.circular(14),
+            borderRadius: BorderRadius.circular(20),
             child: Image.asset(
               data.imagePath,
-              width: 130,
-              height: 110,
+              width: 127,
+              height: 102,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 130,
-                height: 110,
+                width: 127,
+                height: 102,
                 color: const Color(0xFFE2E8F0),
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_rounded,
@@ -697,6 +706,7 @@ class _PropertyListCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Name + heart
+                const SizedBox(height: 8),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -704,31 +714,27 @@ class _PropertyListCard extends StatelessWidget {
                       child: Text(
                         data.name,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 14,
+                          fontWeight: FontWeight.w400,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.red.withValues(alpha: 0.1),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(
+                    const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: Icon(
                         Icons.favorite_rounded,
                         color: Colors.red,
-                        size: 16,
+                        size: 20,
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6),
+                const SizedBox(height: 13),
                 // Location
                 Row(
                   children: [
@@ -739,9 +745,9 @@ class _PropertyListCard extends StatelessWidget {
                       child: Text(
                         data.location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
-                          fontSize: 11,
-                          fontWeight: FontWeight.w500,
+                          color: AppColors.text,
+                          fontSize: 10,
+                          fontWeight: FontWeight.w400,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -749,7 +755,7 @@ class _PropertyListCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 // Meta
                 Wrap(
                   spacing: 10,
@@ -758,15 +764,15 @@ class _PropertyListCard extends StatelessWidget {
                     _MetaInfo(
                         icon: Icons.bed_rounded,
                         text: '${data.beds} Chambres',
-                        fontSize: 11),
+                        fontSize: 10),
                     _MetaInfo(
                         icon: Icons.bathtub_outlined,
                         text: '${data.baths} Salle de bains',
-                        fontSize: 11),
+                        fontSize: 10),
                     _MetaInfo(
                         icon: Icons.kitchen_rounded,
                         text: '${data.kitchens} Cuisine',
-                        fontSize: 11),
+                        fontSize: 10),
                   ],
                 ),
               ],
@@ -800,10 +806,10 @@ class _MetaInfo extends StatelessWidget {
         const SizedBox(width: 3),
         Text(
           text,
-          style: TextStyle(
-            color: AppColors.muted,
-            fontSize: fontSize,
-            fontWeight: FontWeight.w600,
+          style: const TextStyle(
+            color: AppColors.text,
+            fontSize: 9,
+            fontWeight: FontWeight.w300,
           ),
         ),
       ],

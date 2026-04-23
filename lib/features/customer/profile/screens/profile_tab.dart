@@ -11,6 +11,7 @@ import 'package:statefulclickcounter/features/customer/profile/screens/services_
 import 'package:statefulclickcounter/features/customer/profile/widgets/dashboard_card.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/empty_dashboard.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/profile_header.dart';
+import 'package:statefulclickcounter/features/customer/profile/widgets/profile_switcher_sheet.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/services_grid.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -80,21 +81,24 @@ class _ProfileTabState extends State<ProfileTab> {
             profile: profile,
             hasContract: _hasContract,
             onSettingsTap: () => print('settings'),
-            onAgencyTap: () => print('toggle agency'),
+            onAgencyTap: () => showProfileSwitcherSheet(context),
             onMyLocalTap: () => setState(() => _hasContract = !_hasContract),
           ),
-
-          const SizedBox(height: 38),
-
+          const SizedBox(height: 49),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: Text(
               'profile.dashboard.title'.tr(),
-              style: AppTextStyles.sectionTitle,
+              style: AppTextStyles.sectionTitle.copyWith(
+                fontFamily: 'Lexend',
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                height: 1.0,
+                letterSpacing: 0,
+              ),
             ),
           ),
           const SizedBox(height: 12),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
             child: _hasContract
@@ -112,14 +116,11 @@ class _ProfileTabState extends State<ProfileTab> {
                     onFindHome: () => print('find home'),
                   ),
           ),
-
           const SizedBox(height: 18),
-
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: ServicesGrid(services: _services()),
           ),
-
           const SizedBox(height: 100),
         ],
       ),

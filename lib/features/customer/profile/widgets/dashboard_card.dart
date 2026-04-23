@@ -56,13 +56,11 @@ class _DashboardCardState extends State<DashboardCard> {
                 child: Row(
                   children: [
                     Text(
-                      _amountVisible
-                          ? _formatBalance(p.balance)
-                          : '••••••••',
+                      _amountVisible ? _formatBalance(p.balance) : '••••••••',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w900,
-                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
                       ),
                     ),
                     const SizedBox(width: 6),
@@ -141,45 +139,45 @@ class _DashboardCardState extends State<DashboardCard> {
           ),
           const SizedBox(height: 14),
 
-          // Bottom row
+          // Actions row (next-rent text inline with Payer mon loyer)
           Row(
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'profile.dashboard.nextRent'
-                          .tr(namedArgs: {'date': p.nextRentDate}),
-                      style: const TextStyle(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'profile.dashboard.nextRent'
+                        .tr(namedArgs: {'date': p.nextRentDate}),
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  GestureDetector(
+                    onTap: widget.onPayRent,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 8),
+                      decoration: BoxDecoration(
                         color: AppColors.primary,
-                        fontSize: 11,
-                        fontWeight: FontWeight.w500,
+                        borderRadius: BorderRadius.circular(50),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    GestureDetector(
-                      onTap: widget.onPayRent,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Text(
-                          'profile.dashboard.payRent'.tr(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 11,
-                          ),
+                      child: Text(
+                        'profile.dashboard.payRent'.tr(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 8,
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
+              const Spacer(),
               GestureDetector(
                 onTap: widget.onViewHistory,
                 child: Container(
@@ -199,8 +197,8 @@ class _DashboardCardState extends State<DashboardCard> {
                         'profile.dashboard.viewHistory'.tr(),
                         style: const TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 9,
                         ),
                       ),
                     ],

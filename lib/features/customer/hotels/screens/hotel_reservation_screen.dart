@@ -465,16 +465,16 @@ class _PaymentRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: isBold ? AppColors.dark : AppColors.muted,
-            fontWeight: isBold ? FontWeight.w700 : FontWeight.w400,
+            color: isBold ? Color(0xFF171725) : Color(0xFF171725),
+            fontWeight: isBold ? FontWeight.w500 : FontWeight.w300,
             fontSize: 14,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            color: AppColors.dark,
-            fontWeight: isBold ? FontWeight.w800 : FontWeight.w600,
+            color: Color(0xFF171725),
+            fontWeight: isBold ? FontWeight.w500 : FontWeight.w300,
             fontSize: 14,
           ),
         ),
@@ -1392,6 +1392,8 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                 children: [
                   // ── Property card
                   Container(
+                    width: 380,
+                    height: 123,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -1400,56 +1402,72 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(7.88),
                           child: Image.asset(
                             imagePath,
-                            width: 88,
-                            height: 80,
+                            width: 108,
+                            height: 98,
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Container(
-                              width: 88,
-                              height: 80,
+                              width: 108,
+                              height: 98,
                               color: const Color(0xFFE2E8F0),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        const SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              Text(
-                                name,
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
-                                  fontSize: 15,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
+                              SizedBox(
+                                height: 3,
                               ),
-                              const SizedBox(height: 4),
                               Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+                                  Expanded(
+                                    child: Text(
+                                      name,
+                                      style:
+                                          AppTextStyles.sectionTitle.copyWith(
+                                        color: AppColors.dark,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.2,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
                                   const Icon(Icons.star_rounded,
-                                      color: Color(0xFFFACC15), size: 14),
+                                      color: Color(0xFFFACC15), size: 15),
                                   const SizedBox(width: 2),
                                   Text(
                                     rating.toString(),
-                                    style: const TextStyle(
+                                    style: AppTextStyles.regular12.copyWith(
                                       color: AppColors.dark,
-                                      fontWeight: FontWeight.w600,
                                       fontSize: 12,
+                                      fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  const SizedBox(width: 8),
+                                ],
+                              ),
+                              const SizedBox(height: 6),
+                              Row(
+                                children: [
                                   const Icon(Icons.location_on_outlined,
                                       size: 13, color: AppColors.muted),
-                                  const SizedBox(width: 2),
+                                  const SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
                                       location,
                                       style: AppTextStyles.regular12.copyWith(
                                         color: AppColors.muted,
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w400,
                                       ),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
@@ -1457,24 +1475,35 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 10),
                               Text.rich(
                                 TextSpan(
                                   children: [
                                     TextSpan(
-                                      text: '${_fmt(price)} FCFA',
+                                      text: '${_fmt(price)} ',
                                       style: const TextStyle(
+                                        fontFamily: 'Lexend',
                                         color: AppColors.primary,
                                         fontWeight: FontWeight.w700,
-                                        fontSize: 13,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                    const TextSpan(
+                                      text: 'FCFA',
+                                      style: TextStyle(
+                                        fontFamily: 'Lexend',
+                                        color: AppColors.primary,
+                                        fontWeight: FontWeight.w500,
+                                        fontSize: 10,
                                       ),
                                     ),
                                     const TextSpan(
                                       text: '/ nuit',
                                       style: TextStyle(
+                                        fontFamily: 'Lexend',
                                         color: AppColors.muted,
                                         fontWeight: FontWeight.w400,
-                                        fontSize: 11,
+                                        fontSize: 10,
                                       ),
                                     ),
                                   ],
@@ -1574,6 +1603,15 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                   const SizedBox(height: 24),
 
                   // ── Promo section
+                  Text(
+                    'Promo',
+                    style: AppTextStyles.sectionTitle.copyWith(
+                      color: Color(0xFF171725),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                  const SizedBox(height: 10),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
@@ -1584,27 +1622,20 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         const Icon(Icons.local_offer_outlined,
-                            color: AppColors.primary, size: 20),
+                            color: Color(0xFF2563EB), size: 20),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Text(
-                            'Promo',
-                            style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                            'Select',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: const Color(0xFF2563EB),
                               fontSize: 14,
+                              fontWeight: FontWeight.w300,
                             ),
                           ),
                         ),
-                        Text(
-                          'Select',
-                          style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.muted,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
                         const Icon(Icons.chevron_right,
-                            color: AppColors.muted, size: 20),
+                            color: AppColors.muted, size: 22),
                       ],
                     ),
                   ),
@@ -1688,8 +1719,8 @@ class _SummaryRow extends StatelessWidget {
               label,
               style: AppTextStyles.regular12.copyWith(
                 color: const Color(0xFF171725),
-                fontWeight: FontWeight.w400,
-                fontSize: 14,
+                fontWeight: FontWeight.w300,
+                fontSize: 13,
               ),
             ),
           ],
@@ -1697,8 +1728,9 @@ class _SummaryRow extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.dark,
-            fontSize: 14,
+            color: const Color(0xFF171725),
+            fontWeight: FontWeight.w400,
+            fontSize: 13,
           ),
         ),
       ],
@@ -1739,7 +1771,7 @@ class ReservationSuccessScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      // backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
@@ -1754,13 +1786,13 @@ class ReservationSuccessScreen extends StatelessWidget {
                     height: 220,
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
-                      color: Color(0xFFE8ECF0),
+                      // color: Color(0xFFE8ECF0),
                     ),
                     alignment: Alignment.center,
                     child: Image.asset(
                       'assets/images/recu.png',
-                      width: 160,
-                      height: 160,
+                      width: 180,
+                      height: 180,
                       fit: BoxFit.contain,
                       errorBuilder: (_, __, ___) => const Icon(
                         Icons.check_circle_outline,
@@ -1776,8 +1808,9 @@ class ReservationSuccessScreen extends StatelessWidget {
                       'votre réservation a été effectuée avec succès',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.sectionTitle.copyWith(
+                        fontWeight: FontWeight.w500,
                         color: const Color(0xFF22C55E),
-                        fontSize: 18,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -1790,7 +1823,7 @@ class ReservationSuccessScreen extends StatelessWidget {
                       style: AppTextStyles.regular12.copyWith(
                         color: AppColors.muted,
                         fontSize: 14,
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w300,
                       ),
                     ),
                   ),

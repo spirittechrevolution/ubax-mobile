@@ -5,6 +5,8 @@ import 'package:statefulclickcounter/features/customer/home/screens/map_search_t
 import 'package:statefulclickcounter/features/customer/favorites/screens/favorites_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotels_tab.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/profile_tab.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/bailleur_profile_tab.dart';
+import 'package:statefulclickcounter/core/profile/profile_mode.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
@@ -27,15 +29,20 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: IndexedStack(
-          index: _index,
-          children: const [
-            _HomeTab(),
-            HotelsTab(),
-            MapSearchTab(),
-            FavoritesTab(),
-            ProfileTab(),
-          ],
+        child: ValueListenableBuilder<ProfileMode>(
+          valueListenable: profileModeNotifier,
+          builder: (_, mode, __) => IndexedStack(
+            index: _index,
+            children: [
+              const _HomeTab(),
+              const HotelsTab(),
+              const MapSearchTab(),
+              const FavoritesTab(),
+              mode == ProfileMode.bailleur
+                  ? const BailleurProfileTab()
+                  : const ProfileTab(),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: SafeArea(

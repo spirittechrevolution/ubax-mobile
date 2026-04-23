@@ -39,9 +39,8 @@ class ProfileHeader extends StatelessWidget {
                 )
               : const BoxDecoration(color: Color(0xFFA65B2E)),
           child: Container(
-            color: hasContract
-                ? const Color(0xAA1A3047)
-                : const Color(0x33000000),
+            color:
+                hasContract ? const Color(0xAA1A3047) : const Color(0x33000000),
           ),
         ),
 
@@ -118,8 +117,7 @@ class ProfileHeader extends StatelessWidget {
                 height: 90,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border:
-                      Border.all(color: const Color(0xFF4DA8DA), width: 3),
+                  border: Border.all(color: const Color(0xFF4DA8DA), width: 3),
                 ),
                 child: ClipOval(
                   child: Image.asset(
@@ -182,8 +180,7 @@ class ProfileHeader extends StatelessWidget {
             height: 30,
             decoration: const BoxDecoration(
               color: AppColors.background,
-              borderRadius:
-                  BorderRadius.vertical(top: Radius.circular(30)),
+              borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
             ),
           ),
         ),
@@ -209,12 +206,10 @@ class ProfileHeader extends StatelessWidget {
                       color: Colors.white, size: 22),
                   const SizedBox(width: 10),
                   Text(
-                    hasContract
-                        ? 'profile.myLocal'.tr()
-                        : 'Ma maison',
+                    hasContract ? 'profile.myLocal'.tr() : 'Ma maison',
                     style: const TextStyle(
                       color: Colors.white,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                       fontSize: 15,
                     ),
                   ),
