@@ -7,6 +7,7 @@ import 'package:statefulclickcounter/features/customer/profile/widgets/bailleur_
 import 'package:statefulclickcounter/features/customer/profile/widgets/flux_biens_card.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/portfolio_card.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/tenant_row.dart';
+import 'package:statefulclickcounter/features/customer/settings/screens/settings_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -24,7 +25,9 @@ class BailleurProfileTab extends StatelessWidget {
         children: [
           BailleurHeader(
             profile: profile,
-            onSettingsTap: () => debugPrint('settings'),
+            onSettingsTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            ),
             onGestionBailTap: () => debugPrint('gestion bail'),
           ),
           const SizedBox(height: 48),

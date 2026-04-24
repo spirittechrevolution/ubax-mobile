@@ -540,33 +540,36 @@ class _PropertyCard extends StatelessWidget {
                   padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, vPad),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(height: 4),
                       // Name
+                      const SizedBox(height: 4),
                       Text(
                         data.name,
                         style: const TextStyle(
-                          color: AppColors.dark,
+                          color: AppColors.textBlack,
                           fontWeight: FontWeight.w300,
                           fontSize: 9,
+                          height: 1.1,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(height: 3),
+                      const SizedBox(height: 5),
                       // Location
                       Row(
                         children: [
                           Icon(Icons.location_on_outlined,
-                              size: iconSz, color: AppColors.muted),
+                              size: iconSz, color: AppColors.textBlack),
                           const SizedBox(width: 2),
                           Expanded(
                             child: Text(
                               data.location,
                               style: const TextStyle(
-                                color: AppColors.muted,
+                                color: AppColors.textBlack,
                                 fontSize: 6,
-                                fontWeight: FontWeight.w400,
+                                fontWeight: FontWeight.w300,
+                                height: 1.0,
                               ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
@@ -574,10 +577,10 @@ class _PropertyCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      SizedBox(height: 4),
+                      const SizedBox(height: 6),
                       // Meta
                       Wrap(
-                        spacing: 5,
+                        spacing: 10,
                         runSpacing: 2,
                         children: [
                           _MetaInfo(
@@ -587,16 +590,15 @@ class _PropertyCard extends StatelessWidget {
                           _MetaInfo(
                               icon: Icons.bathtub_outlined,
                               fontSize: fsSmall,
-                              text: '${data.baths} Salle de bains'),
+                              text: '${data.baths} Sdb'),
                           _MetaInfo(
                               icon: Icons.kitchen_rounded,
                               fontSize: fsSmall,
                               text: '${data.kitchens} Cuisine'),
                         ],
                       ),
-                      SizedBox(
-                        height: 6,
-                      ),
+                      // const Spacer(),
+                      const SizedBox(height: 6),
                       // Price + button
                       Row(
                         children: [
@@ -764,15 +766,15 @@ class _PropertyListCard extends StatelessWidget {
                     _MetaInfo(
                         icon: Icons.bed_rounded,
                         text: '${data.beds} Chambres',
-                        fontSize: 10),
+                        fontSize: 9),
                     _MetaInfo(
                         icon: Icons.bathtub_outlined,
                         text: '${data.baths} Salle de bains',
-                        fontSize: 10),
+                        fontSize: 9),
                     _MetaInfo(
                         icon: Icons.kitchen_rounded,
                         text: '${data.kitchens} Cuisine',
-                        fontSize: 10),
+                        fontSize: 9),
                   ],
                 ),
               ],
@@ -806,10 +808,11 @@ class _MetaInfo extends StatelessWidget {
         const SizedBox(width: 3),
         Text(
           text,
-          style: const TextStyle(
-            color: AppColors.text,
-            fontSize: 9,
+          style: TextStyle(
+            color: AppColors.textBlack,
+            fontSize: fontSize,
             fontWeight: FontWeight.w300,
+            height: 1.0,
           ),
         ),
       ],

@@ -45,7 +45,7 @@ class DocumentsScreen extends StatelessWidget {
         children: [
           // ── Dark header
           Container(
-            padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
+            padding: EdgeInsets.fromLTRB(18, topPadding + 20, 18, 28),
             decoration: const BoxDecoration(
               color: AppColors.dark,
               borderRadius: BorderRadius.only(
@@ -79,7 +79,8 @@ class DocumentsScreen extends StatelessWidget {
                 const SizedBox(height: 14),
                 // Search bar
                 Container(
-                  height: 44,
+                  height: 45,
+                  margin: EdgeInsets.only(top: 10),
                   padding: const EdgeInsets.symmetric(horizontal: 14),
                   decoration: BoxDecoration(
                     color: const Color(0xFF243E55),
@@ -92,7 +93,7 @@ class DocumentsScreen extends StatelessWidget {
                           'Rechercher un document',
                           style: AppTextStyles.regular12.copyWith(
                             color: const Color(0xFF94A3B8),
-                            fontSize: 13,
+                            fontSize: 11,
                           ),
                         ),
                       ),
@@ -111,8 +112,7 @@ class DocumentsScreen extends StatelessWidget {
               padding: const EdgeInsets.fromLTRB(18, 20, 18, 18),
               itemCount: _kDocuments.length,
               separatorBuilder: (_, __) => const SizedBox(height: 16),
-              itemBuilder: (_, i) =>
-                  _DocumentCard(doc: _kDocuments[i]),
+              itemBuilder: (_, i) => _DocumentCard(doc: _kDocuments[i]),
             ),
           ),
         ],
@@ -132,10 +132,11 @@ class _DocumentCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
+      height: 285,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -143,61 +144,59 @@ class _DocumentCard extends StatelessWidget {
           // Section title
           Text(
             doc.title,
-            style: AppTextStyles.sectionTitle.copyWith(
-              color: AppColors.dark,
-            ),
+            style: AppTextStyles.sectionTitle
+                .copyWith(color: AppColors.dark, fontWeight: FontWeight.w500),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 24),
           // File row
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: AppColors.background,
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: AppColors.primary),
             ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF0E6),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.description_outlined,
-                        color: AppColors.primary, size: 20),
+            child: Row(
+              children: [
+                Container(
+                  width: 36,
+                  height: 36,
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFF0E6),
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          doc.fileName,
-                          style: AppTextStyles.sectionTitle.copyWith(
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.description_outlined,
+                      color: AppColors.primary, size: 20),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        doc.fileName,
+                        style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          doc.fileSize,
-                          style: AppTextStyles.regular12.copyWith(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        doc.fileSize,
+                        style: AppTextStyles.regular12.copyWith(
                             color: AppColors.muted,
                             fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
                   ),
-                  const Icon(Icons.check_circle_rounded,
-                      color: AppColors.primary, size: 22),
-                ],
-              ),
+                ),
+                const Icon(Icons.check_circle_rounded,
+                    color: AppColors.primary, size: 22),
+              ],
             ),
-          const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 36),
           // Telecharger button
           SizedBox(
             width: double.infinity,

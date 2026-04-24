@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/header_tab.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/etat_des_lieux_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/reservation_invoice_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
@@ -70,7 +71,7 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
         children: [
           // ── Dark header
           Container(
-            padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 20),
+            padding: EdgeInsets.fromLTRB(16, topPadding + 10, 16, 20),
             decoration: const BoxDecoration(
               color: AppColors.dark,
               borderRadius: BorderRadius.only(
@@ -104,7 +105,7 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
                 const SizedBox(height: 18),
                 // Tabs
                 Container(
-                  height: 46,
+                  height: 65,
                   padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     color: const Color(0xFF243E55),
@@ -112,12 +113,12 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
                   ),
                   child: Row(
                     children: [
-                      _HeaderTab(
+                      HeaderTab(
                         label: 'Liste des factures',
                         selected: _tabIndex == 0,
                         onTap: () => setState(() => _tabIndex = 0),
                       ),
-                      _HeaderTab(
+                      HeaderTab(
                         label: 'Etat des lieux',
                         selected: _tabIndex == 1,
                         onTap: () => setState(() => _tabIndex = 1),
@@ -136,44 +137,6 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
                 : const _EtatDesLieuxTab(),
           ),
         ],
-      ),
-    );
-  }
-}
-
-// ─── Header tab pill ──────────────────────────────────────────────────────────
-
-class _HeaderTab extends StatelessWidget {
-  const _HeaderTab({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          decoration: BoxDecoration(
-            color: selected ? AppColors.primary : Colors.transparent,
-            borderRadius: BorderRadius.circular(50),
-          ),
-          alignment: Alignment.center,
-          child: Text(
-            label,
-            style: TextStyle(
-              color: Colors.white,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              fontSize: 13,
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -199,36 +162,39 @@ class _InvoiceListTab extends StatelessWidget {
                   Text(
                     'Total',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
-                      fontSize: 14,
-                    ),
+                        color: AppColors.textBlack,
+                        fontSize: 11,
+                        fontWeight: FontWeight.w400),
                   ),
                   const SizedBox(height: 2),
                   Text(
                     '4 Factures',
                     style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.muted,
-                    ),
+                        color: AppColors.textBlack,
+                        fontSize: 9,
+                        fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
               const Spacer(),
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                width: 151,
+                height: 39,
+                padding: const EdgeInsets.symmetric(horizontal: 14),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(50),
                   border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Tous les factures',
+                      'Toutes les factures',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
-                        fontWeight: FontWeight.w500,
-                      ),
+                          color: AppColors.dark,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 10),
                     ),
                     const SizedBox(width: 6),
                     const Icon(Icons.keyboard_arrow_down_rounded,
@@ -266,16 +232,17 @@ class _InvoiceCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(10),
         border: const Border(
-          top: BorderSide(color: AppColors.primary, width: 3),
+          top: BorderSide(color: AppColors.primary, width: 9),
         ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Title + month
+          // Icon + number + month (same line)
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               // File icon
               Container(
@@ -291,46 +258,49 @@ class _InvoiceCard extends StatelessWidget {
               ),
               const SizedBox(width: 10),
               Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      invoice.number,
-                      style: AppTextStyles.sectionTitle.copyWith(
-                        color: AppColors.dark,
-                        fontSize: 13,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      invoice.location,
-                      style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
+                child: Text(
+                  invoice.number,
+                  style: AppTextStyles.sectionTitle.copyWith(
+                    color: AppColors.dark,
+                    fontSize: 13,
+                  ),
                 ),
               ),
               Text(
                 invoice.month,
                 style: AppTextStyles.sectionTitle.copyWith(
-                  color: AppColors.dark,
-                  fontSize: 13,
-                ),
+                    color: AppColors.dark,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w600),
               ),
             ],
           ),
-          const SizedBox(height: 10),
-          // Price
-          Text(
-            '${_fmt(invoice.amount)} FCFA',
-            style: const TextStyle(
-              color: AppColors.primary,
-              fontWeight: FontWeight.w900,
-              fontSize: 14,
+          const SizedBox(height: 6),
+          // Location (second line, aligned with title)
+          Padding(
+            padding: const EdgeInsets.only(left: 44),
+            child: Text(
+              invoice.location,
+              style: AppTextStyles.regular12.copyWith(
+                color: AppColors.dark,
+                fontSize: 11,
+              ),
             ),
           ),
+          const SizedBox(height: 10),
+          // Price
+          Padding(
+            padding: const EdgeInsets.only(left: 44),
+            child: Text(
+              '${_fmt(invoice.amount)} FCFA',
+              style: const TextStyle(
+                color: AppColors.primary,
+                fontWeight: FontWeight.w700,
+                fontSize: 14,
+              ),
+            ),
+          ),
+
           const SizedBox(height: 8),
           // Buttons row
           Row(
@@ -363,7 +333,7 @@ class _InvoiceCard extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.dark,
                           fontWeight: FontWeight.w500,
-                          fontSize: 10,
+                          fontSize: 8,
                         ),
                       ),
                     ],
@@ -373,19 +343,19 @@ class _InvoiceCard extends StatelessWidget {
               const SizedBox(width: 8),
               // Télécharger
               Container(
+                width: 97,
                 height: 33,
-                padding: const EdgeInsets.symmetric(horizontal: 14),
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   color: AppColors.dark,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                alignment: Alignment.center,
                 child: const Text(
                   'Télécharger',
                   style: TextStyle(
                     color: Colors.white,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 9,
                   ),
                 ),
               ),
@@ -416,81 +386,87 @@ class _EtatDesLieuxTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
+      padding: const EdgeInsets.fromLTRB(11, 40, 11, 18),
       child: Container(
         width: double.infinity,
+        height: 329,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const SizedBox(height: 18),
             Text(
               'Etat des lieux',
               style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.dark,
-              ),
+                  color: AppColors.dark,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 18),
             ),
-            const SizedBox(height: 14),
+            const SizedBox(height: 19),
             // File row
             Container(
+              height: 72,
               decoration: BoxDecoration(
-                color: AppColors.background,
                 borderRadius: BorderRadius.circular(12),
               ),
               clipBehavior: Clip.hardEdge,
               child: Container(
-              padding: const EdgeInsets.fromLTRB(15, 12, 12, 12),
-              decoration: const BoxDecoration(
-                border: Border(
-                  left: BorderSide(color: AppColors.primary, width: 3),
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                    border: Border.all(
+                      color: AppColors.primary,
+                    )),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF0E6),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.description_outlined,
+                          color: AppColors.primary, size: 16),
+                    ),
+                    const SizedBox(width: 16),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Etat des lieux .pdf',
+                            style: AppTextStyles.sectionTitle.copyWith(
+                              color: AppColors.dark,
+                              fontSize: 13,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '200 KB',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.dark,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    const Icon(Icons.check_circle_rounded,
+                        color: AppColors.primary, size: 22),
+                  ],
                 ),
               ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 36,
-                    height: 36,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFFF0E6),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.description_outlined,
-                        color: AppColors.primary, size: 20),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Etat des lieux .pdf',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
-                            fontSize: 13,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          '200 KB',
-                          style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.muted,
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Icon(Icons.check_circle_rounded,
-                      color: AppColors.primary, size: 22),
-                ],
-              ),
             ),
-            ),
-            const SizedBox(height: 20),
+
+            const SizedBox(height: 47),
             // Telecharger button
             SizedBox(
               width: double.infinity,

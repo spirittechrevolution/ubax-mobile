@@ -8,6 +8,7 @@ import 'package:statefulclickcounter/features/customer/profile/screens/payment_i
 import 'package:statefulclickcounter/features/customer/profile/screens/reservations_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/sav_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/services_ubax_screen.dart';
+import 'package:statefulclickcounter/features/customer/settings/screens/settings_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/dashboard_card.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/empty_dashboard.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/profile_header.dart';
@@ -80,7 +81,9 @@ class _ProfileTabState extends State<ProfileTab> {
           ProfileHeader(
             profile: profile,
             hasContract: _hasContract,
-            onSettingsTap: () => print('settings'),
+            onSettingsTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const SettingsScreen()),
+            ),
             onAgencyTap: () => showProfileSwitcherSheet(context),
             onMyLocalTap: () => setState(() => _hasContract = !_hasContract),
           ),

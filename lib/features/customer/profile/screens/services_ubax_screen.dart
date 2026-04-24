@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/header_tab.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -135,7 +136,7 @@ class _ServicesUbaxScreenState extends State<ServicesUbaxScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('FAQ', style: AppTextStyles.sectionTitle),
+          const Text('FAQ', style: AppTextStyles.sectionTitle),
           const SizedBox(height: 14),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -186,62 +187,25 @@ class _TabSegment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
-      padding: const EdgeInsets.all(5),
+      height: 65,
+      padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
         color: const Color(0xFF2F445A),
-        borderRadius: BorderRadius.circular(100),
+        borderRadius: BorderRadius.circular(50),
       ),
       child: Row(
         children: [
-          Expanded(
-            child: _SegBtn(
-              label: 'Assistance',
-              selected: tab == 0,
-              onTap: () => onChanged(0),
-            ),
+          HeaderTab(
+            label: 'Assistance',
+            selected: tab == 0,
+            onTap: () => onChanged(0),
           ),
-          Expanded(
-            child: _SegBtn(
-              label: 'FAQ',
-              selected: tab == 1,
-              onTap: () => onChanged(1),
-            ),
+          HeaderTab(
+            label: 'FAQ',
+            selected: tab == 1,
+            onTap: () => onChanged(1),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _SegBtn extends StatelessWidget {
-  const _SegBtn({
-    required this.label,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String label;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(100),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 160),
-        height: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: selected ? AppColors.primary : Colors.transparent,
-          borderRadius: BorderRadius.circular(100),
-        ),
-        child: Text(
-          label,
-          style: AppTextStyles.regularlight16.copyWith(color: Colors.white),
-        ),
       ),
     );
   }
@@ -372,8 +336,8 @@ class _CategoryPill extends StatelessWidget {
           label,
           style: AppTextStyles.regular12.copyWith(
             color: selected ? Colors.white : AppColors.dark,
-            fontSize: 13,
-            fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+            fontSize: 11,
+            fontWeight: selected ? FontWeight.w500 : FontWeight.w300,
           ),
         ),
       ),
@@ -412,9 +376,9 @@ class _FaqCard extends StatelessWidget {
                   child: Text(
                     item.question,
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.textBlack,
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
@@ -433,8 +397,8 @@ class _FaqCard extends StatelessWidget {
               Text(
                 item.answer,
                 style: AppTextStyles.regular12.copyWith(
-                  color: AppColors.muted,
-                  fontSize: 12,
+                  color: AppColors.text,
+                  fontSize: 11,
                 ),
               ),
             ],

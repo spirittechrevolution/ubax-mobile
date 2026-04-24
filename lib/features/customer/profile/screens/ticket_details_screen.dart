@@ -79,14 +79,14 @@ class TicketDetailsScreen extends StatelessWidget {
                           _DetailRow('Type de bien', 'Appartement'),
                           _DetailRow('Nom / Référence', 'Appartement 0025'),
                           _DetailRow('Adresse', 'Cocody Angré, Abidjan'),
-                          _DetailRow(
-                              'Agence gestionnaire', 'Agence Immobilière Horizon'),
+                          _DetailRow('Agence gestionnaire',
+                              'Agence Immobilière Horizon'),
                           const _Divider(),
                           _DetailRow('Problème déclaré', 'Panne électrique'),
                           _DetailRow('Niveau d\u2019urgence', 'Urgent'),
                           _DetailRow('Adresse', 'Cocody Angré, Abidjan'),
-                          _DetailRow(
-                              'Agence gestionnaire', 'Agence Immobilière Horizon'),
+                          _DetailRow('Agence gestionnaire',
+                              'Agence Immobilière Horizon'),
                           _DetailRow(
                             'Titre du problème',
                             'Coupure totale d\u2019électricité dans l\u2019appartement',
@@ -105,8 +105,8 @@ class TicketDetailsScreen extends StatelessWidget {
                           Text(
                             'Depuis hier soir, il n\u2019y a plus d\u2019électricité dans tout l\u2019appartement. Le disjoncteur principal se déclenche immédiatement après réactivation.',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.muted,
-                              fontSize: 12,
+                              color: AppColors.text,
+                              fontSize: 11,
                             ),
                           ),
                         ],
@@ -294,16 +294,19 @@ class _DetailRow extends StatelessWidget {
             '$label : ',
             style: AppTextStyles.regular12.copyWith(
               color: AppColors.dark,
-              fontWeight: FontWeight.w700,
-              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              fontSize: 12,
             ),
+          ),
+          SizedBox(
+            width: 7,
           ),
           Expanded(
             child: Text(
               value,
               style: AppTextStyles.regular12.copyWith(
-                color: AppColors.muted,
-                fontSize: 12,
+                color: AppColors.text,
+                fontSize: 11,
               ),
             ),
           ),
@@ -333,9 +336,9 @@ class _DashedBorderPainter extends CustomPainter {
     final paint = Paint()
       ..color = const Color(0xFF64748B)
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 1.5;
+      ..strokeWidth = 1;
 
-    const dashWidth = 7.0;
+    const dashWidth = 6.0;
     const dashSpace = 4.0;
     const radius = 14.0;
 
@@ -348,8 +351,7 @@ class _DashedBorderPainter extends CustomPainter {
     for (final metric in path.computeMetrics()) {
       double distance = 0;
       while (distance < metric.length) {
-        final len =
-            (dashWidth).clamp(0.0, metric.length - distance).toDouble();
+        final len = (dashWidth).clamp(0.0, metric.length - distance).toDouble();
         canvas.drawPath(metric.extractPath(distance, distance + len), paint);
         distance += dashWidth + dashSpace;
       }

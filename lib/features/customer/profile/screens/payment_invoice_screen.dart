@@ -121,8 +121,9 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
 
           // ── Property card
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
+            padding: const EdgeInsets.symmetric(horizontal: 22),
             child: Container(
+              height: 130,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -138,15 +139,15 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
               child: Row(
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(14),
+                    borderRadius: BorderRadius.circular(20),
                     child: Image.asset(
                       'assets/images/appartements-luxe.jpg',
-                      width: 110,
-                      height: 80,
+                      width: 140.67,
+                      height: 111.43,
                       fit: BoxFit.cover,
                       errorBuilder: (_, __, ___) => Container(
-                        width: 110,
-                        height: 80,
+                        width: 140.67,
+                        height: 111.43,
                         color: const Color(0xFFE2E8F0),
                       ),
                     ),
@@ -156,26 +157,27 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        const SizedBox(height: 10),
                         Text(
                           'Appartement Moderne à Cocody',
                           style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.dark,
-                            fontSize: 14,
+                            fontSize: 13,
                           ),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 14),
                         Row(
                           children: [
                             const Icon(Icons.location_on,
-                                color: AppColors.primary, size: 14),
+                                color: AppColors.muted, size: 14),
                             const SizedBox(width: 3),
                             Expanded(
                               child: Text(
                                 'Cocody Angré, Abidjan – Côte d\'Ivoire',
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                   fontSize: 10,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -184,7 +186,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 14),
                         const Wrap(
                           spacing: 8,
                           runSpacing: 4,
@@ -211,8 +213,9 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
 
           // ── Tabs
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 18),
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
+              height: 60,
               padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -305,8 +308,8 @@ class _TabPill extends StatelessWidget {
             label,
             style: TextStyle(
               color: selected ? Colors.white : AppColors.muted,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
-              fontSize: 13,
+              fontWeight: selected ? FontWeight.w400 : FontWeight.w300,
+              fontSize: 12,
             ),
           ),
         ),
@@ -363,61 +366,65 @@ class _InvoiceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Month + action
+          // Month + action (same row)
           Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      '${invoice.month} ${invoice.year}',
-                      style: AppTextStyles.sectionTitle.copyWith(
-                        color: AppColors.dark,
-                        fontSize: 15,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      invoice.number,
-                      style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
+              Text(
+                '${invoice.month} ${invoice.year}',
+                style: AppTextStyles.sectionTitle.copyWith(
+                    color: AppColors.dark,
+                    fontSize: 15,
+                    fontWeight: FontWeight.w600),
               ),
+              const Spacer(),
               if (showFacture)
                 GestureDetector(
                   onTap: () => _openInvoice(context),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.description_outlined,
-                          color: AppColors.dark, size: 18),
-                      SizedBox(width: 4),
-                      Text(
-                        'Voir la facture',
-                        style: TextStyle(
-                          color: AppColors.dark,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
+                  child: Container(
+                    width: 109,
+                    height: 28,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFECF2F7),
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.description_outlined,
+                            color: AppColors.dark, size: 14),
+                        SizedBox(width: 4),
+                        Text(
+                          'Voir la facture',
+                          style: TextStyle(
+                            color: AppColors.dark,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               if ((isUnpaid || isEnAttente) && invoice.dueDate != null)
                 Text(
                   invoice.dueDate!,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 11,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
             ],
+          ),
+          const SizedBox(height: 3),
+          Text(
+            invoice.number,
+            style: AppTextStyles.regular12.copyWith(
+                color: AppColors.dark,
+                fontWeight: FontWeight.w300,
+                fontSize: 11),
           ),
           const SizedBox(height: 12),
           // Amount + button
@@ -427,8 +434,8 @@ class _InvoiceCard extends StatelessWidget {
                 '${_fmt(invoice.amount)} FCFA',
                 style: const TextStyle(
                   color: AppColors.primary,
-                  fontWeight: FontWeight.w900,
-                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 15,
                 ),
               ),
               const Spacer(),
@@ -491,14 +498,14 @@ class _MetaChip extends StatelessWidget {
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, size: 12, color: AppColors.primary),
+        Icon(icon, size: 10, color: AppColors.primary),
         const SizedBox(width: 3),
         Text(
           text,
           style: const TextStyle(
-            color: AppColors.muted,
-            fontSize: 10,
-            fontWeight: FontWeight.w400,
+            color: AppColors.text,
+            fontSize: 8,
+            fontWeight: FontWeight.w300,
           ),
         ),
       ],
