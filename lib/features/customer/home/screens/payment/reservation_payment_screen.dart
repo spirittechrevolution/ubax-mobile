@@ -337,13 +337,13 @@ class _PropertyCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 12, color: AppColors.muted),
+                        size: 12, color: AppColors.text),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w600,
                         ),
@@ -393,7 +393,7 @@ class _Meta extends StatelessWidget {
           text,
           style: const TextStyle(
             fontFamily: 'Lexend',
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 7,
             fontWeight: FontWeight.w400,
           ),
@@ -485,7 +485,7 @@ class _PaymentLine extends StatelessWidget {
         Text(
           amount,
           style: TextStyle(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontWeight: bold ? FontWeight.w500 : FontWeight.w300,
             fontSize: bold ? 14 : 11,
           ),
@@ -531,7 +531,7 @@ class _PaymentMethodField extends StatelessWidget {
             alignment: Alignment.center,
             child: method == null
                 ? const Icon(Icons.account_balance_wallet_outlined,
-                    color: AppColors.dark)
+                    color: AppColors.text)
                 : Image.asset(
                     _paymentMethodIconAsset(method!),
                     width: 22,
@@ -544,7 +544,7 @@ class _PaymentMethodField extends StatelessWidget {
             child: Text(
               method == null ? '' : _methodLabel(method!),
               style: const TextStyle(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontWeight: FontWeight.w800,
               ),
               maxLines: 1,
@@ -934,7 +934,7 @@ class _PaymentSuccessSheet extends StatelessWidget {
               'votre réservation a été effectuée avec succès.',
               textAlign: TextAlign.center,
               style: AppTextStyles.sectionTitle.copyWith(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w400,
                   fontSize: 13),
             ),

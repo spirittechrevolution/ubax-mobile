@@ -133,13 +133,13 @@ class _HotelReservationDetailsScreenState
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.dark, size: 18),
+              color: AppColors.text, size: 18),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Détails de la reservation',
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontSize: 15,
             fontWeight: FontWeight.w600,
           ),
@@ -202,7 +202,7 @@ class _HotelReservationDetailsScreenState
                           child: Text(
                             '$_guests',
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
                             ),
@@ -306,7 +306,7 @@ class _HotelReservationDetailsScreenState
     return Text(
       text,
       style: AppTextStyles.sectionTitle.copyWith(
-        color: AppColors.dark,
+        color: AppColors.text,
         fontSize: 14,
         fontWeight: FontWeight.w400,
       ),
@@ -346,12 +346,12 @@ class _DatePill extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.calendar_month_outlined,
-                    color: AppColors.dark, size: 16),
+                    color: AppColors.text, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   label,
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 16,
                     fontWeight: FontWeight.w300,
                   ),
@@ -362,7 +362,7 @@ class _DatePill extends StatelessWidget {
             Text(
               date,
               style: AppTextStyles.regular12.copyWith(
-                color: AppColors.muted,
+                color: AppColors.text,
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
               ),
@@ -441,7 +441,7 @@ class _PaymentMethodTile extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.account_balance_wallet_outlined,
-                color: AppColors.dark, size: 18),
+                color: AppColors.text, size: 18),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -451,7 +451,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 Text(
                   title,
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -461,7 +461,7 @@ class _PaymentMethodTile extends StatelessWidget {
                   Text(
                     mask,
                     style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.muted,
+                      color: AppColors.text,
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
                     ),

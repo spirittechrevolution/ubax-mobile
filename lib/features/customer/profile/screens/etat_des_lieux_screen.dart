@@ -21,7 +21,7 @@ class EtatDesLieuxScreen extends StatelessWidget {
                 // Dark background (flat bottom)
                 Container(
                   height: topPadding + 250,
-                  color: AppColors.dark,
+                  color: AppColors.text,
                 ),
 
                 SingleChildScrollView(
@@ -52,7 +52,7 @@ class EtatDesLieuxScreen extends StatelessWidget {
                         Text(
                           'Informations générales',
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 14,
                           ),
                         ),
@@ -69,7 +69,7 @@ class EtatDesLieuxScreen extends StatelessWidget {
                         Text(
                           'Installations & équipements',
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 14,
                           ),
                         ),
@@ -264,7 +264,7 @@ class _TableCell extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: AppColors.dark,
+          color: AppColors.text,
           fontWeight: isHeader ? FontWeight.w600 : FontWeight.w400,
           fontSize: 11,
         ),

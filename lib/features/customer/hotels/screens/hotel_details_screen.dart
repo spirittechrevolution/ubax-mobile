@@ -255,7 +255,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           Text(
                             widget.name,
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 20,
                             ),
                           ),
@@ -269,7 +269,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 widget.location,
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                   fontSize: 13,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -281,7 +281,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 widget.rating.toString(),
                                 style: const TextStyle(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 13,
                                 ),
@@ -297,7 +297,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 'installations communes',
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 15,
                                 ),
                               ),
@@ -332,7 +332,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           Text(
                             'Description',
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 15,
                             ),
                           ),
@@ -340,7 +340,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           Text(
                             'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.muted,
+                              color: AppColors.text,
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -354,7 +354,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 'Adresse',
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 15,
                                 ),
                               ),
@@ -406,7 +406,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 widget.location,
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                   fontSize: 13,
                                 ),
                               ),
@@ -421,7 +421,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               Text(
                                 'Reviews',
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 15,
                                 ),
                               ),
@@ -453,7 +453,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           Text(
                             'Recommandés pour vous',
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 15,
                             ),
                           ),
@@ -498,7 +498,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                       Text(
                         'Prix',
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -610,14 +610,14 @@ class _AmenityIcon extends StatelessWidget {
             border: Border.all(color: const Color(0xFFE5E7EB)),
           ),
           alignment: Alignment.center,
-          child: Icon(icon, color: AppColors.dark, size: 26),
+          child: Icon(icon, color: AppColors.text, size: 26),
         ),
         const SizedBox(height: 6),
         Text(
           label,
           textAlign: TextAlign.center,
           style: const TextStyle(
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 11,
             fontWeight: FontWeight.w500,
             height: 1.4,
@@ -651,7 +651,7 @@ class _ReviewCard extends StatelessWidget {
               width: 40,
               height: 40,
               color: const Color(0xFFD0DDE8),
-              child: const Icon(Icons.person, color: AppColors.muted),
+              child: const Icon(Icons.person, color: AppColors.text),
             ),
           ),
         ),
@@ -666,7 +666,7 @@ class _ReviewCard extends StatelessWidget {
                   Text(
                     review.name,
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 14,
                     ),
                   ),
@@ -677,7 +677,7 @@ class _ReviewCard extends StatelessWidget {
                   Text(
                     review.rating.toString(),
                     style: const TextStyle(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontWeight: FontWeight.w600,
                       fontSize: 13,
                     ),
@@ -688,7 +688,7 @@ class _ReviewCard extends StatelessWidget {
               Text(
                 review.text,
                 style: AppTextStyles.regular12.copyWith(
-                  color: AppColors.muted,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -743,7 +743,7 @@ class _RecommendedCard extends StatelessWidget {
                       child: Text(
                         hotel.name,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -757,7 +757,7 @@ class _RecommendedCard extends StatelessWidget {
                     Text(
                       hotel.rating.toString(),
                       style: const TextStyle(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
@@ -769,12 +769,12 @@ class _RecommendedCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.muted),
+                        size: 13, color: AppColors.text),
                     const SizedBox(width: 3),
                     Text(
                       hotel.location,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                       ),
                     ),
                   ],
@@ -795,7 +795,7 @@ class _RecommendedCard extends StatelessWidget {
                       const TextSpan(
                         text: '/ nuit',
                         style: TextStyle(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w400,
                           fontSize: 11,
                         ),

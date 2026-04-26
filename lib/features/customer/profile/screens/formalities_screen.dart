@@ -73,7 +73,7 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(16, topPadding + 10, 16, 20),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -192,13 +192,13 @@ class _InvoiceListTab extends StatelessWidget {
                     Text(
                       'Toutes les factures',
                       style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w400,
                           fontSize: 10),
                     ),
                     const SizedBox(width: 6),
                     const Icon(Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.dark, size: 18),
+                        color: AppColors.text, size: 18),
                   ],
                 ),
               ),
@@ -261,7 +261,7 @@ class _InvoiceCard extends StatelessWidget {
                 child: Text(
                   invoice.number,
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 13,
                   ),
                 ),
@@ -269,7 +269,7 @@ class _InvoiceCard extends StatelessWidget {
               Text(
                 invoice.month,
                 style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 13,
                     fontWeight: FontWeight.w600),
               ),
@@ -282,7 +282,7 @@ class _InvoiceCard extends StatelessWidget {
             child: Text(
               invoice.location,
               style: AppTextStyles.regular12.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontSize: 11,
               ),
             ),
@@ -326,12 +326,12 @@ class _InvoiceCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.visibility_rounded,
-                          color: AppColors.muted, size: 14),
+                          color: AppColors.text, size: 14),
                       SizedBox(width: 4),
                       Text(
                         'Voir la facture',
                         style: TextStyle(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w500,
                           fontSize: 8,
                         ),
@@ -347,7 +347,7 @@ class _InvoiceCard extends StatelessWidget {
                 height: 33,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(
@@ -402,7 +402,7 @@ class _EtatDesLieuxTab extends StatelessWidget {
             Text(
               'Etat des lieux',
               style: AppTextStyles.sectionTitle.copyWith(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w500,
                   fontSize: 18),
             ),
@@ -443,7 +443,7 @@ class _EtatDesLieuxTab extends StatelessWidget {
                           Text(
                             'Etat des lieux .pdf',
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 13,
                             ),
                           ),
@@ -451,7 +451,7 @@ class _EtatDesLieuxTab extends StatelessWidget {
                           Text(
                             '200 KB',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 11,
                             ),
                           ),

@@ -194,7 +194,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                 Text(
                   'Favoris',
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 20,
                     fontWeight: FontWeight.w400,
                   ),
@@ -213,14 +213,14 @@ class _FavoritesTabState extends State<FavoritesTab> {
                     child: Row(
                       children: [
                         const Icon(Icons.search_rounded,
-                            color: AppColors.muted, size: 20),
+                            color: AppColors.text, size: 20),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
                             controller: _searchController,
                             autofocus: true,
                             style: const TextStyle(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                             ),
@@ -228,7 +228,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                               border: InputBorder.none,
                               hintText: 'Rechercher un bien...',
                               hintStyle: TextStyle(
-                                color: AppColors.muted,
+                                color: AppColors.text,
                                 fontSize: 13,
                               ),
                               isDense: true,
@@ -244,7 +244,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                               _query = '';
                             }),
                             child: const Icon(Icons.close_rounded,
-                                color: AppColors.muted, size: 18),
+                                color: AppColors.text, size: 18),
                           ),
                       ],
                     ),
@@ -256,7 +256,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                 onTap: _toggleSearch,
                 child: Icon(
                   _searchActive ? Icons.close_rounded : Icons.search_rounded,
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   size: 26,
                 ),
               ),
@@ -293,7 +293,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
               Text(
                 '${displayed.length} favoris',
                 style: AppTextStyles.sectionTitle.copyWith(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                 ),
               ),
               const Spacer(),
@@ -492,7 +492,7 @@ class _PropertyCard extends StatelessWidget {
                           color: const Color(0xFFE2E8F0),
                           alignment: Alignment.center,
                           child: const Icon(Icons.image_rounded,
-                              color: AppColors.muted, size: 36),
+                              color: AppColors.text, size: 36),
                         ),
                       ),
                     ),
@@ -505,7 +505,7 @@ class _PropertyCard extends StatelessWidget {
                         height: 15,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Text(
@@ -697,7 +697,7 @@ class _PropertyListCard extends StatelessWidget {
                 color: const Color(0xFFE2E8F0),
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_rounded,
-                    color: AppColors.muted, size: 36),
+                    color: AppColors.text, size: 36),
               ),
             ),
           ),
@@ -741,7 +741,7 @@ class _PropertyListCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.muted),
+                        size: 13, color: AppColors.text),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(

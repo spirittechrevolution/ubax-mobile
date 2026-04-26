@@ -46,7 +46,7 @@ class _ProfileSwitcherSheet extends StatelessWidget {
                 fontFamily: 'Lexend',
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: AppColors.dark,
+                color: AppColors.text,
               ),
             ),
             const SizedBox(height: 12),

@@ -63,14 +63,14 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                   child: Text(
                     'Paiement Facture de location',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                     ),
                   ),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.close_rounded,
-                      color: AppColors.dark, size: 24),
+                      color: AppColors.text, size: 24),
                 ),
               ],
             ),
@@ -79,12 +79,12 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             Row(
               children: [
                 const Icon(Icons.language_rounded,
-                    color: AppColors.muted, size: 24),
+                    color: AppColors.text, size: 24),
                 const SizedBox(width: 10),
                 Text(
                   'Montant',
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 14,
                   ),
                 ),
@@ -92,7 +92,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                 Text(
                   '${_fmt(widget.amount)} FCFA',
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 15,
                   ),
                 ),
@@ -103,12 +103,12 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             Row(
               children: [
                 const Icon(Icons.language_rounded,
-                    color: AppColors.muted, size: 24),
+                    color: AppColors.text, size: 24),
                 const SizedBox(width: 10),
                 Text(
                   'Montant total',
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 14,
                   ),
                 ),
@@ -129,7 +129,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             Text(
               'Selectionner votre methode de paiement',
               style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),
@@ -320,7 +320,7 @@ class _MethodRow extends StatelessWidget {
               child: Text(
                 label,
                 style: const TextStyle(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                 ),
@@ -374,7 +374,7 @@ class _AddCardRow extends StatelessWidget {
           const Text(
             'Ajouter une carte de débit',
             style: TextStyle(
-              color: AppColors.dark,
+              color: AppColors.text,
               fontSize: 13,
               fontWeight: FontWeight.w600,
             ),

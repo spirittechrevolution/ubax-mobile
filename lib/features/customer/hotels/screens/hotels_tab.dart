@@ -163,7 +163,7 @@ class _HotelsTabState extends State<HotelsTab> {
         children: [
           // ── Dark header
           Container(
-            color: AppColors.dark,
+            color: AppColors.text,
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
             child: Row(
               children: [
@@ -227,7 +227,7 @@ class _HotelsTabState extends State<HotelsTab> {
                       ),
                       alignment: Alignment.center,
                       child: const Icon(Icons.notifications_rounded,
-                          color: AppColors.dark, size: 22),
+                          color: AppColors.text, size: 22),
                     ),
                     Positioned(
                       top: -2,
@@ -273,7 +273,7 @@ class _HotelsTabState extends State<HotelsTab> {
                       ),
                       const SizedBox(width: 4),
                       const Icon(Icons.keyboard_arrow_down_rounded,
-                          size: 16, color: AppColors.dark),
+                          size: 16, color: AppColors.text),
                     ],
                   ),
                 ),
@@ -290,7 +290,7 @@ class _HotelsTabState extends State<HotelsTab> {
                   height: (_kDarkBgHeight - _scrollOffset)
                       .clamp(0.0, _kDarkBgHeight),
                   decoration: const BoxDecoration(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(16),
                     ),
@@ -333,14 +333,14 @@ class _HotelsTabState extends State<HotelsTab> {
                                 child: Row(
                                   children: [
                                     const Icon(Icons.location_on_outlined,
-                                        size: 20, color: AppColors.muted),
+                                        size: 20, color: AppColors.text),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
                                         _selectedAddress ??
                                             'Sélectionner une adresse',
                                         style: AppTextStyles.regular12.copyWith(
-                                          color: AppColors.muted,
+                                          color: AppColors.text,
                                           fontSize: 12,
                                           fontWeight: _selectedAddress != null
                                               ? FontWeight.w500
@@ -563,7 +563,7 @@ class _DateCard extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.muted, size: 16),
+                color: AppColors.text, size: 16),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -574,7 +574,7 @@ class _DateCard extends StatelessWidget {
                 Text(
                   label,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
                   ),
@@ -583,7 +583,7 @@ class _DateCard extends StatelessWidget {
                 Text(
                   formatted,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 10,
                     fontWeight: FontWeight.w300,
                   ),
@@ -613,7 +613,7 @@ class _SectionRow extends StatelessWidget {
       children: [
         Text(
           title,
-          style: AppTextStyles.regular20.copyWith(color: AppColors.dark),
+          style: AppTextStyles.regular20.copyWith(color: AppColors.text),
         ),
         const Spacer(),
         GestureDetector(
@@ -666,7 +666,7 @@ class _PopularCard extends StatelessWidget {
                 color: const Color(0xFFD0DDE8),
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_rounded,
-                    color: AppColors.muted, size: 40),
+                    color: AppColors.text, size: 40),
               ),
             ),
             // Gradient overlay: transparent → rgba(0,0,0,0.7)
@@ -804,7 +804,7 @@ class _UbaxBanner extends StatelessWidget {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: AppColors.dark,
+          color: AppColors.text,
           borderRadius: BorderRadius.circular(18),
         ),
         clipBehavior: Clip.hardEdge,
@@ -938,7 +938,7 @@ class _RecommendedTile extends StatelessWidget {
                       child: Text(
                         name,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           height: 1.2,
@@ -961,7 +961,7 @@ class _RecommendedTile extends StatelessWidget {
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w500,
                         ),
@@ -1013,7 +1013,7 @@ class _Meta extends StatelessWidget {
           text,
           style: const TextStyle(
             fontFamily: 'Lexend',
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 7,
             fontWeight: FontWeight.w400,
           ),

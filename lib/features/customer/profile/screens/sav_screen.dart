@@ -70,7 +70,7 @@ class SavScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -125,7 +125,7 @@ class SavScreen extends StatelessWidget {
                       'Pour tout problème lié à votre local, merci de créer\nun ticket afin d\'assurer un suivi rapide.',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
@@ -136,7 +136,7 @@ class SavScreen extends StatelessWidget {
                   Text(
                     'Mes tickets',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                     ),
                   ),
                   const SizedBox(height: 14),
@@ -243,7 +243,7 @@ class _TicketCard extends StatelessWidget {
                               Text(
                                 ticket.residence,
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13,
                                 ),
@@ -251,7 +251,7 @@ class _TicketCard extends StatelessWidget {
                               Text(
                                 ticket.apartment,
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                   fontSize: 11,
                                 ),
                               ),
@@ -261,7 +261,7 @@ class _TicketCard extends StatelessWidget {
                         Text(
                           ticket.number,
                           style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -282,7 +282,7 @@ class _TicketCard extends StatelessWidget {
                             alignment: Alignment.center,
                             child: const Icon(
                               Icons.calendar_month_rounded,
-                              color: AppColors.muted,
+                              color: AppColors.text,
                               size: 14,
                             ),
                           ),
@@ -290,7 +290,7 @@ class _TicketCard extends StatelessWidget {
                           Text(
                             ticket.date,
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w500,
                             ),
                           ),
@@ -324,7 +324,7 @@ class _TicketCard extends StatelessWidget {
                           child: Text(
                             'Détails',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w500,
                             ),
                           ),

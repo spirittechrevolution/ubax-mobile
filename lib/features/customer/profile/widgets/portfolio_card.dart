@@ -40,7 +40,7 @@ class PortfolioCard extends StatelessWidget {
                       errorBuilder: (_, __, ___) => Container(
                         width: 154,
                         height: 115,
-                        color: AppColors.muted,
+                        color: AppColors.text,
                       ),
                     ),
                     Positioned(
@@ -79,7 +79,7 @@ class PortfolioCard extends StatelessWidget {
                       fontFamily: 'Lexend',
                       fontSize: 10,
                       fontWeight: FontWeight.w400,
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       height: 1.0,
                     ),
                     maxLines: 1,
@@ -87,7 +87,7 @@ class PortfolioCard extends StatelessWidget {
                   ),
                 ),
                 const Icon(Icons.chevron_right_rounded,
-                    color: AppColors.dark, size: 16),
+                    color: AppColors.text, size: 16),
               ],
             ),
           ],

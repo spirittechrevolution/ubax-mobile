@@ -37,7 +37,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: AppColors.dark, size: 20),
+                        color: AppColors.text, size: 20),
                   ),
                   Expanded(
                     child: Center(
@@ -47,7 +47,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           fontFamily: 'Lexend',
                           fontSize: 15,
                           fontWeight: FontWeight.w600,
-                          color: AppColors.dark,
+                          color: AppColors.text,
                         ),
                       ),
                     ),
@@ -82,7 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         errorBuilder: (_, __, ___) => Container(
                           width: 58,
                           height: 58,
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           child: const Icon(Icons.person,
                               color: Colors.white, size: 28),
                         ),

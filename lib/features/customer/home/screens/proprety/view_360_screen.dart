@@ -346,7 +346,7 @@ class _PropertyCard extends StatelessWidget {
                       child: Text(
                         title,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           height: 1.2,
@@ -381,7 +381,7 @@ class _PropertyCard extends StatelessWidget {
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w500,
                         ),
@@ -433,7 +433,7 @@ class _Meta extends StatelessWidget {
           text,
           style: const TextStyle(
             fontFamily: 'Lexend',
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 7,
             fontWeight: FontWeight.w400,
           ),

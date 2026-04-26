@@ -43,12 +43,12 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.dark),
+              color: AppColors.text),
         ),
         title: const Text(
           'Recherche avancée',
           style: TextStyle(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontWeight: FontWeight.w800,
           ),
         ),
@@ -119,7 +119,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                     ? '500 Millions FCFA'
                     : '2 MD FCFA',
                 style: const TextStyle(
-                  color: AppColors.muted,
+                  color: AppColors.text,
                   fontSize: 12,
                   fontWeight: FontWeight.w600,
                 ),
@@ -145,7 +145,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   minLabel: '150 m2',
                   maxLabel: '1000 m2',
                   style: const TextStyle(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -226,7 +226,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   minLabel: '100 m2',
                   maxLabel: '500 m2',
                   style: TextStyle(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
                   ),
@@ -287,7 +287,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
               Text(
                 title,
                 style: const TextStyle(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w800,
                   fontSize: 16,
                 ),
@@ -299,13 +299,13 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   title: Text(
                     o,
                     style: const TextStyle(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   trailing: current == o
                       ? const Icon(Icons.check_circle_rounded,
-                          color: AppColors.dark)
+                          color: AppColors.text)
                       : const Icon(Icons.circle_outlined,
                           color: Color(0xFFCBD5E1)),
                   onTap: () => Navigator.of(ctx).pop(o),
@@ -440,18 +440,18 @@ class _SelectField extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.dark),
+            Icon(icon, color: AppColors.text),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
                 value,
-                style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
+                style: AppTextStyles.regular12.copyWith(color: AppColors.text),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
             const Icon(Icons.keyboard_arrow_down_rounded,
-                color: AppColors.muted),
+                color: AppColors.text),
           ],
         ),
       ),
@@ -546,7 +546,7 @@ class _PillChoice extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
                 )
-              : AppTextStyles.regular12.copyWith(color: AppColors.dark),
+              : AppTextStyles.regular12.copyWith(color: AppColors.text),
         ),
       ),
     );
@@ -572,7 +572,7 @@ class _RadioRow extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         label,
-        style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
+        style: AppTextStyles.regular12.copyWith(color: AppColors.text),
       ),
       trailing: Radio<int>(
         value: value,
@@ -656,7 +656,7 @@ class _SmallPill extends StatelessWidget {
                   color: Colors.white,
                   fontWeight: FontWeight.w800,
                 )
-              : AppTextStyles.regular12.copyWith(color: AppColors.dark),
+              : AppTextStyles.regular12.copyWith(color: AppColors.text),
         ),
       ),
     );

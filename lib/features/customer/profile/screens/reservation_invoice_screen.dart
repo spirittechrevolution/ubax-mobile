@@ -23,7 +23,7 @@ class ReservationInvoiceScreen extends StatelessWidget {
                 Container(
                   height: darkHeight,
                   decoration: const BoxDecoration(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                   ),
                 ),
                 // Content on top
@@ -156,7 +156,7 @@ class _InvoiceCard extends StatelessWidget {
                       Text(
                         'Arnaud Koffi',
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 14,
                           fontWeight: FontWeight.w600,
                         ),
@@ -170,24 +170,24 @@ class _InvoiceCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.phone_outlined,
-                        color: AppColors.muted, size: 14),
+                        color: AppColors.text, size: 14),
                     const SizedBox(width: 4),
                     Text(
                       '+225 01 02 03 04 05',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                     const SizedBox(width: 16),
                     const Icon(Icons.mail_outline_rounded,
-                        color: AppColors.muted, size: 14),
+                        color: AppColors.text, size: 14),
                     const SizedBox(width: 4),
                     Text(
                       'arnaud@gmail.com',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 11,
                         fontWeight: FontWeight.w300,
                       ),
@@ -255,7 +255,7 @@ class _InvoiceCard extends StatelessWidget {
                     child: const Icon(
                       Icons.qr_code_2_rounded,
                       size: 90,
-                      color: AppColors.dark,
+                      color: AppColors.text,
                     ),
                   ),
                 ),
@@ -375,7 +375,7 @@ class _CheckBox extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.dark, size: 14),
+                color: AppColors.text, size: 14),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -386,7 +386,7 @@ class _CheckBox extends StatelessWidget {
                 Text(
                   label,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 11,
                     fontWeight: FontWeight.w500,
                   ),
@@ -394,7 +394,7 @@ class _CheckBox extends StatelessWidget {
                 Text(
                   date,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 10,
                     fontWeight: FontWeight.w300,
                   ),

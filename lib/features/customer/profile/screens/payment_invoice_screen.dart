@@ -102,14 +102,14 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.dark, size: 20),
+                      color: AppColors.text, size: 20),
                 ),
                 Expanded(
                   child: Center(
                     child: Text(
                       'Paiement Facture',
                       style: AppTextStyles.sectionTitle.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                       ),
                     ),
                   ),
@@ -161,7 +161,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                         Text(
                           'Appartement Moderne à Cocody',
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 13,
                           ),
                           maxLines: 2,
@@ -171,7 +171,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                         Row(
                           children: [
                             const Icon(Icons.location_on,
-                                color: AppColors.muted, size: 14),
+                                color: AppColors.text, size: 14),
                             const SizedBox(width: 3),
                             Expanded(
                               child: Text(
@@ -261,7 +261,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                     child: Text(
                       'Aucune facture',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontSize: 14,
                       ),
                     ),
@@ -373,7 +373,7 @@ class _InvoiceCard extends StatelessWidget {
               Text(
                 '${invoice.month} ${invoice.year}',
                 style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 15,
                     fontWeight: FontWeight.w600),
               ),
@@ -393,12 +393,12 @@ class _InvoiceCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.description_outlined,
-                            color: AppColors.dark, size: 14),
+                            color: AppColors.text, size: 14),
                         SizedBox(width: 4),
                         Text(
                           'Voir la facture',
                           style: TextStyle(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w300,
                             fontSize: 9,
                           ),
@@ -422,7 +422,7 @@ class _InvoiceCard extends StatelessWidget {
           Text(
             invoice.number,
             style: AppTextStyles.regular12.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontWeight: FontWeight.w300,
                 fontSize: 11),
           ),

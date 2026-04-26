@@ -145,7 +145,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 'auth.forgot_password'.tr(),
                                 style: const TextStyle(
-                                    color: AppColors.dark,
+                                    color: AppColors.text,
                                     fontWeight: FontWeight.w500,
                                     fontSize: 12),
                               ),

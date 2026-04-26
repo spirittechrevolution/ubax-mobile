@@ -23,7 +23,7 @@ class TicketDetailsScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -96,7 +96,7 @@ class TicketDetailsScreen extends StatelessWidget {
                           Text(
                             'Description :',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w700,
                               fontSize: 13,
                             ),
@@ -197,7 +197,7 @@ class _SummaryCard extends StatelessWidget {
                               Text(
                                 'Résidence Azalai',
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 13,
                                 ),
@@ -205,7 +205,7 @@ class _SummaryCard extends StatelessWidget {
                               Text(
                                 'Appartement 0025',
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                   fontSize: 11,
                                 ),
                               ),
@@ -215,7 +215,7 @@ class _SummaryCard extends StatelessWidget {
                         Text(
                           'UBX-SAV-0265',
                           style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -234,7 +234,7 @@ class _SummaryCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: const Icon(
                             Icons.calendar_month_rounded,
-                            color: AppColors.muted,
+                            color: AppColors.text,
                             size: 14,
                           ),
                         ),
@@ -242,7 +242,7 @@ class _SummaryCard extends StatelessWidget {
                         Text(
                           '30 Avril 2026',
                           style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -293,7 +293,7 @@ class _DetailRow extends StatelessWidget {
           Text(
             '$label : ',
             style: AppTextStyles.regular12.copyWith(
-              color: AppColors.dark,
+              color: AppColors.text,
               fontWeight: FontWeight.w600,
               fontSize: 12,
             ),

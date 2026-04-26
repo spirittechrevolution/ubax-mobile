@@ -58,14 +58,14 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.dark, size: 18),
+                      color: AppColors.text, size: 18),
                 ),
                 Expanded(
                   child: Center(
                     child: Text(
                       'Laisser un avis',
                       style: AppTextStyles.sectionTitle.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
                       ),
@@ -99,7 +99,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                   Text(
                     'Ajouter des photos',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -107,7 +107,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                   const SizedBox(height: 14),
                   _DashedBox(
                     borderRadius: 12,
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     strokeWidth: 1.5,
                     dash: 4,
                     gap: 4,
@@ -137,7 +137,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                   Text(
                     'Ecrivez votre avis',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                     ),
@@ -145,7 +145,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                   const SizedBox(height: 14),
                   _DashedBox(
                     borderRadius: 12,
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     strokeWidth: 1.5,
                     dash: 4,
                     gap: 4,
@@ -163,7 +163,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                             hintText:
                                 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard',
                             hintStyle: AppTextStyles.regular12.copyWith(
-                              color: AppColors.muted,
+                              color: AppColors.text,
                               fontSize: 11,
                               fontWeight: FontWeight.w300,
                             ),
@@ -173,7 +173,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                             contentPadding: EdgeInsets.zero,
                           ),
                           style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
                           ),
@@ -187,7 +187,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                     child: Text(
                       '$remaining characters  restants',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontSize: 10,
                         fontWeight: FontWeight.w300,
                       ),
@@ -290,7 +290,7 @@ class _ReviewReservationCard extends StatelessWidget {
                         child: Text(
                           title,
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 14,
                             fontWeight: FontWeight.w400,
                           ),
@@ -320,13 +320,13 @@ class _ReviewReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        color: AppColors.muted, size: 14),
+                        color: AppColors.text, size: 14),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 10,
                           fontWeight: FontWeight.w300,
                         ),
@@ -338,24 +338,24 @@ class _ReviewReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.muted, size: 12),
+                        color: AppColors.text, size: 12),
                     const SizedBox(width: 3),
                     Text(
                       arrival,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 10,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                     const SizedBox(width: 8),
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.muted, size: 12),
+                        color: AppColors.text, size: 12),
                     const SizedBox(width: 3),
                     Text(
                       departure,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 10,
                         fontWeight: FontWeight.w300,
                       ),
@@ -382,12 +382,12 @@ class _ReviewReservationCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.description_outlined,
-                              color: AppColors.dark, size: 12),
+                              color: AppColors.text, size: 12),
                           const SizedBox(width: 4),
                           Text(
                             'Voir la facture',
                             style: AppTextStyles.regular12.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 8,
                               fontWeight: FontWeight.w400,
                             ),

@@ -21,7 +21,7 @@ class TicketSentScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -77,7 +77,7 @@ class TicketSentScreen extends StatelessWidget {
                     'Le ticket a été transmis avec succès à l\u2019agence qui gère votre bien.\nVous serez informé de l\u2019évolution du traitement.',
                     textAlign: TextAlign.center,
                     style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 13,
                     ),
                   ),
@@ -95,7 +95,7 @@ class TicketSentScreen extends StatelessWidget {
                       child: Text(
                         ticketNumber,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 14,
                         ),
                       ),

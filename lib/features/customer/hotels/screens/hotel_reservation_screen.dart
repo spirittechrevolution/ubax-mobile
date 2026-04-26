@@ -126,13 +126,13 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.dark, size: 20),
+              color: AppColors.text, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Demande de réservation',
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontSize: 17,
           ),
         ),
@@ -161,7 +161,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                           Text(
                             'Date',
                             style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 15,
                             ),
                           ),
@@ -175,7 +175,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                     Text(
                                       'Arrivée',
                                       style: AppTextStyles.regular12.copyWith(
-                                        color: AppColors.muted,
+                                        color: AppColors.text,
                                       ),
                                     ),
                                     const SizedBox(height: 4),
@@ -183,7 +183,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                       _formatDate(_arrivalDate),
                                       style:
                                           AppTextStyles.sectionTitle.copyWith(
-                                        color: AppColors.dark,
+                                        color: AppColors.text,
                                         fontSize: 14,
                                       ),
                                     ),
@@ -205,7 +205,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                       Text(
                                         'Départ',
                                         style: AppTextStyles.regular12.copyWith(
-                                          color: AppColors.muted,
+                                          color: AppColors.text,
                                         ),
                                       ),
                                       const SizedBox(height: 4),
@@ -213,7 +213,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                         _formatDate(_departureDate),
                                         style:
                                             AppTextStyles.sectionTitle.copyWith(
-                                          color: AppColors.dark,
+                                          color: AppColors.text,
                                           fontSize: 14,
                                         ),
                                       ),
@@ -245,7 +245,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                         Text(
                           'Invité',
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 15,
                           ),
                         ),
@@ -266,7 +266,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                             ),
                             alignment: Alignment.center,
                             child: const Icon(Icons.remove,
-                                color: AppColors.dark, size: 18),
+                                color: AppColors.text, size: 18),
                           ),
                         ),
                         Padding(
@@ -274,7 +274,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                           child: Text(
                             '$_guestCount',
                             style: const TextStyle(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w700,
                               fontSize: 16,
                             ),
@@ -311,7 +311,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                     child: Row(
                       children: [
                         const Icon(Icons.credit_card_rounded,
-                            color: AppColors.dark, size: 22),
+                            color: AppColors.text, size: 22),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -320,14 +320,14 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                               Text(
                                 'Payé avec',
                                 style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.muted,
+                                  color: AppColors.text,
                                 ),
                               ),
                               const SizedBox(height: 2),
                               Text(
                                 _paymentDisplay,
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 14,
                                 ),
                               ),
@@ -355,7 +355,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                   Text(
                     'Détails du paiement',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 15,
                     ),
                   ),
@@ -534,7 +534,7 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
                   child: Text(
                     'Selectionner votre methode de paiement',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
@@ -542,7 +542,7 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.close, color: AppColors.muted),
+                  child: const Icon(Icons.close, color: AppColors.text),
                 ),
               ],
             ),
@@ -621,7 +621,7 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
                     const Text(
                       'Ajouter une carte de débit',
                       style: TextStyle(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w600,
                         fontSize: 13,
                       ),
@@ -712,7 +712,7 @@ class _PaymentTile extends StatelessWidget {
               child: Text(
                 label,
                 style: const TextStyle(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
                 ),
@@ -776,13 +776,13 @@ class _AddCardScreenState extends State<AddCardScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.dark, size: 20),
+              color: AppColors.text, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Ajouter une carte',
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontSize: 17,
           ),
         ),
@@ -887,7 +887,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   Text(
                     'Numéro de la carte',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 14,
                     ),
                   ),
@@ -904,7 +904,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                   Text(
                     'Prenom',
                     style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontSize: 14,
                     ),
                   ),
@@ -926,7 +926,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             Text(
                               'Expiration',
                               style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.dark,
+                                color: AppColors.text,
                                 fontSize: 14,
                               ),
                             ),
@@ -947,7 +947,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             Text(
                               'CVV Code',
                               style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.dark,
+                                color: AppColors.text,
                                 fontSize: 14,
                               ),
                             ),
@@ -1028,14 +1028,14 @@ class _AddCardScreenState extends State<AddCardScreen> {
         obscureText: obscureText,
         onChanged: (_) => setState(() {}),
         style: const TextStyle(
-          color: AppColors.dark,
+          color: AppColors.text,
           fontWeight: FontWeight.w600,
           fontSize: 14,
         ),
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: const TextStyle(
-            color: AppColors.muted,
+            color: AppColors.text,
             fontWeight: FontWeight.w400,
           ),
           contentPadding:
@@ -1129,7 +1129,7 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
             Text(
               'Selectionner Date',
               style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontSize: 17,
               ),
             ),
@@ -1147,12 +1147,12 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                     });
                   },
                   child: const Icon(Icons.chevron_left,
-                      color: AppColors.dark, size: 28),
+                      color: AppColors.text, size: 28),
                 ),
                 Text(
                   '${_kMonths[_displayMonth.month - 1]} ${_displayMonth.year}',
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                   ),
                 ),
                 GestureDetector(
@@ -1163,7 +1163,7 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                     });
                   },
                   child: const Icon(Icons.chevron_right,
-                      color: AppColors.dark, size: 28),
+                      color: AppColors.text, size: 28),
                 ),
               ],
             ),
@@ -1318,7 +1318,7 @@ class _WeekdayLabel extends StatelessWidget {
         label,
         textAlign: TextAlign.center,
         style: AppTextStyles.regular12.copyWith(
-          color: AppColors.muted,
+          color: AppColors.text,
           fontWeight: FontWeight.w600,
         ),
       ),
@@ -1370,13 +1370,13 @@ class HotelReservationSummaryScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.dark, size: 20),
+              color: AppColors.text, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
           'Resumé',
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.dark,
+            color: AppColors.text,
             fontSize: 17,
           ),
         ),
@@ -1432,7 +1432,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                                       name,
                                       style:
                                           AppTextStyles.sectionTitle.copyWith(
-                                        color: AppColors.dark,
+                                        color: AppColors.text,
                                         fontSize: 15,
                                         fontWeight: FontWeight.w600,
                                         height: 1.2,
@@ -1448,7 +1448,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                                   Text(
                                     rating.toString(),
                                     style: AppTextStyles.regular12.copyWith(
-                                      color: AppColors.dark,
+                                      color: AppColors.text,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -1459,13 +1459,13 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   const Icon(Icons.location_on_outlined,
-                                      size: 13, color: AppColors.muted),
+                                      size: 13, color: AppColors.text),
                                   const SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
                                       location,
                                       style: AppTextStyles.regular12.copyWith(
-                                        color: AppColors.muted,
+                                        color: AppColors.text,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -1501,7 +1501,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                                       text: '/ nuit',
                                       style: TextStyle(
                                         fontFamily: 'Lexend',
-                                        color: AppColors.muted,
+                                        color: AppColors.text,
                                         fontWeight: FontWeight.w400,
                                         fontSize: 10,
                                       ),
@@ -1635,7 +1635,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                           ),
                         ),
                         const Icon(Icons.chevron_right,
-                            color: AppColors.muted, size: 22),
+                            color: AppColors.text, size: 22),
                       ],
                     ),
                   ),
@@ -1821,7 +1821,7 @@ class ReservationSuccessScreen extends StatelessWidget {
                       'Un reçu de paiement a été envoyé à votre adresse e-mail.',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontSize: 14,
                         fontWeight: FontWeight.w300,
                       ),

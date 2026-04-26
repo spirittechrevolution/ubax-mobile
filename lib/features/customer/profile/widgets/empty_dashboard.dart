@@ -14,7 +14,7 @@ class EmptyDashboard extends StatelessWidget {
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 28),
       decoration: BoxDecoration(
-        color: AppColors.dark,
+        color: AppColors.text,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(

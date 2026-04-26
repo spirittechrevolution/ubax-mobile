@@ -477,7 +477,7 @@ class _TenantCard extends StatelessWidget {
                   errorBuilder: (_, __, ___) => Container(
                     width: 192.52,
                     height: 130.93,
-                    color: AppColors.muted,
+                    color: AppColors.text,
                   ),
                 ),
               ),
@@ -576,7 +576,7 @@ class _TenantCard extends StatelessWidget {
                     height: 34,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(
@@ -619,7 +619,7 @@ class _KeyValue extends StatelessWidget {
           fontFamily: 'Lexend',
           fontSize: 9,
           fontWeight: FontWeight.w400,
-          color: AppColors.dark,
+          color: AppColors.text,
           height: 1.0,
         ),
         children: [

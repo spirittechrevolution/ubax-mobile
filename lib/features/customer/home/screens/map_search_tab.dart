@@ -156,7 +156,7 @@ class _AddressCard extends StatelessWidget {
                     Text(
                       'Adresse ( Rayon de 10 km )',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 12,
                         fontWeight: FontWeight.w500,
                       ),
@@ -181,7 +181,7 @@ class _AddressCard extends StatelessWidget {
               height: 36,
               padding: const EdgeInsets.symmetric(horizontal: 14),
               decoration: BoxDecoration(
-                color: AppColors.dark,
+                color: AppColors.text,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Row(
@@ -513,7 +513,7 @@ class _PropertyPreview extends StatelessWidget {
                       child: Text(
                         title,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
                           height: 1.2,
@@ -535,7 +535,7 @@ class _PropertyPreview extends StatelessWidget {
                       child: Text(
                         location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w500,
                         ),
@@ -581,7 +581,7 @@ class _MetaChip extends StatelessWidget {
           text,
           style: const TextStyle(
             fontFamily: 'Lexend',
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 7,
             fontWeight: FontWeight.w400,
           ),

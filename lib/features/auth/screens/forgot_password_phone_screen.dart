@@ -43,10 +43,10 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
                 height: 38,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  border: Border.all(color: AppColors.dark, width: 1.5),
+                  border: Border.all(color: AppColors.text, width: 1.5),
                 ),
                 child: const Icon(Icons.arrow_back_ios_new_rounded,
-                    color: AppColors.dark, size: 18),
+                    color: AppColors.text, size: 18),
               ),
             ),
           ),

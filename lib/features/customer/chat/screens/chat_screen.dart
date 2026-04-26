@@ -45,7 +45,7 @@ class _ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
     return Container(
-      color: AppColors.dark,
+      color: AppColors.text,
       padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -182,7 +182,7 @@ class _DateSeparator extends StatelessWidget {
       child: Text(
         label,
         style: AppTextStyles.regular12.copyWith(
-          color: AppColors.muted,
+          color: AppColors.text,
           fontWeight: FontWeight.w700,
           fontSize: 13,
         ),
@@ -245,7 +245,7 @@ class _SharedPropertyCard extends StatelessWidget {
                     color: const Color(0xFFE2E8F0),
                     alignment: Alignment.center,
                     child: const Icon(Icons.image_rounded,
-                        color: AppColors.muted, size: 40),
+                        color: AppColors.text, size: 40),
                   ),
                 ),
               ),
@@ -257,7 +257,7 @@ class _SharedPropertyCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -303,7 +303,7 @@ class _SharedPropertyCard extends StatelessWidget {
                       child: Text(
                         name,
                         style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontSize: 14,
                         ),
                         maxLines: 1,
@@ -317,7 +317,7 @@ class _SharedPropertyCard extends StatelessWidget {
                     Text(
                       rating.toString(),
                       style: const TextStyle(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w800,
                         fontSize: 13,
                       ),
@@ -328,7 +328,7 @@ class _SharedPropertyCard extends StatelessWidget {
                 Text(
                   location,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -347,7 +347,7 @@ class _SharedPropertyCard extends StatelessWidget {
                       const TextSpan(
                         text: '/ nuit',
                         style: TextStyle(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
                         ),
@@ -422,7 +422,7 @@ class _BubbleMessage extends StatelessWidget {
         Text(
           time,
           style: AppTextStyles.regular12.copyWith(
-            color: AppColors.muted,
+            color: AppColors.text,
             fontSize: 11,
             fontWeight: FontWeight.w500,
           ),
@@ -463,7 +463,7 @@ class _ChatInput extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 style: const TextStyle(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontWeight: FontWeight.w500,
                   fontSize: 14,
                 ),
@@ -471,7 +471,7 @@ class _ChatInput extends StatelessWidget {
                   border: InputBorder.none,
                   hintText: 'Saisir votre message',
                   hintStyle: TextStyle(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontWeight: FontWeight.w400,
                     fontSize: 14,
                   ),

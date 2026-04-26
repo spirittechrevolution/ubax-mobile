@@ -106,7 +106,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
           Container(
             height: darkHeight,
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -229,13 +229,13 @@ class _SearchCard extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(Icons.search_rounded,
-                          color: AppColors.muted, size: 20),
+                          color: AppColors.text, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
                           'Rechercher une réservation',
                           style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.muted,
+                            color: AppColors.text,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
                           ),
@@ -252,7 +252,7 @@ class _SearchCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: const BoxDecoration(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,
@@ -438,7 +438,7 @@ class _DateField extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.muted, size: 16),
+                color: AppColors.text, size: 16),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -449,7 +449,7 @@ class _DateField extends StatelessWidget {
                 Text(
                   label,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 12,
                     fontWeight: FontWeight.w300,
                   ),
@@ -460,7 +460,7 @@ class _DateField extends StatelessWidget {
                 Text(
                   value,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.muted,
+                    color: AppColors.text,
                     fontSize: 10,
                     fontWeight: FontWeight.w300,
                   ),
@@ -681,7 +681,7 @@ class _ReservationCard extends StatelessWidget {
                         child: Text(
                           reservation.title,
                           style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
@@ -711,13 +711,13 @@ class _ReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        color: AppColors.muted, size: 13),
+                        color: AppColors.text, size: 13),
                     const SizedBox(width: 5),
                     Expanded(
                       child: Text(
                         reservation.location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w300,
                         ),
@@ -730,12 +730,12 @@ class _ReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.muted, size: 13),
+                        color: AppColors.text, size: 13),
                     const SizedBox(width: 3),
                     Text(
                       reservation.arrival,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 8,
                         fontWeight: FontWeight.w300,
                       ),
@@ -745,19 +745,19 @@ class _ReservationCard extends StatelessWidget {
                       '—',
                       style: TextStyle(
                         fontFamily: 'Lexend',
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontSize: 8,
                         fontWeight: FontWeight.w300,
                       ),
                     ),
                     const SizedBox(width: 6),
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.muted, size: 13),
+                        color: AppColors.text, size: 13),
                     const SizedBox(width: 3),
                     Text(
                       reservation.departure,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontSize: 8,
                         fontWeight: FontWeight.w300,
                       ),
@@ -835,13 +835,13 @@ class _MiniPillBtn extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppColors.muted, size: 12),
+            Icon(icon, color: AppColors.text, size: 12),
             const SizedBox(width: 4),
             Flexible(
               child: Text(
                 label,
                 style: AppTextStyles.regular12.copyWith(
-                  color: AppColors.dark,
+                  color: AppColors.text,
                   fontSize: 10,
                   fontWeight: FontWeight.w400,
                 ),

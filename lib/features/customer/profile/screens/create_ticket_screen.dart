@@ -37,7 +37,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -248,13 +248,13 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
                 title: Text(
                   o,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                     fontSize: 13,
                   ),
                 ),
                 trailing: current == o
                     ? const Icon(Icons.check_circle_rounded,
-                        color: AppColors.dark)
+                        color: AppColors.text)
                     : const Icon(Icons.circle_outlined,
                         color: Color(0xFFCBD5E1)),
                 onTap: () => Navigator.of(ctx).pop(o),
@@ -320,7 +320,7 @@ class _PillSelect extends StatelessWidget {
               ),
             ),
             const Icon(Icons.keyboard_arrow_down_rounded,
-                color: AppColors.muted),
+                color: AppColors.text),
           ],
         ),
       ),
@@ -346,7 +346,7 @@ class _PillInput extends StatelessWidget {
       child: TextField(
         controller: controller,
         style: AppTextStyles.regular12.copyWith(
-          color: AppColors.dark,
+          color: AppColors.text,
           fontSize: 13,
         ),
         decoration: InputDecoration(
@@ -385,7 +385,7 @@ class _MultilineInput extends StatelessWidget {
         expands: true,
         textAlignVertical: TextAlignVertical.top,
         style: AppTextStyles.regular12.copyWith(
-          color: AppColors.dark,
+          color: AppColors.text,
           fontSize: 13,
         ),
         decoration: InputDecoration(
@@ -423,7 +423,7 @@ class _PhotoPicker extends StatelessWidget {
             Text(
               'Ajouter des photos (max 5)',
               style: AppTextStyles.regular12.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontSize: 13,
                 fontWeight: FontWeight.w500,
               ),

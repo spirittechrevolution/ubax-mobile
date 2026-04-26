@@ -38,7 +38,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: AppColors.dark, size: 20),
+                        color: AppColors.text, size: 20),
                   ),
                   Expanded(
                     child: Center(

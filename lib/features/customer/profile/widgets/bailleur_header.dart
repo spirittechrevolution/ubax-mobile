@@ -28,7 +28,7 @@ class BailleurHeader extends StatelessWidget {
           height: 230 + topPadding,
           width: double.infinity,
           decoration: const BoxDecoration(
-            color: AppColors.dark,
+            color: AppColors.text,
             image: DecorationImage(
               image: AssetImage('assets/images/hidepoint.png'),
               fit: BoxFit.cover,
@@ -179,7 +179,7 @@ class BailleurHeader extends StatelessWidget {
             child: Container(
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.dark,
+                color: AppColors.text,
                 borderRadius: BorderRadius.circular(26),
               ),
               alignment: Alignment.center,

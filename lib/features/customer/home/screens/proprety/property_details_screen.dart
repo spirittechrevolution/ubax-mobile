@@ -698,7 +698,7 @@ class _SpecChip extends StatelessWidget {
                 Text(
                   value,
                   style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -706,7 +706,7 @@ class _SpecChip extends StatelessWidget {
                   child: Text(
                     label,
                     style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w300,
                         fontSize: 9),
                     maxLines: 1,
@@ -737,7 +737,7 @@ class _MiniAction extends StatelessWidget {
         width: 41,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.dark,
+          color: AppColors.text,
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,

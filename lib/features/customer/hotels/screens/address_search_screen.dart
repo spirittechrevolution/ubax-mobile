@@ -85,7 +85,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 16, 18, 24),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(26),
               ),
@@ -192,7 +192,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                               Text(
                                 item.title,
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 15,
                                 ),
                               ),

@@ -277,7 +277,7 @@ class _HomeTab extends StatelessWidget {
               const CircleAvatar(
                 radius: 22,
                 backgroundColor: Color(0xFFD9E3EE),
-                child: Icon(Icons.person, color: AppColors.dark),
+                child: Icon(Icons.person, color: AppColors.text),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -324,7 +324,7 @@ class _HomeTab extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     const Icon(Icons.keyboard_arrow_down_rounded,
-                        size: 16, color: AppColors.dark),
+                        size: 16, color: AppColors.text),
                   ],
                 ),
               ),
@@ -400,7 +400,7 @@ class _NotifButton extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.notifications_none_rounded,
-                color: AppColors.dark),
+                color: AppColors.text),
           ),
           if (count > 0)
             Positioned(
@@ -499,7 +499,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.meeting_room_outlined,
                   text: 'Nombre de pièces',
                   trailing: Icon(Icons.keyboard_arrow_down_rounded,
-                      color: AppColors.muted),
+                      color: AppColors.text),
                 ),
               ),
               SizedBox(width: 10),
@@ -509,7 +509,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.apartment_rounded,
                   text: 'Type',
                   trailing: Icon(Icons.keyboard_arrow_down_rounded,
-                      color: AppColors.muted),
+                      color: AppColors.text),
                 ),
               ),
             ],
@@ -597,7 +597,7 @@ class _InputChip extends StatelessWidget {
           Expanded(
             child: Text(
               text,
-              style: AppTextStyles.regular12.copyWith(color: AppColors.dark),
+              style: AppTextStyles.regular12.copyWith(color: AppColors.text),
               overflow: TextOverflow.ellipsis,
             ),
           ),
@@ -620,7 +620,7 @@ class _SectionHeader extends StatelessWidget {
         Expanded(
           child: Text(
             title,
-            style: AppTextStyles.regular20.copyWith(color: AppColors.dark),
+            style: AppTextStyles.regular20.copyWith(color: AppColors.text),
           ),
         ),
         TextButton(
@@ -907,7 +907,7 @@ class _RecommendedTile extends StatelessWidget {
                               fontSize: 13,
                               fontWeight: FontWeight.w400,
                               height: 1.4,
-                              color: AppColors.dark),
+                              color: AppColors.text),
                         ),
                       ),
                       const Icon(
@@ -921,7 +921,7 @@ class _RecommendedTile extends StatelessWidget {
                   Row(
                     children: [
                       const Icon(Icons.location_on_outlined,
-                          size: 14, color: AppColors.muted),
+                          size: 14, color: AppColors.text),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
@@ -929,7 +929,7 @@ class _RecommendedTile extends StatelessWidget {
                           style: AppTextStyles.regularlight16.copyWith(
                             fontSize: 10,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.muted,
+                            color: AppColors.text,
                           ),
                         ),
                       ),

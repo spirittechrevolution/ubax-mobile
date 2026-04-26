@@ -47,7 +47,7 @@ class DocumentsScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 20, 18, 28),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -145,7 +145,7 @@ class _DocumentCard extends StatelessWidget {
           Text(
             doc.title,
             style: AppTextStyles.sectionTitle
-                .copyWith(color: AppColors.dark, fontWeight: FontWeight.w500),
+                .copyWith(color: AppColors.text, fontWeight: FontWeight.w500),
           ),
           const SizedBox(height: 24),
           // File row
@@ -176,7 +176,7 @@ class _DocumentCard extends StatelessWidget {
                       Text(
                         doc.fileName,
                         style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.dark,
+                            color: AppColors.text,
                             fontSize: 12,
                             fontWeight: FontWeight.w400),
                       ),
@@ -184,7 +184,7 @@ class _DocumentCard extends StatelessWidget {
                       Text(
                         doc.fileSize,
                         style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.muted,
+                            color: AppColors.text,
                             fontSize: 11,
                             fontWeight: FontWeight.w400),
                       ),

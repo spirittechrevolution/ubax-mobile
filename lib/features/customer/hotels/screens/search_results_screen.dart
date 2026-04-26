@@ -123,7 +123,7 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 20),
             decoration: const BoxDecoration(
-              color: AppColors.dark,
+              color: AppColors.text,
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(26),
               ),
@@ -207,14 +207,14 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                     Text(
                       'Résultats',
                       style: AppTextStyles.sectionTitle.copyWith(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                       ),
                     ),
                     const SizedBox(height: 2),
                     Text(
                       '${_kResults.length} biens trouvés',
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.muted,
+                        color: AppColors.text,
                         fontSize: 13,
                         fontWeight: FontWeight.w400,
                       ),
@@ -379,7 +379,7 @@ class _GridCard extends StatelessWidget {
                         child: Text(
                           data.name,
                           style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontSize: 12,
                               fontWeight: FontWeight.w300),
                           maxLines: 1,
@@ -393,7 +393,7 @@ class _GridCard extends StatelessWidget {
                       Text(
                         data.rating.toString(),
                         style: const TextStyle(
-                          color: AppColors.dark,
+                          color: AppColors.text,
                           fontWeight: FontWeight.w400,
                           fontSize: 10,
                         ),
@@ -405,7 +405,7 @@ class _GridCard extends StatelessWidget {
                   Text(
                     data.location,
                     style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.muted,
+                      color: AppColors.text,
                       fontSize: 9,
                       fontWeight: FontWeight.w400,
                     ),
@@ -431,7 +431,7 @@ class _GridCard extends StatelessWidget {
                         const TextSpan(
                           text: '/ nuit',
                           style: TextStyle(
-                            color: AppColors.muted,
+                            color: AppColors.text,
                             fontWeight: FontWeight.w400,
                             fontSize: 10,
                           ),
@@ -513,7 +513,7 @@ class _ListCard extends StatelessWidget {
                               child: Text(
                                 data.name,
                                 style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.dark,
+                                  color: AppColors.text,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w300,
                                 ),
@@ -529,7 +529,7 @@ class _ListCard extends StatelessWidget {
                       Text(
                         data.location,
                         style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.muted,
+                          color: AppColors.text,
                           fontSize: 9,
                           fontWeight: FontWeight.w400,
                         ),
@@ -554,7 +554,7 @@ class _ListCard extends StatelessWidget {
                                 const TextSpan(
                                   text: '/ nuit',
                                   style: TextStyle(
-                                    color: AppColors.muted,
+                                    color: AppColors.text,
                                     fontWeight: FontWeight.w400,
                                     fontSize: 10,
                                   ),
@@ -569,7 +569,7 @@ class _ListCard extends StatelessWidget {
                           Text(
                             data.rating.toString(),
                             style: const TextStyle(
-                              color: AppColors.dark,
+                              color: AppColors.text,
                               fontWeight: FontWeight.w400,
                               fontSize: 10,
                             ),

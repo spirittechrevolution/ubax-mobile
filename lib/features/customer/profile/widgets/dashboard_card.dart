@@ -43,7 +43,7 @@ class _DashboardCardState extends State<DashboardCard> {
       width: double.infinity,
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.dark,
+        color: AppColors.text,
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(

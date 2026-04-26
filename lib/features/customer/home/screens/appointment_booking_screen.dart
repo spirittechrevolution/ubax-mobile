@@ -388,7 +388,7 @@ class _AgencyCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(22),
             ),
             alignment: Alignment.center,
-            child: const Icon(Icons.home_rounded, color: AppColors.dark),
+            child: const Icon(Icons.home_rounded, color: AppColors.text),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -398,7 +398,7 @@ class _AgencyCard extends StatelessWidget {
                 Text(
                   title,
                   style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.dark,
+                    color: AppColors.text,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -441,7 +441,7 @@ class _MonthArrow extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
-        child: Icon(icon, color: AppColors.dark),
+        child: Icon(icon, color: AppColors.text),
       ),
     );
   }
@@ -487,7 +487,7 @@ class _TimeDropdown extends StatelessWidget {
                   child: Text(
                     t,
                     style: const TextStyle(
-                      color: AppColors.dark,
+                      color: AppColors.text,
                       fontWeight: FontWeight.w900,
                     ),
                   ),
@@ -721,7 +721,7 @@ class _CalendarMonthView extends StatelessWidget {
                     child: Text(
                       d,
                       style: const TextStyle(
-                        color: AppColors.dark,
+                        color: AppColors.text,
                         fontWeight: FontWeight.w900,
                         fontSize: 12,
                       ),
@@ -823,7 +823,7 @@ class _ConfirmationSheet extends StatelessWidget {
               'Votre rendez-vous a été confirmé avec succès',
               textAlign: TextAlign.center,
               style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.dark,
+                color: AppColors.text,
                 fontSize: 14,
               ),
             ),
