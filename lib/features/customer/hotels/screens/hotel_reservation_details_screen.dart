@@ -133,7 +133,7 @@ class _HotelReservationDetailsScreenState
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.text, size: 18),
+              color: AppColors.dark, size: 18),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -346,7 +346,7 @@ class _DatePill extends StatelessWidget {
             Row(
               children: [
                 const Icon(Icons.calendar_month_outlined,
-                    color: AppColors.text, size: 16),
+                    color: AppColors.dark, size: 16),
                 const SizedBox(width: 6),
                 Text(
                   label,
@@ -441,7 +441,7 @@ class _PaymentMethodTile extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.account_balance_wallet_outlined,
-                color: AppColors.text, size: 18),
+                color: AppColors.dark, size: 18),
           ),
           const SizedBox(width: 12),
           Expanded(

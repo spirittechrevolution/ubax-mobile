@@ -37,7 +37,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -254,7 +254,7 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
                 ),
                 trailing: current == o
                     ? const Icon(Icons.check_circle_rounded,
-                        color: AppColors.text)
+                        color: AppColors.dark)
                     : const Icon(Icons.circle_outlined,
                         color: Color(0xFFCBD5E1)),
                 onTap: () => Navigator.of(ctx).pop(o),
@@ -320,7 +320,7 @@ class _PillSelect extends StatelessWidget {
               ),
             ),
             const Icon(Icons.keyboard_arrow_down_rounded,
-                color: AppColors.text),
+                color: AppColors.dark),
           ],
         ),
       ),

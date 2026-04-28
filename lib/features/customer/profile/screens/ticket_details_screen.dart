@@ -23,7 +23,7 @@ class TicketDetailsScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -234,7 +234,7 @@ class _SummaryCard extends StatelessWidget {
                           alignment: Alignment.center,
                           child: const Icon(
                             Icons.calendar_month_rounded,
-                            color: AppColors.text,
+                            color: AppColors.dark,
                             size: 14,
                           ),
                         ),

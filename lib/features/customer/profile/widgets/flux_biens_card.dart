@@ -74,7 +74,7 @@ class _PeriodDropdown extends StatelessWidget {
           ),
           const SizedBox(width: 4),
           const Icon(Icons.keyboard_arrow_down_rounded,
-              size: 14, color: AppColors.text),
+              size: 14, color: AppColors.dark),
         ],
       ),
     );

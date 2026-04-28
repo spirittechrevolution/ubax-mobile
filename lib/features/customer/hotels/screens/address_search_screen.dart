@@ -85,7 +85,7 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 16, 18, 24),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.vertical(
                 bottom: Radius.circular(26),
               ),

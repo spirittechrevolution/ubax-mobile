@@ -18,7 +18,7 @@ class AppTheme {
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        foregroundColor: AppColors.text,
+        foregroundColor: AppColors.dark,
         surfaceTintColor: Colors.transparent,
       ),
       textTheme: base.textTheme.apply(

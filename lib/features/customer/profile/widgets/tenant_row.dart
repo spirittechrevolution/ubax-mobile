@@ -36,7 +36,7 @@ class TenantRow extends StatelessWidget {
               errorBuilder: (_, __, ___) => Container(
                 width: 30,
                 height: 30,
-                color: AppColors.text,
+                color: AppColors.dark,
                 child: const Icon(Icons.person, color: Colors.white, size: 16),
               ),
             ),

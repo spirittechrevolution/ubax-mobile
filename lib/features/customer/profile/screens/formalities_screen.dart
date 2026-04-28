@@ -73,7 +73,7 @@ class _FormalitiesScreenState extends State<FormalitiesScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(16, topPadding + 10, 16, 20),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -198,7 +198,7 @@ class _InvoiceListTab extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     const Icon(Icons.keyboard_arrow_down_rounded,
-                        color: AppColors.text, size: 18),
+                        color: AppColors.dark, size: 18),
                   ],
                 ),
               ),
@@ -326,7 +326,7 @@ class _InvoiceCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(Icons.visibility_rounded,
-                          color: AppColors.text, size: 14),
+                          color: AppColors.dark, size: 14),
                       SizedBox(width: 4),
                       Text(
                         'Voir la facture',
@@ -347,7 +347,7 @@ class _InvoiceCard extends StatelessWidget {
                 height: 33,
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                  color: AppColors.text,
+                  color: AppColors.dark,
                   borderRadius: BorderRadius.circular(20),
                 ),
                 child: const Text(

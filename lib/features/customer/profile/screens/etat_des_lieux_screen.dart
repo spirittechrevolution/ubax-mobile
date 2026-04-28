@@ -21,7 +21,7 @@ class EtatDesLieuxScreen extends StatelessWidget {
                 // Dark background (flat bottom)
                 Container(
                   height: topPadding + 250,
-                  color: AppColors.text,
+                  color: AppColors.dark,
                 ),
 
                 SingleChildScrollView(

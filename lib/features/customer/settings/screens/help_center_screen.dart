@@ -81,7 +81,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.text, size: 20),
+                      color: AppColors.dark, size: 20),
                 ),
                 Expanded(
                   child: Center(
@@ -193,7 +193,7 @@ class _HelpCenterScreenState extends State<HelpCenterScreen> {
             child: Row(
               children: [
                 const Icon(Icons.search_rounded,
-                    color: AppColors.text, size: 18),
+                    color: AppColors.dark, size: 18),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(

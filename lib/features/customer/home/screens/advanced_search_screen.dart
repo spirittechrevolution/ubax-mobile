@@ -43,7 +43,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.text),
+              color: AppColors.dark),
         ),
         title: const Text(
           'Recherche avancée',
@@ -305,7 +305,7 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
                   ),
                   trailing: current == o
                       ? const Icon(Icons.check_circle_rounded,
-                          color: AppColors.text)
+                          color: AppColors.dark)
                       : const Icon(Icons.circle_outlined,
                           color: Color(0xFFCBD5E1)),
                   onTap: () => Navigator.of(ctx).pop(o),
@@ -440,7 +440,7 @@ class _SelectField extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.text),
+            Icon(icon, color: AppColors.dark),
             const SizedBox(width: 10),
             Expanded(
               child: Text(
@@ -451,7 +451,7 @@ class _SelectField extends StatelessWidget {
               ),
             ),
             const Icon(Icons.keyboard_arrow_down_rounded,
-                color: AppColors.text),
+                color: AppColors.dark),
           ],
         ),
       ),

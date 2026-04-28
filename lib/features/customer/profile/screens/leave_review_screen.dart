@@ -58,7 +58,7 @@ class _LeaveReviewScreenState extends State<LeaveReviewScreen> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.text, size: 18),
+                      color: AppColors.dark, size: 18),
                 ),
                 Expanded(
                   child: Center(
@@ -320,7 +320,7 @@ class _ReviewReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        color: AppColors.text, size: 14),
+                        color: AppColors.dark, size: 14),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
@@ -338,7 +338,7 @@ class _ReviewReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.text, size: 12),
+                        color: AppColors.dark, size: 12),
                     const SizedBox(width: 3),
                     Text(
                       arrival,
@@ -350,7 +350,7 @@ class _ReviewReservationCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.text, size: 12),
+                        color: AppColors.dark, size: 12),
                     const SizedBox(width: 3),
                     Text(
                       departure,
@@ -382,7 +382,7 @@ class _ReviewReservationCard extends StatelessWidget {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           const Icon(Icons.description_outlined,
-                              color: AppColors.text, size: 12),
+                              color: AppColors.dark, size: 12),
                           const SizedBox(width: 4),
                           Text(
                             'Voir la facture',

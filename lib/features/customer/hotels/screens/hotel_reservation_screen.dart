@@ -126,7 +126,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.text, size: 20),
+              color: AppColors.dark, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -266,7 +266,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                             ),
                             alignment: Alignment.center,
                             child: const Icon(Icons.remove,
-                                color: AppColors.text, size: 18),
+                                color: AppColors.dark, size: 18),
                           ),
                         ),
                         Padding(
@@ -311,7 +311,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                     child: Row(
                       children: [
                         const Icon(Icons.credit_card_rounded,
-                            color: AppColors.text, size: 22),
+                            color: AppColors.dark, size: 22),
                         const SizedBox(width: 12),
                         Expanded(
                           child: Column(
@@ -542,7 +542,7 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
-                  child: const Icon(Icons.close, color: AppColors.text),
+                  child: const Icon(Icons.close, color: AppColors.dark),
                 ),
               ],
             ),
@@ -776,7 +776,7 @@ class _AddCardScreenState extends State<AddCardScreen> {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.text, size: 20),
+              color: AppColors.dark, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -1147,7 +1147,7 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                     });
                   },
                   child: const Icon(Icons.chevron_left,
-                      color: AppColors.text, size: 28),
+                      color: AppColors.dark, size: 28),
                 ),
                 Text(
                   '${_kMonths[_displayMonth.month - 1]} ${_displayMonth.year}',
@@ -1163,7 +1163,7 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                     });
                   },
                   child: const Icon(Icons.chevron_right,
-                      color: AppColors.text, size: 28),
+                      color: AppColors.dark, size: 28),
                 ),
               ],
             ),
@@ -1370,7 +1370,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.text, size: 20),
+              color: AppColors.dark, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -1459,7 +1459,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                               Row(
                                 children: [
                                   const Icon(Icons.location_on_outlined,
-                                      size: 13, color: AppColors.text),
+                                      size: 13, color: AppColors.dark),
                                   const SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
@@ -1635,7 +1635,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                           ),
                         ),
                         const Icon(Icons.chevron_right,
-                            color: AppColors.text, size: 22),
+                            color: AppColors.dark, size: 22),
                       ],
                     ),
                   ),

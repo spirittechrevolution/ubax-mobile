@@ -195,7 +195,7 @@ class ProfileHeader extends StatelessWidget {
             child: Container(
               height: 52,
               decoration: BoxDecoration(
-                color: AppColors.text,
+                color: AppColors.dark,
                 borderRadius: BorderRadius.circular(26),
               ),
               alignment: Alignment.center,

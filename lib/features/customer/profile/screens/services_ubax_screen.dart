@@ -83,7 +83,7 @@ class _ServicesUbaxScreenState extends State<ServicesUbaxScreen> {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 20),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -385,7 +385,7 @@ class _FaqCard extends StatelessWidget {
                 const SizedBox(width: 10),
                 Icon(
                   expanded ? Icons.remove_rounded : Icons.add_rounded,
-                  color: AppColors.text,
+                  color: AppColors.dark,
                   size: 22,
                 ),
               ],

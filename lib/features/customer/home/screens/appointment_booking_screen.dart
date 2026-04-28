@@ -388,7 +388,7 @@ class _AgencyCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(22),
             ),
             alignment: Alignment.center,
-            child: const Icon(Icons.home_rounded, color: AppColors.text),
+            child: const Icon(Icons.home_rounded, color: AppColors.dark),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -441,7 +441,7 @@ class _MonthArrow extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         alignment: Alignment.center,
-        child: Icon(icon, color: AppColors.text),
+        child: Icon(icon, color: AppColors.dark),
       ),
     );
   }

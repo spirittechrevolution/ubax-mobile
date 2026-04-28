@@ -79,7 +79,7 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: AppColors.text, size: 20),
+                        color: AppColors.dark, size: 20),
                   ),
                   Expanded(
                     child: Center(
@@ -195,7 +195,7 @@ class _LanguageSettingsScreenState extends State<LanguageSettingsScreen> {
                     Row(
                       children: [
                         const Icon(Icons.search_rounded,
-                            color: AppColors.text, size: 22),
+                            color: AppColors.dark, size: 22),
                         const SizedBox(width: 10),
                         Expanded(
                           child: TextField(

@@ -45,7 +45,7 @@ class _ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
     return Container(
-      color: AppColors.text,
+      color: AppColors.dark,
       padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -245,7 +245,7 @@ class _SharedPropertyCard extends StatelessWidget {
                     color: const Color(0xFFE2E8F0),
                     alignment: Alignment.center,
                     child: const Icon(Icons.image_rounded,
-                        color: AppColors.text, size: 40),
+                        color: AppColors.dark, size: 40),
                   ),
                 ),
               ),
@@ -257,7 +257,7 @@ class _SharedPropertyCard extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppColors.text,
+                    color: AppColors.dark,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(

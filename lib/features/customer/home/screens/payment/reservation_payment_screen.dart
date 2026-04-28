@@ -337,7 +337,7 @@ class _PropertyCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 12, color: AppColors.text),
+                        size: 12, color: AppColors.dark),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
@@ -531,7 +531,7 @@ class _PaymentMethodField extends StatelessWidget {
             alignment: Alignment.center,
             child: method == null
                 ? const Icon(Icons.account_balance_wallet_outlined,
-                    color: AppColors.text)
+                    color: AppColors.dark)
                 : Image.asset(
                     _paymentMethodIconAsset(method!),
                     width: 22,

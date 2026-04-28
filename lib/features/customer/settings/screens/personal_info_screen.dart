@@ -42,7 +42,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                   GestureDetector(
                     onTap: () => Navigator.of(context).pop(),
                     child: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: AppColors.text, size: 20),
+                        color: AppColors.dark, size: 20),
                   ),
                   Expanded(
                     child: Center(
@@ -79,7 +79,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                           errorBuilder: (_, __, ___) => Container(
                             width: 90,
                             height: 90,
-                            color: AppColors.text,
+                            color: AppColors.dark,
                             child: const Icon(Icons.person,
                                 color: Colors.white, size: 40),
                           ),
@@ -158,7 +158,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                 ),
                               ),
                               const Icon(Icons.keyboard_arrow_down_rounded,
-                                  color: AppColors.text, size: 18),
+                                  color: AppColors.dark, size: 18),
                             ],
                           ),
                         ),
@@ -200,7 +200,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                             ),
                             alignment: Alignment.center,
                             child: const Icon(Icons.upload_rounded,
-                                color: AppColors.text, size: 20),
+                                color: AppColors.dark, size: 20),
                           ),
                         ],
                       ),

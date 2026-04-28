@@ -47,7 +47,7 @@ class DocumentsScreen extends StatelessWidget {
           Container(
             padding: EdgeInsets.fromLTRB(18, topPadding + 20, 18, 28),
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),

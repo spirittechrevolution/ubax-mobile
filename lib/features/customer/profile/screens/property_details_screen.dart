@@ -477,7 +477,7 @@ class _TenantCard extends StatelessWidget {
                   errorBuilder: (_, __, ___) => Container(
                     width: 192.52,
                     height: 130.93,
-                    color: AppColors.text,
+                    color: AppColors.dark,
                   ),
                 ),
               ),
@@ -576,7 +576,7 @@ class _TenantCard extends StatelessWidget {
                     height: 34,
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                      color: AppColors.text,
+                      color: AppColors.dark,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

@@ -86,7 +86,7 @@ class InviteFriendsScreen extends StatelessWidget {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.text, size: 20),
+                      color: AppColors.dark, size: 20),
                 ),
                 Expanded(
                   child: Center(
@@ -138,7 +138,7 @@ class _ContactRow extends StatelessWidget {
             errorBuilder: (_, __, ___) => Container(
               width: 48,
               height: 48,
-              color: AppColors.text,
+              color: AppColors.dark,
               child: const Icon(Icons.person, color: Colors.white, size: 22),
             ),
           ),

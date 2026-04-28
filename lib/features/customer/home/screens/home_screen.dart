@@ -9,6 +9,7 @@ import 'package:statefulclickcounter/features/customer/profile/screens/bailleur_
 import 'package:statefulclickcounter/core/profile/profile_mode.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -277,7 +278,7 @@ class _HomeTab extends StatelessWidget {
               const CircleAvatar(
                 radius: 22,
                 backgroundColor: Color(0xFFD9E3EE),
-                child: Icon(Icons.person, color: AppColors.text),
+                child: Icon(Icons.person, color: AppColors.dark),
               ),
               const SizedBox(width: 12),
               const Expanded(
@@ -324,7 +325,7 @@ class _HomeTab extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     const Icon(Icons.keyboard_arrow_down_rounded,
-                        size: 16, color: AppColors.text),
+                        size: 16, color: AppColors.dark),
                   ],
                 ),
               ),
@@ -361,13 +362,28 @@ class _HomeTab extends StatelessWidget {
           ..._recommendedProperties.map(
             (p) => Padding(
               padding: const EdgeInsets.only(bottom: 12),
-              child: _RecommendedTile(
+              child: RecommendedTile(
                 imagePath: p['image']!,
                 title: p['title']!,
                 location: p['location']!,
                 beds: int.parse(p['beds']!),
                 baths: int.parse(p['baths']!),
                 salons: int.parse(p['salons']!),
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => PropertyDetailsScreen(
+                        imagePath: p['image']!,
+                        title: p['title']!,
+                        location: p['location']!,
+                        price: '250 000 Fcfa',
+                        beds: 3,
+                        baths: 2,
+                        kitchens: 1,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -400,7 +416,7 @@ class _NotifButton extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.notifications_none_rounded,
-                color: AppColors.text),
+                color: AppColors.dark),
           ),
           if (count > 0)
             Positioned(
@@ -499,7 +515,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.meeting_room_outlined,
                   text: 'Nombre de pièces',
                   trailing: Icon(Icons.keyboard_arrow_down_rounded,
-                      color: AppColors.text),
+                      color: AppColors.dark),
                 ),
               ),
               SizedBox(width: 10),
@@ -509,7 +525,7 @@ class _SearchCardState extends State<_SearchCard> {
                   icon: Icons.apartment_rounded,
                   text: 'Type',
                   trailing: Icon(Icons.keyboard_arrow_down_rounded,
-                      color: AppColors.text),
+                      color: AppColors.dark),
                 ),
               ),
             ],
@@ -798,14 +814,12 @@ class _Info extends StatelessWidget {
   const _Info({
     required this.icon,
     required this.text,
-    this.textColor = Colors.white,
-    this.fontSize = 8,
   });
 
   final IconData icon;
   final String text;
-  final Color textColor;
-  final double fontSize;
+  static const Color _textColor = Colors.white;
+  static const double _fontSize = 8;
 
   @override
   Widget build(BuildContext context) {
@@ -821,8 +835,8 @@ class _Info extends StatelessWidget {
               text,
               textAlign: TextAlign.center,
               style: AppTextStyles.regular12.copyWith(
-                fontSize: fontSize,
-                color: textColor,
+                fontSize: _fontSize,
+                color: _textColor,
                 fontWeight: FontWeight.w300,
                 height: 1.4,
                 letterSpacing: 0,
@@ -837,136 +851,4 @@ class _Info extends StatelessWidget {
   }
 }
 
-class _RecommendedTile extends StatelessWidget {
-  const _RecommendedTile({
-    required this.imagePath,
-    required this.title,
-    required this.location,
-    required this.beds,
-    required this.baths,
-    required this.salons,
-  });
-
-  final String imagePath;
-  final String title;
-  final String location;
-  final int beds;
-  final int baths;
-  final int salons;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => PropertyDetailsScreen(
-              imagePath: imagePath,
-              title: title,
-              location: location,
-              price: '250 000 Fcfa',
-              beds: 3,
-              baths: 2,
-              kitchens: 1,
-            ),
-          ),
-        );
-      },
-      borderRadius: BorderRadius.circular(18),
-      child: Container(
-        height: 119,
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Row(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                imagePath,
-                width: 120,
-                height: 120,
-                fit: BoxFit.cover,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          title,
-                          style: AppTextStyles.regularlight16.copyWith(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w400,
-                              height: 1.4,
-                              color: AppColors.text),
-                        ),
-                      ),
-                      const Icon(
-                        Icons.favorite_rounded,
-                        color: Colors.red,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 15),
-                  Row(
-                    children: [
-                      const Icon(Icons.location_on_outlined,
-                          size: 14, color: AppColors.text),
-                      const SizedBox(width: 4),
-                      Expanded(
-                        child: Text(
-                          location,
-                          style: AppTextStyles.regularlight16.copyWith(
-                            fontSize: 10,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.text,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  Wrap(
-                    spacing: 10,
-                    runSpacing: 4,
-                    children: [
-                      _Info(
-                        icon: Icons.bed_rounded,
-                        text: '$beds Chambres',
-                        textColor: const Color(0xFF343434),
-                        fontSize: 8,
-                      ),
-                      _Info(
-                        icon: Icons.bathtub_rounded,
-                        text: '$baths Salle de bains',
-                        textColor: const Color(0xFF343434),
-                        fontSize: 8,
-                      ),
-                      _Info(
-                        icon: Icons.weekend_rounded,
-                        text: '$salons Salon',
-                        textColor: const Color(0xFF343434),
-                        fontSize: 8,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
 

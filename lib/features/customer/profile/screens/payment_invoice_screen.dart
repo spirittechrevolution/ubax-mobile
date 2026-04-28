@@ -102,7 +102,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.arrow_back_ios_new_rounded,
-                      color: AppColors.text, size: 20),
+                      color: AppColors.dark, size: 20),
                 ),
                 Expanded(
                   child: Center(
@@ -171,7 +171,7 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
                         Row(
                           children: [
                             const Icon(Icons.location_on,
-                                color: AppColors.text, size: 14),
+                                color: AppColors.dark, size: 14),
                             const SizedBox(width: 3),
                             Expanded(
                               child: Text(
@@ -393,7 +393,7 @@ class _InvoiceCard extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.description_outlined,
-                            color: AppColors.text, size: 14),
+                            color: AppColors.dark, size: 14),
                         SizedBox(width: 4),
                         Text(
                           'Voir la facture',

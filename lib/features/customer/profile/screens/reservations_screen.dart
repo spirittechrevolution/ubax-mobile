@@ -106,7 +106,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
           Container(
             height: darkHeight,
             decoration: const BoxDecoration(
-              color: AppColors.text,
+              color: AppColors.dark,
               borderRadius: BorderRadius.only(
                 bottomLeft: Radius.circular(20),
                 bottomRight: Radius.circular(20),
@@ -229,7 +229,7 @@ class _SearchCard extends StatelessWidget {
                   child: Row(
                     children: [
                       const Icon(Icons.search_rounded,
-                          color: AppColors.text, size: 20),
+                          color: AppColors.dark, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
@@ -252,7 +252,7 @@ class _SearchCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: const BoxDecoration(
-                    color: AppColors.text,
+                    color: AppColors.dark,
                     shape: BoxShape.circle,
                   ),
                   alignment: Alignment.center,
@@ -438,7 +438,7 @@ class _DateField extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.text, size: 16),
+                color: AppColors.dark, size: 16),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -711,7 +711,7 @@ class _ReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        color: AppColors.text, size: 13),
+                        color: AppColors.dark, size: 13),
                     const SizedBox(width: 5),
                     Expanded(
                       child: Text(
@@ -730,7 +730,7 @@ class _ReservationCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.text, size: 13),
+                        color: AppColors.dark, size: 13),
                     const SizedBox(width: 3),
                     Text(
                       reservation.arrival,
@@ -752,7 +752,7 @@ class _ReservationCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 6),
                     const Icon(Icons.calendar_month_rounded,
-                        color: AppColors.text, size: 13),
+                        color: AppColors.dark, size: 13),
                     const SizedBox(width: 3),
                     Text(
                       reservation.departure,
@@ -835,7 +835,7 @@ class _MiniPillBtn extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(icon, color: AppColors.text, size: 12),
+            Icon(icon, color: AppColors.dark, size: 12),
             const SizedBox(width: 4),
             Flexible(
               child: Text(

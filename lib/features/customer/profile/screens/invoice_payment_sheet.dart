@@ -70,7 +70,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
                   child: const Icon(Icons.close_rounded,
-                      color: AppColors.text, size: 24),
+                      color: AppColors.dark, size: 24),
                 ),
               ],
             ),
@@ -79,7 +79,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             Row(
               children: [
                 const Icon(Icons.language_rounded,
-                    color: AppColors.text, size: 24),
+                    color: AppColors.dark, size: 24),
                 const SizedBox(width: 10),
                 Text(
                   'Montant',
@@ -103,7 +103,7 @@ class _InvoicePaymentSheetState extends State<InvoicePaymentSheet> {
             Row(
               children: [
                 const Icon(Icons.language_rounded,
-                    color: AppColors.text, size: 24),
+                    color: AppColors.dark, size: 24),
                 const SizedBox(width: 10),
                 Text(
                   'Montant total',

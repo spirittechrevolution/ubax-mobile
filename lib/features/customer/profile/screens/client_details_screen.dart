@@ -310,7 +310,7 @@ class _ClientCard extends StatelessWidget {
                   errorBuilder: (_, __, ___) => Container(
                     width: 46,
                     height: 46,
-                    color: AppColors.text,
+                    color: AppColors.dark,
                     child: const Icon(Icons.person, color: Colors.white),
                   ),
                 ),
@@ -507,7 +507,7 @@ class _DocumentTile extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: Icon(icon, color: AppColors.text, size: 16),
+            child: Icon(icon, color: AppColors.dark, size: 16),
           ),
           const SizedBox(height: 8),
           Text(
@@ -527,7 +527,7 @@ class _DocumentTile extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
               decoration: BoxDecoration(
-                color: AppColors.text,
+                color: AppColors.dark,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Text(
@@ -654,7 +654,7 @@ class _BalanceCard extends StatelessWidget {
       height: 118,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.text,
+        color: AppColors.dark,
         borderRadius: BorderRadius.circular(14),
       ),
       child: Column(

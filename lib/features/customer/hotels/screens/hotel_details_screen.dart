@@ -610,7 +610,7 @@ class _AmenityIcon extends StatelessWidget {
             border: Border.all(color: const Color(0xFFE5E7EB)),
           ),
           alignment: Alignment.center,
-          child: Icon(icon, color: AppColors.text, size: 26),
+          child: Icon(icon, color: AppColors.dark, size: 26),
         ),
         const SizedBox(height: 6),
         Text(
@@ -651,7 +651,7 @@ class _ReviewCard extends StatelessWidget {
               width: 40,
               height: 40,
               color: const Color(0xFFD0DDE8),
-              child: const Icon(Icons.person, color: AppColors.text),
+              child: const Icon(Icons.person, color: AppColors.dark),
             ),
           ),
         ),
@@ -769,7 +769,7 @@ class _RecommendedCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.text),
+                        size: 13, color: AppColors.dark),
                     const SizedBox(width: 3),
                     Text(
                       hotel.location,

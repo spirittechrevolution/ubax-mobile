@@ -74,7 +74,7 @@ class _ServiceCard extends StatelessWidget {
                 shape: BoxShape.circle,
               ),
               alignment: Alignment.center,
-              child: Icon(service.icon, color: AppColors.text, size: 18),
+              child: Icon(service.icon, color: AppColors.dark, size: 18),
             ),
             const SizedBox(height: 8),
             Text(

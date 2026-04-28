@@ -29,8 +29,7 @@ class PropertyDetailsScreen extends StatefulWidget {
   static const _bg = AppColors.background;
   static const _dark = AppColors.dark;
   static const _orange = AppColors.primary;
-
-  static const _textMuted = AppColors.muted;
+  static const text = AppColors.text;
 
   @override
   State<PropertyDetailsScreen> createState() => _PropertyDetailsScreenState();
@@ -182,27 +181,31 @@ class _BottomActions extends StatelessWidget {
                     ),
                     alignment: Alignment.center,
                     child: const Icon(Icons.home_rounded,
-                        color: PropertyDetailsScreen._dark),
+                        color: PropertyDetailsScreen.text),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Aigle Immobilier',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                              color: PropertyDetailsScreen._dark, fontSize: 13),
-                        ),
-                        const SizedBox(height: 2),
-                        Text(
-                          'Agence Immobilière',
-                          style: AppTextStyles.regular12.copyWith(
-                            color: PropertyDetailsScreen._textMuted,
-                            fontWeight: FontWeight.w400,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 7),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Aigle Immobilier',
+                            style: AppTextStyles.sectionTitle.copyWith(
+                                color: PropertyDetailsScreen.text,
+                                fontSize: 13),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 2),
+                          Text(
+                            'Agence Immobilière',
+                            style: AppTextStyles.regular12.copyWith(
+                                color: PropertyDetailsScreen.text,
+                                fontWeight: FontWeight.w300,
+                                fontSize: 9),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   _MiniAction(
@@ -508,8 +511,8 @@ class _Content extends StatelessWidget {
                         child: Text(
                           location,
                           style: AppTextStyles.regular12.copyWith(
-                            color: PropertyDetailsScreen._textMuted,
-                            fontWeight: FontWeight.w700,
+                            color: PropertyDetailsScreen.text,
+                            fontWeight: FontWeight.w300,
                           ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -517,7 +520,7 @@ class _Content extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 9),
                   Row(
                     children: [
                       Expanded(
@@ -559,13 +562,167 @@ class _Content extends StatelessWidget {
             Text(
               'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels, cet appartement 3 pièces offre un cadre de vie exceptionnel, pensé pour répondre aux besoins d\'une famille, d\'un cadre ou d\'un investisseur à la recherche d\'un bien de qualité.',
               style: AppTextStyles.regular12.copyWith(
-                color: PropertyDetailsScreen._textMuted,
-                fontWeight: FontWeight.w600,
+                color: PropertyDetailsScreen.text,
+                fontWeight: FontWeight.w300,
               ),
             ),
+            const SizedBox(height: 18),
+            Text(
+              'Détails & Commodités',
+              style: AppTextStyles.sectionTitle.copyWith(
+                color: PropertyDetailsScreen._orange,
+              ),
+            ),
+            const SizedBox(height: 12),
+            const _AmenitiesGrid(),
+            const SizedBox(height: 18),
+            Text(
+              'Localisation',
+              style: AppTextStyles.sectionTitle.copyWith(
+                color: PropertyDetailsScreen._orange,
+              ),
+            ),
+            const SizedBox(height: 12),
+            const _LocationCard(),
+            const SizedBox(height: 18),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _AmenitiesGrid extends StatelessWidget {
+  const _AmenitiesGrid();
+
+  static const _items = [
+    _AmenityData(Icons.open_in_full_rounded, 'Surface', '150m²'),
+    _AmenityData(Icons.ac_unit_rounded, 'Climatisation', '2'),
+    _AmenityData(Icons.stairs_rounded, 'Etage', '2ème'),
+    _AmenityData(Icons.local_pharmacy_outlined, 'Pharmacie', '300m'),
+    _AmenityData(Icons.local_hospital_outlined, 'Clinique', '700 m'),
+    _AmenityData(Icons.restaurant_rounded, 'Restaurant', '50m'),
+    _AmenityData(Icons.account_balance_outlined, 'Banque', '1.5 Km'),
+    _AmenityData(Icons.shopping_cart_outlined, 'Supermarché', '500m'),
+    _AmenityData(Icons.local_gas_station_outlined, 'Stations', '1km'),
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: List.generate(3, (row) {
+        return Padding(
+          padding: EdgeInsets.only(bottom: row == 2 ? 0 : 10),
+          child: Row(
+            children: List.generate(3, (col) {
+              final item = _items[row * 3 + col];
+              return Expanded(
+                child: Padding(
+                  padding: EdgeInsets.only(right: col == 2 ? 0 : 8),
+                  child: _AmenityCard(item: item),
+                ),
+              );
+            }),
+          ),
+        );
+      }),
+    );
+  }
+}
+
+class _AmenityData {
+  const _AmenityData(this.icon, this.label, this.value);
+  final IconData icon;
+  final String label;
+  final String value;
+}
+
+class _AmenityCard extends StatelessWidget {
+  const _AmenityCard({required this.item});
+  final _AmenityData item;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 54,
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(10),
+      ),
+      child: Row(
+        children: [
+          Icon(item.icon, color: PropertyDetailsScreen._dark, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  item.label,
+                  style: AppTextStyles.regular12.copyWith(
+                    color: PropertyDetailsScreen.text,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w500,
+                    height: 1.0,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  item.value,
+                  style: AppTextStyles.regular12.copyWith(
+                    color: PropertyDetailsScreen._orange,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w600,
+                    height: 1.0,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _LocationCard extends StatelessWidget {
+  const _LocationCard();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            height: 170,
+            width: double.infinity,
+            color: const Color(0xFFE9EEF3),
+            alignment: Alignment.center,
+            child: const Icon(Icons.map_rounded,
+                color: Color(0xFFB8C4D0), size: 60),
+          ),
+        ),
+        Positioned(
+          right: 14,
+          bottom: 14,
+          child: Container(
+            width: 44,
+            height: 44,
+            decoration: const BoxDecoration(
+              color: PropertyDetailsScreen._orange,
+              shape: BoxShape.circle,
+            ),
+            alignment: Alignment.center,
+            child: const Icon(Icons.map_outlined,
+                color: Colors.white, size: 22),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -737,7 +894,7 @@ class _MiniAction extends StatelessWidget {
         width: 41,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.text,
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(5),
         ),
         alignment: Alignment.center,

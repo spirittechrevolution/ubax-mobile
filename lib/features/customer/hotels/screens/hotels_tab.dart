@@ -1,6 +1,7 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
@@ -163,7 +164,7 @@ class _HotelsTabState extends State<HotelsTab> {
         children: [
           // ── Dark header
           Container(
-            color: AppColors.text,
+            color: AppColors.dark,
             padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
             child: Row(
               children: [
@@ -227,7 +228,7 @@ class _HotelsTabState extends State<HotelsTab> {
                       ),
                       alignment: Alignment.center,
                       child: const Icon(Icons.notifications_rounded,
-                          color: AppColors.text, size: 22),
+                          color: AppColors.dark, size: 22),
                     ),
                     Positioned(
                       top: -2,
@@ -273,7 +274,7 @@ class _HotelsTabState extends State<HotelsTab> {
                       ),
                       const SizedBox(width: 4),
                       const Icon(Icons.keyboard_arrow_down_rounded,
-                          size: 16, color: AppColors.text),
+                          size: 16, color: AppColors.dark),
                     ],
                   ),
                 ),
@@ -290,7 +291,7 @@ class _HotelsTabState extends State<HotelsTab> {
                   height: (_kDarkBgHeight - _scrollOffset)
                       .clamp(0.0, _kDarkBgHeight),
                   decoration: const BoxDecoration(
-                    color: AppColors.text,
+                    color: AppColors.dark,
                     borderRadius: BorderRadius.vertical(
                       bottom: Radius.circular(16),
                     ),
@@ -333,7 +334,7 @@ class _HotelsTabState extends State<HotelsTab> {
                                 child: Row(
                                   children: [
                                     const Icon(Icons.location_on_outlined,
-                                        size: 20, color: AppColors.text),
+                                        size: 20, color: AppColors.dark),
                                     const SizedBox(width: 8),
                                     Expanded(
                                       child: Text(
@@ -494,14 +495,14 @@ class _HotelsTabState extends State<HotelsTab> {
                       ..._kRecommandesData.map(
                         (p) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: _RecommendedTile(
+                          child: RecommendedTile(
                             imagePath: p['image'] as String,
-                            name: p['name'] as String,
+                            title: p['name'] as String,
                             location: p['location'] as String,
                             beds: p['beds'] as int,
                             baths: p['baths'] as int,
                             salons: p['salons'] as int,
-                            price: p['price'] as String,
+                            onTap: () {},
                           ),
                         ),
                       ),
@@ -563,7 +564,7 @@ class _DateCard extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.text, size: 16),
+                color: AppColors.dark, size: 16),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -666,7 +667,7 @@ class _PopularCard extends StatelessWidget {
                 color: const Color(0xFFD0DDE8),
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_rounded,
-                    color: AppColors.text, size: 40),
+                    color: AppColors.dark, size: 40),
               ),
             ),
             // Gradient overlay: transparent → rgba(0,0,0,0.7)
@@ -804,7 +805,7 @@ class _UbaxBanner extends StatelessWidget {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: AppColors.text,
+          color: AppColors.dark,
           borderRadius: BorderRadius.circular(18),
         ),
         clipBehavior: Clip.hardEdge,
@@ -874,155 +875,6 @@ class _UbaxBanner extends StatelessWidget {
 
 // ─── Recommended tile ─────────────────────────────────────────────────────────
 
-class _RecommendedTile extends StatelessWidget {
-  const _RecommendedTile({
-    required this.imagePath,
-    required this.name,
-    required this.location,
-    required this.beds,
-    required this.baths,
-    required this.salons,
-    required this.price,
-  });
-
-  final String imagePath;
-  final String name;
-  final String location;
-  final int beds;
-  final int baths;
-  final int salons;
-  final String price;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 119,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x40000000),
-            blurRadius: 4,
-            offset: Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
-              imagePath,
-              width: 125,
-              height: 102,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                width: 125,
-                height: 102,
-                color: const Color(0xFFE2E8F0),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(height: 14),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Text(
-                        name,
-                        style: AppTextStyles.sectionTitle.copyWith(
-                          color: AppColors.text,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          height: 1.2,
-                        ),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                    const Icon(Icons.favorite,
-                        color: Color(0xFFEF4444), size: 16),
-                  ],
-                ),
-                const SizedBox(height: 14),
-                Row(
-                  children: [
-                    const Icon(Icons.location_on_outlined,
-                        size: 12, color: AppColors.primary),
-                    const SizedBox(width: 3),
-                    Expanded(
-                      child: Text(
-                        location,
-                        style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.text,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 13),
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 3,
-                  children: [
-                    _Meta(
-                        icon: Icons.bed_rounded,
-                        text: '$beds  Chambres'),
-                    _Meta(
-                        icon: Icons.bathtub_outlined,
-                        text: '$baths  Salle de bains'),
-                    _Meta(
-                        icon: Icons.weekend_rounded,
-                        text: '$salons  Salon'),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _Meta extends StatelessWidget {
-  const _Meta({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 11, color: AppColors.primary),
-        const SizedBox(width: 3),
-        Text(
-          text,
-          style: const TextStyle(
-            fontFamily: 'Lexend',
-            color: AppColors.text,
-            fontSize: 7,
-            fontWeight: FontWeight.w400,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 // ─── Type pill ────────────────────────────────────────────────────────────────
 
 class _TypePill extends StatelessWidget {
@@ -1088,4 +940,3 @@ class _TypePill extends StatelessWidget {
     );
   }
 }
-

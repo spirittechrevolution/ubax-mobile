@@ -213,7 +213,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                     child: Row(
                       children: [
                         const Icon(Icons.search_rounded,
-                            color: AppColors.text, size: 20),
+                            color: AppColors.dark, size: 20),
                         const SizedBox(width: 8),
                         Expanded(
                           child: TextField(
@@ -244,7 +244,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                               _query = '';
                             }),
                             child: const Icon(Icons.close_rounded,
-                                color: AppColors.text, size: 18),
+                                color: AppColors.dark, size: 18),
                           ),
                       ],
                     ),
@@ -256,7 +256,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                 onTap: _toggleSearch,
                 child: Icon(
                   _searchActive ? Icons.close_rounded : Icons.search_rounded,
-                  color: AppColors.text,
+                  color: AppColors.dark,
                   size: 26,
                 ),
               ),
@@ -492,7 +492,7 @@ class _PropertyCard extends StatelessWidget {
                           color: const Color(0xFFE2E8F0),
                           alignment: Alignment.center,
                           child: const Icon(Icons.image_rounded,
-                              color: AppColors.text, size: 36),
+                              color: AppColors.dark, size: 36),
                         ),
                       ),
                     ),
@@ -505,7 +505,7 @@ class _PropertyCard extends StatelessWidget {
                         height: 15,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: AppColors.text,
+                          color: AppColors.dark,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: Text(
@@ -697,7 +697,7 @@ class _PropertyListCard extends StatelessWidget {
                 color: const Color(0xFFE2E8F0),
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_rounded,
-                    color: AppColors.text, size: 36),
+                    color: AppColors.dark, size: 36),
               ),
             ),
           ),
@@ -741,7 +741,7 @@ class _PropertyListCard extends StatelessWidget {
                 Row(
                   children: [
                     const Icon(Icons.location_on_outlined,
-                        size: 13, color: AppColors.text),
+                        size: 13, color: AppColors.dark),
                     const SizedBox(width: 3),
                     Expanded(
                       child: Text(
