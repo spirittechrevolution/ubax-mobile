@@ -652,7 +652,18 @@ class _AmenityCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(item.icon, color: PropertyDetailsScreen._dark, size: 20),
+          Container(
+            width: 27.22,
+            height: 27.22,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(6),
+              border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+            ),
+            alignment: Alignment.center,
+            child: Icon(item.icon,
+                color: PropertyDetailsScreen._dark, size: 16),
+          ),
           const SizedBox(width: 8),
           Expanded(
             child: Column(

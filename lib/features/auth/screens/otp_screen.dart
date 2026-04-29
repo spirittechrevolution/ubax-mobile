@@ -138,7 +138,7 @@ class _OtpScreenState extends State<OtpScreen> {
                               style: AppTextStyles.regular12,
                               textAlign: TextAlign.center,
                             ),
-                            const SizedBox(height: 18),
+                            const SizedBox(height: 40),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: List.generate(6, (i) {
@@ -165,7 +165,7 @@ class _OtpScreenState extends State<OtpScreen> {
                                 );
                               }),
                             ),
-                            const SizedBox(height: 25),
+                            const SizedBox(height: 50),
                             OrangeButton(
                               text: 'auth.verify'.tr(),
                               onPressed: () {

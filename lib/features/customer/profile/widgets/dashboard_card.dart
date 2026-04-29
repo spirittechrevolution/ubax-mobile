@@ -139,8 +139,9 @@ class _DashboardCardState extends State<DashboardCard> {
           ),
           const SizedBox(height: 14),
 
-          // Actions row (next-rent text inline with Payer mon loyer)
+          // Actions row: [Prochain loyer + Payer mon loyer] | Voir l'historique
           Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

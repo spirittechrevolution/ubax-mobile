@@ -29,21 +29,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: ValueListenableBuilder<ProfileMode>(
-          valueListenable: profileModeNotifier,
-          builder: (_, mode, __) => IndexedStack(
-            index: _index,
-            children: [
-              const _HomeTab(),
-              const HotelsTab(),
-              const MapSearchTab(),
-              const FavoritesTab(),
-              mode == ProfileMode.bailleur
-                  ? const BailleurProfileTab()
-                  : const ProfileTab(),
-            ],
-          ),
+      body: ValueListenableBuilder<ProfileMode>(
+        valueListenable: profileModeNotifier,
+        builder: (_, mode, __) => IndexedStack(
+          index: _index,
+          children: [
+            const SafeArea(bottom: false, child: _HomeTab()),
+            const SafeArea(bottom: false, child: HotelsTab()),
+            const SafeArea(bottom: false, child: MapSearchTab()),
+            const SafeArea(bottom: false, child: FavoritesTab()),
+            // Profile/Bailleur tabs let their hero header extend behind the status bar
+            mode == ProfileMode.bailleur
+                ? const BailleurProfileTab()
+                : const ProfileTab(),
+          ],
         ),
       ),
       bottomNavigationBar: SafeArea(
@@ -94,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: _NavItem(
                         icon: Icons.search_rounded,
-                        label: 'Rechercher',
+                        label: 'Recherche',
                         selected: _index == 2,
                         onTap: () => setState(() => _index = 2),
                       ),
@@ -850,5 +849,3 @@ class _Info extends StatelessWidget {
     );
   }
 }
-
-

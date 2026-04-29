@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/invoice_payment_sheet.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/reservation_invoice_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
@@ -122,90 +123,14 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
           // ── Property card
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 22),
-            child: Container(
-              height: 130,
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(18),
-                boxShadow: const [
-                  BoxShadow(
-                    color: Color(0x10000000),
-                    blurRadius: 12,
-                    offset: Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: Image.asset(
-                      'assets/images/appartements-luxe.jpg',
-                      width: 140.67,
-                      height: 111.43,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 140.67,
-                        height: 111.43,
-                        color: const Color(0xFFE2E8F0),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 10),
-                        Text(
-                          'Appartement Moderne à Cocody',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.text,
-                            fontSize: 13,
-                          ),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 14),
-                        Row(
-                          children: [
-                            const Icon(Icons.location_on,
-                                color: AppColors.dark, size: 14),
-                            const SizedBox(width: 3),
-                            Expanded(
-                              child: Text(
-                                'Cocody Angré, Abidjan – Côte d\'Ivoire',
-                                style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                maxLines: 2,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 14),
-                        const Wrap(
-                          spacing: 8,
-                          runSpacing: 4,
-                          children: [
-                            _MetaChip(
-                                icon: Icons.bed_rounded, text: '3  Chambres'),
-                            _MetaChip(
-                                icon: Icons.bathtub_outlined,
-                                text: '2  Salle de bains'),
-                            _MetaChip(
-                                icon: Icons.kitchen_rounded,
-                                text: '1  Cuisine'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            child: RecommendedTile(
+              imagePath: 'assets/images/appartements-luxe.jpg',
+              title: 'Appartement Moderne à Cocody',
+              location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+              beds: 3,
+              baths: 2,
+              salons: 1,
+              onTap: () {},
             ),
           ),
 
@@ -485,30 +410,3 @@ class _InvoiceCard extends StatelessWidget {
   }
 }
 
-// ─── Meta chip ────────────────────────────────────────────────────────────────
-
-class _MetaChip extends StatelessWidget {
-  const _MetaChip({required this.icon, required this.text});
-
-  final IconData icon;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(icon, size: 10, color: AppColors.primary),
-        const SizedBox(width: 3),
-        Text(
-          text,
-          style: const TextStyle(
-            color: AppColors.text,
-            fontSize: 8,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-      ],
-    );
-  }
-}

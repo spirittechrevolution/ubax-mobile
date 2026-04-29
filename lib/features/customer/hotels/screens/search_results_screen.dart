@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
@@ -265,10 +266,18 @@ class _SearchResultsScreenState extends State<SearchResultsScreen> {
                     padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
                     itemCount: _kResults.length,
                     separatorBuilder: (_, __) => const SizedBox(height: 12),
-                    itemBuilder: (_, i) => GestureDetector(
-                      onTap: () => _openDetails(context, _kResults[i]),
-                      child: _ListCard(data: _kResults[i]),
-                    ),
+                    itemBuilder: (_, i) {
+                      final p = _kResults[i];
+                      return RecommendedTile(
+                        imagePath: p.image,
+                        title: p.name,
+                        location: p.location,
+                        beds: 3,
+                        baths: 2,
+                        salons: 1,
+                        onTap: () => _openDetails(context, p),
+                      );
+                    },
                   ),
           ),
         ],
@@ -437,161 +446,6 @@ class _GridCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── List card ────────────────────────────────────────────────────────────────
-
-class _ListCard extends StatelessWidget {
-  const _ListCard({required this.data});
-
-  final _PropertyResult data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 139,
-      margin: const EdgeInsets.only(left: 2),
-      padding: const EdgeInsets.fromLTRB(8, 6, 12, 6),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(25),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x1A000000),
-            blurRadius: 2,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(20),
-            child: Image.asset(
-              data.image,
-              width: 159,
-              height: 127,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                width: 159,
-                height: 127,
-                color: const Color(0xFFE2E8F0),
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          // Info
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(right: 4, top: 6),
-              child: Stack(
-                children: [
-                  // Main content column (same text properties as _GridCard)
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 37),
-                      // Title + star + rating (inline, like GridCard)
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.only(right: 34),
-                              child: Text(
-                                data.name,
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      // Location (plain text, no icon — like GridCard)
-                      Text(
-                        data.location,
-                        style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.text,
-                          fontSize: 9,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      const SizedBox(height: 17),
-                      // Price
-                      Row(
-                        children: [
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '${_fmt(data.price)} FCFA',
-                                  style: const TextStyle(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: '/ nuit',
-                                  style: TextStyle(
-                                    color: AppColors.text,
-                                    fontWeight: FontWeight.w400,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          Spacer(),
-                          const Icon(Icons.star_rounded,
-                              color: Color(0xFFFACC15), size: 14),
-                          const SizedBox(width: 2),
-                          Text(
-                            data.rating.toString(),
-                            style: const TextStyle(
-                              color: AppColors.text,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  // Heart chip — floating top-right corner
-                  Positioned(
-                    top: 0,
-                    right: 0,
-                    child: Container(
-                      width: 26,
-                      height: 26,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Color(0xFFECF2F7),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.favorite_rounded,
-                          color: Color(0xFFEF4444), size: 13),
                     ),
                   ),
                 ],

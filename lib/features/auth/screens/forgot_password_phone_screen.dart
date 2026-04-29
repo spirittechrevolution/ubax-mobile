@@ -106,7 +106,7 @@ class _ForgotPasswordPhoneScreenState extends State<ForgotPasswordPhoneScreen> {
               ),
               // const Spacer(),
               const SizedBox(
-                height: 20,
+                height: 25,
               ),
               OrangeButton(
                 text: 'auth.send'.tr(),

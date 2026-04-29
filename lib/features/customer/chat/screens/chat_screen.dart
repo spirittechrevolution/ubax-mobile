@@ -45,8 +45,14 @@ class _ChatHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
     return Container(
-      color: AppColors.dark,
-      padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 18),
+      decoration: const BoxDecoration(
+        color: AppColors.dark,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(20),
+          bottomRight: Radius.circular(20),
+        ),
+      ),
+      padding: EdgeInsets.fromLTRB(18, topPadding + 10, 18, 22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -59,19 +65,26 @@ class _ChatHeader extends StatelessWidget {
           const SizedBox(height: 16),
           Row(
             children: [
-              // Avatar
+              // Avatar (UBAX logo)
               Container(
-                width: 52,
-                height: 52,
+                width: 42,
+                height: 42,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
                 alignment: Alignment.center,
-                child: const Icon(
-                  Icons.home_rounded,
-                  color: AppColors.primary,
-                  size: 28,
+                child: Padding(
+                  padding: const EdgeInsets.all(8),
+                  child: Image.asset(
+                    'assets/icons/logoubaxblue.png',
+                    fit: BoxFit.contain,
+                    errorBuilder: (_, __, ___) => const Icon(
+                      Icons.home_rounded,
+                      color: AppColors.primary,
+                      size: 28,
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(width: 12),
@@ -150,7 +163,8 @@ class _ChatBody extends StatelessWidget {
           alignment: AlignmentDirectional.centerStart,
           child: _SharedPropertyCard(
             tag: 'Hôtel',
-            imagePath: 'assets/images/property1.png',
+            imagePath:
+                'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
             name: 'Palm Club Plateau',
             location: 'Cocody Angré, Abidjan',
             rating: 4.7,
@@ -214,7 +228,6 @@ class _SharedPropertyCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 232,
-      height: 190,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(25),
@@ -229,67 +242,70 @@ class _SharedPropertyCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Image with tag and heart
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(25)),
-                child: Image.asset(
-                  imagePath,
-                  height: 105,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  errorBuilder: (_, __, ___) => Container(
-                    height: 105,
-                    color: const Color(0xFFE2E8F0),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.image_rounded,
-                        color: AppColors.dark, size: 40),
-                  ),
-                ),
-              ),
-              // Tag
-              Positioned(
-                top: 10,
-                left: 10,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: AppColors.dark,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    tag,
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 11,
+          // Image with tag and heart (inset with border-radius 20 all 4 corners)
+          Padding(
+            padding: const EdgeInsets.only(top: 5, left: 7, right: 7),
+            child: Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(20),
+                  child: Image.asset(
+                    imagePath,
+                    width: 216.77,
+                    height: 122.20,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 216.77,
+                      height: 122.20,
+                      color: const Color(0xFFE2E8F0),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.image_rounded,
+                          color: AppColors.dark, size: 40),
                     ),
                   ),
                 ),
-              ),
-              // Heart
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Container(
-                  width: 32,
-                  height: 32,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white,
-                  ),
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.favorite_rounded,
-                    color: Colors.red,
-                    size: 18,
+                // Tag
+                Positioned(
+                  top: 8,
+                  left: 8,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: AppColors.dark,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      tag,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 10,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-            ],
+                // Heart
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Container(
+                    width: 28,
+                    height: 28,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white,
+                    ),
+                    alignment: Alignment.center,
+                    child: const Icon(
+                      Icons.favorite_rounded,
+                      color: Colors.red,
+                      size: 14,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
           // Info
           Padding(
@@ -304,7 +320,7 @@ class _SharedPropertyCard extends StatelessWidget {
                         name,
                         style: AppTextStyles.sectionTitle.copyWith(
                           color: AppColors.text,
-                          fontSize: 14,
+                          fontSize: 12,
                         ),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -318,8 +334,8 @@ class _SharedPropertyCard extends StatelessWidget {
                       rating.toString(),
                       style: const TextStyle(
                         color: AppColors.text,
-                        fontWeight: FontWeight.w800,
-                        fontSize: 13,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
                       ),
                     ),
                   ],
@@ -329,31 +345,36 @@ class _SharedPropertyCard extends StatelessWidget {
                   location,
                   style: AppTextStyles.regular12.copyWith(
                     color: AppColors.text,
-                    fontWeight: FontWeight.w500,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w300,
                   ),
                 ),
                 const SizedBox(height: 6),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: '${_formatAmount(pricePerNight)} FCFA',
-                        style: const TextStyle(
-                          color: AppColors.primary,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 13,
-                        ),
+                Row(
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${_formatAmount(pricePerNight)} FCFA',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 10,
+                            ),
+                          ),
+                          const TextSpan(
+                            text: ' / nuit',
+                            style: TextStyle(
+                              color: AppColors.text,
+                              fontWeight: FontWeight.w300,
+                              fontSize: 7,
+                            ),
+                          ),
+                        ],
                       ),
-                      const TextSpan(
-                        text: '/ nuit',
-                        style: TextStyle(
-                          color: AppColors.text,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -412,8 +433,8 @@ class _BubbleMessage extends StatelessWidget {
             text,
             style: TextStyle(
               color: isMine ? Colors.white : AppColors.dark,
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontWeight: FontWeight.w300,
+              fontSize: 12,
               height: 1.4,
             ),
           ),

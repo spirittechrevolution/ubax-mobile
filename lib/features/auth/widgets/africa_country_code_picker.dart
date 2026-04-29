@@ -142,8 +142,8 @@ class _AfricaCountryCodePickerState extends State<AfricaCountryCodePicker> {
             ClipOval(
               child: CountryFlag.fromCountryCode(
                 widget.value.iso2,
-                width: 40,
-                height: 40,
+                width: 35,
+                height: 35,
               ),
             ),
             const SizedBox(width: 6),

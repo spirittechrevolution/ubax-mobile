@@ -21,20 +21,23 @@ class ProfileHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.sizeOf(context);
     final topPadding = MediaQuery.of(context).padding.top;
+    final headerHeight = (size.height * 0.32).clamp(230.0, 340.0);
 
     return Stack(
       clipBehavior: Clip.none,
       children: [
         // Background image
         Container(
-          height: 230 + topPadding,
+          height: headerHeight,
           width: double.infinity,
           decoration: hasContract
               ? const BoxDecoration(
                   image: DecorationImage(
                     image: AssetImage('assets/images/villa.jpg'),
                     fit: BoxFit.cover,
+                    alignment: Alignment.topCenter,
                   ),
                 )
               : const BoxDecoration(color: Color(0xFFA65B2E)),

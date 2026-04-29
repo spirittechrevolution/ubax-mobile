@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -442,6 +443,20 @@ class _PropertyCard extends StatelessWidget {
 
   final _PropertyData data;
 
+  void _openDetails(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => HotelDetailsScreen(
+          imagePath: data.imagePath,
+          name: data.name,
+          location: data.location,
+          price: data.price,
+          rating: 4.7,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -455,7 +470,9 @@ class _PropertyCard extends StatelessWidget {
         final hPad = (scale * 8).clamp(6.0, 12.0);
         final vPad = (scale * 3).clamp(2.0, 5.0);
 
-        return Container(
+        return GestureDetector(
+          onTap: () => _openDetails(context),
+          child: Container(
           height: 201,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -614,20 +631,23 @@ class _PropertyCard extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Container(
-                            width: 77,
-                            height: 18,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              color: AppColors.primary,
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: Text(
-                              'Voir les détails',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 7,
+                          GestureDetector(
+                            onTap: () => _openDetails(context),
+                            child: Container(
+                              width: 77,
+                              height: 18,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Text(
+                                'Voir les détails',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 7,
+                                ),
                               ),
                             ),
                           ),
@@ -639,6 +659,7 @@ class _PropertyCard extends StatelessWidget {
               ),
             ],
           ),
+        ),
         );
       },
     );

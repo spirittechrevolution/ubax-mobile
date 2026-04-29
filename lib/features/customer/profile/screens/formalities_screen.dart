@@ -8,18 +8,22 @@ import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
+enum _InvoiceStatus { paid, inProgress }
+
 class _InvoiceData {
   const _InvoiceData({
     required this.number,
     required this.location,
     required this.amount,
     required this.month,
+    required this.status,
   });
 
   final String number;
   final String location;
   final int amount;
   final String month;
+  final _InvoiceStatus status;
 }
 
 const _kInvoices = [
@@ -28,24 +32,28 @@ const _kInvoices = [
     location: 'Appartement – Cocody Angré',
     amount: 250000,
     month: 'Janvier 2026',
+    status: _InvoiceStatus.paid,
   ),
   _InvoiceData(
     number: 'Facture UBX-FAC-0264',
     location: 'Appartement – Cocody Angré',
     amount: 250000,
     month: 'Février 2026',
+    status: _InvoiceStatus.inProgress,
   ),
   _InvoiceData(
     number: 'Facture UBX-FAC-0263',
     location: 'Appartement – Cocody Angré',
     amount: 250000,
     month: 'Mars 2026',
+    status: _InvoiceStatus.paid,
   ),
   _InvoiceData(
     number: 'Facture UBX-FAC-0262',
     location: 'Appartement – Cocody Angré',
     amount: 250000,
     month: 'Avril 2026',
+    status: _InvoiceStatus.inProgress,
   ),
 ];
 
@@ -228,13 +236,16 @@ class _InvoiceCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topColor = invoice.status == _InvoiceStatus.paid
+        ? AppColors.statusPaid
+        : AppColors.primary;
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
-        border: const Border(
-          top: BorderSide(color: AppColors.primary, width: 9),
+        border: Border(
+          top: BorderSide(color: topColor, width: 7),
         ),
       ),
       child: Column(

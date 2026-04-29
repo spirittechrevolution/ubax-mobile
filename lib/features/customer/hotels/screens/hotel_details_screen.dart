@@ -788,7 +788,7 @@ class _RecommendedCard extends StatelessWidget {
                         text: '${_fmtPrice(hotel.price)} FCFA',
                         style: const TextStyle(
                           color: AppColors.primary,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w500,
                           fontSize: 13,
                         ),
                       ),
