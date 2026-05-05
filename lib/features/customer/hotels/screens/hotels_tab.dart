@@ -502,6 +502,7 @@ class _HotelsTabState extends State<HotelsTab> {
                             beds: p['beds'] as int,
                             baths: p['baths'] as int,
                             salons: p['salons'] as int,
+                            showShadow: false,
                             onTap: () {
                               Navigator.of(context).push(
                                 MaterialPageRoute(
@@ -509,9 +510,8 @@ class _HotelsTabState extends State<HotelsTab> {
                                     imagePath: p['image'] as String,
                                     name: p['name'] as String,
                                     location: p['location'] as String,
-                                    price: int.tryParse(
-                                            (p['price'] as String)
-                                                .replaceAll(' ', '')) ??
+                                    price: int.tryParse((p['price'] as String)
+                                            .replaceAll(' ', '')) ??
                                         0,
                                     rating: 4.7,
                                   ),

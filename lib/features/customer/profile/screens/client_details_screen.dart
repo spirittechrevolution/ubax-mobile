@@ -616,8 +616,8 @@ class _FinanceLine extends StatelessWidget {
             text: TextSpan(
               style: AppTextStyles.regular12.copyWith(
                 fontFamily: 'Lexend',
-                fontSize: 9,
-                fontWeight: FontWeight.w300,
+                fontSize: 10,
+                fontWeight: FontWeight.w400,
                 color: Colors.white,
                 height: 1.0,
               ),
@@ -627,7 +627,7 @@ class _FinanceLine extends StatelessWidget {
                   text: value,
                   style: AppTextStyles.regular12.copyWith(
                     fontFamily: 'Lexend',
-                    fontSize: 9,
+                    fontSize: 10,
                     fontWeight: FontWeight.w600,
                     color: AppColors.text,
                     height: 1.0,
@@ -666,7 +666,7 @@ class _BalanceCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: AppTextStyles.regular12.copyWith(
               fontFamily: 'Lexend',
-              fontSize: 10,
+              fontSize: 11,
               fontWeight: FontWeight.w500,
               color: Colors.white,
               height: 1.0,

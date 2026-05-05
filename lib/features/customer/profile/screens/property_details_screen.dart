@@ -289,7 +289,7 @@ class _StatTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 67,
+      height: 70,
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
         color: background,
@@ -305,7 +305,7 @@ class _StatTile extends StatelessWidget {
                   labelKey.tr(),
                   style: AppTextStyles.regular12.copyWith(
                     fontFamily: 'Lexend',
-                    fontSize: 10,
+                    fontSize: 11,
                     fontWeight: FontWeight.w300,
                     color: textColor,
                     height: 1.1,
@@ -327,7 +327,7 @@ class _StatTile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: 10),
           Text(
             '$percent %',
             style: AppTextStyles.regular12.copyWith(

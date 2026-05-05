@@ -215,7 +215,7 @@ class _AddressCard extends StatelessWidget {
 
 // ─── Radius + avatar + pins layer ────────────────────────────────────────────
 
-class _MapOverlay extends StatelessWidget {
+class _MapOverlay extends StatefulWidget {
   const _MapOverlay({
     required this.properties,
     required this.selectedIndex,
@@ -225,6 +225,29 @@ class _MapOverlay extends StatelessWidget {
   final List<_MapProperty> properties;
   final int? selectedIndex;
   final ValueChanged<int> onPinTap;
+
+  @override
+  State<_MapOverlay> createState() => _MapOverlayState();
+}
+
+class _MapOverlayState extends State<_MapOverlay>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _pulse;
+
+  @override
+  void initState() {
+    super.initState();
+    _pulse = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _pulse.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -237,92 +260,97 @@ class _MapOverlay extends StatelessWidget {
         const midR = 135.0;
         const innerR = 68.0;
 
-        return Stack(
-          clipBehavior: Clip.none,
-          children: [
-            // Outer radius
-            Positioned(
-              left: center.dx - outerR,
-              top: center.dy - outerR,
-              child: Container(
-                width: outerR * 2,
-                height: outerR * 2,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.22),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            // Middle radius
-            Positioned(
-              left: center.dx - midR,
-              top: center.dy - midR,
-              child: Container(
-                width: midR * 2,
-                height: midR * 2,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.40),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            // Inner radius — orange background behind the avatar
-            Positioned(
-              left: center.dx - innerR,
-              top: center.dy - innerR,
-              child: Container(
-                width: innerR * 2,
-                height: innerR * 2,
-                decoration: BoxDecoration(
-                  color: AppColors.primary.withOpacity(0.65),
-                  shape: BoxShape.circle,
-                ),
-              ),
-            ),
-            // Avatar (center) — white ring + photo, sits on inner radius
-            Positioned(
-              left: center.dx - 78.6 / 2,
-              top: center.dy - 78.6 / 2,
-              child: Container(
-                width: 78.6,
-                height: 78.6,
-                padding: const EdgeInsets.all(5),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color(0x22000000),
-                      blurRadius: 8,
-                      offset: Offset(0, 2),
-                    ),
-                  ],
-                ),
-                child: ClipOval(
-                  child: Image.asset(
-                    'assets/images/pexels-ekrulila-2128329.jpg',
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: const Color(0xFFD0DDE8),
-                      child: const Icon(Icons.person,
-                          color: Colors.white, size: 30),
+        return AnimatedBuilder(
+          animation: _pulse,
+          builder: (context, _) {
+            return Stack(
+              clipBehavior: Clip.none,
+              children: [
+                // Outer radius
+                Positioned(
+                  left: center.dx - outerR,
+                  top: center.dy - outerR,
+                  child: Container(
+                    width: outerR * 2,
+                    height: outerR * 2,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.22),
+                      shape: BoxShape.circle,
                     ),
                   ),
                 ),
-              ),
-            ),
+                // Middle radius
+                Positioned(
+                  left: center.dx - midR,
+                  top: center.dy - midR,
+                  child: Container(
+                    width: midR * 2,
+                    height: midR * 2,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.40),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                // Inner radius — orange background behind the avatar
+                Positioned(
+                  left: center.dx - innerR,
+                  top: center.dy - innerR,
+                  child: Container(
+                    width: innerR * 2,
+                    height: innerR * 2,
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.65),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                ),
+                // Avatar (center) — white ring + photo, sits on inner radius
+                Positioned(
+                  left: center.dx - 78.6 / 2,
+                  top: center.dy - 78.6 / 2,
+                  child: Container(
+                    width: 78.6,
+                    height: 78.6,
+                    padding: const EdgeInsets.all(5),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Color(0x22000000),
+                          blurRadius: 8,
+                          offset: Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: ClipOval(
+                      child: Image.asset(
+                        'assets/images/pexels-ekrulila-2128329.jpg',
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: const Color(0xFFD0DDE8),
+                          child: const Icon(Icons.person,
+                              color: Colors.white, size: 30),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
 
-            // ── Pins (positions relative to center)
-            for (var i = 0; i < properties.length; i++)
-              _pinAt(
-                center,
-                properties[i].dx,
-                properties[i].dy,
-                properties[i].image,
-                selected: selectedIndex == i,
-                onTap: () => onPinTap(i),
-              ),
-          ],
+                // ── Pins (positions relative to center)
+                for (var i = 0; i < widget.properties.length; i++)
+                  _pinAt(
+                    center,
+                    widget.properties[i].dx,
+                    widget.properties[i].dy,
+                    widget.properties[i].image,
+                    selected: widget.selectedIndex == i,
+                    onTap: () => widget.onPinTap(i),
+                  ),
+              ],
+            );
+          },
         );
       },
     );
@@ -343,6 +371,13 @@ class _MapOverlay extends StatelessWidget {
     // Pin tip (dx, dy) maps to (center + dx, center + dy).
     final tipX = center.dx + dx;
     final tipY = center.dy + dy;
+
+    final t = Curves.easeOut.transform(_pulse.value);
+    final haloScale = 1.0 + (0.28 * t);
+    final pinScale = 1.0 + (0.08 * t);
+    final baseOpacity = selected ? 0.75 : 0.40;
+    final haloOpacity = baseOpacity * (1.0 - (0.55 * t));
+
     return Stack(
       children: [
         // Teardrop-shaped halo behind the pin (same shape, larger, translucent)
@@ -350,10 +385,17 @@ class _MapOverlay extends StatelessWidget {
           left: tipX - haloW / 2,
           top: tipY - haloH,
           child: IgnorePointer(
-            child: CustomPaint(
-              size: const Size(haloW, haloH),
-              painter: _PinPainter(
-                color: AppColors.primary.withOpacity(selected ? 0.75 : 0.40),
+            child: Opacity(
+              opacity: haloOpacity,
+              child: Transform.scale(
+                scale: haloScale,
+                alignment: Alignment.bottomCenter,
+                child: CustomPaint(
+                  size: const Size(haloW, haloH),
+                  painter: _PinPainter(
+                    color: AppColors.primary,
+                  ),
+                ),
               ),
             ),
           ),
@@ -365,7 +407,11 @@ class _MapOverlay extends StatelessWidget {
           child: GestureDetector(
             onTap: onTap,
             behavior: HitTestBehavior.opaque,
-            child: _Pin(image: image),
+            child: Transform.scale(
+              scale: pinScale,
+              alignment: Alignment.bottomCenter,
+              child: _Pin(image: image),
+            ),
           ),
         ),
       ],
@@ -459,4 +505,3 @@ class _PinPainter extends CustomPainter {
   bool shouldRepaint(covariant _PinPainter oldDelegate) =>
       oldDelegate.color != color;
 }
-

@@ -23,7 +23,6 @@ class ServicesGrid extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      height: 212,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -36,11 +35,21 @@ class ServicesGrid extends StatelessWidget {
           ),
         ],
       ),
-      child: Wrap(
-        // alignment: WrapAlignment.center,
-        spacing: 10,
-        runSpacing: 10,
-        children: services.map((s) => _ServiceCard(service: s)).toList(),
+      child: GridView.builder(
+        primary: false,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.zero,
+        itemCount: services.length,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          crossAxisSpacing: 10,
+          mainAxisSpacing: 10,
+          childAspectRatio: 110 / 84,
+        ),
+        itemBuilder: (context, index) {
+          return _ServiceCard(service: services[index]);
+        },
       ),
     );
   }
@@ -55,39 +64,40 @@ class _ServiceCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: service.onTap,
-      child: Container(
-        width: 110,
+      child: SizedBox(
         height: 84,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(color: const Color(0xFFE5E7EB), width: 0.8),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 32,
-              height: 32,
-              decoration: const BoxDecoration(
-                color: AppColors.background,
-                shape: BoxShape.circle,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: const Color(0xFFE5E7EB), width: 0.8),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                width: 32,
+                height: 32,
+                decoration: const BoxDecoration(
+                  color: AppColors.background,
+                  shape: BoxShape.circle,
+                ),
+                alignment: Alignment.center,
+                child: Icon(service.icon, color: AppColors.dark, size: 18),
               ),
-              alignment: Alignment.center,
-              child: Icon(service.icon, color: AppColors.dark, size: 18),
-            ),
-            const SizedBox(height: 8),
-            Text(
-              service.labelKey.tr(),
-              textAlign: TextAlign.center,
-              style: const TextStyle(
-                color: AppColors.text,
-                fontWeight: FontWeight.w300,
-                fontSize: 11,
-                height: 1.4,
+              const SizedBox(height: 8),
+              Text(
+                service.labelKey.tr(),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: AppColors.text,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 11,
+                  height: 1.4,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

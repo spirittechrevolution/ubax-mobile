@@ -121,7 +121,7 @@ class _ProfileTabState extends State<ProfileTab> {
           ),
           const SizedBox(height: 18),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 18),
             child: ServicesGrid(services: _services()),
           ),
           const SizedBox(height: 100),
