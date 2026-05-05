@@ -711,8 +711,8 @@ class _PropertyCard extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Color(0x55000000),
-                      Color(0xDD000000),
+                      Color(0x33000000),
+                      Color(0x99000000),
                     ],
                   ),
                 ),

@@ -291,7 +291,7 @@ class _ClientCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 255,
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
@@ -304,8 +304,8 @@ class _ClientCard extends StatelessWidget {
               ClipOval(
                 child: Image.asset(
                   tenant.avatarAsset,
-                  width: 46,
-                  height: 46,
+                  width: 50,
+                  height: 50,
                   fit: BoxFit.cover,
                   errorBuilder: (_, __, ___) => Container(
                     width: 46,
@@ -454,10 +454,10 @@ class _LineInfo extends StatelessWidget {
             text: TextSpan(
               style: AppTextStyles.regular12.copyWith(
                 fontFamily: 'Lexend',
-                fontSize: 9,
+                fontSize: 11,
                 fontWeight: FontWeight.w300,
                 color: AppColors.primary,
-                height: 1.2,
+                height: 1.1,
               ),
               children: [
                 TextSpan(text: '$label : '),
@@ -465,10 +465,10 @@ class _LineInfo extends StatelessWidget {
                   text: value,
                   style: AppTextStyles.regular12.copyWith(
                     fontFamily: 'Lexend',
-                    fontSize: 9,
+                    fontSize: 11,
                     fontWeight: FontWeight.w400,
                     color: AppColors.text,
-                    height: 1.2,
+                    height: 1.1,
                   ),
                 ),
               ],

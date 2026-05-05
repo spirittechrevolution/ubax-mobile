@@ -78,7 +78,10 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 'auth.verification'.tr(),
-                style: AppTextStyles.sectionTitle.copyWith(color: Colors.white),
+                style: AppTextStyles.sectionTitle.copyWith(
+                  color: Colors.white,
+                  fontSize: 24,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -87,7 +90,7 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
               child: Text(
                 'auth.verification_subtitle'.tr(),
                 style: AppTextStyles.regular12
-                    .copyWith(color: const Color(0xFFE2E8F0)),
+                    .copyWith(color: const Color(0xFFE2E8F0), fontSize: 14),
               ),
             ),
             const SizedBox(height: 60),

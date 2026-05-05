@@ -78,142 +78,166 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
     final topPadding = MediaQuery.of(context).padding.top;
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: AppColors.dark,
       body: Column(
         children: [
-          // ── Dark header
-          Container(
-            padding: EdgeInsets.fromLTRB(18, topPadding + 16, 18, 24),
-            decoration: const BoxDecoration(
-              color: AppColors.dark,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(26),
-              ),
-            ),
-            child: Row(
-              children: [
-                // Orange icon
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Icon(
-                    Icons.my_location_rounded,
-                    color: Colors.white,
-                    size: 24,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                // Search field
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Adresse',
-                        style: AppTextStyles.sectionTitle.copyWith(
-                          color: Colors.white,
-                          fontSize: 14,
-                        ),
-                      ),
-                      TextField(
-                        controller: _controller,
-                        autofocus: true,
-                        onChanged: _onSearch,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w400,
-                        ),
-                        cursorColor: AppColors.primary,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                          isDense: true,
-                          contentPadding: EdgeInsets.zero,
-                          hintText: 'Quelle localités voulez vous voir ?',
-                          hintStyle: TextStyle(
-                            color: Color(0xFF94A3B8),
-                            fontSize: 13,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          // ── List
+          SizedBox(height: topPadding + 10),
           Expanded(
-            child: ListView.separated(
-              padding: const EdgeInsets.fromLTRB(18, 16, 18, 18),
-              itemCount: _filtered.length,
-              separatorBuilder: (_, __) => const Divider(
-                height: 1,
-                color: Color(0xFFE5E7EB),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(26),
+                ),
               ),
-              itemBuilder: (_, i) {
-                final item = _filtered[i];
-                return InkWell(
-                  onTap: () {
-                    Navigator.of(context).pop(item.title);
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => SearchResultsScreen(
-                          addressTitle: item.title,
-                          addressSubtitle: item.subtitle,
-                        ),
+              child: Column(
+                children: [
+                  const SizedBox(height: 10),
+                  Center(
+                    child: Container(
+                      width: 44,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: Color(0xFFE5E7EB),
+                        borderRadius: BorderRadius.circular(3),
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 14),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Pin icon
-                        const Icon(
-                          Icons.location_on,
-                          color: Color(0xFFE05A2B),
-                          size: 22,
-                        ),
-                        const SizedBox(width: 12),
-                        // Text
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                item.title,
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const SizedBox(height: 4),
-                              Text(
-                                item.subtitle,
-                                style: AppTextStyles.regular12.copyWith(
-                                  color: const Color(0xFF858585),
-                                  fontSize: 11,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                                maxLines: 3,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
                   ),
-                );
-              },
+                  const SizedBox(height: 14),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: AppColors.background,
+                        borderRadius: BorderRadius.circular(18),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            alignment: Alignment.center,
+                            child: const Icon(
+                              Icons.gps_fixed_rounded,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Adresse',
+                                  style: AppTextStyles.sectionTitle.copyWith(
+                                    color: AppColors.text,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                TextField(
+                                  controller: _controller,
+                                  autofocus: true,
+                                  onChanged: _onSearch,
+                                  style: const TextStyle(
+                                    color: AppColors.text,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  cursorColor: AppColors.primary,
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    isDense: true,
+                                    contentPadding: EdgeInsets.zero,
+                                    hintText:
+                                        'Quelle localités voulez vous voir ?',
+                                    hintStyle: TextStyle(
+                                      color: AppColors.muted,
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: ListView.separated(
+                      padding: const EdgeInsets.fromLTRB(18, 6, 18, 18),
+                      itemCount: _filtered.length,
+                      separatorBuilder: (_, __) => const Divider(
+                        height: 1,
+                        color: Color(0xFFE5E7EB),
+                      ),
+                      itemBuilder: (_, i) {
+                        final item = _filtered[i];
+                        return InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop(item.title);
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (_) => SearchResultsScreen(
+                                  addressTitle: item.title,
+                                  addressSubtitle: item.subtitle,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  '📍',
+                                  style: const TextStyle(fontSize: 24),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        item.title,
+                                        style:
+                                            AppTextStyles.sectionTitle.copyWith(
+                                          color: AppColors.text,
+                                          fontSize: 15,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        item.subtitle,
+                                        style: AppTextStyles.regular12.copyWith(
+                                          color: const Color(0xFF858585),
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.w400,
+                                        ),
+                                        maxLines: 3,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ],

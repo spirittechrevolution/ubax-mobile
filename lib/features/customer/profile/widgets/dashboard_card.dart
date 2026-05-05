@@ -80,30 +80,35 @@ class _DashboardCardState extends State<DashboardCard> {
               ),
 
               // Pie chart
-              SizedBox(
-                width: 100,
-                height: 100,
+              Container(
+                width: 118,
+                height: 118,
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                ),
                 child: PieChart(
                   PieChartData(
-                    sectionsSpace: 2,
-                    centerSpaceRadius: 22,
+                    sectionsSpace: 0,
+                    centerSpaceRadius: 0,
+                    startDegreeOffset: -60,
                     sections: [
                       PieChartSectionData(
                         value: p.paidCount.toDouble(),
                         color: AppColors.statusPaid,
-                        radius: 22,
+                        radius: 50,
                         showTitle: false,
                       ),
                       PieChartSectionData(
                         value: p.pendingCount.toDouble(),
                         color: AppColors.statusPending,
-                        radius: 22,
+                        radius: 50,
                         showTitle: false,
                       ),
                       PieChartSectionData(
                         value: p.unpaidCount.toDouble(),
                         color: AppColors.statusUnpaid,
-                        radius: 22,
+                        radius: 50,
                         showTitle: false,
                       ),
                     ],
@@ -235,7 +240,7 @@ class _LegendItem extends StatelessWidget {
           height: 18,
           decoration: BoxDecoration(
             color: color,
-            borderRadius: BorderRadius.circular(6),
+            shape: BoxShape.circle,
           ),
           alignment: Alignment.center,
           child: Text(

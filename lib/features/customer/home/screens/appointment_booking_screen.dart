@@ -170,7 +170,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                           'à',
                           style: TextStyle(
                             color: _dark,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -224,7 +224,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                         dateLabel,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -237,7 +237,7 @@ class _AppointmentBookingScreenState extends State<AppointmentBookingScreen> {
                       '${_startTime.replaceAll(':', '.')}-${_endTime.replaceAll(':', '.')}',
                       style: const TextStyle(
                         color: Colors.white,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                   ],
@@ -488,7 +488,7 @@ class _TimeDropdown extends StatelessWidget {
                     t,
                     style: const TextStyle(
                       color: AppColors.text,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
@@ -581,7 +581,7 @@ class _DateSelectorSheetState extends State<_DateSelectorSheet> {
                   _formatMonthYear(_month),
                   style: const TextStyle(
                     color: _dark,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
                 const Spacer(),
@@ -722,7 +722,7 @@ class _CalendarMonthView extends StatelessWidget {
                       d,
                       style: const TextStyle(
                         color: AppColors.text,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w600,
                         fontSize: 12,
                       ),
                     ),
@@ -767,7 +767,7 @@ class _CalendarMonthView extends StatelessWidget {
                   '$dayNumber',
                   style: TextStyle(
                     color: selected ? Colors.white : AppColors.dark,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                     fontSize: 12,
                   ),
                 ),

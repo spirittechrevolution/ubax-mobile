@@ -85,7 +85,7 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                     height: 86,
                   ),
                 ),
-                const SizedBox(height: 25),
+                const SizedBox(height: 2),
                 Expanded(
                   child: Container(
                     width: double.infinity,
@@ -105,136 +105,133 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                     ),
                     child: SingleChildScrollView(
                       padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Center(
+                            child: Text(
+                              'auth.signup_form_title'.tr(),
+                              style: AppTextStyles.sectionTitle,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          Row(
                             children: [
-                              Center(
-                                child: Text(
-                                  'auth.signup_form_title'.tr(),
-                                  style: AppTextStyles.sectionTitle,
-                                  textAlign: TextAlign.center,
+                              Expanded(
+                                flex: 2,
+                                child: _DropdownField(
+                                  value: _civility,
+                                  items: const ['Mrs', 'Mr'],
+                                  onChanged: (v) =>
+                                      setState(() => _civility = v),
                                 ),
                               ),
-                              const SizedBox(height: 14),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: _DropdownField(
-                                      value: _civility,
-                                      items: const ['Mrs', 'Mr'],
-                                      onChanged: (v) =>
-                                          setState(() => _civility = v),
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    flex: 4,
-                                    child: _Field(
-                                      controller: _firstName,
-                                      hint: 'auth.first_name'.tr(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              _Field(
-                                controller: _lastName,
-                                hint: 'auth.last_name'.tr(),
-                              ),
-                              const SizedBox(height: 12),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: _Field(
-                                      controller: _email,
-                                      hint: 'auth.email'.tr(),
-                                      keyboardType: TextInputType.emailAddress,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Expanded(
-                                    child: _DropdownField(
-                                      value: _accountType,
-                                      items: const ['Particulier', 'Agence'],
-                                      onChanged: (v) =>
-                                          setState(() => _accountType = v),
-                                      hint: 'auth.account_type'.tr(),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 12),
-                              _Field(
-                                controller: _password,
-                                hint: 'auth.password_hint'.tr(),
-                                obscureText: _obscure1,
-                                fontSize: 22,
-                                suffix: IconButton(
-                                  onPressed: () =>
-                                      setState(() => _obscure1 = !_obscure1),
-                                  icon: Icon(
-                                    _obscure1
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: const Color(0xFF6D6D6D),
-                                  ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                flex: 4,
+                                child: _Field(
+                                  controller: _firstName,
+                                  hint: 'auth.first_name'.tr(),
                                 ),
-                              ),
-                              const SizedBox(height: 12),
-                              _Field(
-                                controller: _confirmPassword,
-                                hint: 'auth.confirm_password'.tr(),
-                                obscureText: _obscure2,
-                                fontSize: 22,
-                                suffix: IconButton(
-                                  onPressed: () =>
-                                      setState(() => _obscure2 = !_obscure2),
-                                  icon: Icon(
-                                    _obscure2
-                                        ? Icons.visibility_off_outlined
-                                        : Icons.visibility_outlined,
-                                    color: const Color(0xFF6D6D6D),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 14),
-                              OrangeButton(
-                                text: 'auth.signup_button'.tr(),
-                                onPressed: () => Navigator.of(context)
-                                    .popUntil((r) => r.isFirst),
-                              ),
-                              const SizedBox(height: 18),
-                              _DividerLabel(text: 'auth.or_signup_with'.tr()),
-                              const SizedBox(height: 14),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  _SocialButton(
-                                    assetPath: 'assets/icons/logo_google.png',
-                                    onTap: () {},
-                                  ),
-                                  _SocialButton(
-                                    assetPath: 'assets/icons/logo_apple.png',
-                                    onTap: () {},
-                                  ),
-                                  _SocialButton(
-                                    assetPath:
-                                        'assets/icons/logos_whatsapp.png',
-                                    onTap: () {},
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height:
-                                    MediaQuery.of(context).padding.bottom + 6,
                               ),
                             ],
                           ),
-                        ),
+                          const SizedBox(height: 12),
+                          _Field(
+                            controller: _lastName,
+                            hint: 'auth.last_name'.tr(),
+                          ),
+                          const SizedBox(height: 12),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: _Field(
+                                  controller: _email,
+                                  hint: 'auth.email'.tr(),
+                                  keyboardType: TextInputType.emailAddress,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: _DropdownField(
+                                  value: _accountType,
+                                  items: const ['Particulier', 'Agence'],
+                                  onChanged: (v) =>
+                                      setState(() => _accountType = v),
+                                  hint: 'auth.account_type'.tr(),
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 12),
+                          _Field(
+                            controller: _password,
+                            hint: 'auth.password_hint'.tr(),
+                            obscureText: _obscure1,
+                            fontSize: 22,
+                            suffix: IconButton(
+                              onPressed: () =>
+                                  setState(() => _obscure1 = !_obscure1),
+                              icon: Icon(
+                                _obscure1
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color: const Color(0xFF6D6D6D),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 12),
+                          _Field(
+                            controller: _confirmPassword,
+                            hint: 'auth.confirm_password'.tr(),
+                            obscureText: _obscure2,
+                            fontSize: 22,
+                            suffix: IconButton(
+                              onPressed: () =>
+                                  setState(() => _obscure2 = !_obscure2),
+                              icon: Icon(
+                                _obscure2
+                                    ? Icons.visibility_off_outlined
+                                    : Icons.visibility_outlined,
+                                color: const Color(0xFF6D6D6D),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 14),
+                          OrangeButton(
+                            text: 'auth.signup_button'.tr(),
+                            onPressed: () => Navigator.of(context)
+                                .popUntil((r) => r.isFirst),
+                          ),
+                          const SizedBox(height: 18),
+                          _DividerLabel(text: 'auth.or_signup_with'.tr()),
+                          const SizedBox(height: 14),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              _SocialButton(
+                                assetPath: 'assets/icons/logo_google.png',
+                                onTap: () {},
+                              ),
+                              _SocialButton(
+                                assetPath: 'assets/icons/logo_apple.png',
+                                onTap: () {},
+                              ),
+                              _SocialButton(
+                                assetPath: 'assets/icons/logos_whatsapp.png',
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: MediaQuery.of(context).padding.bottom + 6,
+                          ),
+                        ],
                       ),
                     ),
+                  ),
+                ),
               ],
             ),
           ),
