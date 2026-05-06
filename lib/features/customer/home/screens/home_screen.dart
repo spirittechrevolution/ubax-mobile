@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
           index: _index,
           children: [
             const SafeArea(bottom: false, child: _HomeTab()),
-            const SafeArea(bottom: false, child: HotelsTab()),
+            const SafeArea(top: false, bottom: false, child: HotelsTab()),
             const SafeArea(bottom: false, child: MapSearchTab()),
             const SafeArea(bottom: false, child: FavoritesTab()),
             // Profile/Bailleur tabs let their hero header extend behind the status bar

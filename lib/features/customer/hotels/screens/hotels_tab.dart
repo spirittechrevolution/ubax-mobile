@@ -165,120 +165,129 @@ class _HotelsTabState extends State<HotelsTab> {
           // ── Dark header
           Container(
             color: AppColors.dark,
-            padding: const EdgeInsets.fromLTRB(18, 10, 18, 20),
-            child: Row(
-              children: [
-                ClipOval(
-                  child: Image.asset(
-                    'assets/images/pexels-ekrulila-2128329.jpg',
-                    width: 44,
-                    height: 44,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
+            child: Padding(
+              padding: EdgeInsets.fromLTRB(
+                18,
+                MediaQuery.of(context).padding.top + 10,
+                18,
+                20,
+              ),
+              child: Row(
+                children: [
+                  ClipOval(
+                    child: Image.asset(
+                      'assets/images/pexels-ekrulila-2128329.jpg',
                       width: 44,
                       height: 44,
-                      color: const Color(0xFF2D4A65),
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.person, color: Colors.white),
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 44,
+                        height: 44,
+                        color: const Color(0xFF2D4A65),
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.person, color: Colors.white),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            'Bonjour ',
-                            style: AppTextStyles.regular12.copyWith(
-                              color: const Color(0xFF94A3B8),
-                              fontWeight: FontWeight.w600,
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              'Bonjour ',
+                              style: AppTextStyles.regular12.copyWith(
+                                color: const Color(0xFF94A3B8),
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          Text(
-                            '👋',
-                            style: AppTextStyles.regular12,
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        'Arnaud Koffi',
-                        style: AppTextStyles.regularlight16.copyWith(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
+                            Text(
+                              '👋',
+                              style: AppTextStyles.regular12,
+                            ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Bell
-                Stack(
-                  clipBehavior: Clip.none,
-                  children: [
-                    Container(
-                      width: 42,
-                      height: 42,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.notifications_rounded,
-                          color: AppColors.dark, size: 22),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Arnaud Koffi',
+                          style: AppTextStyles.regularlight16.copyWith(
+                            color: Colors.white,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
-                    Positioned(
-                      top: -2,
-                      right: -2,
-                      child: Container(
-                        width: 18,
-                        height: 18,
+                  ),
+                  // Bell
+                  Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        width: 42,
+                        height: 42,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: AppColors.primary,
+                          color: Colors.white,
                         ),
                         alignment: Alignment.center,
-                        child: Text(
-                          '5',
-                          style: AppTextStyles.regular12.copyWith(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w800,
+                        child: const Icon(Icons.notifications_rounded,
+                            color: AppColors.dark, size: 22),
+                      ),
+                      Positioned(
+                        top: -2,
+                        right: -2,
+                        child: Container(
+                          width: 18,
+                          height: 18,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: AppColors.primary,
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '5',
+                            style: AppTextStyles.regular12.copyWith(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 10),
-                // CI flag
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(22),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      ClipOval(
-                        child: CountryFlag.fromCountryCode(
-                          'CI',
-                          width: 28,
-                          height: 28,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.keyboard_arrow_down_rounded,
-                          size: 16, color: AppColors.dark),
                     ],
                   ),
-                ),
-              ],
+                  const SizedBox(width: 10),
+                  Container(
+                    height: 42,
+                    padding: const EdgeInsets.symmetric(horizontal: 10),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(22),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        ClipOval(
+                          child: CountryFlag.fromCountryCode(
+                            'CI',
+                            width: 28,
+                            height: 28,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        const Icon(
+                          Icons.keyboard_arrow_down_rounded,
+                          size: 16,
+                          color: AppColors.dark,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 
@@ -489,36 +498,81 @@ class _HotelsTabState extends State<HotelsTab> {
 
                       // UBAX banner
                       _UbaxBanner(onTap: () {}),
-                      const SizedBox(height: 12),
+                      const SizedBox(height: 20),
+
+                      // Type pills (under banner)
+                      Row(
+                        children: [
+                          for (var i = 0; i < _kTypes.length; i++) ...[
+                            Expanded(
+                              child: _TypePill(
+                                data: _kTypes[i],
+                                selected: _kTypes[i].label == _selectedType,
+                                onTap: () => setState(
+                                    () => _selectedType = _kTypes[i].label),
+                              ),
+                            ),
+                            if (i < _kTypes.length - 1)
+                              const SizedBox(width: 10),
+                          ],
+                        ],
+                      ),
+                      const SizedBox(height: 20),
 
                       // Tiles
                       ..._kRecommandesData.map(
                         (p) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
-                          child: RecommendedTile(
-                            imagePath: p['image'] as String,
-                            title: p['name'] as String,
-                            location: p['location'] as String,
-                            beds: p['beds'] as int,
-                            baths: p['baths'] as int,
-                            salons: p['salons'] as int,
-                            showShadow: false,
-                            onTap: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => HotelDetailsScreen(
-                                    imagePath: p['image'] as String,
-                                    name: p['name'] as String,
-                                    location: p['location'] as String,
-                                    price: int.tryParse((p['price'] as String)
-                                            .replaceAll(' ', '')) ??
-                                        0,
-                                    rating: 4.7,
-                                  ),
+                          child: _selectedType == 'Hotels'
+                              ? _HotelHorizontalCard(
+                                  imagePath: p['image'] as String,
+                                  title: p['name'] as String,
+                                  location: p['location'] as String,
+                                  price: int.tryParse((p['price'] as String)
+                                          .replaceAll(' ', '')) ??
+                                      0,
+                                  rating: 4.7,
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => HotelDetailsScreen(
+                                          imagePath: p['image'] as String,
+                                          name: p['name'] as String,
+                                          location: p['location'] as String,
+                                          price: int.tryParse(
+                                                  (p['price'] as String)
+                                                      .replaceAll(' ', '')) ??
+                                              0,
+                                          rating: 4.7,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                )
+                              : RecommendedTile(
+                                  imagePath: p['image'] as String,
+                                  title: p['name'] as String,
+                                  location: p['location'] as String,
+                                  beds: p['beds'] as int,
+                                  baths: p['baths'] as int,
+                                  salons: p['salons'] as int,
+                                  onTap: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => HotelDetailsScreen(
+                                          imagePath: p['image'] as String,
+                                          name: p['name'] as String,
+                                          location: p['location'] as String,
+                                          price: int.tryParse(
+                                                  (p['price'] as String)
+                                                      .replaceAll(' ', '')) ??
+                                              0,
+                                          rating: 4.7,
+                                        ),
+                                      ),
+                                    );
+                                  },
                                 ),
-                              );
-                            },
-                          ),
                         ),
                       ),
                     ],
@@ -530,6 +584,155 @@ class _HotelsTabState extends State<HotelsTab> {
         ],
       ),
     );
+  }
+}
+
+class _HotelHorizontalCard extends StatelessWidget {
+  const _HotelHorizontalCard({
+    required this.imagePath,
+    required this.title,
+    required this.location,
+    required this.price,
+    required this.rating,
+    required this.onTap,
+  });
+
+  final String imagePath;
+  final String title;
+  final String location;
+  final int price;
+  final double rating;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 119,
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image.asset(
+                imagePath,
+                width: 125,
+                height: 102,
+                fit: BoxFit.cover,
+                errorBuilder: (_, __, ___) => Container(
+                  width: 125,
+                  height: 102,
+                  color: const Color(0xFFE2E8F0),
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            title,
+                            style: AppTextStyles.sectionTitle.copyWith(
+                              color: AppColors.text,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                              height: 1.2,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                        const Icon(Icons.favorite_rounded,
+                            color: Colors.red, size: 14),
+                        const SizedBox(width: 6),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Icon(Icons.location_on_outlined,
+                            color: AppColors.primary, size: 16),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            location,
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.text,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w500,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        Text(
+                          '${_fmt(price)}',
+                          style: const TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 6,
+                        ),
+                        const Text(
+                          'FCFA / nuit',
+                          style: TextStyle(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 9,
+                          ),
+                        ),
+                        const Spacer(),
+                        const Icon(Icons.star_rounded,
+                            color: Color(0xFFFACC15), size: 16),
+                        const SizedBox(width: 2),
+                        Text(
+                          rating.toStringAsFixed(1),
+                          style: const TextStyle(
+                            color: AppColors.text,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  static String _fmt(int value) {
+    final s = value.toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      final fromEnd = s.length - i;
+      buf.write(s[i]);
+      if (fromEnd > 1 && fromEnd % 3 == 1) buf.write(' ');
+    }
+    return buf.toString().trim();
   }
 }
 

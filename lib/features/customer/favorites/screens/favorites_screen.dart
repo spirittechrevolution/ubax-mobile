@@ -473,193 +473,193 @@ class _PropertyCard extends StatelessWidget {
         return GestureDetector(
           onTap: () => _openDetails(context),
           child: Container(
-          height: 201,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-            border: Border.all(
-              color: const Color(0xFFE5E7EB),
-              width: 0.3,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: Color(0x03000000),
-                blurRadius: 4,
-                offset: Offset(0, 4),
+            height: 230,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: const Color(0xFFE5E7EB),
+                width: 0.3,
               ),
-            ],
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // ── Image
-              Padding(
-                padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-                child: Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset(
-                        data.imagePath,
-                        height: 114,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          height: 114,
-                          color: const Color(0xFFE2E8F0),
-                          alignment: Alignment.center,
-                          child: const Icon(Icons.image_rounded,
-                              color: AppColors.dark, size: 36),
-                        ),
-                      ),
-                    ),
-                    // Tag
-                    Positioned(
-                      top: 12,
-                      left: 6,
-                      child: Container(
-                        width: 51,
-                        height: 15,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: AppColors.dark,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Text(
-                          data.tag,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 7,
-                          ),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                    ),
-                    // Heart
-                    const Positioned(
-                      top: 12,
-                      right: 6,
-                      child: Icon(
-                        Icons.favorite_rounded,
-                        color: Colors.red,
-                        size: 14,
-                      ),
-                    ),
-                  ],
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x03000000),
+                  blurRadius: 4,
+                  offset: Offset(0, 4),
                 ),
-              ),
-
-              // ── Info
-              Expanded(
-                child: Padding(
-                  padding: EdgeInsets.fromLTRB(hPad, vPad, hPad, vPad),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // ── Image
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+                  child: Stack(
                     children: [
-                      // Name
-                      const SizedBox(height: 4),
-                      Text(
-                        data.name,
-                        style: const TextStyle(
-                          color: AppColors.textBlack,
-                          fontWeight: FontWeight.w300,
-                          fontSize: 9,
-                          height: 1.1,
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(10),
+                        child: Image.asset(
+                          data.imagePath,
+                          height: 114,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            height: 114,
+                            color: const Color(0xFFE2E8F0),
+                            alignment: Alignment.center,
+                            child: const Icon(Icons.image_rounded,
+                                color: AppColors.dark, size: 36),
+                          ),
                         ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(height: 5),
-                      // Location
-                      Row(
-                        children: [
-                          Icon(Icons.location_on_outlined,
-                              size: iconSz, color: AppColors.textBlack),
-                          const SizedBox(width: 2),
-                          Expanded(
-                            child: Text(
-                              data.location,
-                              style: const TextStyle(
-                                color: AppColors.textBlack,
-                                fontSize: 6,
-                                fontWeight: FontWeight.w300,
-                                height: 1.0,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
+                      // Tag
+                      Positioned(
+                        top: 12,
+                        left: 6,
+                        child: Container(
+                          width: 51,
+                          height: 15,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: AppColors.dark,
+                            borderRadius: BorderRadius.circular(50),
                           ),
-                        ],
+                          child: Text(
+                            data.tag,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 7,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
-                      const SizedBox(height: 6),
-                      // Meta
-                      Wrap(
-                        spacing: 10,
-                        runSpacing: 2,
-                        children: [
-                          _MetaInfo(
-                              icon: Icons.bed_rounded,
-                              fontSize: fsSmall,
-                              text: '${data.beds} Chambres'),
-                          _MetaInfo(
-                              icon: Icons.bathtub_outlined,
-                              fontSize: fsSmall,
-                              text: '${data.baths} Sdb'),
-                          _MetaInfo(
-                              icon: Icons.kitchen_rounded,
-                              fontSize: fsSmall,
-                              text: '${data.kitchens} Cuisine'),
-                        ],
-                      ),
-                      // const Spacer(),
-                      const SizedBox(height: 6),
-                      // Price + button
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              '${_fmt(data.price)} Fcfa',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 10,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () => _openDetails(context),
-                            child: Container(
-                              width: 77,
-                              height: 18,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Text(
-                                'Voir les détails',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 7,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                      // Heart
+                      const Positioned(
+                        top: 12,
+                        right: 6,
+                        child: Icon(
+                          Icons.favorite_rounded,
+                          color: Colors.red,
+                          size: 14,
+                        ),
                       ),
                     ],
                   ),
                 ),
-              ),
-            ],
+
+                // ── Info
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        // Name
+                        // const SizedBox(height: 4),
+                        Text(
+                          data.name,
+                          style: const TextStyle(
+                            color: AppColors.textBlack,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 9,
+                            height: 1.1,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 5),
+                        // Location
+                        Row(
+                          children: [
+                            Icon(Icons.location_on_outlined,
+                                size: iconSz, color: AppColors.textBlack),
+                            const SizedBox(width: 2),
+                            Expanded(
+                              child: Text(
+                                data.location,
+                                style: const TextStyle(
+                                  color: AppColors.textBlack,
+                                  fontSize: 6,
+                                  fontWeight: FontWeight.w300,
+                                  height: 1.0,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 6),
+                        // Meta
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 2,
+                          children: [
+                            _MetaInfo(
+                                icon: Icons.bed_rounded,
+                                fontSize: 7,
+                                text: '${data.beds} Chambres'),
+                            _MetaInfo(
+                                icon: Icons.bathtub_outlined,
+                                fontSize: 7,
+                                text: '${data.baths} Sdb'),
+                            _MetaInfo(
+                                icon: Icons.kitchen_rounded,
+                                fontSize: 7,
+                                text: '${data.kitchens} Cuisine'),
+                          ],
+                        ),
+                        // const Spacer(),
+                        const SizedBox(height: 6),
+                        // Price + button
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                '${_fmt(data.price)} Fcfa',
+                                style: const TextStyle(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 10,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => _openDetails(context),
+                              child: Container(
+                                width: 77,
+                                height: 16,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary,
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: const Text(
+                                  'Voir les détails',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 7,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
         );
       },
     );
@@ -757,7 +757,7 @@ class _PropertyListCard extends StatelessWidget {
                     ),
                   ],
                 ),
-                const SizedBox(height: 13),
+                const SizedBox(height: 10),
                 // Location
                 Row(
                   children: [

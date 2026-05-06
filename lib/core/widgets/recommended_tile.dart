@@ -13,7 +13,6 @@ class RecommendedTile extends StatelessWidget {
     required this.salons,
     required this.onTap,
     this.isFavorite = true,
-    this.showShadow = true,
   });
 
   final String imagePath;
@@ -24,7 +23,6 @@ class RecommendedTile extends StatelessWidget {
   final int salons;
   final VoidCallback onTap;
   final bool isFavorite;
-  final bool showShadow;
 
   @override
   Widget build(BuildContext context) {
@@ -37,15 +35,6 @@ class RecommendedTile extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(18),
-          boxShadow: showShadow
-              ? const [
-                  BoxShadow(
-                    color: Color(0x40000000),
-                    blurRadius: 4,
-                    offset: Offset(0, 4),
-                  ),
-                ]
-              : null,
         ),
         child: Row(
           children: [

@@ -260,97 +260,153 @@ class _MapOverlayState extends State<_MapOverlay>
         const midR = 135.0;
         const innerR = 68.0;
 
-        return AnimatedBuilder(
-          animation: _pulse,
-          builder: (context, _) {
-            return Stack(
-              clipBehavior: Clip.none,
-              children: [
-                // Outer radius
-                Positioned(
-                  left: center.dx - outerR,
-                  top: center.dy - outerR,
-                  child: Container(
-                    width: outerR * 2,
-                    height: outerR * 2,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.22),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                // Middle radius
-                Positioned(
-                  left: center.dx - midR,
-                  top: center.dy - midR,
-                  child: Container(
-                    width: midR * 2,
-                    height: midR * 2,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.40),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                // Inner radius — orange background behind the avatar
-                Positioned(
-                  left: center.dx - innerR,
-                  top: center.dy - innerR,
-                  child: Container(
-                    width: innerR * 2,
-                    height: innerR * 2,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.65),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                // Avatar (center) — white ring + photo, sits on inner radius
-                Positioned(
-                  left: center.dx - 78.6 / 2,
-                  top: center.dy - 78.6 / 2,
-                  child: Container(
-                    width: 78.6,
-                    height: 78.6,
-                    padding: const EdgeInsets.all(5),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x22000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/images/pexels-ekrulila-2128329.jpg',
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: const Color(0xFFD0DDE8),
-                          child: const Icon(Icons.person,
-                              color: Colors.white, size: 30),
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            AnimatedBuilder(
+              animation: _pulse,
+              builder: (context, _) {
+                final t = Curves.easeOut.transform(_pulse.value);
+
+                final outerScale = 1.0 + (0.06 * t);
+                final midScale = 1.0 + (0.10 * t);
+                final innerScale = 1.0 + (0.14 * t);
+
+                final outerOpacity = 0.22 - (0.10 * t);
+                final midOpacity = 0.40 - (0.18 * t);
+                final innerOpacity = 0.65 - (0.30 * t);
+
+                return Stack(
+                  clipBehavior: Clip.none,
+                  children: [
+                    // Outer radius (static)
+                    Positioned(
+                      left: center.dx - outerR,
+                      top: center.dy - outerR,
+                      child: Transform.scale(
+                        scale: outerScale,
+                        child: Container(
+                          width: outerR * 2,
+                          height: outerR * 2,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(outerOpacity),
+                            shape: BoxShape.circle,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
+                    // Scanning ring inside outer radius
+                    Positioned(
+                      left: center.dx - outerR,
+                      top: center.dy - outerR,
+                      child: IgnorePointer(
+                        child: CustomPaint(
+                          size: const Size(outerR * 2, outerR * 2),
+                          painter: _RadarRingPainter(
+                            color: AppColors.primary,
+                            t: t,
+                            minRadius: midR,
+                            maxRadius: outerR,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Middle radius (radar pulse)
+                    Positioned(
+                      left: center.dx - midR,
+                      top: center.dy - midR,
+                      child: Transform.scale(
+                        scale: midScale,
+                        child: Container(
+                          width: midR * 2,
+                          height: midR * 2,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(midOpacity),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Scanning ring inside middle radius
+                    Positioned(
+                      left: center.dx - midR,
+                      top: center.dy - midR,
+                      child: IgnorePointer(
+                        child: CustomPaint(
+                          size: const Size(midR * 2, midR * 2),
+                          painter: _RadarRingPainter(
+                            color: AppColors.primary,
+                            t: t,
+                            minRadius: innerR,
+                            maxRadius: midR,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Inner radius — orange background behind the avatar (radar)
+                    Positioned(
+                      left: center.dx - innerR,
+                      top: center.dy - innerR,
+                      child: Transform.scale(
+                        scale: innerScale,
+                        child: Container(
+                          width: innerR * 2,
+                          height: innerR * 2,
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(innerOpacity),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // Avatar (center) — white ring + photo, sits on inner radius
+                    Positioned(
+                      left: center.dx - 78.6 / 2,
+                      top: center.dy - 78.6 / 2,
+                      child: Container(
+                        width: 78.6,
+                        height: 78.6,
+                        padding: const EdgeInsets.all(5),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color(0x22000000),
+                              blurRadius: 8,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
+                        ),
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/images/pexels-ekrulila-2128329.jpg',
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              color: const Color(0xFFD0DDE8),
+                              child: const Icon(Icons.person,
+                                  color: Colors.white, size: 30),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
 
-                // ── Pins (positions relative to center)
-                for (var i = 0; i < widget.properties.length; i++)
-                  _pinAt(
-                    center,
-                    widget.properties[i].dx,
-                    widget.properties[i].dy,
-                    widget.properties[i].image,
-                    selected: widget.selectedIndex == i,
-                    onTap: () => widget.onPinTap(i),
-                  ),
-              ],
-            );
-          },
+            // ── Pins (static)
+            for (var i = 0; i < widget.properties.length; i++)
+              _pinAt(
+                center,
+                widget.properties[i].dx,
+                widget.properties[i].dy,
+                widget.properties[i].image,
+                selected: widget.selectedIndex == i,
+                onTap: () => widget.onPinTap(i),
+              ),
+          ],
         );
       },
     );
@@ -366,56 +422,56 @@ class _MapOverlayState extends State<_MapOverlay>
   }) {
     const pinW = 44.0;
     const pinH = 62.0;
-    const haloW = 55.0;
-    const haloH = 70.0;
     // Pin tip (dx, dy) maps to (center + dx, center + dy).
     final tipX = center.dx + dx;
     final tipY = center.dy + dy;
 
-    final t = Curves.easeOut.transform(_pulse.value);
-    final haloScale = 1.0 + (0.28 * t);
-    final pinScale = 1.0 + (0.08 * t);
-    final baseOpacity = selected ? 0.75 : 0.40;
-    final haloOpacity = baseOpacity * (1.0 - (0.55 * t));
-
-    return Stack(
-      children: [
-        // Teardrop-shaped halo behind the pin (same shape, larger, translucent)
-        Positioned(
-          left: tipX - haloW / 2,
-          top: tipY - haloH,
-          child: IgnorePointer(
-            child: Opacity(
-              opacity: haloOpacity,
-              child: Transform.scale(
-                scale: haloScale,
-                alignment: Alignment.bottomCenter,
-                child: CustomPaint(
-                  size: const Size(haloW, haloH),
-                  painter: _PinPainter(
-                    color: AppColors.primary,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
-        // Pin (tappable)
-        Positioned(
-          left: tipX - pinW / 2,
-          top: tipY - pinH,
-          child: GestureDetector(
-            onTap: onTap,
-            behavior: HitTestBehavior.opaque,
-            child: Transform.scale(
-              scale: pinScale,
-              alignment: Alignment.bottomCenter,
-              child: _Pin(image: image),
-            ),
-          ),
-        ),
-      ],
+    return Positioned(
+      left: tipX - pinW / 2,
+      top: tipY - pinH,
+      child: GestureDetector(
+        onTap: onTap,
+        behavior: HitTestBehavior.opaque,
+        child: _Pin(image: image),
+      ),
     );
+  }
+}
+
+class _RadarRingPainter extends CustomPainter {
+  const _RadarRingPainter({
+    required this.color,
+    required this.t,
+    required this.minRadius,
+    required this.maxRadius,
+  });
+
+  final Color color;
+  final double t;
+  final double minRadius;
+  final double maxRadius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+
+    final radius = minRadius + ((maxRadius - minRadius) * t);
+    final opacity = (1.0 - t) * 0.55;
+
+    final paint = Paint()
+      ..color = color.withOpacity(opacity)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0;
+
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RadarRingPainter oldDelegate) {
+    return oldDelegate.t != t ||
+        oldDelegate.color != color ||
+        oldDelegate.minRadius != minRadius ||
+        oldDelegate.maxRadius != maxRadius;
   }
 }
 
