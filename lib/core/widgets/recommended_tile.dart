@@ -70,6 +70,7 @@ class RecommendedTile extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                             height: 1.2,
                           ),
+                          softWrap: true,
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

@@ -28,7 +28,7 @@ class _PropertyData {
   final String tag;
 }
 
-const _kProperties = [
+const _kAppartementProperties = [
   _PropertyData(
     imagePath: 'assets/images/appartements-luxe.jpg',
     name: 'Appartement Moderne à Cocody',
@@ -40,39 +40,40 @@ const _kProperties = [
     tag: 'Location',
   ),
   _PropertyData(
-    imagePath:
-        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
-    name: 'Appartement Moderne à Cocody',
-    location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-    beds: 3,
-    baths: 2,
+    imagePath: 'assets/images/chambre11.jpg',
+    name: 'Studio meublé au Plateau',
+    location: 'Plateau, Abidjan – Côte d\'Ivoire',
+    beds: 1,
+    baths: 1,
     kitchens: 1,
-    price: 250000,
+    price: 180000,
     tag: 'Location',
   ),
   _PropertyData(
-    imagePath: 'assets/images/modern-elegant-bedroom-interior.jpg',
-    name: 'Appartement Moderne à Cocody',
-    location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-    beds: 3,
+    imagePath: 'assets/images/chambre12.jpg',
+    name: 'Duplex moderne à Marcory',
+    location: 'Marcory, Abidjan – Côte d\'Ivoire',
+    beds: 4,
     baths: 2,
     kitchens: 1,
-    price: 250000,
+    price: 320000,
     tag: 'Location',
   ),
   _PropertyData(
-    imagePath:
-        'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
-    name: 'Appartement Moderne à Cocody',
-    location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
-    beds: 3,
-    baths: 2,
+    imagePath: 'assets/images/chambre13.jpg',
+    name: 'Appartement vue panoramique',
+    location: 'Cocody, Abidjan – Côte d\'Ivoire',
+    beds: 2,
+    baths: 1,
     kitchens: 1,
-    price: 250000,
+    price: 210000,
     tag: 'Location',
   ),
+];
+
+const _kMaisonProperties = [
   _PropertyData(
-    imagePath: 'assets/images/villa-ultra-moderna-carignan.jpg',
+    imagePath: 'assets/images/villa6.jpg',
     name: 'Villa Ultra Moderna',
     location: 'Riviera Palmeraie, Abidjan – Côte d\'Ivoire',
     beds: 4,
@@ -82,15 +83,120 @@ const _kProperties = [
     tag: 'Vente',
   ),
   _PropertyData(
-    imagePath:
-        'assets/images/3d-rendering-loft-luxury-living-room-with-shelf-near-dining-table-counter.jpg',
-    name: 'Loft Luxueux Plateau',
+    imagePath: 'assets/images/villa3.jpg',
+    name: 'Maison familiale à Cocody',
+    location: 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+    beds: 5,
+    baths: 3,
+    kitchens: 1,
+    price: 520000,
+    tag: 'Vente',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/chambre4.jpg',
+    name: 'Maison avec jardin',
+    location: 'Bingerville, Abidjan – Côte d\'Ivoire',
+    beds: 3,
+    baths: 2,
+    kitchens: 1,
+    price: 390000,
+    tag: 'Vente',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/chambre5.jpg',
+    name: 'Maison moderne',
+    location: 'Riviera, Abidjan – Côte d\'Ivoire',
+    beds: 4,
+    baths: 2,
+    kitchens: 1,
+    price: 410000,
+    tag: 'Vente',
+  ),
+];
+
+const _kHotelProperties = [
+  _PropertyData(
+    imagePath: 'assets/images/chambre.jpg',
+    name: 'Suite luxueuse',
     location: 'Plateau, Abidjan – Côte d\'Ivoire',
+    beds: 1,
+    baths: 1,
+    kitchens: 0,
+    price: 95000,
+    tag: 'Nuit',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/chambre10.jpg',
+    name: 'Chambre standard',
+    location: 'Cocody, Abidjan – Côte d\'Ivoire',
+    beds: 1,
+    baths: 1,
+    kitchens: 0,
+    price: 45000,
+    tag: 'Nuit',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/chambre11.jpg',
+    name: 'Suite junior',
+    location: 'Marcory, Abidjan – Côte d\'Ivoire',
+    beds: 1,
+    baths: 1,
+    kitchens: 0,
+    price: 65000,
+    tag: 'Nuit',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/chambre12.jpg',
+    name: 'Suite familiale',
+    location: 'Riviera, Abidjan – Côte d\'Ivoire',
     beds: 2,
     baths: 1,
-    kitchens: 1,
-    price: 180000,
-    tag: 'Location',
+    kitchens: 0,
+    price: 75000,
+    tag: 'Nuit',
+  ),
+];
+
+const _kTerrainProperties = [
+  _PropertyData(
+    imagePath: 'assets/images/piscine.jpg',
+    name: 'Terrain à vendre',
+    location: 'Grand-Bassam – Côte d\'Ivoire',
+    beds: 0,
+    baths: 0,
+    kitchens: 0,
+    price: 1200000,
+    tag: 'Vente',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/villa1.jpg',
+    name: 'Parcelle viabilisée',
+    location: 'Bingerville – Côte d\'Ivoire',
+    beds: 0,
+    baths: 0,
+    kitchens: 0,
+    price: 950000,
+    tag: 'Vente',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/villa2.jpg',
+    name: 'Terrain angle',
+    location: 'Anyama – Côte d\'Ivoire',
+    beds: 0,
+    baths: 0,
+    kitchens: 0,
+    price: 650000,
+    tag: 'Vente',
+  ),
+  _PropertyData(
+    imagePath: 'assets/images/villa3.jpg',
+    name: 'Terrain en lotissement',
+    location: 'Songon – Côte d\'Ivoire',
+    beds: 0,
+    baths: 0,
+    kitchens: 0,
+    price: 780000,
+    tag: 'Vente',
   ),
 ];
 
@@ -121,17 +227,23 @@ class FavoritesTab extends StatefulWidget {
 
 class _FavoritesTabState extends State<FavoritesTab> {
   String _selectedCategory = 'Appartement';
+  bool _isSwitchingCategory = false;
   bool _isGridView = true;
   bool _searchActive = false;
   final TextEditingController _searchController = TextEditingController();
   String _query = '';
 
-  late List<_PropertyData> _properties;
+  late final Map<String, List<_PropertyData>> _propertiesByCategory;
 
   @override
   void initState() {
     super.initState();
-    _properties = List.of(_kProperties);
+    _propertiesByCategory = {
+      'Maison': List.of(_kMaisonProperties),
+      'Appartement': List.of(_kAppartementProperties),
+      'Hotel': List.of(_kHotelProperties),
+      'Terrain': List.of(_kTerrainProperties),
+    };
   }
 
   @override
@@ -141,17 +253,32 @@ class _FavoritesTabState extends State<FavoritesTab> {
   }
 
   void _remove(_PropertyData item) {
-    setState(() => _properties.remove(item));
+    final list = _propertiesByCategory[_selectedCategory];
+    if (list == null) return;
+    setState(() => list.remove(item));
   }
 
   List<_PropertyData> get _filtered {
-    if (_query.isEmpty) return _properties;
+    final base =
+        _propertiesByCategory[_selectedCategory] ?? const <_PropertyData>[];
+    if (_query.isEmpty) return base;
     final q = _query.toLowerCase();
-    return _properties
+    return base
         .where((p) =>
             p.name.toLowerCase().contains(q) ||
             p.location.toLowerCase().contains(q))
         .toList();
+  }
+
+  Future<void> _handleCategoryChanged(String next) async {
+    if (next == _selectedCategory || _isSwitchingCategory) return;
+    setState(() => _isSwitchingCategory = true);
+    await Future<void>.delayed(const Duration(milliseconds: 420));
+    if (!mounted) return;
+    setState(() {
+      _selectedCategory = next;
+      _isSwitchingCategory = false;
+    });
   }
 
   void _toggleSearch() {
@@ -265,22 +392,21 @@ class _FavoritesTabState extends State<FavoritesTab> {
           ),
         ),
 
-        // ── Category pills
+        // ── Categories
         SizedBox(
-          height: 42,
+          height: 48,
           child: ListView.separated(
+            padding: const EdgeInsets.fromLTRB(18, 0, 18, 0),
             scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 18),
             itemCount: _kCategories.length,
             separatorBuilder: (_, __) => const SizedBox(width: 10),
             itemBuilder: (_, i) {
-              final cat = _kCategories[i];
-              final selected = cat.label == _selectedCategory;
+              final c = _kCategories[i];
               return _CategoryPill(
-                label: cat.label,
-                icon: cat.icon,
-                selected: selected,
-                onTap: () => setState(() => _selectedCategory = cat.label),
+                label: c.label,
+                icon: c.icon,
+                selected: c.label == _selectedCategory,
+                onTap: () => _handleCategoryChanged(c.label),
               );
             },
           ),
@@ -321,64 +447,206 @@ class _FavoritesTabState extends State<FavoritesTab> {
 
         // ── Grid or List
         Expanded(
-          child: _isGridView
-              ? GridView.builder(
-                  padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 12,
-                    mainAxisSpacing: 12,
-                    childAspectRatio: 198 / 201,
-                  ),
-                  itemCount: displayed.length,
-                  itemBuilder: (_, i) => _PropertyCard(data: displayed[i]),
-                )
-              : ListView.separated(
-                  padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
-                  itemCount: displayed.length,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
-                  itemBuilder: (_, i) => Dismissible(
-                    key: ValueKey(displayed[i].imagePath + i.toString()),
-                    direction: DismissDirection.startToEnd,
-                    onDismissed: (_) => _remove(displayed[i]),
-                    background: Stack(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            child: _isSwitchingCategory
+                ? _FavoritesSkeleton(
+                    key: ValueKey<String>(
+                        'skeleton_${_isGridView ? 'grid' : 'list'}'),
+                    grid: _isGridView,
+                  )
+                : _isGridView
+                    ? GridView.builder(
+                        key: ValueKey<String>('grid_$_selectedCategory'),
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: 0.84,
+                        ),
+                        itemCount: displayed.length,
+                        itemBuilder: (_, i) =>
+                            _PropertyCard(data: displayed[i]),
+                      )
+                    : ListView.separated(
+                        key: ValueKey<String>('list_$_selectedCategory'),
+                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+                        itemCount: displayed.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 12),
+                        itemBuilder: (_, i) => _SwipeToDelete(
+                          key: ValueKey(displayed[i].imagePath + i.toString()),
+                          onDelete: () => _remove(displayed[i]),
+                          child: _PropertyListCard(data: displayed[i]),
+                        ),
+                      ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _FavoritesSkeleton extends StatelessWidget {
+  const _FavoritesSkeleton({super.key, required this.grid});
+
+  final bool grid;
+
+  @override
+  Widget build(BuildContext context) {
+    Widget block({required double h}) {
+      return Container(
+        height: h,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE2E8F0),
+          borderRadius: BorderRadius.circular(18),
+        ),
+      );
+    }
+
+    if (grid) {
+      return GridView.builder(
+        padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          crossAxisSpacing: 12,
+          mainAxisSpacing: 12,
+          childAspectRatio: 0.84,
+        ),
+        itemCount: 4,
+        itemBuilder: (_, __) => block(h: 230),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(18, 0, 18, 18),
+      itemCount: 4,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (_, __) => block(h: 230),
+    );
+  }
+}
+
+class _SwipeToDelete extends StatefulWidget {
+  const _SwipeToDelete({
+    super.key,
+    required this.child,
+    required this.onDelete,
+  });
+
+  final Widget child;
+  final VoidCallback onDelete;
+
+  @override
+  State<_SwipeToDelete> createState() => _SwipeToDeleteState();
+}
+
+class _SwipeToDeleteState extends State<_SwipeToDelete> {
+  static const double _maxReveal = 150;
+  double _dragOffset = 0;
+  double _targetOffset = 0;
+
+  Future<void> _confirmDelete() async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Supprimer'),
+        content: const Text('Voulez-vous vraiment supprimer cet élément ?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Annuler'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Supprimer'),
+          ),
+        ],
+      ),
+    );
+
+    if (ok == true) {
+      widget.onDelete();
+    }
+    if (!mounted) return;
+    setState(() {
+      _dragOffset = 0;
+      _targetOffset = 0;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onHorizontalDragUpdate: (details) {
+        final next = (_dragOffset + details.delta.dx).clamp(0.0, _maxReveal);
+        setState(() {
+          _dragOffset = next;
+          _targetOffset = next;
+        });
+      },
+      onHorizontalDragEnd: (_) {
+        final shouldOpen = _dragOffset > (_maxReveal * 0.45);
+        setState(() {
+          _targetOffset = shouldOpen ? _maxReveal : 0;
+          _dragOffset = _targetOffset;
+        });
+      },
+      child: Stack(
+        children: [
+          Positioned.fill(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 11),
+                child: GestureDetector(
+                  onTap: _confirmDelete,
+                  child: Container(
+                    width: 135,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(40),
+                    ),
+                    alignment: Alignment.center,
+                    child: const Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Positioned(
-                          top: 40,
-                          left: 11,
-                          child: Container(
-                            width: 135,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: Colors.red,
-                              borderRadius: BorderRadius.circular(40),
-                            ),
-                            alignment: Alignment.center,
-                            child: const Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Icon(Icons.delete_rounded,
-                                    color: Colors.white, size: 18),
-                                SizedBox(width: 6),
-                                Text(
-                                  'Supprimer',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            ),
+                        Icon(Icons.delete_rounded,
+                            color: Colors.white, size: 18),
+                        SizedBox(width: 6),
+                        Text(
+                          'Supprimer',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
                           ),
                         ),
                       ],
                     ),
-                    child: _PropertyListCard(data: displayed[i]),
                   ),
                 ),
-        ),
-      ],
+              ),
+            ),
+          ),
+          TweenAnimationBuilder<double>(
+            tween: Tween(begin: 0, end: _targetOffset),
+            duration: const Duration(milliseconds: 160),
+            curve: Curves.easeOut,
+            builder: (_, value, child) {
+              return Transform.translate(
+                offset: Offset(value, 0),
+                child: child,
+              );
+            },
+            child: widget.child,
+          ),
+        ],
+      ),
     );
   }
 }
@@ -572,7 +840,7 @@ class _PropertyCard extends StatelessWidget {
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 5),
+                        const SizedBox(height: 8),
                         // Location
                         Row(
                           children: [
@@ -584,7 +852,7 @@ class _PropertyCard extends StatelessWidget {
                                 data.location,
                                 style: const TextStyle(
                                   color: AppColors.textBlack,
-                                  fontSize: 6,
+                                  fontSize: 7,
                                   fontWeight: FontWeight.w300,
                                   height: 1.0,
                                 ),
@@ -594,7 +862,7 @@ class _PropertyCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 9),
                         // Meta
                         Wrap(
                           spacing: 10,
@@ -615,7 +883,7 @@ class _PropertyCard extends StatelessWidget {
                           ],
                         ),
                         // const Spacer(),
-                        const SizedBox(height: 6),
+                        const SizedBox(height: 10),
                         // Price + button
                         Row(
                           children: [
@@ -635,7 +903,7 @@ class _PropertyCard extends StatelessWidget {
                               onTap: () => _openDetails(context),
                               child: Container(
                                 width: 77,
-                                height: 16,
+                                height: 18,
                                 alignment: Alignment.center,
                                 decoration: BoxDecoration(
                                   color: AppColors.primary,
@@ -787,15 +1055,15 @@ class _PropertyListCard extends StatelessWidget {
                     _MetaInfo(
                         icon: Icons.bed_rounded,
                         text: '${data.beds} Chambres',
-                        fontSize: 9),
+                        fontSize: 8),
                     _MetaInfo(
                         icon: Icons.bathtub_outlined,
                         text: '${data.baths} Salle de bains',
-                        fontSize: 9),
+                        fontSize: 8),
                     _MetaInfo(
                         icon: Icons.kitchen_rounded,
                         text: '${data.kitchens} Cuisine',
-                        fontSize: 9),
+                        fontSize: 8),
                   ],
                 ),
               ],

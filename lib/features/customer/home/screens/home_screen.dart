@@ -188,12 +188,31 @@ class _NavItem extends StatelessWidget {
   }
 }
 
-class _HomeTab extends StatelessWidget {
+class _HomeTab extends StatefulWidget {
   const _HomeTab();
 
-  static const _popularProperties = [
+  @override
+  State<_HomeTab> createState() => _HomeTabState();
+}
+
+class _HomeTabState extends State<_HomeTab> {
+  bool _rent = true;
+  bool _isSwitching = false;
+
+  Future<void> _handleRentChanged(bool v) async {
+    if (v == _rent || _isSwitching) return;
+    setState(() => _isSwitching = true);
+    await Future<void>.delayed(const Duration(milliseconds: 1220));
+    if (!mounted) return;
+    setState(() {
+      _rent = v;
+      _isSwitching = false;
+    });
+  }
+
+  static const _popularRentProperties = [
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/piscine.jpg',
       'price': '49 990 000 Fcfa',
       'title': 'Villa avec piscine',
       'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
@@ -202,7 +221,7 @@ class _HomeTab extends StatelessWidget {
       'kitchens': '2'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/villa1.jpg',
       'price': '35 000 000 Fcfa',
       'title': 'Villa sur la côte',
       'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
@@ -211,7 +230,7 @@ class _HomeTab extends StatelessWidget {
       'kitchens': '1'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/villa2.jpg',
       'price': '28 500 000 Fcfa',
       'title': 'Villa moderne',
       'location': 'Marcory, Abidjan – Côte d\'Ivoire',
@@ -220,7 +239,7 @@ class _HomeTab extends StatelessWidget {
       'kitchens': '1'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/villa3.jpg',
       'price': '55 000 000 Fcfa',
       'title': 'Villa de luxe',
       'location': 'Riviera, Abidjan – Côte d\'Ivoire',
@@ -230,7 +249,46 @@ class _HomeTab extends StatelessWidget {
     },
   ];
 
-  static const _recommendedProperties = [
+  static const _popularBuyProperties = [
+    {
+      'image': 'assets/images/villa.jpg',
+      'price': '99 990 000 Fcfa',
+      'title': 'Villa contemporaine',
+      'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+      'beds': '6',
+      'baths': '4',
+      'kitchens': '2'
+    },
+    {
+      'image': 'assets/images/villa1.jpg',
+      'price': '75 000 000 Fcfa',
+      'title': 'Duplex familial',
+      'location': 'Riviera, Abidjan – Côte d\'Ivoire',
+      'beds': '5',
+      'baths': '3',
+      'kitchens': '1'
+    },
+    {
+      'image': 'assets/images/villa2.jpg',
+      'price': '58 500 000 Fcfa',
+      'title': 'Villa moderne',
+      'location': 'Marcory, Abidjan – Côte d\'Ivoire',
+      'beds': '4',
+      'baths': '2',
+      'kitchens': '1'
+    },
+    {
+      'image': 'assets/images/villa3.jpg',
+      'price': '125 000 000 Fcfa',
+      'title': 'Villa de luxe',
+      'location': 'Riviera, Abidjan – Côte d\'Ivoire',
+      'beds': '7',
+      'baths': '5',
+      'kitchens': '2'
+    },
+  ];
+
+  static const _recommendedRentProperties = [
     {
       'image': 'assets/images/villa.jpg',
       'title': 'Appartement Moderne à\nCocody',
@@ -240,7 +298,7 @@ class _HomeTab extends StatelessWidget {
       'salons': '1'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/piscine.jpg',
       'title': 'Studio meublé au\nPlateau',
       'location': 'Plateau, Abidjan – Côte d\'Ivoire',
       'beds': '1',
@@ -248,7 +306,7 @@ class _HomeTab extends StatelessWidget {
       'salons': '1'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/villa1.jpg',
       'title': 'Duplex à Marcory',
       'location': 'Marcory, Abidjan – Côte d\'Ivoire',
       'beds': '4',
@@ -256,7 +314,15 @@ class _HomeTab extends StatelessWidget {
       'salons': '2'
     },
     {
-      'image': 'assets/images/villa.jpg',
+      'image': 'assets/images/villa2.jpg',
+      'title': 'Appartement vue mer\nà Treichville',
+      'location': 'Treichville, Abidjan – Côte d\'Ivoire',
+      'beds': '2',
+      'baths': '1',
+      'salons': '1'
+    },
+    {
+      'image': 'assets/images/villa3.jpg',
       'title': 'Appartement vue mer\nà Treichville',
       'location': 'Treichville, Abidjan – Côte d\'Ivoire',
       'beds': '2',
@@ -265,14 +331,52 @@ class _HomeTab extends StatelessWidget {
     },
   ];
 
+  static const _recommendedBuyProperties = [
+    {
+      'image': 'assets/images/piscine.jpg',
+      'title': 'Appartement Premium\nau Plateau',
+      'location': 'Plateau, Abidjan – Côte d\'Ivoire',
+      'beds': '2',
+      'baths': '2',
+      'salons': '1'
+    },
+    {
+      'image': 'assets/images/villa1.jpg',
+      'title': 'Duplex avec jardin',
+      'location': 'Cocody, Abidjan – Côte d\'Ivoire',
+      'beds': '4',
+      'baths': '2',
+      'salons': '2'
+    },
+    {
+      'image': 'assets/images/villa2.jpg',
+      'title': 'Appartement vue mer',
+      'location': 'Treichville, Abidjan – Côte d\'Ivoire',
+      'beds': '3',
+      'baths': '2',
+      'salons': '1'
+    },
+    {
+      'image': 'assets/images/villa3.jpg',
+      'title': 'Penthouse moderne',
+      'location': 'Riviera, Abidjan – Côte d\'Ivoire',
+      'beds': '4',
+      'baths': '3',
+      'salons': '1'
+    },
+  ];
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(18, 10, 18, 110),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    final popular = _rent ? _popularRentProperties : _popularBuyProperties;
+    final recommended =
+        _rent ? _recommendedRentProperties : _recommendedBuyProperties;
+
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+          child: Row(
             children: [
               const CircleAvatar(
                 radius: 22,
@@ -330,62 +434,146 @@ class _HomeTab extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 16),
-          const _SearchCard(),
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOut,
+            switchOutCurve: Curves.easeIn,
+            transitionBuilder: (child, animation) {
+              final fade =
+                  CurvedAnimation(parent: animation, curve: Curves.easeOut);
+              final offsetTween = Tween<Offset>(
+                begin: const Offset(0.0, 0.02),
+                end: Offset.zero,
+              ).animate(fade);
+              return FadeTransition(
+                opacity: fade,
+                child: SlideTransition(position: offsetTween, child: child),
+              );
+            },
+            child: _isSwitching
+                ? const _HomeSkeleton(key: ValueKey<String>('skeleton'))
+                : SingleChildScrollView(
+                    key: ValueKey<bool>(_rent),
+                    padding: const EdgeInsets.fromLTRB(18, 0, 18, 110),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _SearchCard(
+                          rent: _rent,
+                          onRentChanged: _handleRentChanged,
+                        ),
+                        const SizedBox(height: 20),
+                        const _SectionHeader(title: 'Les plus populaires'),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 194,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: popular.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (_, i) {
+                              final p = popular[i];
+                              return _PropertyCard(
+                                imagePath: p['image']!,
+                                price: p['price']!,
+                                title: p['title']!,
+                                location: p['location']!,
+                                beds: int.parse(p['beds']!),
+                                baths: int.parse(p['baths']!),
+                                kitchens: int.parse(p['kitchens']!),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        const _SectionHeader(title: 'Biens recommandés'),
+                        const SizedBox(height: 12),
+                        ...recommended.map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: RecommendedTile(
+                              imagePath: p['image']!,
+                              title: p['title']!,
+                              location: p['location']!,
+                              beds: int.parse(p['beds']!),
+                              baths: int.parse(p['baths']!),
+                              salons: int.parse(p['salons']!),
+                              onTap: () {
+                                Navigator.of(context).push(
+                                  MaterialPageRoute(
+                                    builder: (_) => PropertyDetailsScreen(
+                                      imagePath: p['image']!,
+                                      title: p['title']!,
+                                      location: p['location']!,
+                                      price: '250 000 Fcfa',
+                                      beds: 3,
+                                      baths: 2,
+                                      kitchens: 1,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HomeSkeleton extends StatelessWidget {
+  const _HomeSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    const base = Color(0xFFE2E8F0);
+
+    Widget block({required double h, double? w, double r = 16}) {
+      return Container(
+        height: h,
+        width: w,
+        decoration: BoxDecoration(
+          color: base,
+          borderRadius: BorderRadius.circular(r),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(18, 0, 18, 110),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          block(h: 255, r: 24),
           const SizedBox(height: 20),
-          const _SectionHeader(title: 'Les plus populaires'),
+          block(h: 14, w: 160, r: 8),
           const SizedBox(height: 12),
           SizedBox(
             height: 194,
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
-              itemCount: _popularProperties.length,
+              itemCount: 4,
               separatorBuilder: (_, __) => const SizedBox(width: 12),
-              itemBuilder: (_, i) {
-                final p = _popularProperties[i];
-                return _PropertyCard(
-                  imagePath: p['image']!,
-                  price: p['price']!,
-                  title: p['title']!,
-                  location: p['location']!,
-                  beds: int.parse(p['beds']!),
-                  baths: int.parse(p['baths']!),
-                  kitchens: int.parse(p['kitchens']!),
-                );
-              },
+              itemBuilder: (_, __) => block(h: 194, w: 250, r: 18),
             ),
           ),
           const SizedBox(height: 18),
-          const _SectionHeader(title: 'Biens recommandés'),
+          block(h: 14, w: 170, r: 8),
           const SizedBox(height: 12),
-          ..._recommendedProperties.map(
-            (p) => Padding(
-              padding: const EdgeInsets.only(bottom: 12),
-              child: RecommendedTile(
-                imagePath: p['image']!,
-                title: p['title']!,
-                location: p['location']!,
-                beds: int.parse(p['beds']!),
-                baths: int.parse(p['baths']!),
-                salons: int.parse(p['salons']!),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => PropertyDetailsScreen(
-                        imagePath: p['image']!,
-                        title: p['title']!,
-                        location: p['location']!,
-                        price: '250 000 Fcfa',
-                        beds: 3,
-                        baths: 2,
-                        kitchens: 1,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
+          block(h: 119, r: 18),
+          const SizedBox(height: 12),
+          block(h: 119, r: 18),
+          const SizedBox(height: 12),
+          block(h: 119, r: 18),
         ],
       ),
     );
@@ -447,15 +635,16 @@ class _NotifButton extends StatelessWidget {
 }
 
 class _SearchCard extends StatefulWidget {
-  const _SearchCard();
+  const _SearchCard({required this.rent, required this.onRentChanged});
+
+  final bool rent;
+  final ValueChanged<bool> onRentChanged;
 
   @override
   State<_SearchCard> createState() => _SearchCardState();
 }
 
 class _SearchCardState extends State<_SearchCard> {
-  bool _rent = true;
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -485,15 +674,15 @@ class _SearchCardState extends State<_SearchCard> {
                 Expanded(
                   child: _Segment(
                     label: 'Louer',
-                    selected: _rent,
-                    onTap: () => setState(() => _rent = true),
+                    selected: widget.rent,
+                    onTap: () => widget.onRentChanged(true),
                   ),
                 ),
                 Expanded(
                   child: _Segment(
                     label: 'Acheter',
-                    selected: !_rent,
-                    onTap: () => setState(() => _rent = false),
+                    selected: !widget.rent,
+                    onTap: () => widget.onRentChanged(false),
                   ),
                 ),
               ],
@@ -537,7 +726,8 @@ class _SearchCardState extends State<_SearchCard> {
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => AdvancedSearchScreen(initialRent: _rent),
+                  builder: (_) =>
+                      AdvancedSearchScreen(initialRent: widget.rent),
                 ),
               );
             },

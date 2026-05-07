@@ -15,6 +15,111 @@ class _TypeData {
   final IconData icon;
 }
 
+class _RecommendedList extends StatelessWidget {
+  const _RecommendedList({
+    super.key,
+    required this.selectedType,
+  });
+
+  final String selectedType;
+
+  @override
+  Widget build(BuildContext context) {
+    final data = selectedType == 'Villas'
+        ? _kRecommandesVillas
+        : selectedType == 'Résidences'
+            ? _kRecommandesResidences
+            : _kRecommandesData;
+
+    return Column(
+      children: [
+        for (final p in data)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: selectedType == 'Hotels'
+                ? _HotelHorizontalCard(
+                    imagePath: p['image'] as String,
+                    title: p['name'] as String,
+                    location: p['location'] as String,
+                    price: int.tryParse(
+                          (p['price'] as String).replaceAll(' ', ''),
+                        ) ??
+                        0,
+                    rating: 4.7,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => HotelDetailsScreen(
+                            imagePath: p['image'] as String,
+                            name: p['name'] as String,
+                            location: p['location'] as String,
+                            price: int.tryParse(
+                                  (p['price'] as String).replaceAll(' ', ''),
+                                ) ??
+                                0,
+                            rating: 4.7,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : RecommendedTile(
+                    imagePath: p['image'] as String,
+                    title: p['name'] as String,
+                    location: p['location'] as String,
+                    beds: p['beds'] as int,
+                    baths: p['baths'] as int,
+                    salons: p['salons'] as int,
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => HotelDetailsScreen(
+                            imagePath: p['image'] as String,
+                            name: p['name'] as String,
+                            location: p['location'] as String,
+                            price: int.tryParse(
+                                  (p['price'] as String).replaceAll(' ', ''),
+                                ) ??
+                                0,
+                            rating: 4.7,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+      ],
+    );
+  }
+}
+
+class _RecommendedSkeleton extends StatelessWidget {
+  const _RecommendedSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget block({required double h}) {
+      return Container(
+        height: h,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE2E8F0),
+          borderRadius: BorderRadius.circular(18),
+        ),
+      );
+    }
+
+    return Column(
+      children: [
+        block(h: 119),
+        const SizedBox(height: 12),
+        block(h: 119),
+        const SizedBox(height: 12),
+        block(h: 119),
+      ],
+    );
+  }
+}
+
 const _kTypes = [
   _TypeData('Hotels', Icons.apartment_rounded),
   _TypeData('Villas', Icons.house_rounded),
@@ -46,7 +151,7 @@ const _kPopulaires = [
     'rating': 4.8,
   },
   {
-    'image': 'assets/images/modern-elegant-bedroom-interior.jpg',
+    'image': 'assets/images/villa10.jpg',
     'name': 'Suite Présidentielle',
     'location': 'Riviera Golf, Abidjan',
     'price': 95000,
@@ -65,8 +170,7 @@ const _kRecommandesData = [
     'price': '250 000',
   },
   {
-    'image':
-        'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    'image': 'assets/images/chambre11.jpg',
     'name': 'Studio meublé au Plateau',
     'location': 'Plateau, Abidjan – Côte d\'Ivoire',
     'beds': 1,
@@ -75,13 +179,74 @@ const _kRecommandesData = [
     'price': '180 000',
   },
   {
-    'image': 'assets/images/villa-ultra-moderna-carignan.jpg',
-    'name': 'Villa Ultra Moderna',
+    'image': 'assets/images/chambre12.jpg',
+    'name': 'Studio Ultra Moderna',
     'location': 'Riviera Palmeraie, Abidjan – Côte d\'Ivoire',
     'beds': 4,
     'baths': 3,
     'salons': 2,
     'price': '450 000',
+  },
+];
+
+const _kRecommandesVillas = [
+  {
+    'image': 'assets/images/villa1.jpg',
+    'name': 'Villa contemporaine à Cocody',
+    'location': 'Cocody Angré, Abidjan – Côte d\'Ivoire',
+    'beds': 5,
+    'baths': 3,
+    'salons': 2,
+    'price': '520 000',
+  },
+  {
+    'image': 'assets/images/chambre4.jpg',
+    'name': 'Villa familiale à Marcory',
+    'location': 'Marcory, Abidjan – Côte d\'Ivoire',
+    'beds': 4,
+    'baths': 2,
+    'salons': 2,
+    'price': '410 000',
+  },
+  {
+    'image': 'assets/images/villa3.jpg',
+    'name': 'Villa de luxe nà Riviera',
+    'location': 'Riviera, Abidjan – Côte d\'Ivoire',
+    'beds': 6,
+    'baths': 4,
+    'salons': 3,
+    'price': '680 000',
+  },
+];
+
+const _kRecommandesResidences = [
+  {
+    'image': 'assets/images/appartements-luxe.jpg',
+    'name': 'Résidence premium\\nau Plateau',
+    'location': 'Plateau, Abidjan – Côte d\'Ivoire',
+    'beds': 2,
+    'baths': 2,
+    'salons': 1,
+    'price': '230 000',
+  },
+  {
+    'image': 'assets/images/chambre.jpg',
+    'name': 'Résidence meublée à Zone 4',
+    'location': 'Zone 4, Marcory – Abidjan',
+    'beds': 1,
+    'baths': 1,
+    'salons': 1,
+    'price': '190 000',
+  },
+  {
+    'image':
+        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'name': 'Résidence standing\\nà Cocody',
+    'location': 'Cocody, Abidjan – Côte d\'Ivoire',
+    'beds': 3,
+    'baths': 2,
+    'salons': 2,
+    'price': '310 000',
   },
 ];
 
@@ -98,6 +263,7 @@ class _HotelsTabState extends State<HotelsTab> {
   static const double _kDarkBgHeight = 160.0;
 
   String _selectedType = 'Hotels';
+  bool _isSwitchingType = false;
   String? _selectedAddress;
   DateTime _arrival = DateTime(2026, 3, 15);
   DateTime _departure = DateTime(2026, 3, 18);
@@ -113,6 +279,17 @@ class _HotelsTabState extends State<HotelsTab> {
       if (clamped != _scrollOffset) {
         setState(() => _scrollOffset = clamped);
       }
+    });
+  }
+
+  Future<void> _handleTypeChanged(String next) async {
+    if (next == _selectedType || _isSwitchingType) return;
+    setState(() => _isSwitchingType = true);
+    await Future<void>.delayed(const Duration(milliseconds: 420));
+    if (!mounted) return;
+    setState(() {
+      _selectedType = next;
+      _isSwitchingType = false;
     });
   }
 
@@ -203,7 +380,7 @@ class _HotelsTabState extends State<HotelsTab> {
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
-                            Text(
+                            const Text(
                               '👋',
                               style: AppTextStyles.regular12,
                             ),
@@ -387,8 +564,8 @@ class _HotelsTabState extends State<HotelsTab> {
                                       data: _kTypes[i],
                                       selected:
                                           _kTypes[i].label == _selectedType,
-                                      onTap: () => setState(() =>
-                                          _selectedType = _kTypes[i].label),
+                                      onTap: () =>
+                                          _handleTypeChanged(_kTypes[i].label),
                                     ),
                                   ),
                                   if (i < _kTypes.length - 1)
@@ -497,7 +674,16 @@ class _HotelsTabState extends State<HotelsTab> {
                       const SizedBox(height: 12),
 
                       // UBAX banner
-                      _UbaxBanner(onTap: () {}),
+                      // _UbaxBanner(onTap: () {}),
+                      Image.asset(
+                        'assets/images/bannerhotel.png',
+                        // width: double.infinity,
+                        // height: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) => Container(
+                          color: AppColors.dark,
+                        ),
+                      ),
                       const SizedBox(height: 20),
 
                       // Type pills (under banner)
@@ -508,8 +694,8 @@ class _HotelsTabState extends State<HotelsTab> {
                               child: _TypePill(
                                 data: _kTypes[i],
                                 selected: _kTypes[i].label == _selectedType,
-                                onTap: () => setState(
-                                    () => _selectedType = _kTypes[i].label),
+                                onTap: () =>
+                                    _handleTypeChanged(_kTypes[i].label),
                               ),
                             ),
                             if (i < _kTypes.length - 1)
@@ -519,61 +705,18 @@ class _HotelsTabState extends State<HotelsTab> {
                       ),
                       const SizedBox(height: 20),
 
-                      // Tiles
-                      ..._kRecommandesData.map(
-                        (p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _selectedType == 'Hotels'
-                              ? _HotelHorizontalCard(
-                                  imagePath: p['image'] as String,
-                                  title: p['name'] as String,
-                                  location: p['location'] as String,
-                                  price: int.tryParse((p['price'] as String)
-                                          .replaceAll(' ', '')) ??
-                                      0,
-                                  rating: 4.7,
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => HotelDetailsScreen(
-                                          imagePath: p['image'] as String,
-                                          name: p['name'] as String,
-                                          location: p['location'] as String,
-                                          price: int.tryParse(
-                                                  (p['price'] as String)
-                                                      .replaceAll(' ', '')) ??
-                                              0,
-                                          rating: 4.7,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                )
-                              : RecommendedTile(
-                                  imagePath: p['image'] as String,
-                                  title: p['name'] as String,
-                                  location: p['location'] as String,
-                                  beds: p['beds'] as int,
-                                  baths: p['baths'] as int,
-                                  salons: p['salons'] as int,
-                                  onTap: () {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute(
-                                        builder: (_) => HotelDetailsScreen(
-                                          imagePath: p['image'] as String,
-                                          name: p['name'] as String,
-                                          location: p['location'] as String,
-                                          price: int.tryParse(
-                                                  (p['price'] as String)
-                                                      .replaceAll(' ', '')) ??
-                                              0,
-                                          rating: 4.7,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
+                      AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 220),
+                        switchInCurve: Curves.easeOut,
+                        switchOutCurve: Curves.easeIn,
+                        child: _isSwitchingType
+                            ? const _RecommendedSkeleton(
+                                key: ValueKey<String>('recommended_skeleton'),
+                              )
+                            : _RecommendedList(
+                                key: ValueKey<String>(_selectedType),
+                                selectedType: _selectedType,
+                              ),
                       ),
                     ],
                   ),
@@ -649,7 +792,8 @@ class _HotelHorizontalCard extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                               height: 1.2,
                             ),
-                            maxLines: 1,
+                            softWrap: true,
+                            maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
@@ -1023,68 +1167,16 @@ class _UbaxBanner extends StatelessWidget {
       child: Container(
         height: 120,
         decoration: BoxDecoration(
-          color: AppColors.dark,
           borderRadius: BorderRadius.circular(18),
         ),
-        clipBehavior: Clip.hardEdge,
-        child: Row(
-          children: [
-            // Text
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Trouvez. Emménagez avec',
-                      style: AppTextStyles.sectionTitle.copyWith(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                    Text(
-                      'UBAX',
-                      style: AppTextStyles.sectionTitle.copyWith(
-                        color: Colors.white,
-                        fontSize: 22,
-                        fontWeight: FontWeight.w900,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            // Orange panel + image
-            Stack(
-              children: [
-                Container(
-                  width: 130,
-                  color: AppColors.primary,
-                ),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Image.asset(
-                    'assets/images/villa-ultra-moderna-carignan.jpg',
-                    width: 130,
-                    height: 120,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      width: 130,
-                      height: 120,
-                      color: AppColors.primary,
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.apartment_rounded,
-                          color: Colors.white, size: 40),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
+        child: Image.asset(
+          'assets/images/bannerhotel.png',
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => Container(
+            color: AppColors.dark,
+          ),
         ),
       ),
     );
