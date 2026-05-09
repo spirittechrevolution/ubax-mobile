@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/proprety/property_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -18,6 +21,44 @@ class _MapProperty {
   final String image;
   final String title;
   final String location;
+}
+
+class _RadarFillPainter extends CustomPainter {
+  const _RadarFillPainter({
+    required this.color,
+    required this.t,
+    required this.minRadius,
+    required this.maxRadius,
+  });
+
+  final Color color;
+  final double t;
+  final double minRadius;
+  final double maxRadius;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+
+    final radius = minRadius + ((maxRadius - minRadius) * t);
+    final easedT = Curves.easeOut.transform(t);
+    final gated = ((easedT - 0.08) / 0.92).clamp(0.0, 1.0);
+    final opacity = (gated * (1.0 - gated)) * 0.92;
+
+    final paint = Paint()
+      ..color = color.withOpacity(opacity)
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(center, radius, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _RadarFillPainter oldDelegate) {
+    return oldDelegate.t != t ||
+        oldDelegate.color != color ||
+        oldDelegate.minRadius != minRadius ||
+        oldDelegate.maxRadius != maxRadius;
+  }
 }
 
 const _kMapProperties = <_MapProperty>[
@@ -93,11 +134,19 @@ class _MapSearchTabState extends State<MapSearchTab> {
         ),
 
         // ── Top address card
-        const Positioned(
+        Positioned(
           top: 10,
           left: 14,
           right: 14,
-          child: _AddressCard(),
+          child: _AddressCard(
+            onChange: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const AddressSearchScreen(),
+                ),
+              );
+            },
+          ),
         ),
 
         // ── Bottom selected property preview (only when a pin is tapped)
@@ -116,7 +165,21 @@ class _MapSearchTabState extends State<MapSearchTab> {
                   beds: 6,
                   baths: 4,
                   salons: 2,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => PropertyDetailsScreen(
+                          imagePath: selected.image,
+                          title: selected.title,
+                          location: selected.location,
+                          price: '250 000 Fcfa',
+                          beds: 6,
+                          baths: 4,
+                          kitchens: 1,
+                        ),
+                      ),
+                    );
+                  },
                 ),
               ),
             ),
@@ -129,7 +192,9 @@ class _MapSearchTabState extends State<MapSearchTab> {
 // ─── Top address card ────────────────────────────────────────────────────────
 
 class _AddressCard extends StatelessWidget {
-  const _AddressCard();
+  const _AddressCard({required this.onChange});
+
+  final VoidCallback onChange;
 
   @override
   Widget build(BuildContext context) {
@@ -180,7 +245,7 @@ class _AddressCard extends StatelessWidget {
             ),
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: onChange,
             child: Container(
               height: 36,
               padding: const EdgeInsets.symmetric(horizontal: 14),
@@ -230,8 +295,10 @@ class _MapOverlay extends StatefulWidget {
 }
 
 class _MapOverlayState extends State<_MapOverlay>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _pulse;
+  int _revealedPins = 0;
+  Timer? _pinRevealTimer;
 
   @override
   void initState() {
@@ -240,11 +307,23 @@ class _MapOverlayState extends State<_MapOverlay>
       vsync: this,
       duration: const Duration(milliseconds: 3800),
     )..repeat();
+
+    _revealedPins = widget.properties.isEmpty ? 0 : 1;
+
+    _pinRevealTimer = Timer.periodic(_pulse.duration!, (_) {
+      if (!mounted) return;
+      final next = (_revealedPins + 1).clamp(0, widget.properties.length);
+      if (next == _revealedPins) return;
+      setState(() {
+        _revealedPins = next;
+      });
+    });
   }
 
   @override
   void dispose() {
     _pulse.dispose();
+    _pinRevealTimer?.cancel();
     super.dispose();
   }
 
@@ -278,19 +357,19 @@ class _MapOverlayState extends State<_MapOverlay>
                         width: outerR * 2,
                         height: outerR * 2,
                         decoration: BoxDecoration(
-                          color: AppColors.primary.withOpacity(0.22),
+                          color: AppColors.primary.withOpacity(0.18),
                           shape: BoxShape.circle,
                         ),
                       ),
                     ),
-                    // Scanning ring: starts behind avatar and expands to outer radius
+                    // Scanning fill: darker background that starts behind avatar and expands to outer radius
                     Positioned(
                       left: center.dx - outerR,
                       top: center.dy - outerR,
                       child: IgnorePointer(
                         child: CustomPaint(
                           size: const Size(outerR * 2, outerR * 2),
-                          painter: _RadarRingPainter(
+                          painter: _RadarFillPainter(
                             color: AppColors.primary,
                             t: t,
                             minRadius: avatarR + 6,
@@ -352,16 +431,22 @@ class _MapOverlayState extends State<_MapOverlay>
               },
             ),
 
-            // ── Pins (static)
-            for (var i = 0; i < widget.properties.length; i++)
-              _pinAt(
-                center,
-                widget.properties[i].dx,
-                widget.properties[i].dy,
-                widget.properties[i].image,
-                selected: widget.selectedIndex == i,
-                onTap: () => widget.onPinTap(i),
-              ),
+            // ── Pins (reveal one per radar pulse)
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                for (var i = 0; i < widget.properties.length; i++)
+                  _pinAt(
+                    center,
+                    widget.properties[i].dx,
+                    widget.properties[i].dy,
+                    widget.properties[i].image,
+                    index: i,
+                    selected: widget.selectedIndex == i,
+                    onTap: () => widget.onPinTap(i),
+                  ),
+              ],
+            ),
           ],
         );
       },
@@ -373,89 +458,70 @@ class _MapOverlayState extends State<_MapOverlay>
     double dx,
     double dy,
     String image, {
+    required int index,
     required bool selected,
     required VoidCallback onTap,
   }) {
-    const pinW = 44.0;
-    const pinH = 62.0;
+    const pinW = 50.0;
+    const pinH = 64.0;
     // Pin tip (dx, dy) maps to (center + dx, center + dy).
     final tipX = center.dx + dx;
     final tipY = center.dy + dy;
 
+    final visible = index < _revealedPins;
+
     return Positioned(
       left: tipX - pinW / 2,
       top: tipY - pinH,
-      child: GestureDetector(
-        onTap: onTap,
-        behavior: HitTestBehavior.opaque,
-        child: _Pin(image: image),
+      child: AnimatedOpacity(
+        opacity: visible ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 260),
+        curve: Curves.easeOut,
+        child: GestureDetector(
+          onTap: onTap,
+          behavior: HitTestBehavior.opaque,
+          child: _Pin(image: image, selected: selected),
+        ),
       ),
     );
-  }
-}
-
-class _RadarRingPainter extends CustomPainter {
-  const _RadarRingPainter({
-    required this.color,
-    required this.t,
-    required this.minRadius,
-    required this.maxRadius,
-  });
-
-  final Color color;
-  final double t;
-  final double minRadius;
-  final double maxRadius;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-
-    final radius = minRadius + ((maxRadius - minRadius) * t);
-    final easedT = Curves.easeOut.transform(t);
-    final gated = ((easedT - 0.08) / 0.92).clamp(0.0, 1.0);
-    final opacity = (gated * (1.0 - gated)) * 1.75;
-
-    final paint = Paint()
-      ..color = color.withOpacity(opacity)
-      ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.6;
-
-    canvas.drawCircle(center, radius, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant _RadarRingPainter oldDelegate) {
-    return oldDelegate.t != t ||
-        oldDelegate.color != color ||
-        oldDelegate.minRadius != minRadius ||
-        oldDelegate.maxRadius != maxRadius;
   }
 }
 
 // ─── Teardrop pin with property image ────────────────────────────────────────
 
 class _Pin extends StatelessWidget {
-  const _Pin({required this.image});
+  const _Pin({required this.image, required this.selected});
 
   final String image;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 44,
-      height: 52,
+      width: 50,
+      height: 64,
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
+          if (selected)
+            Positioned.fill(
+              child: Opacity(
+                opacity: 0.18,
+                child: CustomPaint(
+                  size: const Size(50, 64),
+                  painter: _PinPainter(color: AppColors.primary),
+                ),
+              ),
+            ),
           // Teardrop background
           CustomPaint(
-            size: const Size(44, 52),
-            painter: _PinPainter(),
+            size: const Size(50, 64),
+            painter: _PinPainter(
+                color: selected ? AppColors.primary : AppColors.dark),
           ),
           // Image disc
           Positioned(
-            top: 4,
+            top: 8,
             child: ClipOval(
               child: Image.asset(
                 image,
