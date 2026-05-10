@@ -130,6 +130,8 @@ class _PaymentInvoiceScreenState extends State<PaymentInvoiceScreen> {
               beds: 3,
               baths: 2,
               salons: 1,
+              isFavorite: false,
+              onFavoriteToggle: () {},
               onTap: () {},
             ),
           ),
@@ -409,4 +411,3 @@ class _InvoiceCard extends StatelessWidget {
     return buf.toString().trim();
   }
 }
-

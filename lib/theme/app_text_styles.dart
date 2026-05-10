@@ -42,7 +42,7 @@ class AppTextStyles {
 
   static const TextStyle button = TextStyle(
     fontSize: 16,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w300,
     height: 1.4,
     letterSpacing: 0,
   );

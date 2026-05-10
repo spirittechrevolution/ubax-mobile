@@ -118,6 +118,8 @@ class _ReservationPaymentScreenState extends State<ReservationPaymentScreen> {
                       beds: widget.beds,
                       baths: widget.baths,
                       salons: widget.kitchens,
+                      isFavorite: false,
+                      onFavoriteToggle: () {},
                       onTap: () {},
                     ),
                     const SizedBox(height: 30),

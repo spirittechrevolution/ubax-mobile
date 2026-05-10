@@ -3,6 +3,7 @@ import 'package:statefulclickcounter/features/customer/chat/screens/chat_screen.
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -36,6 +37,9 @@ class PropertyDetailsScreen extends StatefulWidget {
 }
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
+  String get _favoriteId =>
+      'details-${widget.title}-${widget.location}-${widget.imagePath}';
+
   static const _extraGallery = [
     'assets/images/modern-elegant-living-room-interior-with-abstract-art.jpg',
     'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
@@ -108,11 +112,12 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             imagePath: _currentImage,
             gallery: _gallery,
             galleryExpanded: _galleryExpanded,
+            favoriteId: _favoriteId,
             onToggleGallery: () =>
                 setState(() => _galleryExpanded = !_galleryExpanded),
             onSelectImage: (path) => setState(() => _currentImage = path),
             onBack: () => Navigator.of(context).pop(),
-            onFavorite: () {},
+            onFavorite: () => FavoritesStore.instance.toggle(_favoriteId),
             onView360: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -276,6 +281,7 @@ class _Header extends StatelessWidget {
     required this.imagePath,
     required this.gallery,
     required this.galleryExpanded,
+    required this.favoriteId,
     required this.onToggleGallery,
     required this.onSelectImage,
     required this.onBack,
@@ -287,6 +293,7 @@ class _Header extends StatelessWidget {
   final String imagePath;
   final List<String> gallery;
   final bool galleryExpanded;
+  final String favoriteId;
   final VoidCallback onToggleGallery;
   final ValueChanged<String> onSelectImage;
   final VoidCallback onBack;
@@ -340,9 +347,17 @@ class _Header extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  _CircleIcon(
-                    icon: Icons.favorite_border_rounded,
-                    onTap: onFavorite,
+                  ValueListenableBuilder<Set<String>>(
+                    valueListenable: FavoritesStore.instance.favorites,
+                    builder: (context, favs, _) {
+                      final isFav = favs.contains(favoriteId);
+                      return _CircleIcon(
+                        icon: isFav
+                            ? Icons.favorite_rounded
+                            : Icons.favorite_border_rounded,
+                        onTap: onFavorite,
+                      );
+                    },
                   ),
                 ],
               ),
@@ -661,8 +676,8 @@ class _AmenityCard extends StatelessWidget {
               border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
             ),
             alignment: Alignment.center,
-            child: Icon(item.icon,
-                color: PropertyDetailsScreen._dark, size: 16),
+            child:
+                Icon(item.icon, color: PropertyDetailsScreen._dark, size: 16),
           ),
           const SizedBox(width: 8),
           Expanded(
@@ -729,8 +744,8 @@ class _LocationCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             alignment: Alignment.center,
-            child: const Icon(Icons.map_outlined,
-                color: Colors.white, size: 22),
+            child:
+                const Icon(Icons.map_outlined, color: Colors.white, size: 22),
           ),
         ),
       ],

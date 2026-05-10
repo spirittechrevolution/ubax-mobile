@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
-import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
-import 'package:statefulclickcounter/features/customer/home/screens/proprety/property_details_screen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -140,11 +141,7 @@ class _MapSearchTabState extends State<MapSearchTab> {
           right: 14,
           child: _AddressCard(
             onChange: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const AddressSearchScreen(),
-                ),
-              );
+              context.push(AppRoutes.addressSearch);
             },
           ),
         ),
@@ -165,18 +162,23 @@ class _MapSearchTabState extends State<MapSearchTab> {
                   beds: 6,
                   baths: 4,
                   salons: 2,
+                  isFavorite: FavoritesStore.instance.isFavorite(
+                    'map-${selected.title}-${selected.location}',
+                  ),
+                  onFavoriteToggle: () => FavoritesStore.instance.toggle(
+                    'map-${selected.title}-${selected.location}',
+                  ),
                   onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => PropertyDetailsScreen(
-                          imagePath: selected.image,
-                          title: selected.title,
-                          location: selected.location,
-                          price: '250 000 Fcfa',
-                          beds: 6,
-                          baths: 4,
-                          kitchens: 1,
-                        ),
+                    context.push(
+                      AppRoutes.propertyDetails,
+                      extra: PropertyDetailsArgs(
+                        imagePath: selected.image,
+                        title: selected.title,
+                        location: selected.location,
+                        price: '250 000 Fcfa',
+                        beds: 6,
+                        baths: 4,
+                        kitchens: 1,
                       ),
                     );
                   },

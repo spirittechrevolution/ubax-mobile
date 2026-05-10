@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -25,6 +26,7 @@ class _RecommendedList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final favorites = FavoritesStore.instance;
     final data = selectedType == 'Villas'
         ? _kRecommandesVillas
         : selectedType == 'Résidences'
@@ -46,6 +48,8 @@ class _RecommendedList extends StatelessWidget {
                         ) ??
                         0,
                     rating: 4.7,
+                    favoriteId:
+                        'hotel-${p['name'] as String}-${p['location'] as String}',
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -70,6 +74,12 @@ class _RecommendedList extends StatelessWidget {
                     beds: p['beds'] as int,
                     baths: p['baths'] as int,
                     salons: p['salons'] as int,
+                    isFavorite: favorites.isFavorite(
+                      'stay-${p['name'] as String}-${p['location'] as String}',
+                    ),
+                    onFavoriteToggle: () => favorites.toggle(
+                      'stay-${p['name'] as String}-${p['location'] as String}',
+                    ),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -660,6 +670,8 @@ class _HotelsTabState extends State<HotelsTab> {
                                 location: p['location'] as String,
                                 pricePerNight: p['price'] as int,
                                 rating: (p['rating'] as num).toDouble(),
+                                favoriteId:
+                                    'popular-${p['name'] as String}-${p['location'] as String}',
                               ),
                             );
                           },
@@ -737,6 +749,7 @@ class _HotelHorizontalCard extends StatelessWidget {
     required this.location,
     required this.price,
     required this.rating,
+    required this.favoriteId,
     required this.onTap,
   });
 
@@ -745,6 +758,7 @@ class _HotelHorizontalCard extends StatelessWidget {
   final String location;
   final int price;
   final double rating;
+  final String favoriteId;
   final VoidCallback onTap;
 
   @override
@@ -782,6 +796,7 @@ class _HotelHorizontalCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Expanded(
                           child: Text(
@@ -797,12 +812,30 @@ class _HotelHorizontalCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const Icon(Icons.favorite_rounded,
-                            color: Colors.red, size: 14),
-                        const SizedBox(width: 6),
+                        ValueListenableBuilder<Set<String>>(
+                          valueListenable: FavoritesStore.instance.favorites,
+                          builder: (context, favs, _) {
+                            final isFav = favs.contains(favoriteId);
+                            return InkWell(
+                              onTap: () =>
+                                  FavoritesStore.instance.toggle(favoriteId),
+                              borderRadius: BorderRadius.circular(20),
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(8, 0, 6, 0),
+                                child: Icon(
+                                  Icons.favorite_rounded,
+                                  color: isFav
+                                      ? const Color(0xFFEF4444)
+                                      : AppColors.muted,
+                                  size: 14,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                       ],
                     ),
-                    const SizedBox(height: 16),
+                    const SizedBox(height: 12),
                     Row(
                       children: [
                         const Icon(Icons.location_on_outlined,
@@ -1003,6 +1036,7 @@ class _PopularCard extends StatelessWidget {
     required this.location,
     required this.pricePerNight,
     required this.rating,
+    required this.favoriteId,
   });
 
   final String imagePath;
@@ -1010,6 +1044,7 @@ class _PopularCard extends StatelessWidget {
   final String location;
   final int pricePerNight;
   final double rating;
+  final String favoriteId;
 
   @override
   Widget build(BuildContext context) {
@@ -1047,16 +1082,30 @@ class _PopularCard extends StatelessWidget {
             Positioned(
               top: 10,
               right: 10,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-                alignment: Alignment.center,
-                child: const Icon(Icons.favorite_rounded,
-                    color: Colors.red, size: 11),
+              child: ValueListenableBuilder<Set<String>>(
+                valueListenable: FavoritesStore.instance.favorites,
+                builder: (context, favs, _) {
+                  final isFav = favs.contains(favoriteId);
+                  return InkWell(
+                    onTap: () => FavoritesStore.instance.toggle(favoriteId),
+                    borderRadius: BorderRadius.circular(22),
+                    child: Container(
+                      width: 20,
+                      height: 20,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.white,
+                      ),
+                      alignment: Alignment.center,
+                      child: Icon(
+                        Icons.favorite_rounded,
+                        color:
+                            isFav ? const Color(0xFFEF4444) : AppColors.muted,
+                        size: 11,
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
             // Info at bottom

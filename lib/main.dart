@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:statefulclickcounter/features/customer/home/screens/home_screen.dart';
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
 import 'package:statefulclickcounter/theme/app_theme.dart';
-
-import 'features/onboarding/app_start.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,14 +30,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: _title,
       locale: context.locale,
       supportedLocales: context.supportedLocales,
       localizationsDelegates: context.localizationDelegates,
       theme: AppTheme.light(),
-      home: const AppStart(home: HomeScreen()),
+      routerConfig: AppRouter.router,
     );
   }
 }

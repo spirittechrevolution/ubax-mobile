@@ -37,7 +37,10 @@ class OrangeButton extends StatelessWidget {
           elevation: 0,
         ),
         onPressed: onPressed,
-        child: Text(text, style: textStyle ?? AppTextStyles.button),
+        child: Text(
+          text,
+          style: textStyle ?? AppTextStyles.button,
+        ),
       ),
     );
   }

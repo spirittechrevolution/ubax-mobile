@@ -74,11 +74,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             onPageChanged: (i) => setState(() => _index = i),
             itemBuilder: (context, i) {
               final p = _pages[i];
-              return _OnboardingPage(
-                data: p,
-                index: i,
-                total: _pages.length,
-                orange: _orange,
+              return AnimatedBuilder(
+                animation: _pageController,
+                builder: (context, _) {
+                  final page = _pageController.hasClients
+                      ? (_pageController.page ?? _index.toDouble())
+                      : _index.toDouble();
+                  final delta = (page - i).clamp(-1.0, 1.0);
+
+                  return _OnboardingPage(
+                    data: p,
+                    index: i,
+                    total: _pages.length,
+                    orange: _orange,
+                    delta: delta,
+                  );
+                },
               );
             },
           ),
@@ -118,21 +129,36 @@ class _OnboardingPage extends StatelessWidget {
     required this.index,
     required this.total,
     required this.orange,
+    required this.delta,
   });
 
   final _OnboardingPageData data;
   final int index;
   final int total;
   final Color orange;
+  final double delta;
 
   @override
   Widget build(BuildContext context) {
+    final dAbs = Curves.easeOut.transform(delta.abs());
+    final dx = -delta * 72;
+    final dy = dAbs * 16;
+    final scale = 1.0 + (dAbs * 0.10);
+    final contentDx = delta * 22;
+    final contentOpacity = (1.0 - (dAbs * 0.22)).clamp(0.0, 1.0);
+
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(
-          data.imageAsset,
-          fit: BoxFit.cover,
+        Transform.translate(
+          offset: Offset(dx, dy),
+          child: Transform.scale(
+            scale: scale,
+            child: Image.asset(
+              data.imageAsset,
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
         Container(
           decoration: const BoxDecoration(
@@ -148,37 +174,46 @@ class _OnboardingPage extends StatelessWidget {
             ),
           ),
         ),
-        SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: Image.asset(
-                    'assets/icons/logoUbaxWhite.png',
-                    width: 54,
-                    height: 54,
-                  ),
+        Opacity(
+          opacity: contentOpacity,
+          child: Transform.translate(
+            offset: Offset(contentDx, 0),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Center(
+                      child: Image.asset(
+                        'assets/icons/logoUbaxWhite.png',
+                        width: 54,
+                        height: 54,
+                      ),
+                    ),
+                    const SizedBox(height: 18),
+                    _ProgressBar(
+                      index: index,
+                      total: total,
+                      orange: orange,
+                    ),
+                    const Spacer(),
+                    Text(
+                      data.titleKey.tr(),
+                      style: AppTextStyles.semibold30
+                          .copyWith(color: Colors.white),
+                    ),
+                    const SizedBox(height: 22),
+                    Text(
+                      data.descriptionKey.tr(),
+                      style:
+                          AppTextStyles.light15.copyWith(color: Colors.white),
+                    ),
+                    SizedBox(
+                        height: MediaQuery.of(context).padding.bottom + 92),
+                  ],
                 ),
-                const SizedBox(height: 18),
-                _ProgressBar(
-                  index: index,
-                  total: total,
-                  orange: orange,
-                ),
-                const Spacer(),
-                Text(
-                  data.titleKey.tr(),
-                  style: AppTextStyles.semibold30.copyWith(color: Colors.white),
-                ),
-                const SizedBox(height: 22),
-                Text(
-                  data.descriptionKey.tr(),
-                  style: AppTextStyles.light15.copyWith(color: Colors.white),
-                ),
-                SizedBox(height: MediaQuery.of(context).padding.bottom + 92),
-              ],
+              ),
             ),
           ),
         ),

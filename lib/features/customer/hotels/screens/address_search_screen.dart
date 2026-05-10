@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'package:statefulclickcounter/features/customer/hotels/screens/search_results_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -184,14 +183,6 @@ class _AddressSearchScreenState extends State<AddressSearchScreen> {
                         return InkWell(
                           onTap: () {
                             Navigator.of(context).pop(item.title);
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => SearchResultsScreen(
-                                  addressTitle: item.title,
-                                  addressSubtitle: item.subtitle,
-                                ),
-                              ),
-                            );
                           },
                           child: Padding(
                             padding: const EdgeInsets.symmetric(vertical: 14),

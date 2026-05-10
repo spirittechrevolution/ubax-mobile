@@ -244,7 +244,14 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
             const SizedBox(height: 22),
             DarkButton(
               text: 'Appliquer',
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () {
+                Navigator.of(context).pop(<String, dynamic>{
+                  'rent': _rent,
+                  'zone': _zone,
+                  'type': _propertyType,
+                  'rooms': _propertyType == 'Terrain' ? null : _bedrooms,
+                });
+              },
               height: 56,
               borderRadius: 24,
             ),

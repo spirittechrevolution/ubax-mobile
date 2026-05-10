@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -466,7 +467,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
                           crossAxisCount: 2,
                           crossAxisSpacing: 12,
                           mainAxisSpacing: 12,
-                          childAspectRatio: 0.84,
+                          childAspectRatio: 0.86,
                         ),
                         itemCount: displayed.length,
                         itemBuilder: (_, i) =>
@@ -514,10 +515,10 @@ class _FavoritesSkeleton extends StatelessWidget {
           crossAxisCount: 2,
           crossAxisSpacing: 12,
           mainAxisSpacing: 12,
-          childAspectRatio: 0.84,
+          childAspectRatio: 0.90,
         ),
         itemCount: 4,
-        itemBuilder: (_, __) => block(h: 230),
+        itemBuilder: (_, __) => block(h: 215),
       );
     }
 
@@ -806,13 +807,30 @@ class _PropertyCard extends StatelessWidget {
                         ),
                       ),
                       // Heart
-                      const Positioned(
-                        top: 12,
-                        right: 6,
-                        child: Icon(
-                          Icons.favorite_rounded,
-                          color: Colors.red,
-                          size: 14,
+                      Positioned(
+                        top: 6,
+                        right: 2,
+                        child: ValueListenableBuilder<Set<String>>(
+                          valueListenable: FavoritesStore.instance.favorites,
+                          builder: (context, favs, _) {
+                            final id =
+                                'fav-${data.name}-${data.location}-${data.imagePath}';
+                            final isFav = favs.contains(id);
+                            return InkWell(
+                              onTap: () => FavoritesStore.instance.toggle(id),
+                              borderRadius: BorderRadius.circular(20),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8),
+                                child: Icon(
+                                  Icons.favorite_rounded,
+                                  color: isFav
+                                      ? const Color(0xFFEF4444)
+                                      : Colors.white,
+                                  size: 14,
+                                ),
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ],

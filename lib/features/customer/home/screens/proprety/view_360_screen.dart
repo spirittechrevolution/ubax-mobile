@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:flutter/services.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
@@ -29,8 +30,10 @@ class _View360ScreenState extends State<View360Screen>
     with SingleTickerProviderStateMixin {
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
-  bool _isFavorite = false;
   final ScrollController _scrollController = ScrollController();
+
+  String get _favoriteId =>
+      '360-${widget.title}-${widget.location}-${widget.imagePath}';
 
   @override
   void initState() {
@@ -198,16 +201,22 @@ class _View360ScreenState extends State<View360Screen>
                       const SizedBox(height: 20),
 
                       // Card propriété
-                      _PropertyCard(
-                        imagePath: widget.imagePath,
-                        title: widget.title,
-                        location: widget.location,
-                        beds: widget.beds,
-                        baths: widget.baths,
-                        kitchens: widget.kitchens,
-                        isFavorite: _isFavorite,
-                        onFavoriteTap: () =>
-                            setState(() => _isFavorite = !_isFavorite),
+                      ValueListenableBuilder<Set<String>>(
+                        valueListenable: FavoritesStore.instance.favorites,
+                        builder: (context, favs, _) {
+                          final isFav = favs.contains(_favoriteId);
+                          return _PropertyCard(
+                            imagePath: widget.imagePath,
+                            title: widget.title,
+                            location: widget.location,
+                            beds: widget.beds,
+                            baths: widget.baths,
+                            kitchens: widget.kitchens,
+                            isFavorite: isFav,
+                            onFavoriteTap: () =>
+                                FavoritesStore.instance.toggle(_favoriteId),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -396,9 +405,7 @@ class _PropertyCard extends StatelessWidget {
                   spacing: 8,
                   runSpacing: 3,
                   children: [
-                    _Meta(
-                        icon: Icons.bed_rounded,
-                        text: '$beds  Chambres'),
+                    _Meta(icon: Icons.bed_rounded, text: '$beds  Chambres'),
                     _Meta(
                         icon: Icons.bathtub_outlined,
                         text: '$baths  Salle de bains'),

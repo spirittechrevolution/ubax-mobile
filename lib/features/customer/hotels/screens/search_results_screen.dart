@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -325,6 +326,7 @@ class _HotelListCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Expanded(
                         child: Text(
@@ -338,16 +340,33 @@ class _HotelListCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Container(
-                        width: 26,
-                        height: 26,
-                        decoration: const BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Color(0xFFF1F5F9),
-                        ),
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.favorite_rounded,
-                            color: Colors.red, size: 14),
+                      ValueListenableBuilder<Set<String>>(
+                        valueListenable: FavoritesStore.instance.favorites,
+                        builder: (context, favs, _) {
+                          final id =
+                              'results-${data.name}-${data.location}-${data.image}';
+                          final isFav = favs.contains(id);
+                          return InkWell(
+                            onTap: () => FavoritesStore.instance.toggle(id),
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              width: 26,
+                              height: 26,
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Color(0xFFF1F5F9),
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.favorite_rounded,
+                                color: isFav
+                                    ? const Color(0xFFEF4444)
+                                    : AppColors.muted,
+                                size: 14,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(width: 10),
                     ],
@@ -489,16 +508,33 @@ class _GridCard extends StatelessWidget {
                 Positioned(
                   top: 6,
                   right: 6,
-                  child: Container(
-                    width: 22,
-                    height: 22,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Colors.white,
-                    ),
-                    alignment: Alignment.center,
-                    child: const Icon(Icons.favorite_rounded,
-                        color: Colors.red, size: 12),
+                  child: ValueListenableBuilder<Set<String>>(
+                    valueListenable: FavoritesStore.instance.favorites,
+                    builder: (context, favs, _) {
+                      final id =
+                          'results-grid-${data.name}-${data.location}-${data.image}';
+                      final isFav = favs.contains(id);
+                      return InkWell(
+                        onTap: () => FavoritesStore.instance.toggle(id),
+                        borderRadius: BorderRadius.circular(20),
+                        child: Container(
+                          width: 22,
+                          height: 22,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                          ),
+                          alignment: Alignment.center,
+                          child: Icon(
+                            Icons.favorite_rounded,
+                            color: isFav
+                                ? const Color(0xFFEF4444)
+                                : AppColors.muted,
+                            size: 12,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
