@@ -1,12 +1,19 @@
 import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
+import 'package:statefulclickcounter/core/di/injection.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/search_results_screen.dart';
 import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
+import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -14,6 +21,112 @@ class _TypeData {
   const _TypeData(this.label, this.icon);
   final String label;
   final IconData icon;
+}
+
+class _PopularSkeleton extends StatelessWidget {
+  const _PopularSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget block() {
+      return Container(
+        width: 156,
+        height: 220,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE2E8F0),
+          borderRadius: BorderRadius.circular(12),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      scrollDirection: Axis.horizontal,
+      itemCount: 3,
+      separatorBuilder: (_, __) => const SizedBox(width: 12),
+      itemBuilder: (_, __) => block(),
+    );
+  }
+}
+
+class _ApiRecommendedList extends StatelessWidget {
+  const _ApiRecommendedList({
+    super.key,
+    required this.items,
+    required this.selectedType,
+  });
+
+  final List<PropertyItem> items;
+  final String selectedType;
+
+  int _asInt(num v) => v.round();
+
+  @override
+  Widget build(BuildContext context) {
+    final favorites = FavoritesStore.instance;
+    return Column(
+      children: [
+        for (final p in items)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 12),
+            child: selectedType == 'Hotels'
+                ? _HotelHorizontalCard(
+                    imagePath: p.coverPhotoUrl ?? 'assets/images/chambre12.jpg',
+                    title: p.title,
+                    location: p.district.isNotEmpty
+                        ? '${p.district}, ${p.city}'
+                        : p.city,
+                    price: _asInt(p.price),
+                    rating: 4.7,
+                    favoriteId: 'hotel-${p.id}',
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => HotelDetailsScreen(
+                            imagePath: p.coverPhotoUrl ??
+                                'assets/images/chambre12.jpg',
+                            name: p.title,
+                            location: p.district.isNotEmpty
+                                ? '${p.district}, ${p.city}'
+                                : p.city,
+                            price: _asInt(p.price),
+                            rating: 4.7,
+                          ),
+                        ),
+                      );
+                    },
+                  )
+                : RecommendedTile(
+                    imagePath: p.coverPhotoUrl ?? 'assets/images/chambre11.jpg',
+                    title: p.title,
+                    location: p.district.isNotEmpty
+                        ? '${p.district}, ${p.city}'
+                        : p.city,
+                    beds: p.bedrooms,
+                    baths: p.bathrooms,
+                    salons: 1,
+                    isFavorite: favorites.isFavorite('stay-${p.id}'),
+                    onFavoriteToggle: () => favorites.toggle('stay-${p.id}'),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => HotelDetailsScreen(
+                            imagePath: p.coverPhotoUrl ??
+                                'assets/images/chambre11.jpg',
+                            name: p.title,
+                            location: p.district.isNotEmpty
+                                ? '${p.district}, ${p.city}'
+                                : p.city,
+                            price: _asInt(p.price),
+                            rating: 4.7,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+          ),
+      ],
+    );
+  }
 }
 
 class _RecommendedList extends StatelessWidget {
@@ -138,23 +251,21 @@ const _kTypes = [
 
 const _kPopulaires = [
   {
-    'image': 'assets/images/expedia_group-695130-2cf588-799717.jpg',
+    'image': 'assets/images/chambre12.jpg',
     'name': 'Hôtel Azur Cocody',
     'location': 'Cocody Angré, Abidjan',
     'price': 45000,
     'rating': 4.5,
   },
   {
-    'image':
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    'image': 'assets/images/chambre11.jpg',
     'name': 'Résidence Lagune Prestige',
     'location': 'Zone 4, Marcory – Abidjan',
     'price': 65000,
     'rating': 4.7,
   },
   {
-    'image':
-        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'image': 'assets/images/chambre12.jpg',
     'name': 'Palm Club Plateau',
     'location': 'Centre-ville – Abidjan',
     'price': 55000,
@@ -231,8 +342,8 @@ const _kRecommandesVillas = [
 
 const _kRecommandesResidences = [
   {
-    'image': 'assets/images/appartements-luxe.jpg',
-    'name': 'Résidence premium\\nau Plateau',
+    'image': 'assets/images/chambre.jpg',
+    'name': 'Résidence premium\nau Plateau',
     'location': 'Plateau, Abidjan – Côte d\'Ivoire',
     'beds': 2,
     'baths': 2,
@@ -249,9 +360,8 @@ const _kRecommandesResidences = [
     'price': '190 000',
   },
   {
-    'image':
-        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
-    'name': 'Résidence standing\\nà Cocody',
+    'image': 'assets/images/chambre.jpg',
+    'name': 'Résidence standing\nà Cocody',
     'location': 'Cocody, Abidjan – Côte d\'Ivoire',
     'beds': 3,
     'baths': 2,
@@ -278,6 +388,24 @@ class _HotelsTabState extends State<HotelsTab> {
   DateTime _arrival = DateTime(2026, 3, 15);
   DateTime _departure = DateTime(2026, 3, 18);
 
+  bool _apiLoading = true;
+  List<PropertyItem> _apiItems = const [];
+
+  bool _isRefreshing = false;
+
+  ({String title, String subtitle}) _splitAddress(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return (title: '', subtitle: '');
+
+    final parts =
+        trimmed.split(',').map((e) => e.trim()).toList(growable: false);
+    if (parts.length <= 1) return (title: trimmed, subtitle: trimmed);
+
+    final title = parts.first;
+    final subtitle = parts.sublist(1).where((e) => e.isNotEmpty).join(', ');
+    return (title: title, subtitle: subtitle.isEmpty ? trimmed : subtitle);
+  }
+
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0;
 
@@ -290,6 +418,75 @@ class _HotelsTabState extends State<HotelsTab> {
         setState(() => _scrollOffset = clamped);
       }
     });
+
+    _loadApi();
+  }
+
+  Future<void> _loadApi() async {
+    setState(() => _apiLoading = true);
+    try {
+      String? apiType;
+      if (_selectedType == 'Villas') apiType = 'VILLA';
+      if (_selectedType == 'Résidences') apiType = 'APPARTEMENT';
+
+      String? apiCity;
+      final addr = _selectedAddress;
+      if (addr != null && addr.trim().isNotEmpty) {
+        apiCity = addr.split(',').first.trim();
+      }
+
+      final page = await getIt<PropertiesRepository>().getProperties(
+        type: apiType,
+        city: apiCity,
+      );
+      if (!mounted) return;
+      setState(() {
+        _apiItems = page.results;
+        _apiLoading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() {
+        _apiItems = const [];
+        _apiLoading = false;
+      });
+    }
+  }
+
+  Future<void> _handlePullToRefresh() async {
+    if (_isRefreshing) return;
+    setState(() {
+      _isRefreshing = true;
+      _apiLoading = true;
+    });
+    try {
+      await Future.wait([
+        _loadApi(),
+        Future<void>.delayed(const Duration(milliseconds: 220)),
+      ]);
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _isRefreshing = false;
+        _apiLoading = false;
+      });
+    }
+  }
+
+  bool _matchesType(PropertyItem p) {
+    final type = p.propertyType.toUpperCase();
+    if (_selectedType == 'Hotels') return p.hotelId != null;
+    if (_selectedType == 'Villas') return type == 'VILLA';
+    // Résidences
+    return type == 'APARTMENT';
+  }
+
+  ({List<PropertyItem> popular, List<PropertyItem> recommended}) _splitApi() {
+    final filtered = _apiItems.where(_matchesType).toList(growable: false);
+    final popular = filtered.where((p) => p.boosted).toList(growable: false);
+    final recommended =
+        filtered.where((p) => !p.boosted).toList(growable: false);
+    return (popular: popular, recommended: recommended);
   }
 
   Future<void> _handleTypeChanged(String next) async {
@@ -301,6 +498,8 @@ class _HotelsTabState extends State<HotelsTab> {
       _selectedType = next;
       _isSwitchingType = false;
     });
+
+    _loadApi();
   }
 
   @override
@@ -315,13 +514,21 @@ class _HotelsTabState extends State<HotelsTab> {
     );
     if (!mounted || result == null) return;
     setState(() => _selectedAddress = result);
+    _loadApi();
   }
 
   Future<void> _pickDate({required bool isArrival}) async {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final firstDate = today;
+
+    final current = isArrival ? _arrival : _departure;
+    final safeInitial = current.isBefore(firstDate) ? firstDate : current;
+
     final picked = await showDatePicker(
       context: context,
-      initialDate: isArrival ? _arrival : _departure,
-      firstDate: DateTime.now(),
+      initialDate: safeInitial,
+      firstDate: firstDate,
       lastDate: DateTime(2027),
       builder: (ctx, child) => Theme(
         data: Theme.of(ctx).copyWith(
@@ -334,17 +541,22 @@ class _HotelsTabState extends State<HotelsTab> {
     setState(() {
       if (isArrival) {
         _arrival = picked;
-        if (_departure.isBefore(_arrival)) {
-          _departure = _arrival.add(const Duration(days: 1));
+
+        final minDeparture = _arrival.add(const Duration(days: 1));
+        if (_departure.isBefore(minDeparture)) {
+          _departure = minDeparture;
         }
       } else {
-        _departure = picked;
+        final minDeparture = _arrival.add(const Duration(days: 1));
+        _departure = picked.isBefore(minDeparture) ? minDeparture : picked;
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    final api = _splitApi();
+
     return Container(
       color: AppColors.background,
       child: Column(
@@ -361,20 +573,23 @@ class _HotelsTabState extends State<HotelsTab> {
               ),
               child: Row(
                 children: [
-                  ClipOval(
-                    child: Image.asset(
-                      'assets/images/pexels-ekrulila-2128329.jpg',
-                      width: 44,
-                      height: 44,
-                      fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
-                        width: 44,
-                        height: 44,
-                        color: const Color(0xFF2D4A65),
-                        alignment: Alignment.center,
-                        child: const Icon(Icons.person, color: Colors.white),
-                      ),
-                    ),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (prev, next) =>
+                        prev.currentUser?.avatarUrl !=
+                        next.currentUser?.avatarUrl,
+                    builder: (context, state) {
+                      final url = state.currentUser?.avatarUrl;
+                      final hasUrl = url != null && url.trim().isNotEmpty;
+                      return CircleAvatar(
+                        radius: 22,
+                        backgroundColor: const Color(0xFF2D4A65),
+                        backgroundImage:
+                            hasUrl ? NetworkImage(url) as ImageProvider : null,
+                        child: hasUrl
+                            ? null
+                            : const Icon(Icons.person, color: Colors.white),
+                      );
+                    },
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -397,13 +612,26 @@ class _HotelsTabState extends State<HotelsTab> {
                           ],
                         ),
                         const SizedBox(height: 2),
-                        Text(
-                          'Arnaud Koffi',
-                          style: AppTextStyles.regularlight16.copyWith(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, next) =>
+                              prev.currentUser != next.currentUser,
+                          builder: (context, state) {
+                            final name =
+                                state.currentUser?.fullName.trim().isNotEmpty ==
+                                        true
+                                    ? state.currentUser!.fullName
+                                    : '—';
+                            return Text(
+                              name,
+                              style: AppTextStyles.regularlight16.copyWith(
+                                color: Colors.white,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -457,12 +685,23 @@ class _HotelsTabState extends State<HotelsTab> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ClipOval(
-                          child: CountryFlag.fromCountryCode(
-                            'CI',
-                            width: 28,
-                            height: 28,
-                          ),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, next) =>
+                              prev.currentUser?.country !=
+                              next.currentUser?.country,
+                          builder: (context, state) {
+                            final raw = state.currentUser?.country;
+                            final code = (raw == null || raw.trim().length != 2)
+                                ? 'CI'
+                                : raw.trim().toUpperCase();
+                            return ClipOval(
+                              child: CountryFlag.fromCountryCode(
+                                code,
+                                width: 28,
+                                height: 28,
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(width: 4),
                         const Icon(
@@ -493,244 +732,317 @@ class _HotelsTabState extends State<HotelsTab> {
                     ),
                   ),
                 ),
-                SingleChildScrollView(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ── Search card
-                      Container(
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(22),
-                          boxShadow: const [
-                            BoxShadow(
-                              color: Color(0x14000000),
-                              blurRadius: 20,
-                              offset: Offset(0, 8),
-                            ),
-                          ],
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Address
-                            GestureDetector(
-                              onTap: _pickAddress,
-                              child: Container(
-                                height: 43,
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 14),
-                                decoration: BoxDecoration(
-                                  color: const Color(0xFFECF2F7),
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.location_on_outlined,
-                                        size: 20, color: AppColors.dark),
-                                    const SizedBox(width: 8),
-                                    Expanded(
-                                      child: Text(
-                                        _selectedAddress ??
-                                            'Sélectionner une adresse',
-                                        style: AppTextStyles.regular12.copyWith(
-                                          color: AppColors.text,
-                                          fontSize: 12,
-                                          fontWeight: _selectedAddress != null
-                                              ? FontWeight.w500
-                                              : FontWeight.w400,
-                                        ),
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                    ),
-                                    Container(
-                                      width: 34,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(17),
-                                      ),
-                                      alignment: Alignment.center,
-                                      child: const Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: AppColors.primary,
-                                          size: 20),
-                                    ),
-                                  ],
-                                ),
+                RefreshIndicator(
+                  onRefresh: _handlePullToRefresh,
+                  child: SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(18, 18, 18, 18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // ── Search card
+                        Container(
+                          padding: const EdgeInsets.all(16),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(22),
+                            boxShadow: const [
+                              BoxShadow(
+                                color: Color(0x14000000),
+                                blurRadius: 20,
+                                offset: Offset(0, 8),
                               ),
-                            ),
-                            const SizedBox(height: 12),
-                            // Type pills — same style as Mes réservations
-                            Row(
-                              children: [
-                                for (var i = 0; i < _kTypes.length; i++) ...[
-                                  Expanded(
-                                    child: _TypePill(
-                                      data: _kTypes[i],
-                                      selected:
-                                          _kTypes[i].label == _selectedType,
-                                      onTap: () =>
-                                          _handleTypeChanged(_kTypes[i].label),
-                                    ),
-                                  ),
-                                  if (i < _kTypes.length - 1)
-                                    const SizedBox(width: 10),
-                                ],
-                              ],
-                            ),
-                            const SizedBox(height: 12),
-                            // Date pickers
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => _pickDate(isArrival: true),
-                                    child: _DateCard(
-                                      label: 'Arrivée',
-                                      date: _arrival,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () => _pickDate(isArrival: false),
-                                    child: _DateCard(
-                                      label: 'Départ',
-                                      date: _departure,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 14),
-                            // Search button
-                            SizedBox(
-                              width: double.infinity,
-                              height: 43,
-                              child: ElevatedButton.icon(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
-                                  foregroundColor: Colors.white,
-                                  elevation: 0,
-                                  shape: RoundedRectangleBorder(
+                            ],
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Address
+                              GestureDetector(
+                                onTap: _pickAddress,
+                                child: Container(
+                                  height: 43,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFECF2F7),
                                     borderRadius: BorderRadius.circular(25),
                                   ),
-                                ),
-                                onPressed: () {},
-                                icon:
-                                    const Icon(Icons.search_rounded, size: 20),
-                                label: Text(
-                                  'Rechercher',
-                                  style: AppTextStyles.button
-                                      .copyWith(fontSize: 15),
+                                  child: Row(
+                                    children: [
+                                      const Icon(Icons.location_on_outlined,
+                                          size: 20, color: AppColors.dark),
+                                      const SizedBox(width: 8),
+                                      Expanded(
+                                        child: Text(
+                                          _selectedAddress ??
+                                              'Sélectionner une adresse',
+                                          style:
+                                              AppTextStyles.regular12.copyWith(
+                                            color: AppColors.text,
+                                            fontSize: 12,
+                                            fontWeight: _selectedAddress != null
+                                                ? FontWeight.w500
+                                                : FontWeight.w400,
+                                          ),
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                      ),
+                                      Container(
+                                        width: 34,
+                                        height: 34,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius:
+                                              BorderRadius.circular(17),
+                                        ),
+                                        alignment: Alignment.center,
+                                        child: const Icon(
+                                            Icons.keyboard_arrow_down_rounded,
+                                            color: AppColors.primary,
+                                            size: 20),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // ── Populaires
-                      _SectionRow(title: 'Populaires', onMore: () {}),
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        height: 220,
-                        child: ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: _kPopulaires.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 12),
-                          itemBuilder: (_, i) {
-                            final p = _kPopulaires[i];
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => HotelDetailsScreen(
-                                      imagePath: p['image'] as String,
-                                      name: p['name'] as String,
-                                      location: p['location'] as String,
-                                      price: p['price'] as int,
-                                      rating: (p['rating'] as num).toDouble(),
+                              const SizedBox(height: 12),
+                              // Type pills — same style as Mes réservations
+                              Row(
+                                children: [
+                                  for (var i = 0; i < _kTypes.length; i++) ...[
+                                    Expanded(
+                                      child: _TypePill(
+                                        data: _kTypes[i],
+                                        selected:
+                                            _kTypes[i].label == _selectedType,
+                                        onTap: () => _handleTypeChanged(
+                                            _kTypes[i].label),
+                                      ),
+                                    ),
+                                    if (i < _kTypes.length - 1)
+                                      const SizedBox(width: 10),
+                                  ],
+                                ],
+                              ),
+                              const SizedBox(height: 12),
+                              // Date pickers
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () => _pickDate(isArrival: true),
+                                      child: _DateCard(
+                                        label: 'Arrivée',
+                                        date: _arrival,
+                                      ),
                                     ),
                                   ),
-                                );
-                              },
-                              child: _PopularCard(
-                                imagePath: p['image'] as String,
-                                name: p['name'] as String,
-                                location: p['location'] as String,
-                                pricePerNight: p['price'] as int,
-                                rating: (p['rating'] as num).toDouble(),
-                                favoriteId:
-                                    'popular-${p['name'] as String}-${p['location'] as String}',
+                                  const SizedBox(width: 10),
+                                  Expanded(
+                                    child: GestureDetector(
+                                      onTap: () => _pickDate(isArrival: false),
+                                      child: _DateCard(
+                                        label: 'Départ',
+                                        date: _departure,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            );
-                          },
-                        ),
-                      ),
+                              const SizedBox(height: 14),
+                              // Search button
+                              SizedBox(
+                                width: double.infinity,
+                                height: 43,
+                                child: ElevatedButton.icon(
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: AppColors.primary,
+                                    foregroundColor: Colors.white,
+                                    elevation: 0,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                  ),
+                                  onPressed: () {
+                                    final selected = _selectedAddress;
+                                    if (selected == null ||
+                                        selected.trim().isEmpty) {
+                                      _pickAddress();
+                                      return;
+                                    }
 
-                      const SizedBox(height: 24),
+                                    final address = _splitAddress(selected);
 
-                      // ── Recommandés
-                      _SectionRow(
-                          title: 'Recommandés pour vous', onMore: () {}),
-                      const SizedBox(height: 12),
-
-                      // UBAX banner
-                      // _UbaxBanner(onTap: () {}),
-                      Image.asset(
-                        'assets/images/bannerhotel.png',
-                        // width: double.infinity,
-                        // height: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          color: AppColors.dark,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-
-                      // Type pills (under banner)
-                      Row(
-                        children: [
-                          for (var i = 0; i < _kTypes.length; i++) ...[
-                            Expanded(
-                              child: _TypePill(
-                                data: _kTypes[i],
-                                selected: _kTypes[i].label == _selectedType,
-                                onTap: () =>
-                                    _handleTypeChanged(_kTypes[i].label),
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute(
+                                        builder: (_) => SearchResultsScreen(
+                                          addressTitle: address.title,
+                                          addressSubtitle: address.subtitle,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.search_rounded,
+                                      size: 20),
+                                  label: Text(
+                                    'Rechercher',
+                                    style: AppTextStyles.button
+                                        .copyWith(fontSize: 15),
+                                  ),
+                                ),
                               ),
-                            ),
-                            if (i < _kTypes.length - 1)
-                              const SizedBox(width: 10),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Populaires
+                        _SectionRow(title: 'Populaires', onMore: () {}),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 220,
+                          child: _apiLoading || _isRefreshing
+                              ? const _PopularSkeleton(
+                                  key: ValueKey<String>('popular_skeleton'),
+                                )
+                              : ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: api.popular.isNotEmpty
+                                      ? api.popular.length
+                                      : _kPopulaires.length,
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(width: 12),
+                                  itemBuilder: (_, i) {
+                                    if (api.popular.isNotEmpty) {
+                                      final p = api.popular[i];
+                                      final imagePath = p.coverPhotoUrl ??
+                                          'assets/images/chambre12.jpg';
+                                      return GestureDetector(
+                                        onTap: () {
+                                          Navigator.of(context).push(
+                                            MaterialPageRoute(
+                                              builder: (_) =>
+                                                  HotelDetailsScreen(
+                                                imagePath: imagePath,
+                                                name: p.title,
+                                                location: p.district.isNotEmpty
+                                                    ? '${p.district}, ${p.city}'
+                                                    : p.city,
+                                                price: p.price.round(),
+                                                rating: 4.7,
+                                              ),
+                                            ),
+                                          );
+                                        },
+                                        child: _PopularCard(
+                                          imagePath: imagePath,
+                                          name: p.title,
+                                          location: p.district.isNotEmpty
+                                              ? '${p.district}, ${p.city}'
+                                              : p.city,
+                                          pricePerNight: p.price.round(),
+                                          rating: 4.7,
+                                          favoriteId: 'popular-${p.id}',
+                                        ),
+                                      );
+                                    }
+
+                                    final p = _kPopulaires[i];
+                                    return GestureDetector(
+                                      onTap: () {
+                                        Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                            builder: (_) => HotelDetailsScreen(
+                                              imagePath: p['image'] as String,
+                                              name: p['name'] as String,
+                                              location: p['location'] as String,
+                                              price: p['price'] as int,
+                                              rating: (p['rating'] as num)
+                                                  .toDouble(),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: _PopularCard(
+                                        imagePath: p['image'] as String,
+                                        name: p['name'] as String,
+                                        location: p['location'] as String,
+                                        pricePerNight: p['price'] as int,
+                                        rating: (p['rating'] as num).toDouble(),
+                                        favoriteId:
+                                            'popular-${p['name'] as String}-${p['location'] as String}',
+                                      ),
+                                    );
+                                  },
+                                ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // ── Recommandés
+                        _SectionRow(
+                            title: 'Recommandés pour vous', onMore: () {}),
+                        const SizedBox(height: 12),
+
+                        // UBAX banner
+                        // _UbaxBanner(onTap: () {}),
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(18),
+                          child: SvgPicture.asset(
+                            'assets/images/Promo.svg',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+
+                        const SizedBox(height: 20),
+
+                        // Type pills (under banner)
+                        Row(
+                          children: [
+                            for (var i = 0; i < _kTypes.length; i++) ...[
+                              Expanded(
+                                child: _TypePill(
+                                  data: _kTypes[i],
+                                  selected: _kTypes[i].label == _selectedType,
+                                  onTap: () =>
+                                      _handleTypeChanged(_kTypes[i].label),
+                                ),
+                              ),
+                              if (i < _kTypes.length - 1)
+                                const SizedBox(width: 10),
+                            ],
                           ],
-                        ],
-                      ),
-                      const SizedBox(height: 20),
+                        ),
+                        const SizedBox(height: 20),
 
-                      AnimatedSwitcher(
-                        duration: const Duration(milliseconds: 220),
-                        switchInCurve: Curves.easeOut,
-                        switchOutCurve: Curves.easeIn,
-                        child: _isSwitchingType
-                            ? const _RecommendedSkeleton(
-                                key: ValueKey<String>('recommended_skeleton'),
-                              )
-                            : _RecommendedList(
-                                key: ValueKey<String>(_selectedType),
-                                selectedType: _selectedType,
-                              ),
-                      ),
-                    ],
+                        AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 220),
+                          switchInCurve: Curves.easeOut,
+                          switchOutCurve: Curves.easeIn,
+                          child: _isSwitchingType ||
+                                  _apiLoading ||
+                                  _isRefreshing
+                              ? const _RecommendedSkeleton(
+                                  key: ValueKey<String>('recommended_skeleton'),
+                                )
+                              : (api.recommended.isNotEmpty
+                                  ? _ApiRecommendedList(
+                                      key: ValueKey<String>(
+                                          'api_recommended_$_selectedType'),
+                                      items: api.recommended,
+                                      selectedType: _selectedType,
+                                    )
+                                  : _RecommendedList(
+                                      key: ValueKey<String>(_selectedType),
+                                      selectedType: _selectedType,
+                                    )),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
@@ -763,6 +1075,9 @@ class _HotelHorizontalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork =
+        imagePath.startsWith('http://') || imagePath.startsWith('https://');
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -776,17 +1091,29 @@ class _HotelHorizontalCard extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                imagePath,
-                width: 125,
-                height: 102,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 125,
-                  height: 102,
-                  color: const Color(0xFFE2E8F0),
-                ),
-              ),
+              child: isNetwork
+                  ? Image.network(
+                      imagePath,
+                      width: 125,
+                      height: 102,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 125,
+                        height: 102,
+                        color: const Color(0xFFE2E8F0),
+                      ),
+                    )
+                  : Image.asset(
+                      imagePath,
+                      width: 125,
+                      height: 102,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 125,
+                        height: 102,
+                        color: const Color(0xFFE2E8F0),
+                      ),
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -1048,6 +1375,9 @@ class _PopularCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork =
+        imagePath.startsWith('http://') || imagePath.startsWith('https://');
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(12),
       child: SizedBox(
@@ -1057,16 +1387,27 @@ class _PopularCard extends StatelessWidget {
           fit: StackFit.expand,
           children: [
             // Image
-            Image.asset(
-              imagePath,
-              fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => Container(
-                color: const Color(0xFFD0DDE8),
-                alignment: Alignment.center,
-                child: const Icon(Icons.image_rounded,
-                    color: AppColors.dark, size: 40),
-              ),
-            ),
+            isNetwork
+                ? Image.network(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: const Color(0xFFD0DDE8),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.image_rounded,
+                          color: AppColors.dark, size: 40),
+                    ),
+                  )
+                : Image.asset(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      color: const Color(0xFFD0DDE8),
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.image_rounded,
+                          color: AppColors.dark, size: 40),
+                    ),
+                  ),
             // Gradient overlay: transparent → rgba(0,0,0,0.7)
             Container(
               decoration: const BoxDecoration(
