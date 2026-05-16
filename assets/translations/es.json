@@ -52,7 +52,36 @@
     "email": "Correo",
     "account_type": "Tipo de cuenta",
     "confirm_password": "Confirmar contraseña",
-    "signup_button": "Registrarse"
+    "signup_button": "Registrarse",
+    "reset_password_title": "Restablecer contraseña",
+    "reset_password_subtitle": "Introduce tu número de teléfono para restablecer la contraseña",
+    "send": "Enviar",
+    "verification": "Verificación",
+    "verification_subtitle": "Introduce el código recibido por SMS",
+    "verify_code": "Verificar código",
+    "new_password_title": "Nueva contraseña",
+    "new_password_subtitle": "Crea una nueva contraseña para proteger tu cuenta.",
+    "new_password_hint": "Nueva contraseña",
+    "confirm_password_hint": "Confirmar contraseña",
+    "validate": "Validar",
+    "fill_all_fields": "Rellena todos los campos",
+    "invalid_phone": "Número de teléfono no válido",
+    "signing_in": "Iniciando sesión…",
+    "login_failed": "Error al iniciar sesión",
+    "sending_otp": "Enviando código…",
+    "otp_send_failed": "Error al enviar el código",
+    "otp_incomplete": "Código OTP incompleto",
+    "verifying": "Verificando…",
+    "otp_resent": "Código reenviado",
+    "otp_invalid": "Código no válido o expirado",
+    "resend_code": "Reenviar código",
+    "passwords_dont_match": "Las contraseñas no coinciden",
+    "creating_account": "Creando cuenta…",
+    "signup_success": "Cuenta creada con éxito",
+    "signup_failed": "Error al registrarse",
+    "password_reset_success": "Contraseña actualizada",
+    "reset_failed": "Error al restablecer la contraseña",
+    "resetting": "Restableciendo…"
   },
   "profile": {
     "role": {
@@ -132,5 +161,36 @@
       "upToDate": "À jour",
       "sinceLastMonth": "Depuis le mois derniers"
     }
+  },
+  "favorites": {
+    "title": "Favoritos",
+    "search_hint": "Buscar una propiedad...",
+    "count": {
+      "zero": "Sin favoritos",
+      "one": "1 favorito",
+      "other": "{} favoritos"
+    },
+    "categories": {
+      "house": "Casa",
+      "apartment": "Apartamento",
+      "hotel": "Hotel",
+      "land": "Terreno"
+    },
+    "meta": {
+      "rooms": "Habitaciones",
+      "bedrooms": "Dormitorios",
+      "bathrooms": "Baños"
+    },
+    "see_details": "Ver detalles",
+    "empty_title": "Aún no hay favoritos",
+    "empty_message": "Añade propiedades a tus favoritos tocando el corazón desde la búsqueda.",
+    "error": "No se pudieron cargar tus favoritos.",
+    "retry": "Reintentar",
+    "delete": "Eliminar",
+    "delete_confirm_title": "Eliminar",
+    "delete_confirm_message": "¿Quieres realmente quitar esta propiedad de tus favoritos?",
+    "delete_confirm_cancel": "Cancelar",
+    "delete_confirm_ok": "Eliminar",
+    "delete_failed": "No se pudo eliminar el favorito."
   }
 }

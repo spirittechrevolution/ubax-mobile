@@ -77,7 +77,7 @@ class PortfolioCard extends StatelessWidget {
                     property.name,
                     style: AppTextStyles.regularlight16.copyWith(
                       fontFamily: 'Lexend',
-                      fontSize: 10,
+                      fontSize: 12,
                       fontWeight: FontWeight.w400,
                       color: AppColors.text,
                       height: 1.0,

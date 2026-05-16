@@ -28,6 +28,9 @@ class RecommendedTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork =
+        imagePath.startsWith('http://') || imagePath.startsWith('https://');
+
     return InkWell(
       onTap: onTap,
       borderRadius: BorderRadius.circular(20),
@@ -42,17 +45,29 @@ class RecommendedTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                imagePath,
-                width: 125,
-                height: 102,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 125,
-                  height: 102,
-                  color: const Color(0xFFE2E8F0),
-                ),
-              ),
+              child: isNetwork
+                  ? Image.network(
+                      imagePath,
+                      width: 125,
+                      height: 102,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 125,
+                        height: 102,
+                        color: const Color(0xFFE2E8F0),
+                      ),
+                    )
+                  : Image.asset(
+                      imagePath,
+                      width: 125,
+                      height: 102,
+                      fit: BoxFit.cover,
+                      errorBuilder: (_, __, ___) => Container(
+                        width: 125,
+                        height: 102,
+                        color: const Color(0xFFE2E8F0),
+                      ),
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(

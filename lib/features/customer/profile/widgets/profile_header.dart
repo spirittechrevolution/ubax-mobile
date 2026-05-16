@@ -110,7 +110,7 @@ class ProfileHeader extends StatelessWidget {
 
         // Avatar + Name + Role
         Positioned(
-          top: topPadding + 50,
+          top: topPadding + 30,
           left: 0,
           right: 0,
           child: Column(
@@ -123,15 +123,30 @@ class ProfileHeader extends StatelessWidget {
                   border: Border.all(color: const Color(0xFF4DA8DA), width: 3),
                 ),
                 child: ClipOval(
-                  child: Image.asset(
-                    profile.avatarAsset,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, __, ___) => Container(
-                      color: const Color(0xFF2D4A65),
-                      child: const Icon(Icons.person,
-                          color: Colors.white, size: 40),
-                    ),
-                  ),
+                  child: (profile.avatarUrl != null &&
+                          profile.avatarUrl!.isNotEmpty)
+                      ? Image.network(
+                          profile.avatarUrl!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Image.asset(
+                            profile.avatarAsset,
+                            fit: BoxFit.cover,
+                            errorBuilder: (_, __, ___) => Container(
+                              color: const Color(0xFF2D4A65),
+                              child: const Icon(Icons.person,
+                                  color: Colors.white, size: 40),
+                            ),
+                          ),
+                        )
+                      : Image.asset(
+                          profile.avatarAsset,
+                          fit: BoxFit.cover,
+                          errorBuilder: (_, __, ___) => Container(
+                            color: const Color(0xFF2D4A65),
+                            child: const Icon(Icons.person,
+                                color: Colors.white, size: 40),
+                          ),
+                        ),
                 ),
               ),
               const SizedBox(height: 8),

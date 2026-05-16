@@ -7,6 +7,8 @@ import 'package:statefulclickcounter/core/navigation/app_router.dart';
 import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
 
 class _MapProperty {
   const _MapProperty({
@@ -101,7 +103,9 @@ const _kMapProperties = <_MapProperty>[
 ];
 
 class MapSearchTab extends StatefulWidget {
-  const MapSearchTab({super.key});
+  const MapSearchTab({super.key, required this.isActive});
+
+  final bool isActive;
 
   @override
   State<MapSearchTab> createState() => _MapSearchTabState();
@@ -109,9 +113,17 @@ class MapSearchTab extends StatefulWidget {
 
 class _MapSearchTabState extends State<MapSearchTab> {
   int? _selected;
+  final Map<String, bool> _favoriteStates = {};
 
   void _toggle(int i) {
     setState(() => _selected = _selected == i ? null : i);
+  }
+
+  void _toggleFavorite(String propertyId) {
+    FavoritesStore.instance.toggle(propertyId);
+    setState(() {
+      _favoriteStates[propertyId] = FavoritesStore.instance.isFavorite(propertyId);
+    });
   }
 
   @override
@@ -120,9 +132,20 @@ class _MapSearchTabState extends State<MapSearchTab> {
 
     return Stack(
       children: [
-        // ── Map background (placeholder tint)
+        // ── Map background (use image asset if available, otherwise tint)
         Positioned.fill(
-          child: Container(color: const Color(0xFFE9EEF3)),
+          child: Container(
+            decoration: const BoxDecoration(
+              color: Color(0xFFE9EEF3),
+              image: DecorationImage(
+                image: AssetImage('assets/images/map_bg.png'),
+                fit: BoxFit.cover,
+                opacity: 0.98,
+              ),
+            ),
+            // subtle overlay to match original tint
+            child: Container(color: const Color(0x55FFFFFF)),
+          ),
         ),
 
         // ── Radius + avatar + pins
@@ -131,6 +154,7 @@ class _MapSearchTabState extends State<MapSearchTab> {
             properties: _kMapProperties,
             selectedIndex: _selected,
             onPinTap: _toggle,
+            isActive: widget.isActive,
           ),
         ),
 
@@ -162,23 +186,25 @@ class _MapSearchTabState extends State<MapSearchTab> {
                   beds: 6,
                   baths: 4,
                   salons: 2,
-                  isFavorite: FavoritesStore.instance.isFavorite(
-                    'map-${selected.title}-${selected.location}',
-                  ),
-                  onFavoriteToggle: () => FavoritesStore.instance.toggle(
+                  isFavorite: _favoriteStates['map-${selected.title}-${selected.location}'] ?? false,
+                  onFavoriteToggle: () => _toggleFavorite(
                     'map-${selected.title}-${selected.location}',
                   ),
                   onTap: () {
                     context.push(
                       AppRoutes.propertyDetails,
                       extra: PropertyDetailsArgs(
-                        imagePath: selected.image,
-                        title: selected.title,
-                        location: selected.location,
-                        price: '250 000 Fcfa',
-                        beds: 6,
-                        baths: 4,
-                        kitchens: 1,
+                        propertyId:
+                            'map-${selected.title}-${selected.location}',
+                        coverImageFallback: selected.image,
+                        mockTitle: selected.title,
+                        mockLocation: selected.location,
+                        mockPrice: '250 000 Fcfa',
+                        mockDescription:
+                            'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels, ce bien offre un cadre de vie exceptionnel.',
+                        mockBeds: 6,
+                        mockBaths: 4,
+                        mockKitchens: 1,
                       ),
                     );
                   },
@@ -286,11 +312,13 @@ class _MapOverlay extends StatefulWidget {
     required this.properties,
     required this.selectedIndex,
     required this.onPinTap,
+    required this.isActive,
   });
 
   final List<_MapProperty> properties;
   final int? selectedIndex;
   final ValueChanged<int> onPinTap;
+  final bool isActive;
 
   @override
   State<_MapOverlay> createState() => _MapOverlayState();
@@ -301,32 +329,114 @@ class _MapOverlayState extends State<_MapOverlay>
   late final AnimationController _pulse;
   int _revealedPins = 0;
   Timer? _pinRevealTimer;
+  // Per-pin animation controllers for fade + slide
+  late List<AnimationController> _pinControllers;
+  late List<Animation<double>> _pinOpacities;
+  late List<Animation<double>> _pinSlidesY;
 
   @override
   void initState() {
     super.initState();
     _pulse = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3800),
-    )..repeat();
+      duration: const Duration(milliseconds: 1600),
+    );
+
+    // initialize pin animations
+    _initPinAnimations(widget.properties.length);
 
     _revealedPins = widget.properties.isEmpty ? 0 : 1;
 
-    _pinRevealTimer = Timer.periodic(_pulse.duration!, (_) {
+    if (widget.isActive) {
+      _start();
+    }
+  }
+
+  void _start() {
+    _pulse.repeat();
+    _pinRevealTimer?.cancel();
+    _pinRevealTimer = Timer.periodic(const Duration(milliseconds: 280), (_) {
       if (!mounted) return;
       final next = (_revealedPins + 1).clamp(0, widget.properties.length);
       if (next == _revealedPins) return;
       setState(() {
         _revealedPins = next;
       });
+      // start animations for all revealed pins with 60ms stagger
+      for (var j = 0; j < _revealedPins && j < _pinControllers.length; j++) {
+        final controller = _pinControllers[j];
+        if (controller.status == AnimationStatus.dismissed) {
+          Future.delayed(Duration(milliseconds: 60 * j), () {
+            if (mounted) controller.forward();
+          });
+        }
+      }
     });
+  }
+
+  void _stop() {
+    _pulse.stop();
+    _pinRevealTimer?.cancel();
+    _pinRevealTimer = null;
+  }
+
+  void _resetPins() {
+    setState(() {
+      _revealedPins = widget.properties.isEmpty ? 0 : 1;
+    });
+    for (final c in _pinControllers) {
+      c.reset();
+    }
+    if (_pinControllers.isNotEmpty && _revealedPins > 0) {
+      _pinControllers.first.forward();
+    }
+  }
+
+  void _initPinAnimations(int count) {
+    // dispose previous if any
+    _pinControllers = List.generate(
+      count,
+      (_) => AnimationController(
+          vsync: this, duration: const Duration(milliseconds: 200)),
+    );
+
+    _pinOpacities = _pinControllers
+        .map((c) => Tween<double>(begin: 0.0, end: 1.0)
+            .animate(CurvedAnimation(parent: c, curve: Curves.easeOut)))
+        .toList();
+    _pinSlidesY = _pinControllers
+        .map((c) => Tween<double>(begin: 12.0, end: 0.0)
+            .animate(CurvedAnimation(parent: c, curve: Curves.easeOut)))
+        .toList();
   }
 
   @override
   void dispose() {
     _pulse.dispose();
     _pinRevealTimer?.cancel();
+    for (final c in _pinControllers) {
+      c.dispose();
+    }
     super.dispose();
+  }
+
+  @override
+  void didUpdateWidget(covariant _MapOverlay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.properties.length != widget.properties.length) {
+      // recreate pin controllers
+      for (final c in _pinControllers) {
+        c.dispose();
+      }
+      _initPinAnimations(widget.properties.length);
+    }
+
+    if (!oldWidget.isActive && widget.isActive) {
+      _resetPins();
+      _start();
+    } else if (oldWidget.isActive && !widget.isActive) {
+      _stop();
+    }
   }
 
   @override
@@ -336,7 +446,7 @@ class _MapOverlayState extends State<_MapOverlay>
         final w = constraints.maxWidth;
         final h = constraints.maxHeight;
         final center = Offset(w / 2, h * 0.5);
-        const outerR = 210.0;
+        const outerR = 190.0;
 
         return Stack(
           clipBehavior: Clip.none,
@@ -398,32 +508,68 @@ class _MapOverlayState extends State<_MapOverlay>
                     // ),
                     // Avatar (center) — white ring + photo, sits on inner radius
                     Positioned(
-                      left: center.dx - 78.6 / 2,
-                      top: center.dy - 78.6 / 2,
+                      left: center.dx - 98 / 2,
+                      top: center.dy - 98 / 2,
                       child: Container(
-                        width: 78.6,
-                        height: 78.6,
-                        padding: const EdgeInsets.all(5),
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
+                        width: 98,
+                        height: 98,
+                        alignment: Alignment.center,
+                        // Outer orange ring
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
                           shape: BoxShape.circle,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               color: Color(0x22000000),
-                              blurRadius: 8,
-                              offset: Offset(0, 2),
+                              blurRadius: 12,
+                              offset: Offset(0, 4),
                             ),
                           ],
                         ),
-                        child: ClipOval(
-                          child: Image.asset(
-                            'assets/images/profil.png',
-                            fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Container(
-                              color: const Color(0xFFD0DDE8),
-                              child: const Icon(Icons.person,
-                                  color: Colors.white, size: 30),
-                            ),
+                        child: Container(
+                          width: 86,
+                          height: 86,
+                          alignment: Alignment.center,
+                          // white ring
+                          decoration: const BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                          padding: const EdgeInsets.all(6),
+                          child: BlocBuilder<AuthBloc, AuthState>(
+                            buildWhen: (prev, next) =>
+                                prev.currentUser?.avatarUrl !=
+                                next.currentUser?.avatarUrl,
+                            builder: (context, state) {
+                              final rawUrl = state.currentUser?.avatarUrl;
+                              final hasUrl =
+                                  rawUrl != null && rawUrl.trim().isNotEmpty;
+                              final cacheKey = (state.currentUser?.updatedAt ??
+                                  state.currentUser?.userId ??
+                                  '');
+                              final url = rawUrl ?? '';
+                              final cacheBustedUrl = hasUrl
+                                  ? (url.contains('?')
+                                      ? '$url&v=$cacheKey'
+                                      : '$url?v=$cacheKey')
+                                  : null;
+
+                              return CircleAvatar(
+                                radius: 37,
+                                backgroundColor: const Color(0xFFD0DDE8),
+                                backgroundImage: hasUrl
+                                    ? NetworkImage(cacheBustedUrl!)
+                                        as ImageProvider
+                                    : null,
+                                child: hasUrl
+                                    ? null
+                                    : const Icon(
+                                        Icons.person,
+                                        color: Colors.white,
+                                        size: 30,
+                                      ),
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -472,20 +618,39 @@ class _MapOverlayState extends State<_MapOverlay>
 
     final visible = index < _revealedPins;
 
-    return Positioned(
-      left: tipX - pinW / 2,
-      top: tipY - pinH,
-      child: AnimatedOpacity(
-        opacity: visible ? 1.0 : 0.0,
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOut,
+    // compute fade duration as portion of the pulse duration so opacity
+    // change is synced with the radar pulse. Use 60% of the pulse.
+    // The actual animated widget below uses per-pin controllers; we keep
+    // fade behaviour driven by the per-pin controllers started on reveal.
+    final animIndex = index;
+    Widget pinChild = _Pin(image: image, selected: selected);
+
+    if (animIndex < _pinControllers.length) {
+      pinChild = AnimatedBuilder(
+        animation: _pinControllers[animIndex],
+        builder: (context, child) {
+          final opacity = _pinOpacities[animIndex].value;
+          final dy = _pinSlidesY[animIndex].value;
+          return Opacity(
+            opacity: visible ? opacity : 0.0,
+            child: Transform.translate(
+              offset: Offset(0, dy),
+              child: child,
+            ),
+          );
+        },
         child: GestureDetector(
           onTap: onTap,
           behavior: HitTestBehavior.opaque,
-          child: _Pin(image: image, selected: selected),
+          child: pinChild,
         ),
-      ),
-    );
+      );
+    } else {
+      pinChild = GestureDetector(
+          onTap: onTap, behavior: HitTestBehavior.opaque, child: pinChild);
+    }
+
+    return Positioned(left: tipX - pinW / 2, top: tipY - pinH, child: pinChild);
   }
 }
 
@@ -521,19 +686,44 @@ class _Pin extends StatelessWidget {
             painter: _PinPainter(
                 color: selected ? AppColors.primary : AppColors.dark),
           ),
-          // Image disc
+          // Image disc with white + orange rings
           Positioned(
-            top: 8,
-            child: ClipOval(
-              child: Image.asset(
-                image,
-                width: 36,
-                height: 36,
-                fit: BoxFit.cover,
-                errorBuilder: (_, __, ___) => Container(
-                  width: 36,
-                  height: 36,
-                  color: const Color(0xFFE2E8F0),
+            top: 6,
+            child: Container(
+              width: 44,
+              height: 44,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.primary,
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x22000000),
+                    blurRadius: 6,
+                    offset: Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: Container(
+                width: 38,
+                height: 38,
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Colors.white,
+                ),
+                padding: const EdgeInsets.all(2),
+                child: ClipOval(
+                  child: Image.asset(
+                    image,
+                    width: 36,
+                    height: 36,
+                    fit: BoxFit.cover,
+                    errorBuilder: (_, __, ___) => Container(
+                      width: 36,
+                      height: 36,
+                      color: const Color(0xFFE2E8F0),
+                    ),
+                  ),
                 ),
               ),
             ),

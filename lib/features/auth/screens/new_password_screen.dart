@@ -1,12 +1,21 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class NewPasswordScreen extends StatefulWidget {
-  const NewPasswordScreen({super.key});
+  const NewPasswordScreen({
+    super.key,
+    required this.phoneE164,
+    required this.code,
+  });
+
+  final String phoneE164;
+  final String code;
 
   @override
   State<NewPasswordScreen> createState() => _NewPasswordScreenState();
@@ -25,9 +34,50 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
     super.dispose();
   }
 
+  void _onValidate() {
+    final pwd = _password.text;
+    final confirm = _confirmPassword.text;
+    if (pwd.isEmpty || confirm.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.fill_all_fields'.tr())),
+      );
+      return;
+    }
+    if (pwd != confirm) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.passwords_dont_match'.tr())),
+      );
+      return;
+    }
+    context.read<ForgotPasswordBloc>().add(
+          ForgotResetPassword(
+            phone: widget.phoneE164,
+            code: widget.code,
+            newPassword: pwd,
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: (context, state) {
+        if (state.status == ForgotPasswordStatus.resetDone) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('auth.password_reset_success'.tr())),
+          );
+          Navigator.of(context).popUntil((r) => r.isFirst);
+        } else if (state.status == ForgotPasswordStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'auth.reset_failed'.tr()),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -117,16 +167,23 @@ class _NewPasswordScreenState extends State<NewPasswordScreen> {
                 ),
               ),
               const SizedBox(height: 33),
-              OrangeButton(
-                text: 'auth.validate'.tr(),
-                onPressed: () {
-                  Navigator.of(context).popUntil((r) => r.isFirst);
+              BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                builder: (context, state) {
+                  final loading =
+                      state.status == ForgotPasswordStatus.resetting;
+                  return OrangeButton(
+                    text: loading
+                        ? 'auth.resetting'.tr()
+                        : 'auth.validate'.tr(),
+                    onPressed: loading ? null : _onValidate,
+                  );
                 },
               ),
             ],
           ),
         ),
       ),
+    ),
     );
   }
 }

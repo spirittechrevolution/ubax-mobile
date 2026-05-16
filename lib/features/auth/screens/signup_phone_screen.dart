@@ -1,21 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:statefulclickcounter/core/di/injection.dart';
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/features/auth/domain/repositories/auth_repository.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/signup/signup_bloc.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'otp_screen.dart';
 import '../widgets/africa_country_code_picker.dart';
+import '../utils/phone_formatter.dart';
 
-class SignupPhoneScreen extends StatefulWidget {
+class SignupPhoneScreen extends StatelessWidget {
   const SignupPhoneScreen({super.key});
 
   @override
-  State<SignupPhoneScreen> createState() => _SignupPhoneScreenState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => SignupBloc(getIt<AuthRepository>()),
+      child: const _SignupPhoneView(),
+    );
+  }
 }
 
-class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
-  final _phoneController = TextEditingController(text: '07 12 34 56 78');
+class _SignupPhoneView extends StatefulWidget {
+  const _SignupPhoneView();
+
+  @override
+  State<_SignupPhoneView> createState() => _SignupPhoneViewState();
+}
+
+class _SignupPhoneViewState extends State<_SignupPhoneView> {
+  final _phoneController = TextEditingController();
   AfricaCountry _country = AfricaCountryCodePicker.byIso2('CI');
 
   @override
@@ -24,154 +41,195 @@ class _SignupPhoneScreenState extends State<SignupPhoneScreen> {
     super.dispose();
   }
 
+  void _onContinue() {
+    final phone = PhoneFormatter.toE164(
+      dialCode: _country.dialCode,
+      rawPhone: _phoneController.text,
+    );
+    if (phone.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.invalid_phone'.tr())),
+      );
+      return;
+    }
+    context.read<SignupBloc>().add(SignupSendOtp(phone: phone));
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset('assets/images/onb1.png', fit: BoxFit.cover),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    const Color(0xFF0B1A28).withOpacity(0.55),
-                    const Color(0xFF0B1A28).withOpacity(0.35),
-                    const Color(0xFF0B1A28).withOpacity(0.65),
-                  ],
-                  stops: const [0.0, 0.55, 1.0],
+    return BlocListener<SignupBloc, SignupState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: (context, state) {
+        if (state.status == SignupStatus.otpSent && state.phone != null) {
+          final bloc = context.read<SignupBloc>();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: bloc,
+                child: OtpScreen(
+                  phoneDisplay:
+                      '${_country.dialCode} ${_phoneController.text}',
+                  phoneE164: state.phone!,
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white),
+          );
+        } else if (state.status == SignupStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'auth.otp_send_failed'.tr()),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset('assets/images/onb1.png', fit: BoxFit.cover),
+            ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF0B1A28).withOpacity(0.55),
+                      const Color(0xFF0B1A28).withOpacity(0.35),
+                      const Color(0xFF0B1A28).withOpacity(0.65),
+                    ],
+                    stops: const [0.0, 0.55, 1.0],
                   ),
                 ),
-                const SizedBox(height: 10),
-                Text(
-                  'auth.create_account'.tr(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: Image.asset(
-                    'assets/icons/logoUbaxWhite.png',
-                    width: 86,
-                    height: 86,
-                  ),
-                ),
-                const SizedBox(height: 30),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(28),
-                        topRight: Radius.circular(28),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x1A000000),
-                          blurRadius: 24,
-                          offset: Offset(0, -6),
-                        ),
-                      ],
+              ),
+            ),
+            SafeArea(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white),
                     ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            'auth.signup_phone_title'.tr(),
-                            style: AppTextStyles.sectionTitle,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'auth.signup_phone_subtitle'.tr(),
-                            style: AppTextStyles.regular12,
-                            textAlign: TextAlign.center,
-                          ),
-                          const SizedBox(height: 25),
-                          Row(
-                            children: [
-                              AfricaCountryCodePicker(
-                                value: _country,
-                                onChanged: (c) => setState(() => _country = c),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _Field(
-                                  controller: _phoneController,
-                                  hint: 'auth.phone_hint'.tr(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 34),
-                          OrangeButton(
-                            text: 'common.continue'.tr(),
-                            onPressed: () {
-                              Navigator.of(context).push(
-                                MaterialPageRoute(
-                                  builder: (_) => OtpScreen(
-                                    phoneDisplay:
-                                        '${_country.dialCode} ${_phoneController.text}',
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
-                          const SizedBox(height: 208),
-                          _DividerLabel(text: 'auth.or_signup_with'.tr()),
-                          const SizedBox(height: 14),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _SocialButton(
-                                assetPath: 'assets/icons/logo_google.png',
-                                onTap: () {},
-                              ),
-                              _SocialButton(
-                                assetPath: 'assets/icons/logo_apple.png',
-                                onTap: () {},
-                              ),
-                              _SocialButton(
-                                assetPath: 'assets/icons/logos_whatsapp.png',
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).padding.bottom + 6,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'auth.create_account'.tr(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Image.asset(
+                      'assets/icons/logoUbaxWhite.png',
+                      width: 86,
+                      height: 86,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(28),
+                          topRight: Radius.circular(28),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x1A000000),
+                            blurRadius: 24,
+                            offset: Offset(0, -6),
                           ),
                         ],
                       ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'auth.signup_phone_title'.tr(),
+                              style: AppTextStyles.sectionTitle,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              'auth.signup_phone_subtitle'.tr(),
+                              style: AppTextStyles.regular12,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 25),
+                            Row(
+                              children: [
+                                AfricaCountryCodePicker(
+                                  value: _country,
+                                  onChanged: (c) => setState(() => _country = c),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _Field(
+                                    controller: _phoneController,
+                                    hint: 'auth.phone_hint'.tr(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 34),
+                            BlocBuilder<SignupBloc, SignupState>(
+                              builder: (context, state) {
+                                final loading =
+                                    state.status == SignupStatus.sendingOtp;
+                                return OrangeButton(
+                                  text: loading
+                                      ? 'auth.sending_otp'.tr()
+                                      : 'common.continue'.tr(),
+                                  onPressed: loading ? null : _onContinue,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 208),
+                            _DividerLabel(text: 'auth.or_signup_with'.tr()),
+                            const SizedBox(height: 14),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logo_google.png',
+                                  onTap: () {},
+                                ),
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logo_apple.png',
+                                  onTap: () {},
+                                ),
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logos_whatsapp.png',
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height:
+                                  MediaQuery.of(context).padding.bottom + 6,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

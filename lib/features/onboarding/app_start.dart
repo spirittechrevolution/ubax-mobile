@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:go_router/go_router.dart';
+import '../../core/navigation/app_router.dart';
 
 import '../../core/storage/app_prefs.dart';
-import '../auth/screens/login_screen.dart';
-import 'language_screen.dart';
-import 'onboarding_screen.dart';
 import 'splash_screen.dart';
 
 class AppStart extends StatefulWidget {
@@ -30,6 +29,17 @@ class _AppStartState extends State<AppStart> {
     final onboardingDone = await AppPrefs.isOnboardingDone();
     final language = await AppPrefs.getLanguageCode();
 
+    // If there's an existing logged-in session, skip onboarding/login and go to home
+    final hasSession = await AppPrefs.hasValidSession();
+    if (hasSession) {
+      if (language != null && language.isNotEmpty) {
+        await context.setLocale(Locale(language));
+      }
+      if (!mounted) return;
+      context.go(AppRoutes.home);
+      return;
+    }
+
     if (!mounted) return;
 
     if (language != null && language.isNotEmpty) {
@@ -37,94 +47,15 @@ class _AppStartState extends State<AppStart> {
       if (!mounted) return;
 
       if (!onboardingDone) {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(
-            builder: (onboardingRouteContext) => OnboardingScreen(
-              onDone: () async {
-                await AppPrefs.setOnboardingDone(true);
-                if (!onboardingRouteContext.mounted) return;
-                Navigator.of(onboardingRouteContext).pushReplacement(
-                  MaterialPageRoute(
-                    builder: (loginRouteContext) => LoginScreen(
-                      onLoggedIn: () {
-                        if (!loginRouteContext.mounted) return;
-                        Navigator.of(loginRouteContext).pushReplacement(
-                          MaterialPageRoute(builder: (_) => widget.home),
-                        );
-                      },
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        );
+        context.go(AppRoutes.onboarding);
         return;
       }
 
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (loginRouteContext) => LoginScreen(
-            onLoggedIn: () {
-              if (!loginRouteContext.mounted) return;
-              Navigator.of(loginRouteContext).pushReplacement(
-                MaterialPageRoute(builder: (_) => widget.home),
-              );
-            },
-          ),
-        ),
-      );
+      context.go(AppRoutes.login);
       return;
     }
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (languageRouteContext) => LanguageScreen(
-          onContinue: (code) async {
-            await AppPrefs.setLanguageCode(code);
-
-            if (!onboardingDone) {
-              Navigator.of(languageRouteContext).pushReplacement(
-                MaterialPageRoute(
-                  builder: (onboardingRouteContext) => OnboardingScreen(
-                    onDone: () async {
-                      await AppPrefs.setOnboardingDone(true);
-                      if (!onboardingRouteContext.mounted) return;
-                      Navigator.of(onboardingRouteContext).pushReplacement(
-                        MaterialPageRoute(
-                          builder: (loginRouteContext) => LoginScreen(
-                            onLoggedIn: () {
-                              if (!loginRouteContext.mounted) return;
-                              Navigator.of(loginRouteContext).pushReplacement(
-                                MaterialPageRoute(builder: (_) => widget.home),
-                              );
-                            },
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              );
-              return;
-            }
-
-            Navigator.of(languageRouteContext).pushReplacement(
-              MaterialPageRoute(
-                builder: (loginRouteContext) => LoginScreen(
-                  onLoggedIn: () {
-                    if (!loginRouteContext.mounted) return;
-                    Navigator.of(loginRouteContext).pushReplacement(
-                      MaterialPageRoute(builder: (_) => widget.home),
-                    );
-                  },
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
+    context.go(AppRoutes.language);
   }
 
   @override

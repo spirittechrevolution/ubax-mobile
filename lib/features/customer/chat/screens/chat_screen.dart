@@ -163,8 +163,7 @@ class _ChatBody extends StatelessWidget {
           alignment: AlignmentDirectional.centerStart,
           child: _SharedPropertyCard(
             tag: 'Hôtel',
-            imagePath:
-                'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+            imagePath: 'assets/images/chambre11.jpg',
             name: 'Palm Club Plateau',
             location: 'Cocody Angré, Abidjan',
             rating: 4.7,

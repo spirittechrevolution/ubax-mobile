@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/help_center_screen.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/invite_friends_screen.dart';
-import 'package:statefulclickcounter/features/customer/settings/screens/language_settings_screen.dart';
+// language settings are provided via go_router route
 import 'package:statefulclickcounter/features/customer/settings/screens/notifications_screen.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/personal_info_screen.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/security_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -73,20 +77,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 ),
                 child: Row(
                   children: [
-                    ClipOval(
-                      child: Image.asset(
-                        'assets/images/pexels-ekrulila-2128329.jpg',
-                        width: 58,
-                        height: 58,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          width: 58,
-                          height: 58,
-                          color: AppColors.dark,
-                          child: const Icon(Icons.person,
-                              color: Colors.white, size: 28),
-                        ),
-                      ),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      buildWhen: (prev, next) =>
+                          prev.currentUser?.avatarUrl !=
+                          next.currentUser?.avatarUrl,
+                      builder: (context, state) {
+                        final rawUrl = state.currentUser?.avatarUrl;
+                        final hasUrl =
+                            rawUrl != null && rawUrl.trim().isNotEmpty;
+                        final url = rawUrl ?? '';
+                        final cacheKey = (state.currentUser?.updatedAt ??
+                            state.currentUser?.userId ??
+                            '');
+                        final cacheBustedUrl = hasUrl
+                            ? (url.contains('?')
+                                ? '$url&v=$cacheKey'
+                                : '$url?v=$cacheKey')
+                            : null;
+
+                        return CircleAvatar(
+                          radius: 29,
+                          backgroundColor: AppColors.dark,
+                          backgroundImage: hasUrl
+                              ? NetworkImage(cacheBustedUrl!) as ImageProvider
+                              : null,
+                          child: hasUrl
+                              ? null
+                              : const Icon(Icons.person,
+                                  color: Colors.white, size: 28),
+                        );
+                      },
                     ),
                     const SizedBox(width: 14),
                     Expanded(
@@ -94,15 +114,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text(
-                            'Arnaud Koffi',
-                            style: AppTextStyles.regularlight16.copyWith(
-                              fontFamily: 'Lexend',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.text,
-                              height: 1.0,
-                            ),
+                          BlocBuilder<AuthBloc, AuthState>(
+                            buildWhen: (prev, next) =>
+                                prev.currentUser != next.currentUser,
+                            builder: (context, state) {
+                              final name = state.currentUser?.fullName
+                                          .trim()
+                                          .isNotEmpty ==
+                                      true
+                                  ? state.currentUser!.fullName
+                                  : '—';
+                              return Text(
+                                name,
+                                style: AppTextStyles.regularlight16.copyWith(
+                                  fontFamily: 'Lexend',
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.text,
+                                  height: 1.0,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            },
                           ),
                           const SizedBox(height: 8),
                           Container(
@@ -203,9 +237,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icons.language_rounded,
                       label: 'Langue',
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (_) => const LanguageSettingsScreen(),
-                        ));
+                        context.push(AppRoutes.languageSettings);
                       },
                     ),
                     const _RowDivider(),
@@ -268,7 +300,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       icon: Icons.logout_rounded,
                       label: 'Déconnexion',
                       danger: true,
-                      onTap: () {},
+                      onTap: () {
+                        // Trigger sign out and navigate to login (go_router will
+                        // prevent returning to protected routes).
+                        context.read<AuthBloc>().add(const AuthSignedOut());
+                        context.go(AppRoutes.login);
+                      },
                     ),
                   ],
                 ),

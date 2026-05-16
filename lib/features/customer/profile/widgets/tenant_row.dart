@@ -19,8 +19,8 @@ class TenantRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 43,
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      height: 56,
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
@@ -30,12 +30,12 @@ class TenantRow extends StatelessWidget {
           ClipOval(
             child: Image.asset(
               tenant.avatarAsset,
-              width: 30,
-              height: 30,
+              width: 38,
+              height: 38,
               fit: BoxFit.cover,
               errorBuilder: (_, __, ___) => Container(
-                width: 30,
-                height: 30,
+                width: 38,
+                height: 38,
                 color: AppColors.dark,
                 child: const Icon(Icons.person, color: Colors.white, size: 16),
               ),
@@ -51,17 +51,17 @@ class TenantRow extends StatelessWidget {
                   tenant.name,
                   style: AppTextStyles.regularlight16.copyWith(
                     fontFamily: 'Lexend',
-                    fontSize: 10,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
                     color: AppColors.text,
                     height: 1.0,
                   ),
                 ),
-                const SizedBox(height: 5),
+                const SizedBox(height: 6),
                 Row(
                   children: [
                     const Icon(Icons.circle,
-                        color: AppColors.statusPaid, size: 5),
+                        color: AppColors.statusPaid, size: 6),
                     const SizedBox(width: 4),
                     Flexible(
                       child: RichText(
@@ -70,7 +70,7 @@ class TenantRow extends StatelessWidget {
                         text: TextSpan(
                           style: AppTextStyles.regular12.copyWith(
                             fontFamily: 'Lexend',
-                            fontSize: 8,
+                            fontSize: 10,
                             fontWeight: FontWeight.w300,
                             color: AppColors.text,
                             height: 1.0,
@@ -81,7 +81,7 @@ class TenantRow extends StatelessWidget {
                               text: 'profile.bailleur.paid'.tr(),
                               style: AppTextStyles.regular12.copyWith(
                                 fontFamily: 'Lexend',
-                                fontSize: 8,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w500,
                                 color: AppColors.statusPaid,
                                 height: 1.0,
@@ -99,8 +99,8 @@ class TenantRow extends StatelessWidget {
           GestureDetector(
             onTap: onDetailsTap,
             child: Container(
-              width: 60.09,
-              height: 31.78,
+              width: 74,
+              height: 36,
               alignment: Alignment.center,
               decoration: BoxDecoration(
                 color: const Color(0xFFF7F7F7),
@@ -110,7 +110,7 @@ class TenantRow extends StatelessWidget {
                 'profile.bailleur.details'.tr(),
                 style: AppTextStyles.regular12.copyWith(
                   fontFamily: 'Lexend',
-                  fontSize: 9,
+                  fontSize: 11,
                   fontWeight: FontWeight.w500,
                   color: AppColors.text,
                   height: 1.0,

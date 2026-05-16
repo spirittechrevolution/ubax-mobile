@@ -28,7 +28,7 @@ const _kContacts = <_Contact>[
   _Contact(
     name: 'Aïssata Coulibaly',
     phone: '+225 01 02 03 04 05',
-    avatarAsset: 'assets/images/sara1.jpg',
+    avatarAsset: 'assets/images/villa9.jpg',
   ),
   _Contact(
     name: 'Ismaël Fofana',
@@ -58,7 +58,7 @@ const _kContacts = <_Contact>[
   _Contact(
     name: 'Rosine Gnahoré',
     phone: '+225 01 02 03 04 05',
-    avatarAsset: 'assets/images/sara1.jpg',
+    avatarAsset: 'assets/images/villa9.jpg',
   ),
   _Contact(
     name: 'Adama Traoré',

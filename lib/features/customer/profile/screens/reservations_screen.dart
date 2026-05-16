@@ -9,57 +9,99 @@ import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 enum _ResStatus { annulee, terminee }
 
+class _ReservationsSkeleton extends StatelessWidget {
+  const _ReservationsSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget block({required double h, double r = 14}) {
+      return Container(
+        height: h,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE2E8F0),
+          borderRadius: BorderRadius.circular(r),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      padding: const EdgeInsets.fromLTRB(10, 0, 10, 24),
+      itemCount: 5,
+      separatorBuilder: (_, __) => const SizedBox(height: 12),
+      itemBuilder: (_, __) => block(h: 139),
+    );
+  }
+}
+
+enum _ResType { hotel, villa, residence }
+
 class _Reservation {
-  const _Reservation({
+  _Reservation({
     required this.image,
+    required this.type,
     required this.title,
     required this.location,
     required this.arrival,
     required this.departure,
+    required this.arrivalAt,
+    required this.departureAt,
     required this.status,
   });
 
   final String image;
+  final _ResType type;
   final String title;
   final String location;
   final String arrival;
   final String departure;
+  final DateTime arrivalAt;
+  final DateTime departureAt;
   final _ResStatus status;
 }
 
-const _kReservations = [
+final _kReservations = [
   _Reservation(
-    image: 'assets/images/modern-elegant-bedroom-interior.jpg',
-    title: 'Chambre de luxe',
+    image: 'assets/images/chambre.jpg',
+    type: _ResType.residence,
+    title: 'Appartement 3 pièces',
     location: 'Cocody Angré, Abidjan',
     arrival: '15 Mars 2026',
     departure: '18 Mars 2026',
+    arrivalAt: DateTime(2026, 3, 15, 14, 0),
+    departureAt: DateTime(2026, 3, 18, 11, 0),
     status: _ResStatus.annulee,
   ),
   _Reservation(
-    image:
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    image: 'assets/images/chambre11.jpg',
+    type: _ResType.hotel,
     title: 'Chambre de luxe',
     location: 'Cocody Angré, Abidjan',
     arrival: '15 Mars 2026',
     departure: '18 Mars 2026',
+    arrivalAt: DateTime(2026, 3, 15, 12, 0),
+    departureAt: DateTime(2026, 3, 18, 10, 0),
     status: _ResStatus.terminee,
   ),
   _Reservation(
-    image:
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    image: 'assets/images/chambre.jpg',
+    type: _ResType.villa,
     title: 'Chambre de luxe',
     location: 'Cocody Angré, Abidjan',
     arrival: '15 Mars 2026',
     departure: '18 Mars 2026',
+    arrivalAt: DateTime(2026, 3, 15, 16, 30),
+    departureAt: DateTime(2026, 3, 18, 9, 0),
     status: _ResStatus.annulee,
   ),
   _Reservation(
-    image: 'assets/images/expedia_group-695130-2cf588-799717.jpg',
+    image: 'assets/images/chambre11.jpg',
+    type: _ResType.hotel,
     title: 'Chambre de luxe',
     location: 'Cocody Angré, Abidjan',
     arrival: '15 Mars 2026',
     departure: '18 Mars 2026',
+    arrivalAt: DateTime(2026, 3, 15, 9, 0),
+    departureAt: DateTime(2026, 3, 18, 14, 0),
     status: _ResStatus.terminee,
   ),
 ];
@@ -75,22 +117,148 @@ class ReservationsScreen extends StatefulWidget {
 
 class _ReservationsScreenState extends State<ReservationsScreen> {
   bool _filtersOpen = false;
-  String _type = 'Hotels';
+  _ResType _type = _ResType.hotel;
   int _tab = 0;
+  String _query = '';
+  DateTime? _arrivalFilter;
+  DateTime? _departureFilter;
+  bool _loading = true;
+  late final TextEditingController _searchController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+
+    Future.delayed(const Duration(milliseconds: 700), () {
+      if (!mounted) return;
+      setState(() => _loading = false);
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _setQuery(String v) {
+    setState(() => _query = v);
+  }
+
+  void _clearQuery() {
+    _searchController.clear();
+    setState(() => _query = '');
+  }
+
+  Future<void> _pickArrival() async {
+    final now = DateTime.now();
+    final initial = _arrivalFilter ?? now;
+    final date = await showDatePicker(
+      context: context,
+      initialDate: DateTime(initial.year, initial.month, initial.day),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (date == null) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (time == null) return;
+
+    setState(() {
+      _arrivalFilter = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  Future<void> _pickDeparture() async {
+    final now = DateTime.now();
+    final initial = _departureFilter ?? _arrivalFilter ?? now;
+    final date = await showDatePicker(
+      context: context,
+      initialDate: DateTime(initial.year, initial.month, initial.day),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2100),
+    );
+    if (date == null) return;
+
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(initial),
+    );
+    if (time == null) return;
+
+    setState(() {
+      _departureFilter = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
+  }
+
+  void _clearDates() {
+    setState(() {
+      _arrivalFilter = null;
+      _departureFilter = null;
+    });
+  }
 
   List<_Reservation> get _filtered {
+    List<_Reservation> base;
     switch (_tab) {
       case 1:
-        return _kReservations
+        base = _kReservations
             .where((r) => r.status == _ResStatus.terminee)
             .toList();
+        break;
       case 2:
-        return _kReservations
+        base = _kReservations
             .where((r) => r.status == _ResStatus.annulee)
             .toList();
+        break;
       default:
-        return _kReservations;
+        base = _kReservations;
     }
+
+    bool matchType(_Reservation r) => r.type == _type;
+
+    bool matchArrival(_Reservation r) {
+      final f = _arrivalFilter;
+      if (f == null) return true;
+      return r.arrivalAt.isAtSameMomentAs(f) || r.arrivalAt.isAfter(f);
+    }
+
+    bool matchDeparture(_Reservation r) {
+      final f = _departureFilter;
+      if (f == null) return true;
+      return r.departureAt.isAtSameMomentAs(f) || r.departureAt.isBefore(f);
+    }
+
+    bool matchQuery(_Reservation r) {
+      final q = _query.trim().toLowerCase();
+      if (q.isEmpty) return true;
+      final hay =
+          '${r.title} ${r.location} ${r.arrival} ${r.departure}'.toLowerCase();
+      return hay.contains(q);
+    }
+
+    return base
+        .where(matchType)
+        .where(matchArrival)
+        .where(matchDeparture)
+        .where(matchQuery)
+        .toList(growable: false);
   }
 
   @override
@@ -152,6 +320,15 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                   onToggle: () => setState(() => _filtersOpen = !_filtersOpen),
                   type: _type,
                   onTypeChanged: (t) => setState(() => _type = t),
+                  controller: _searchController,
+                  query: _query,
+                  onQueryChanged: _setQuery,
+                  onClearQuery: _clearQuery,
+                  arrival: _arrivalFilter,
+                  departure: _departureFilter,
+                  onArrivalTap: _pickArrival,
+                  onDepartureTap: _pickDeparture,
+                  onClearDates: _clearDates,
                 ),
               ),
               const SizedBox(height: 28),
@@ -166,20 +343,44 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
               const SizedBox(height: 14),
               // List
               Expanded(
-                child: Builder(
-                  builder: (_) {
-                    final items = _filtered;
-                    return ListView.separated(
-                      padding: const EdgeInsets.fromLTRB(10, 0, 10, 24),
-                      itemCount: items.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 12),
-                      itemBuilder: (_, i) => _SlidableCard(
-                        reservation: items[i],
-                        swipeEnabled: _tab == 0,
-                        onCancel: () => print('cancel ${items[i].title}'),
-                      ),
-                    );
-                  },
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 220),
+                  switchInCurve: Curves.easeOut,
+                  switchOutCurve: Curves.easeIn,
+                  child: _loading
+                      ? const _ReservationsSkeleton(
+                          key: ValueKey<String>('reservations_skeleton'),
+                        )
+                      : Builder(
+                          key: const ValueKey<String>('reservations_list'),
+                          builder: (_) {
+                            final items = _filtered;
+                            if (items.isEmpty) {
+                              return Center(
+                                child: Text(
+                                  'Aucune réservation',
+                                  style: AppTextStyles.regular12.copyWith(
+                                    color: AppColors.muted,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              );
+                            }
+                            return ListView.separated(
+                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 24),
+                              itemCount: items.length,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(height: 12),
+                              itemBuilder: (_, i) => _SlidableCard(
+                                reservation: items[i],
+                                swipeEnabled: _tab == 0,
+                                onCancel: () =>
+                                    print('cancel ${items[i].title}'),
+                              ),
+                            );
+                          },
+                        ),
                 ),
               ),
             ],
@@ -198,12 +399,30 @@ class _SearchCard extends StatelessWidget {
     required this.onToggle,
     required this.type,
     required this.onTypeChanged,
+    required this.controller,
+    required this.query,
+    required this.onQueryChanged,
+    required this.onClearQuery,
+    required this.arrival,
+    required this.departure,
+    required this.onArrivalTap,
+    required this.onDepartureTap,
+    required this.onClearDates,
   });
 
   final bool expanded;
   final VoidCallback onToggle;
-  final String type;
-  final ValueChanged<String> onTypeChanged;
+  final _ResType type;
+  final ValueChanged<_ResType> onTypeChanged;
+  final TextEditingController controller;
+  final String query;
+  final ValueChanged<String> onQueryChanged;
+  final VoidCallback onClearQuery;
+  final DateTime? arrival;
+  final DateTime? departure;
+  final VoidCallback onArrivalTap;
+  final VoidCallback onDepartureTap;
+  final VoidCallback onClearDates;
 
   @override
   Widget build(BuildContext context) {
@@ -232,15 +451,39 @@ class _SearchCard extends StatelessWidget {
                           color: AppColors.dark, size: 20),
                       const SizedBox(width: 8),
                       Expanded(
-                        child: Text(
-                          'Rechercher une réservation',
+                        child: TextField(
+                          key: const ValueKey('reservations-search'),
+                          controller: controller,
+                          onChanged: onQueryChanged,
+                          textInputAction: TextInputAction.search,
                           style: AppTextStyles.regular12.copyWith(
                             color: AppColors.text,
                             fontSize: 11,
                             fontWeight: FontWeight.w300,
                           ),
+                          decoration: InputDecoration(
+                            isCollapsed: true,
+                            border: InputBorder.none,
+                            hintText: 'Rechercher une réservation',
+                            hintStyle: AppTextStyles.regular12.copyWith(
+                              color: AppColors.text,
+                              fontSize: 11,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
                         ),
                       ),
+                      if (query.trim().isNotEmpty) ...[
+                        const SizedBox(width: 6),
+                        GestureDetector(
+                          onTap: onClearQuery,
+                          child: const Icon(
+                            Icons.close_rounded,
+                            color: AppColors.dark,
+                            size: 18,
+                          ),
+                        ),
+                      ],
                     ],
                   ),
                 ),
@@ -274,8 +517,8 @@ class _SearchCard extends StatelessWidget {
                   child: _TypeChip(
                     icon: Icons.hotel_rounded,
                     label: 'Hotels',
-                    selected: type == 'Hotels',
-                    onTap: () => onTypeChanged('Hotels'),
+                    selected: type == _ResType.hotel,
+                    onTap: () => onTypeChanged(_ResType.hotel),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -283,8 +526,8 @@ class _SearchCard extends StatelessWidget {
                   child: _TypeChip(
                     icon: Icons.villa_rounded,
                     label: 'Villas',
-                    selected: type == 'Villas',
-                    onTap: () => onTypeChanged('Villas'),
+                    selected: type == _ResType.villa,
+                    onTap: () => onTypeChanged(_ResType.villa),
                   ),
                 ),
                 const SizedBox(width: 10),
@@ -292,31 +535,60 @@ class _SearchCard extends StatelessWidget {
                   child: _TypeChip(
                     icon: Icons.apartment_rounded,
                     label: 'Résidences',
-                    selected: type == 'Résidences',
-                    onTap: () => onTypeChanged('Résidences'),
+                    selected: type == _ResType.residence,
+                    onTap: () => onTypeChanged(_ResType.residence),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 10),
             // Dates
-            const Row(
+            Row(
               children: [
                 Expanded(
                   child: _DateField(
                     label: 'Arrivée',
-                    value: '15 Mars 2026',
+                    value: arrival == null
+                        ? '--/--/---- --:--'
+                        : _formatDateTime(arrival!),
+                    onTap: onArrivalTap,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: _DateField(
                     label: 'Départ',
-                    value: '17 Mars 2026',
+                    value: departure == null
+                        ? '--/--/---- --:--'
+                        : _formatDateTime(departure!),
+                    onTap: onDepartureTap,
                   ),
                 ),
               ],
             ),
+            if (arrival != null || departure != null) ...[
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerRight,
+                child: TextButton(
+                  onPressed: onClearDates,
+                  style: TextButton.styleFrom(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+                    minimumSize: const Size(0, 0),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                  ),
+                  child: Text(
+                    'Réinitialiser les dates',
+                    style: AppTextStyles.regular12.copyWith(
+                      color: AppColors.primary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ),
+              ),
+            ],
             const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
@@ -412,66 +684,81 @@ class _TypeChip extends StatelessWidget {
 // ─── Date field ───────────────────────────────────────────────────────────────
 
 class _DateField extends StatelessWidget {
-  const _DateField({required this.label, required this.value});
+  const _DateField({
+    required this.label,
+    required this.value,
+    required this.onTap,
+  });
 
   final String label;
   final String value;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 62,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 30,
-            height: 30,
-            decoration: BoxDecoration(
-              color: AppColors.background,
-              borderRadius: BorderRadius.circular(8),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 62,
+        padding: const EdgeInsets.symmetric(horizontal: 10),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: const Color(0xFFE5E7EB), width: 1),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 30,
+              height: 30,
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              alignment: Alignment.center,
+              child: const Icon(Icons.calendar_month_rounded,
+                  color: AppColors.dark, size: 16),
             ),
-            alignment: Alignment.center,
-            child: const Icon(Icons.calendar_month_rounded,
-                color: AppColors.dark, size: 16),
-          ),
-          const SizedBox(width: 8),
-          Expanded(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  label,
-                  style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.text,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w300,
+            const SizedBox(width: 8),
+            Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: AppTextStyles.regular12.copyWith(
+                      color: AppColors.text,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
-                ),
-                const SizedBox(
-                  height: 3,
-                ),
-                Text(
-                  value,
-                  style: AppTextStyles.regular12.copyWith(
-                    color: AppColors.text,
-                    fontSize: 10,
-                    fontWeight: FontWeight.w300,
+                  const SizedBox(
+                    height: 3,
                   ),
-                ),
-              ],
+                  Text(
+                    value,
+                    style: AppTextStyles.regular12.copyWith(
+                      color: AppColors.text,
+                      fontSize: 10,
+                      fontWeight: FontWeight.w300,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
+}
+
+String _two(int v) => v.toString().padLeft(2, '0');
+
+String _formatDateTime(DateTime d) {
+  return '${_two(d.day)}/${_two(d.month)}/${d.year} ${_two(d.hour)}:${_two(d.minute)}';
 }
 
 // ─── Status tabs ──────────────────────────────────────────────────────────────

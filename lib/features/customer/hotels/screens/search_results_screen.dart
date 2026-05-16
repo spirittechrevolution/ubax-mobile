@@ -27,8 +27,7 @@ class _PropertyResult {
 
 const _kResults = [
   _PropertyResult(
-    image:
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    image: 'assets/images/sara2.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -36,8 +35,7 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image:
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    image: 'assets/images/villa9.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -45,7 +43,7 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image: 'assets/images/modern-elegant-bedroom-interior.jpg',
+    image: 'assets/images/villa7.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -53,8 +51,7 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image:
-        'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    image: 'assets/images/villa6.jpg',
     name: 'Palm Club Plateau',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -62,7 +59,7 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image: 'assets/images/expedia_group-695130-2cf588-799717.jpg',
+    image: 'assets/images/villa2.jpg',
     name: 'Chambre de luxe',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -70,7 +67,7 @@ const _kResults = [
     tag: 'Hôtel',
   ),
   _PropertyResult(
-    image: 'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
+    image: 'assets/images/villa1.jpg',
     name: 'Chambre de luxe',
     location: 'Cocody Angré, Abidjan',
     price: 45000,
@@ -543,75 +540,84 @@ class _GridCard extends StatelessWidget {
           // Info
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(10, 6, 10, 12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Name + rating
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          data.name,
-                          style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.text,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ),
-                      const SizedBox(width: 4),
-                      const Icon(Icons.star_rounded,
-                          color: Color(0xFFFACC15), size: 14),
-                      const SizedBox(width: 2),
-                      Text(
-                        data.rating.toString(),
-                        style: const TextStyle(
-                          color: AppColors.text,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 10,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 3),
-                  // Location
-                  Text(
-                    data.location,
-                    style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.text,
-                      fontSize: 9,
-                      fontWeight: FontWeight.w400,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  // Price
-                  Text.rich(
-                    TextSpan(
+              padding: const EdgeInsets.fromLTRB(10, 6, 10, 6),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.topLeft,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Name + rating
+                    Row(
                       children: [
-                        TextSpan(
-                          text: '${_fmt(data.price)} FCFA',
-                          style: const TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
+                        SizedBox(
+                          width: 118,
+                          child: Text(
+                            data.name,
+                            style: AppTextStyles.sectionTitle.copyWith(
+                                color: AppColors.text,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        const TextSpan(
-                          text: '/ nuit',
-                          style: TextStyle(
+                        const SizedBox(width: 4),
+                        const Icon(Icons.star_rounded,
+                            color: Color(0xFFFACC15), size: 14),
+                        const SizedBox(width: 2),
+                        Text(
+                          data.rating.toString(),
+                          style: const TextStyle(
                             color: AppColors.text,
                             fontWeight: FontWeight.w400,
-                            fontSize: 9,
+                            fontSize: 10,
                           ),
                         ),
                       ],
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 2),
+                    // Location
+                    SizedBox(
+                      width: 157,
+                      child: Text(
+                        data.location,
+                        style: AppTextStyles.regular12.copyWith(
+                          color: AppColors.text,
+                          fontSize: 9,
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    // Price
+                    Text.rich(
+                      TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '${_fmt(data.price)} FCFA',
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 11,
+                            ),
+                          ),
+                          const TextSpan(
+                            text: '/ nuit',
+                            style: TextStyle(
+                              color: AppColors.text,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 9,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -17,6 +17,7 @@ class OnboardingScreen extends StatefulWidget {
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
   static const _orange = AppColors.primary;
+  static const _kPremiumEase = Cubic(0.76, 0.0, 0.24, 1.0);
   final _pageController = PageController();
   int _index = 0;
 
@@ -56,8 +57,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
     await _pageController.animateToPage(
       _index + 1,
-      duration: const Duration(milliseconds: 280),
-      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 420),
+      curve: _kPremiumEase,
     );
   }
 
@@ -123,7 +124,7 @@ class _OnboardingPageData {
   final String descriptionKey;
 }
 
-class _OnboardingPage extends StatelessWidget {
+class _OnboardingPage extends StatefulWidget {
   const _OnboardingPage({
     required this.data,
     required this.index,
@@ -139,85 +140,166 @@ class _OnboardingPage extends StatelessWidget {
   final double delta;
 
   @override
+  State<_OnboardingPage> createState() => _OnboardingPageState();
+}
+
+class _OnboardingPageState extends State<_OnboardingPage>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _titleT;
+  late final Animation<double> _descT;
+
+  bool get _isActive => widget.delta.abs() < 0.001;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 620),
+    );
+
+    _titleT = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.0, 0.72,
+          curve: _OnboardingScreenState._kPremiumEase),
+    );
+    _descT = CurvedAnimation(
+      parent: _controller,
+      curve: const Interval(0.14, 1.0,
+          curve: _OnboardingScreenState._kPremiumEase),
+    );
+
+    if (_isActive) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  @override
+  void didUpdateWidget(covariant _OnboardingPage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    final becameActive = !_wasActive(oldWidget) && _isActive;
+    if (becameActive) {
+      _controller.forward(from: 0);
+    }
+  }
+
+  bool _wasActive(_OnboardingPage w) => w.delta.abs() < 0.001;
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final dAbs = Curves.easeOut.transform(delta.abs());
+    final delta = widget.delta;
+    final dAbs = _OnboardingScreenState._kPremiumEase.transform(delta.abs());
     final dx = -delta * 72;
     final dy = dAbs * 16;
     final scale = 1.0 + (dAbs * 0.10);
     final contentDx = delta * 22;
     final contentOpacity = (1.0 - (dAbs * 0.22)).clamp(0.0, 1.0);
+    final pageOpacity = (1.0 - (dAbs * 0.46)).clamp(0.0, 1.0);
+    final pageScale = 1.0 - (dAbs * 0.04);
 
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        Transform.translate(
-          offset: Offset(dx, dy),
-          child: Transform.scale(
-            scale: scale,
-            child: Image.asset(
-              data.imageAsset,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Color(0xCC000000),
-                Color(0x33000000),
-                Color(0xCC000000),
-              ],
-              stops: [0.0, 0.45, 1.0],
-            ),
-          ),
-        ),
-        Opacity(
-          opacity: contentOpacity,
-          child: Transform.translate(
-            offset: Offset(contentDx, 0),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Image.asset(
-                        'assets/icons/logoUbaxWhite.png',
-                        width: 54,
-                        height: 54,
-                      ),
-                    ),
-                    const SizedBox(height: 18),
-                    _ProgressBar(
-                      index: index,
-                      total: total,
-                      orange: orange,
-                    ),
-                    const Spacer(),
-                    Text(
-                      data.titleKey.tr(),
-                      style: AppTextStyles.semibold30
-                          .copyWith(color: Colors.white),
-                    ),
-                    const SizedBox(height: 22),
-                    Text(
-                      data.descriptionKey.tr(),
-                      style:
-                          AppTextStyles.light15.copyWith(color: Colors.white),
-                    ),
-                    SizedBox(
-                        height: MediaQuery.of(context).padding.bottom + 92),
-                  ],
+    return Opacity(
+      opacity: pageOpacity,
+      child: Transform.scale(
+        scale: pageScale,
+        alignment: Alignment.center,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            Transform.translate(
+              offset: Offset(dx, dy),
+              child: Transform.scale(
+                scale: scale,
+                child: Image.asset(
+                  widget.data.imageAsset,
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
-          ),
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xCC000000),
+                    Color(0x33000000),
+                    Color(0xCC000000),
+                  ],
+                  stops: [0.0, 0.45, 1.0],
+                ),
+              ),
+            ),
+            Opacity(
+              opacity: contentOpacity,
+              child: Transform.translate(
+                offset: Offset(contentDx, 0),
+                child: SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 24, 20, 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Center(
+                          child: Image.asset(
+                            'assets/icons/logoUbaxWhite.png',
+                            width: 54,
+                            height: 54,
+                          ),
+                        ),
+                        const SizedBox(height: 18),
+                        _ProgressBar(
+                          index: widget.index,
+                          total: widget.total,
+                          orange: widget.orange,
+                        ),
+                        const Spacer(),
+                        AnimatedBuilder(
+                          animation: _titleT,
+                          builder: (_, __) => Opacity(
+                            opacity: _titleT.value,
+                            child: Transform.translate(
+                              offset: Offset(0, (1.0 - _titleT.value) * 22),
+                              child: Text(
+                                widget.data.titleKey.tr(),
+                                style: AppTextStyles.semibold30
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 22),
+                        AnimatedBuilder(
+                          animation: _descT,
+                          builder: (_, __) => Opacity(
+                            opacity: _descT.value,
+                            child: Transform.translate(
+                              offset: Offset(0, (1.0 - _descT.value) * 16),
+                              child: Text(
+                                widget.data.descriptionKey.tr(),
+                                style: AppTextStyles.light15
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                            height: MediaQuery.of(context).padding.bottom + 92),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

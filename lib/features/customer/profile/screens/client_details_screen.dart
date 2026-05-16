@@ -241,18 +241,22 @@ class _HeroStat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisSize: MainAxisSize.min,
+      mainAxisSize: MainAxisSize.max,
       children: [
         Icon(icon, color: AppColors.primary, size: 10),
         const SizedBox(width: 3),
-        Text(
-          text,
-          style: AppTextStyles.regular12.copyWith(
-            fontFamily: 'Lexend',
-            fontSize: 8,
-            fontWeight: FontWeight.w300,
-            color: Colors.white,
-            height: 1.0,
+        Expanded(
+          child: Text(
+            text,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.regular12.copyWith(
+              fontFamily: 'Lexend',
+              fontSize: 8,
+              fontWeight: FontWeight.w300,
+              color: Colors.white,
+              height: 1.0,
+            ),
           ),
         ),
       ],
@@ -290,7 +294,6 @@ class _ClientCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 255,
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -445,33 +448,39 @@ class _LineInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon, color: iconColor, size: 13),
         const SizedBox(width: 4),
         Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: AppTextStyles.regular12.copyWith(
-                fontFamily: 'Lexend',
-                fontSize: 11,
-                fontWeight: FontWeight.w300,
-                color: AppColors.primary,
-                height: 1.1,
-              ),
-              children: [
-                TextSpan(text: '$label : '),
-                TextSpan(
-                  text: value,
-                  style: AppTextStyles.regular12.copyWith(
-                    fontFamily: 'Lexend',
-                    fontSize: 11,
-                    fontWeight: FontWeight.w400,
-                    color: AppColors.text,
-                    height: 1.1,
-                  ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: RichText(
+              maxLines: 1,
+              overflow: TextOverflow.clip,
+              text: TextSpan(
+                style: AppTextStyles.regular12.copyWith(
+                  fontFamily: 'Lexend',
+                  fontSize: 10,
+                  fontWeight: FontWeight.w300,
+                  color: AppColors.primary,
+                  height: 1.1,
                 ),
-              ],
+                children: [
+                  TextSpan(text: '$label : '),
+                  TextSpan(
+                    text: value,
+                    style: AppTextStyles.regular12.copyWith(
+                      fontFamily: 'Lexend',
+                      fontSize: 10,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.text,
+                      height: 1.1,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -489,7 +498,6 @@ class _DocumentTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 109,
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: Color(0xFFECF2F7),
@@ -608,32 +616,39 @@ class _FinanceLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Icon(icon, color: Colors.white, size: 13),
         const SizedBox(width: 5),
         Expanded(
-          child: RichText(
-            text: TextSpan(
-              style: AppTextStyles.regular12.copyWith(
-                fontFamily: 'Lexend',
-                fontSize: 10,
-                fontWeight: FontWeight.w400,
-                color: Colors.white,
-                height: 1.0,
-              ),
-              children: [
-                TextSpan(text: '$label : '),
-                TextSpan(
-                  text: value,
-                  style: AppTextStyles.regular12.copyWith(
-                    fontFamily: 'Lexend',
-                    fontSize: 10,
-                    fontWeight: FontWeight.w600,
-                    color: AppColors.text,
-                    height: 1.0,
-                  ),
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: RichText(
+              maxLines: 1,
+              overflow: TextOverflow.clip,
+              text: TextSpan(
+                style: AppTextStyles.regular12.copyWith(
+                  fontFamily: 'Lexend',
+                  fontSize: 9,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  height: 1.0,
                 ),
-              ],
+                children: [
+                  TextSpan(text: '$label : '),
+                  TextSpan(
+                    text: value,
+                    style: AppTextStyles.regular12.copyWith(
+                      fontFamily: 'Lexend',
+                      fontSize: 9,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.text,
+                      height: 1.0,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

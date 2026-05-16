@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 enum PropertyStatus { loue, disponible, vendu }
 
+enum BailleurContractType { location, vente }
+
 class BailleurProperty {
   const BailleurProperty({
     required this.id,
@@ -59,6 +61,7 @@ class BailleurTenant {
     required this.apartmentImage,
     required this.propertyId,
     required this.isActive,
+    required this.contractType,
   });
 
   final String id;
@@ -84,6 +87,7 @@ class BailleurTenant {
   final String apartmentImage;
   final String propertyId;
   final bool isActive;
+  final BailleurContractType contractType;
 }
 
 class BailleurFluxPoint {
@@ -159,7 +163,7 @@ const kMockBailleurProperties = <BailleurProperty>[
     id: 'prop-villa-luxe',
     name: 'Villa de luxe',
     location: 'Riviera, Abidjan – Côte d\'Ivoire',
-    imageAsset: 'assets/images/villa-ultra-moderna-carignan.jpg',
+    imageAsset: 'assets/images/villa10.jpg',
     status: PropertyStatus.disponible,
     totalApartments: 1,
     availableApartments: 1,
@@ -195,7 +199,7 @@ const kMockBailleurTenants = <BailleurTenant>[
     floor: '2ème étage',
     phone: '+225 01 02 03 04 05',
     bailYears: 1,
-    avatarAsset: 'assets/images/sara1.jpg',
+    avatarAsset: 'assets/images/villa9.jpg',
     reference: 'UBX-CL-2025-0014',
     startDate: '14/11/2025',
     endDate: '14/11/2026',
@@ -209,9 +213,10 @@ const kMockBailleurTenants = <BailleurTenant>[
     paidCount: 3,
     pendingCount: 9,
     unpaidCount: 0,
-    apartmentImage: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    apartmentImage: 'assets/images/chambre11.jpg',
     propertyId: 'prop-azalai',
     isActive: true,
+    contractType: BailleurContractType.location,
   ),
   BailleurTenant(
     id: 'tenant-0026',
@@ -234,9 +239,10 @@ const kMockBailleurTenants = <BailleurTenant>[
     paidCount: 4,
     pendingCount: 8,
     unpaidCount: 0,
-    apartmentImage: 'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv-working-table.jpg',
+    apartmentImage: 'assets/images/villa3.jpg',
     propertyId: 'prop-azalai',
     isActive: true,
+    contractType: BailleurContractType.location,
   ),
   BailleurTenant(
     id: 'tenant-0027',
@@ -245,7 +251,7 @@ const kMockBailleurTenants = <BailleurTenant>[
     floor: '3ème étage',
     phone: '+225 01 02 03 04 05',
     bailYears: 1,
-    avatarAsset: 'assets/images/full-shot-happy-family-playing-games.jpg',
+    avatarAsset: 'assets/images/villa6.jpg',
     reference: 'UBX-CL-2025-0016',
     startDate: '15/09/2025',
     endDate: '15/09/2026',
@@ -259,9 +265,10 @@ const kMockBailleurTenants = <BailleurTenant>[
     paidCount: 5,
     pendingCount: 7,
     unpaidCount: 0,
-    apartmentImage: 'assets/images/modern-luxurious-bedroom-interior-design.jpg',
-    propertyId: 'prop-azalai',
+    apartmentImage: 'assets/images/chambre12.jpg',
+    propertyId: 'prop-villa-luxe',
     isActive: true,
+    contractType: BailleurContractType.vente,
   ),
 ];
 

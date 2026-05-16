@@ -52,7 +52,36 @@
     "email": "ईमेल",
     "account_type": "खाते का प्रकार",
     "confirm_password": "पासवर्ड की पुष्टि करें",
-    "signup_button": "साइन अप"
+    "signup_button": "साइन अप",
+    "reset_password_title": "पासवर्ड रीसेट करें",
+    "reset_password_subtitle": "पासवर्ड रीसेट करने के लिए कृपया अपना फ़ोन नंबर दर्ज करें",
+    "send": "भेजें",
+    "verification": "सत्यापन",
+    "verification_subtitle": "कृपया SMS से प्राप्त कोड दर्ज करें",
+    "verify_code": "कोड सत्यापित करें",
+    "new_password_title": "नया पासवर्ड",
+    "new_password_subtitle": "अपने खाते को सुरक्षित करने के लिए नया पासवर्ड बनाएं।",
+    "new_password_hint": "नया पासवर्ड",
+    "confirm_password_hint": "पासवर्ड की पुष्टि करें",
+    "validate": "मान्य करें",
+    "fill_all_fields": "कृपया सभी फ़ील्ड भरें",
+    "invalid_phone": "अमान्य फ़ोन नंबर",
+    "signing_in": "साइन इन हो रहा है…",
+    "login_failed": "साइन इन विफल",
+    "sending_otp": "कोड भेज रहे हैं…",
+    "otp_send_failed": "कोड भेजने में विफल",
+    "otp_incomplete": "OTP कोड अधूरा",
+    "verifying": "सत्यापन हो रहा है…",
+    "otp_resent": "नया कोड भेजा गया",
+    "otp_invalid": "अमान्य या समाप्त कोड",
+    "resend_code": "कोड पुनः भेजें",
+    "passwords_dont_match": "पासवर्ड मेल नहीं खाते",
+    "creating_account": "खाता बनाया जा रहा है…",
+    "signup_success": "खाता सफलतापूर्वक बनाया गया",
+    "signup_failed": "पंजीकरण विफल",
+    "password_reset_success": "पासवर्ड अपडेट किया गया",
+    "reset_failed": "रीसेट विफल",
+    "resetting": "रीसेट हो रहा है…"
   },
   "profile": {
     "role": {
@@ -132,5 +161,36 @@
       "upToDate": "À jour",
       "sinceLastMonth": "Depuis le mois derniers"
     }
+  },
+  "favorites": {
+    "title": "पसंदीदा",
+    "search_hint": "संपत्ति खोजें...",
+    "count": {
+      "zero": "कोई पसंदीदा नहीं",
+      "one": "1 पसंदीदा",
+      "other": "{} पसंदीदा"
+    },
+    "categories": {
+      "house": "घर",
+      "apartment": "अपार्टमेंट",
+      "hotel": "होटल",
+      "land": "ज़मीन"
+    },
+    "meta": {
+      "rooms": "कमरे",
+      "bedrooms": "शयनकक्ष",
+      "bathrooms": "स्नानघर"
+    },
+    "see_details": "विवरण देखें",
+    "empty_title": "अभी कोई पसंदीदा नहीं",
+    "empty_message": "खोज से हृदय आइकन पर टैप करके संपत्तियों को अपने पसंदीदा में जोड़ें।",
+    "error": "आपके पसंदीदा लोड नहीं हो सके।",
+    "retry": "पुनः प्रयास करें",
+    "delete": "हटाएं",
+    "delete_confirm_title": "हटाएं",
+    "delete_confirm_message": "क्या आप वाकई इस संपत्ति को अपने पसंदीदा से हटाना चाहते हैं?",
+    "delete_confirm_cancel": "रद्द करें",
+    "delete_confirm_ok": "हटाएं",
+    "delete_failed": "पसंदीदा हटाने में विफल।"
   }
 }

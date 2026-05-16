@@ -63,7 +63,25 @@
     "new_password_subtitle": "Veuillez créer un nouveau mot de passe pour sécuriser votre compte.",
     "new_password_hint": "Nouveau mot de passe",
     "confirm_password_hint": "Confirmer le mot de passe",
-    "validate": "Valider"
+    "validate": "Valider",
+    "fill_all_fields": "Veuillez remplir tous les champs",
+    "invalid_phone": "Numéro de téléphone invalide",
+    "signing_in": "Connexion…",
+    "login_failed": "Échec de la connexion",
+    "sending_otp": "Envoi du code…",
+    "otp_send_failed": "Échec de l'envoi du code",
+    "otp_incomplete": "Code OTP incomplet",
+    "verifying": "Vérification…",
+    "otp_resent": "Nouveau code envoyé",
+    "otp_invalid": "Code invalide ou expiré",
+    "resend_code": "Renvoyer le code",
+    "passwords_dont_match": "Les mots de passe ne correspondent pas",
+    "creating_account": "Création du compte…",
+    "signup_success": "Compte créé avec succès",
+    "signup_failed": "Échec de l'inscription",
+    "password_reset_success": "Mot de passe modifié",
+    "reset_failed": "Échec de la réinitialisation",
+    "resetting": "Réinitialisation…"
   },
   "profile": {
     "role": {
@@ -144,5 +162,36 @@
       "upToDate": "À jour",
       "sinceLastMonth": "Depuis le mois derniers"
     }
+  },
+  "favorites": {
+    "title": "Favoris",
+    "search_hint": "Rechercher un bien...",
+    "count": {
+      "zero": "Aucun favori",
+      "one": "1 favori",
+      "other": "{} favoris"
+    },
+    "categories": {
+      "house": "Maison",
+      "apartment": "Appartement",
+      "hotel": "Hôtel",
+      "land": "Terrain"
+    },
+    "meta": {
+      "rooms": "Pièces",
+      "bedrooms": "Chambres",
+      "bathrooms": "Sdb"
+    },
+    "see_details": "Voir les détails",
+    "empty_title": "Aucun favori",
+    "empty_message": "Ajoute des biens à tes favoris en touchant le cœur depuis la recherche.",
+    "error": "Impossible de charger tes favoris.",
+    "retry": "Réessayer",
+    "delete": "Supprimer",
+    "delete_confirm_title": "Supprimer",
+    "delete_confirm_message": "Voulez-vous vraiment retirer ce bien de vos favoris ?",
+    "delete_confirm_cancel": "Annuler",
+    "delete_confirm_ok": "Supprimer",
+    "delete_failed": "Échec de la suppression du favori."
   }
 }

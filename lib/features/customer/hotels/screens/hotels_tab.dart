@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/all_properties_screen.dart';
 import 'package:statefulclickcounter/core/di/injection.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/address_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_details_screen.dart';
@@ -63,6 +64,13 @@ class _ApiRecommendedList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favorites = FavoritesStore.instance;
+    return ValueListenableBuilder<Set<String>>(
+      valueListenable: favorites.favorites,
+      builder: (context, _, __) => _buildList(context, favorites),
+    );
+  }
+
+  Widget _buildList(BuildContext context, FavoritesStore favorites) {
     return Column(
       children: [
         for (final p in items)
@@ -77,7 +85,7 @@ class _ApiRecommendedList extends StatelessWidget {
                         : p.city,
                     price: _asInt(p.price),
                     rating: 4.7,
-                    favoriteId: 'hotel-${p.id}',
+                    favoriteId: p.id,
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -104,8 +112,8 @@ class _ApiRecommendedList extends StatelessWidget {
                     beds: p.bedrooms,
                     baths: p.bathrooms,
                     salons: 1,
-                    isFavorite: favorites.isFavorite('stay-${p.id}'),
-                    onFavoriteToggle: () => favorites.toggle('stay-${p.id}'),
+                    isFavorite: favorites.isFavorite(p.id),
+                    onFavoriteToggle: () => favorites.toggle(p.id),
                     onTap: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
@@ -901,7 +909,36 @@ class _HotelsTabState extends State<HotelsTab> {
                         const SizedBox(height: 24),
 
                         // ── Populaires
-                        _SectionRow(title: 'Populaires', onMore: () {}),
+                        _SectionRow(
+                          title: 'Populaires',
+                          onMore: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => AllPropertiesScreen(
+                                  title: 'Populaires',
+                                  popular: api.popular,
+                                  recommended: api.recommended,
+                                  onItemTap: (p) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => HotelDetailsScreen(
+                                          imagePath: p.coverPhotoUrl ??
+                                              'assets/images/chambre12.jpg',
+                                          name: p.title,
+                                          location: p.district.isNotEmpty
+                                              ? '${p.district}, ${p.city}'
+                                              : p.city,
+                                          price: p.price.round(),
+                                          rating: 4.7,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         const SizedBox(height: 12),
                         SizedBox(
                           height: 220,
@@ -985,7 +1022,35 @@ class _HotelsTabState extends State<HotelsTab> {
 
                         // ── Recommandés
                         _SectionRow(
-                            title: 'Recommandés pour vous', onMore: () {}),
+                          title: 'Recommandés pour vous',
+                          onMore: () {
+                            Navigator.of(context).push(
+                              MaterialPageRoute<void>(
+                                builder: (_) => AllPropertiesScreen(
+                                  title: 'Recommandés pour vous',
+                                  popular: api.popular,
+                                  recommended: api.recommended,
+                                  onItemTap: (p) {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => HotelDetailsScreen(
+                                          imagePath: p.coverPhotoUrl ??
+                                              'assets/images/chambre11.jpg',
+                                          name: p.title,
+                                          location: p.district.isNotEmpty
+                                              ? '${p.district}, ${p.city}'
+                                              : p.city,
+                                          price: p.price.round(),
+                                          rating: 4.7,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                         const SizedBox(height: 12),
 
                         // UBAX banner

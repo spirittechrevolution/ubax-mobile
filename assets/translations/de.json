@@ -52,7 +52,36 @@
     "email": "E-Mail",
     "account_type": "Kontotyp",
     "confirm_password": "Passwort bestätigen",
-    "signup_button": "Registrieren"
+    "signup_button": "Registrieren",
+    "reset_password_title": "Passwort zurücksetzen",
+    "reset_password_subtitle": "Bitte gib deine Telefonnummer ein, um das Passwort zurückzusetzen",
+    "send": "Senden",
+    "verification": "Verifizierung",
+    "verification_subtitle": "Bitte gib den per SMS erhaltenen Code ein",
+    "verify_code": "Code überprüfen",
+    "new_password_title": "Neues Passwort",
+    "new_password_subtitle": "Bitte erstelle ein neues Passwort, um dein Konto zu sichern.",
+    "new_password_hint": "Neues Passwort",
+    "confirm_password_hint": "Passwort bestätigen",
+    "validate": "Bestätigen",
+    "fill_all_fields": "Bitte alle Felder ausfüllen",
+    "invalid_phone": "Ungültige Telefonnummer",
+    "signing_in": "Anmeldung…",
+    "login_failed": "Anmeldung fehlgeschlagen",
+    "sending_otp": "Code wird gesendet…",
+    "otp_send_failed": "Fehler beim Senden des Codes",
+    "otp_incomplete": "OTP-Code unvollständig",
+    "verifying": "Überprüfung…",
+    "otp_resent": "Neuer Code gesendet",
+    "otp_invalid": "Ungültiger oder abgelaufener Code",
+    "resend_code": "Code erneut senden",
+    "passwords_dont_match": "Passwörter stimmen nicht überein",
+    "creating_account": "Konto wird erstellt…",
+    "signup_success": "Konto erfolgreich erstellt",
+    "signup_failed": "Registrierung fehlgeschlagen",
+    "password_reset_success": "Passwort aktualisiert",
+    "reset_failed": "Zurücksetzen fehlgeschlagen",
+    "resetting": "Wird zurückgesetzt…"
   },
   "profile": {
     "role": {
@@ -132,5 +161,36 @@
       "upToDate": "À jour",
       "sinceLastMonth": "Depuis le mois derniers"
     }
+  },
+  "favorites": {
+    "title": "Favoriten",
+    "search_hint": "Eine Immobilie suchen...",
+    "count": {
+      "zero": "Keine Favoriten",
+      "one": "1 Favorit",
+      "other": "{} Favoriten"
+    },
+    "categories": {
+      "house": "Haus",
+      "apartment": "Wohnung",
+      "hotel": "Hotel",
+      "land": "Grundstück"
+    },
+    "meta": {
+      "rooms": "Zimmer",
+      "bedrooms": "Schlafzimmer",
+      "bathrooms": "Bad"
+    },
+    "see_details": "Details ansehen",
+    "empty_title": "Noch keine Favoriten",
+    "empty_message": "Füge Immobilien zu deinen Favoriten hinzu, indem du in der Suche auf das Herz tippst.",
+    "error": "Deine Favoriten konnten nicht geladen werden.",
+    "retry": "Erneut versuchen",
+    "delete": "Löschen",
+    "delete_confirm_title": "Löschen",
+    "delete_confirm_message": "Möchtest du diese Immobilie wirklich aus deinen Favoriten entfernen?",
+    "delete_confirm_cancel": "Abbrechen",
+    "delete_confirm_ok": "Löschen",
+    "delete_failed": "Favorit konnte nicht entfernt werden."
   }
 }

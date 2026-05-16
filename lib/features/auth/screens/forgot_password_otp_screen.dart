@@ -1,15 +1,22 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/forgot_password/forgot_password_bloc.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 import 'new_password_screen.dart';
 
 class ForgotPasswordOtpScreen extends StatefulWidget {
-  const ForgotPasswordOtpScreen({super.key, required this.phoneDisplay});
+  const ForgotPasswordOtpScreen({
+    super.key,
+    required this.phoneDisplay,
+    required this.phoneE164,
+  });
 
   final String phoneDisplay;
+  final String phoneE164;
 
   @override
   State<ForgotPasswordOtpScreen> createState() =>
@@ -41,87 +48,131 @@ class _ForgotPasswordOtpScreenState extends State<ForgotPasswordOtpScreen> {
     }
   }
 
+  String _readCode() => _controllers.map((c) => c.text).join();
+
+  void _onVerify() {
+    final code = _readCode();
+    if (code.length != 6) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.otp_incomplete'.tr())),
+      );
+      return;
+    }
+    context.read<ForgotPasswordBloc>().add(
+          ForgotVerifyOtp(phone: widget.phoneE164, code: code),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF16324A),
-      appBar: AppBar(
-        backgroundColor: const Color(0xFF16324A),
-        elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Center(
-            child: GestureDetector(
-              onTap: () => Navigator.of(context).maybePop(),
-              child: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  border: Border.all(color: Colors.white, width: 1.5),
+    return BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: (context, state) {
+        if (state.status == ForgotPasswordStatus.otpVerified) {
+          final bloc = context.read<ForgotPasswordBloc>();
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => BlocProvider.value(
+                value: bloc,
+                child: NewPasswordScreen(
+                  phoneE164: widget.phoneE164,
+                  code: state.code ?? _readCode(),
                 ),
-                child: const Icon(Icons.arrow_back_ios_new_rounded,
-                    color: Colors.white, size: 18),
+              ),
+            ),
+          );
+        } else if (state.status == ForgotPasswordStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'auth.otp_invalid'.tr()),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: const Color(0xFF16324A),
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF16324A),
+          elevation: 0,
+          leading: Padding(
+            padding: const EdgeInsets.only(left: 16),
+            child: Center(
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).maybePop(),
+                child: Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.white, width: 1.5),
+                  ),
+                  child: const Icon(Icons.arrow_back_ios_new_rounded,
+                      color: Colors.white, size: 18),
+                ),
               ),
             ),
           ),
         ),
-      ),
-      body: SafeArea(
-        top: false,
-        bottom: false,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(height: 74),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'auth.verification'.tr(),
-                style: AppTextStyles.sectionTitle.copyWith(
-                  color: Colors.white,
-                  fontSize: 24,
+        body: SafeArea(
+          top: false,
+          bottom: false,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 74),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'auth.verification'.tr(),
+                  style: AppTextStyles.sectionTitle.copyWith(
+                    color: Colors.white,
+                    fontSize: 24,
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'auth.verification_subtitle'.tr(),
-                style: AppTextStyles.regular12
-                    .copyWith(color: const Color(0xFFE2E8F0), fontSize: 14),
+              const SizedBox(height: 8),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'auth.verification_subtitle'.tr(),
+                  style: AppTextStyles.regular12
+                      .copyWith(color: const Color(0xFFE2E8F0), fontSize: 14),
+                ),
               ),
-            ),
-            const SizedBox(height: 60),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: List.generate(6, (i) {
-                  return _OtpDotField(
-                    controller: _controllers[i],
-                    node: _nodes[i],
-                    onChanged: (v) => _onChanged(i, v),
-                  );
-                }),
+              const SizedBox(height: 60),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(6, (i) {
+                    return _OtpDotField(
+                      controller: _controllers[i],
+                      node: _nodes[i],
+                      onChanged: (v) => _onChanged(i, v),
+                    );
+                  }),
+                ),
               ),
-            ),
-            const Spacer(),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: OrangeButton(
-                text: 'auth.verify_code'.tr(),
-                onPressed: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                        builder: (_) => const NewPasswordScreen()),
-                  );
-                },
+              const Spacer(),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                  builder: (context, state) {
+                    final loading =
+                        state.status == ForgotPasswordStatus.verifyingOtp;
+                    return OrangeButton(
+                      text: loading
+                          ? 'auth.verifying'.tr()
+                          : 'auth.verify_code'.tr(),
+                      onPressed: loading ? null : _onVerify,
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
-          ],
+              SizedBox(height: MediaQuery.of(context).padding.bottom + 20),
+            ],
+          ),
         ),
       ),
     );

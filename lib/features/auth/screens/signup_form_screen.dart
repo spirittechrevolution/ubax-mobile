@@ -1,11 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/signup/signup_bloc.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class SignupFormScreen extends StatefulWidget {
-  const SignupFormScreen({super.key});
+  const SignupFormScreen({super.key, required this.phoneE164});
+
+  final String phoneE164;
 
   @override
   State<SignupFormScreen> createState() => _SignupFormScreenState();
@@ -33,209 +38,270 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
     super.dispose();
   }
 
+  void _onSubmit() {
+    final firstName = _firstName.text.trim();
+    final lastName = _lastName.text.trim();
+    final email = _email.text.trim();
+    final password = _password.text;
+    final confirm = _confirmPassword.text;
+
+    if (firstName.isEmpty ||
+        lastName.isEmpty ||
+        email.isEmpty ||
+        password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.fill_all_fields'.tr())),
+      );
+      return;
+    }
+    if (password != confirm) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('auth.passwords_dont_match'.tr())),
+      );
+      return;
+    }
+
+    context.read<SignupBloc>().add(
+          SignupComplete(
+            phone: widget.phoneE164,
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+            title: _civility == 'Mrs' ? 'Mme' : 'M.',
+          ),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        children: [
-          Positioned.fill(
-            child: Image.asset('assets/images/onb1.png', fit: BoxFit.cover),
-          ),
-          Positioned.fill(
-            child: Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    const Color(0xFF0B1A28).withOpacity(0.55),
-                    const Color(0xFF0B1A28).withOpacity(0.35),
-                    const Color(0xFF0B1A28).withOpacity(0.65),
-                  ],
-                  stops: const [0.0, 0.55, 1.0],
+    return BlocListener<SignupBloc, SignupState>(
+      listenWhen: (prev, curr) => prev.status != curr.status,
+      listener: (context, state) {
+        if (state.status == SignupStatus.completed) {
+          context.read<AuthBloc>().add(const AuthSignedIn());
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('auth.signup_success'.tr())),
+          );
+          Navigator.of(context).popUntil((r) => r.isFirst);
+        } else if (state.status == SignupStatus.failure) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage ?? 'auth.signup_failed'.tr()),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      },
+      child: Scaffold(
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset('assets/images/onb1.png', fit: BoxFit.cover),
+            ),
+            Positioned.fill(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      const Color(0xFF0B1A28).withOpacity(0.55),
+                      const Color(0xFF0B1A28).withOpacity(0.35),
+                      const Color(0xFF0B1A28).withOpacity(0.65),
+                    ],
+                    stops: const [0.0, 0.55, 1.0],
+                  ),
                 ),
               ),
             ),
-          ),
-          SafeArea(
-            child: Column(
-              children: [
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).maybePop(),
-                    icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white),
-                  ),
-                ),
-                const SizedBox(height: 10),
-                Text(
-                  'auth.create_account'.tr(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 12),
-                Center(
-                  child: Image.asset(
-                    'assets/icons/logoUbaxWhite.png',
-                    width: 86,
-                    height: 86,
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(28),
-                        topRight: Radius.circular(28),
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Color(0x1A000000),
-                          blurRadius: 24,
-                          offset: Offset(0, -6),
-                        ),
-                      ],
+            SafeArea(
+              child: Column(
+                children: [
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: IconButton(
+                      onPressed: () => Navigator.of(context).maybePop(),
+                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
+                          color: Colors.white),
                     ),
-                    child: SingleChildScrollView(
-                      padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Center(
-                            child: Text(
-                              'auth.signup_form_title'.tr(),
-                              style: AppTextStyles.sectionTitle,
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(height: 14),
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 2,
-                                child: _DropdownField(
-                                  value: _civility,
-                                  items: const ['Mrs', 'Mr'],
-                                  onChanged: (v) =>
-                                      setState(() => _civility = v),
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                flex: 4,
-                                child: _Field(
-                                  controller: _firstName,
-                                  hint: 'auth.first_name'.tr(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          _Field(
-                            controller: _lastName,
-                            hint: 'auth.last_name'.tr(),
-                          ),
-                          const SizedBox(height: 12),
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _Field(
-                                  controller: _email,
-                                  hint: 'auth.email'.tr(),
-                                  keyboardType: TextInputType.emailAddress,
-                                ),
-                              ),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: _DropdownField(
-                                  value: _accountType,
-                                  items: const ['Particulier', 'Agence'],
-                                  onChanged: (v) =>
-                                      setState(() => _accountType = v),
-                                  hint: 'auth.account_type'.tr(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 12),
-                          _Field(
-                            controller: _password,
-                            hint: 'auth.password_hint'.tr(),
-                            obscureText: _obscure1,
-                            fontSize: 22,
-                            suffix: IconButton(
-                              onPressed: () =>
-                                  setState(() => _obscure1 = !_obscure1),
-                              icon: Icon(
-                                _obscure1
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: const Color(0xFF6D6D6D),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          _Field(
-                            controller: _confirmPassword,
-                            hint: 'auth.confirm_password'.tr(),
-                            obscureText: _obscure2,
-                            fontSize: 22,
-                            suffix: IconButton(
-                              onPressed: () =>
-                                  setState(() => _obscure2 = !_obscure2),
-                              icon: Icon(
-                                _obscure2
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: const Color(0xFF6D6D6D),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 14),
-                          OrangeButton(
-                            text: 'auth.signup_button'.tr(),
-                            onPressed: () => Navigator.of(context)
-                                .popUntil((r) => r.isFirst),
-                          ),
-                          const SizedBox(height: 18),
-                          _DividerLabel(text: 'auth.or_signup_with'.tr()),
-                          const SizedBox(height: 14),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              _SocialButton(
-                                assetPath: 'assets/icons/logo_google.png',
-                                onTap: () {},
-                              ),
-                              _SocialButton(
-                                assetPath: 'assets/icons/logo_apple.png',
-                                onTap: () {},
-                              ),
-                              _SocialButton(
-                                assetPath: 'assets/icons/logos_whatsapp.png',
-                                onTap: () {},
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: MediaQuery.of(context).padding.bottom + 6,
+                  ),
+                  const SizedBox(height: 10),
+                  Text(
+                    'auth.create_account'.tr(),
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  Center(
+                    child: Image.asset(
+                      'assets/icons/logoUbaxWhite.png',
+                      width: 86,
+                      height: 86,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(28),
+                          topRight: Radius.circular(28),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0x1A000000),
+                            blurRadius: 24,
+                            offset: Offset(0, -6),
                           ),
                         ],
                       ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.fromLTRB(18, 24, 18, 18),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: Text(
+                                'auth.signup_form_title'.tr(),
+                                style: AppTextStyles.sectionTitle,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            Row(
+                              children: [
+                                Expanded(
+                                  flex: 2,
+                                  child: _DropdownField(
+                                    value: _civility,
+                                    items: const ['Mrs', 'Mr'],
+                                    onChanged: (v) =>
+                                        setState(() => _civility = v),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  flex: 4,
+                                  child: _Field(
+                                    controller: _firstName,
+                                    hint: 'auth.first_name'.tr(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            _Field(
+                              controller: _lastName,
+                              hint: 'auth.last_name'.tr(),
+                            ),
+                            const SizedBox(height: 12),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _Field(
+                                    controller: _email,
+                                    hint: 'auth.email'.tr(),
+                                    keyboardType: TextInputType.emailAddress,
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: _DropdownField(
+                                    value: _accountType,
+                                    items: const ['Particulier'],
+                                    onChanged: (v) =>
+                                        setState(() => _accountType = v),
+                                    hint: 'auth.account_type'.tr(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 12),
+                            _Field(
+                              controller: _password,
+                              hint: 'auth.password_hint'.tr(),
+                              obscureText: _obscure1,
+                              fontSize: 22,
+                              suffix: IconButton(
+                                onPressed: () =>
+                                    setState(() => _obscure1 = !_obscure1),
+                                icon: Icon(
+                                  _obscure1
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: const Color(0xFF6D6D6D),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            _Field(
+                              controller: _confirmPassword,
+                              hint: 'auth.confirm_password'.tr(),
+                              obscureText: _obscure2,
+                              fontSize: 22,
+                              suffix: IconButton(
+                                onPressed: () =>
+                                    setState(() => _obscure2 = !_obscure2),
+                                icon: Icon(
+                                  _obscure2
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: const Color(0xFF6D6D6D),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 14),
+                            BlocBuilder<SignupBloc, SignupState>(
+                              builder: (context, state) {
+                                final loading =
+                                    state.status == SignupStatus.completing;
+                                return OrangeButton(
+                                  text: loading
+                                      ? 'auth.creating_account'.tr()
+                                      : 'auth.signup_button'.tr(),
+                                  onPressed: loading ? null : _onSubmit,
+                                );
+                              },
+                            ),
+                            const SizedBox(height: 18),
+                            _DividerLabel(text: 'auth.or_signup_with'.tr()),
+                            const SizedBox(height: 14),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logo_google.png',
+                                  onTap: () {},
+                                ),
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logo_apple.png',
+                                  onTap: () {},
+                                ),
+                                _SocialButton(
+                                  assetPath: 'assets/icons/logos_whatsapp.png',
+                                  onTap: () {},
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: MediaQuery.of(context).padding.bottom + 6,
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

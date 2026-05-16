@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:statefulclickcounter/features/customer/profile/data/mock_tenant_profile.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/documents_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/formalities_screen.dart';
@@ -72,7 +74,17 @@ class _ProfileTabState extends State<ProfileTab> {
 
   @override
   Widget build(BuildContext context) {
-    const profile = kMockTenantProfile;
+    final currentUser = context.watch<AuthBloc>().state.currentUser;
+    final profile = currentUser == null
+        ? kMockTenantProfile
+        : kMockTenantProfile.copyWith(
+            name: currentUser.fullName.isEmpty
+                ? kMockTenantProfile.name
+                : currentUser.fullName,
+            avatarUrl: currentUser.avatarUrl,
+            email: currentUser.email,
+            phone: currentUser.phone,
+          );
 
     return SingleChildScrollView(
       child: Column(

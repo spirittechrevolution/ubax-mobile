@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_details_screen.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/home_screen.dart';
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -30,7 +33,7 @@ class _Review {
 const _kReviews = [
   _Review(
     'Marie K',
-    'assets/images/sara1.jpg',
+    'assets/images/villa9.jpg',
     4.6,
     "Emplacement parfait pour le travail. L'appartement est pratique et lumineux",
   ),
@@ -65,19 +68,18 @@ class _RecommendedHotel {
 
 const _kRecommended = [
   _RecommendedHotel(
-    image: 'assets/images/modern-elegant-bedroom-interior.jpg',
+    image: 'assets/images/chambre11.jpg',
     name: 'Hôtel Ébène City',
     location: 'Plateau, Abidjan',
     price: 70000,
-    rating: 4.6,
+    rating: 4.8,
   ),
   _RecommendedHotel(
-    image:
-        'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
+    image: 'assets/images/chambre11.jpg',
     name: 'Suite Prestige',
     location: 'Cocody Riviera, Abidjan',
     price: 85000,
-    rating: 4.8,
+    rating: 4.9,
   ),
 ];
 
@@ -105,12 +107,12 @@ class HotelDetailsScreen extends StatefulWidget {
 
 class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
   static const _extraGallery = [
-    'assets/images/modern-elegant-bedroom-interior.jpg',
-    'assets/images/3d-rendering-beautiful-luxury-bedroom-suite-hotel-with-tv.jpg',
-    'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
-    'assets/images/modern-luxurious-bedroom-interior-design.jpg',
-    'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
-    'assets/images/modern-elegant-living-room-interior-with-abstract-art.jpg',
+    'assets/images/chambre11.jpg',
+    'assets/images/chambre12.jpg',
+    'assets/images/chambre4.jpg',
+    'assets/images/villa9.jpg',
+    'assets/images/villa7.jpg',
+    'assets/images/villa6.jpg',
   ];
 
   late List<String> _gallery;
@@ -360,7 +362,10 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               ),
                               const Spacer(),
                               GestureDetector(
-                                onTap: () {},
+                                onTap: () {
+                                  homeRequestedTabIndex.value = 2;
+                                  context.go(AppRoutes.home);
+                                },
                                 child: const Text(
                                   'Ouvrir la carte',
                                   style: TextStyle(
@@ -380,22 +385,22 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               color: const Color(0xFFE2E8F0),
                               borderRadius: BorderRadius.circular(16),
                               image: const DecorationImage(
-                                image: AssetImage('assets/images/l.jpg'),
+                                image: AssetImage('assets/images/Map.png'),
                                 fit: BoxFit.cover,
                               ),
                             ),
                             alignment: Alignment.center,
-                            child: Container(
-                              width: 36,
-                              height: 36,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: AppColors.primary,
-                              ),
-                              alignment: Alignment.center,
-                              child: const Icon(Icons.location_on,
-                                  color: Colors.white, size: 20),
-                            ),
+                            // child: Container(
+                            //   width: 36,
+                            //   height: 36,
+                            //   decoration: const BoxDecoration(
+                            //     shape: BoxShape.circle,
+                            //     color: AppColors.primary,
+                            //   ),
+                            //   alignment: Alignment.center,
+                            //   child: const Icon(Icons.location_on,
+                            //       color: Colors.white, size: 20),
+                            // ),
                           ),
                           const SizedBox(height: 10),
                           Row(

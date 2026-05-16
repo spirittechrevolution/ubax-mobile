@@ -84,7 +84,7 @@ class _DashboardCardState extends State<DashboardCard> {
                 width: 118,
                 height: 118,
                 padding: const EdgeInsets.all(6),
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                 ),
                 child: PieChart(
@@ -166,17 +166,21 @@ class _DashboardCardState extends State<DashboardCard> {
                     onTap: widget.onPayRent,
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 14, vertical: 8),
+                          horizontal: 18, vertical: 10),
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(50),
+                        border: Border.all(
+                          color: Colors.white.withValues(alpha: 0.55),
+                          width: 1,
+                        ),
                       ),
                       child: Text(
                         'profile.dashboard.payRent'.tr(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w400,
-                          fontSize: 8,
+                          fontSize: 11,
                         ),
                       ),
                     ),
@@ -188,23 +192,27 @@ class _DashboardCardState extends State<DashboardCard> {
                 onTap: widget.onViewHistory,
                 child: Container(
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
                   decoration: BoxDecoration(
                     color: Colors.white.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(50),
+                    border: Border.all(
+                      color: Colors.white.withValues(alpha: 0.55),
+                      width: 1,
+                    ),
                   ),
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       const Icon(Icons.calendar_month_rounded,
-                          color: Colors.white, size: 16),
+                          color: Colors.white, size: 18),
                       const SizedBox(width: 6),
                       Text(
                         'profile.dashboard.viewHistory'.tr(),
                         style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.w400,
-                          fontSize: 9,
+                          fontSize: 11,
                         ),
                       ),
                     ],

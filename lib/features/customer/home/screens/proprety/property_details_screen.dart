@@ -3,29 +3,38 @@ import 'package:statefulclickcounter/features/customer/chat/screens/chat_screen.
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
+import 'package:statefulclickcounter/core/di/injection.dart';
 import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
+import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
+import 'package:statefulclickcounter/features/customer/properties/utils/properties_utils.dart';
 
 class PropertyDetailsScreen extends StatefulWidget {
   const PropertyDetailsScreen({
     super.key,
-    required this.imagePath,
-    required this.title,
-    required this.location,
-    required this.price,
-    required this.beds,
-    required this.baths,
-    required this.kitchens,
+    required this.propertyId,
+    this.coverImageFallback,
+    this.mockTitle,
+    this.mockLocation,
+    this.mockPrice,
+    this.mockDescription,
+    this.mockBeds,
+    this.mockBaths,
+    this.mockKitchens,
   });
 
-  final String imagePath;
-  final String title;
-  final String location;
-  final String price;
-  final int beds;
-  final int baths;
-  final int kitchens;
+  final String propertyId;
+  final String? coverImageFallback;
+
+  final String? mockTitle;
+  final String? mockLocation;
+  final String? mockPrice;
+  final String? mockDescription;
+  final int? mockBeds;
+  final int? mockBaths;
+  final int? mockKitchens;
 
   static const _bg = AppColors.background;
   static const _dark = AppColors.dark;
@@ -37,15 +46,16 @@ class PropertyDetailsScreen extends StatefulWidget {
 }
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
-  String get _favoriteId =>
-      'details-${widget.title}-${widget.location}-${widget.imagePath}';
+  String get _favoriteId => widget.propertyId;
+  late bool _isFavorite =
+      FavoritesStore.instance.isFavorite(widget.propertyId);
 
   static const _extraGallery = [
-    'assets/images/modern-elegant-living-room-interior-with-abstract-art.jpg',
-    'assets/images/cozy-living-room-interior-with-panoramic-window.jpg',
-    'assets/images/modern-luxurious-bedroom-interior-design.jpg',
-    'assets/images/modern-elegant-bedroom-interior.jpg',
-    'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
+    'assets/images/chambre11.jpg',
+    'assets/images/chambre12.jpg',
+    'assets/images/chambre4.jpg',
+    'assets/images/villa9.jpg',
+    'assets/images/villa7.jpg',
     'assets/images/appartements-luxe.jpg',
   ];
 
@@ -53,11 +63,68 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   late String _currentImage;
   bool _galleryExpanded = false;
 
+  bool _loading = true;
+  PropertyItem? _property;
+
   @override
   void initState() {
     super.initState();
-    _gallery = [widget.imagePath, ..._extraGallery];
-    _currentImage = widget.imagePath;
+    final fallback = widget.coverImageFallback ?? 'assets/images/chambre11.jpg';
+    _gallery = [fallback, ..._extraGallery];
+    _currentImage = fallback;
+
+    FavoritesStore.instance.favorites.addListener(_onFavoritesChanged);
+
+    final hasMock = widget.mockTitle != null ||
+        widget.mockLocation != null ||
+        widget.mockPrice != null ||
+        widget.mockDescription != null;
+
+    if (hasMock) {
+      _loading = false;
+    } else {
+      _load();
+    }
+  }
+
+  @override
+  void dispose() {
+    FavoritesStore.instance.favorites.removeListener(_onFavoritesChanged);
+    super.dispose();
+  }
+
+  void _onFavoritesChanged() {
+    final next = FavoritesStore.instance.isFavorite(_favoriteId);
+    if (next != _isFavorite && mounted) {
+      setState(() => _isFavorite = next);
+    }
+  }
+
+  Future<void> _load() async {
+    setState(() => _loading = true);
+    try {
+      final property = await getIt<PropertiesRepository>()
+          .getPropertyById(widget.propertyId);
+      if (!mounted) return;
+      final cover = property.coverPhotoUrl ?? widget.coverImageFallback;
+      setState(() {
+        _property = property;
+        if (cover != null && cover.trim().isNotEmpty) {
+          _currentImage = cover;
+          _gallery = [cover, ..._extraGallery];
+        }
+        _loading = false;
+      });
+    } catch (_) {
+      if (!mounted) return;
+      setState(() => _loading = false);
+    }
+  }
+
+  void _toggleFavorite() {
+    // Listener will pick up the optimistic update from the store; no need to
+    // call setState here directly.
+    FavoritesStore.instance.toggle(_favoriteId);
   }
 
   static int _parseAmount(String raw) {
@@ -72,22 +139,38 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     final size = MediaQuery.sizeOf(context);
     final headerHeight = (size.height * 0.40).clamp(280.0, 440.0);
 
+    final p = _property;
+
+    final title = p?.title ?? widget.mockTitle ?? '—';
+    final location = p != null
+        ? (p.district.isNotEmpty ? '${p.district}, ${p.city}' : p.city)
+        : (widget.mockLocation ?? '—');
+    final price =
+        p != null ? '${formatFcfa(p.price)} FCFA' : (widget.mockPrice ?? '—');
+    final beds = p?.bedrooms ?? widget.mockBeds ?? 0;
+    final baths = p?.bathrooms ?? widget.mockBaths ?? 0;
+    final kitchens = widget.mockKitchens ?? 1;
+    final description = p?.description ?? widget.mockDescription ?? '';
+    final amenityCodes =
+        p?.amenities.map((a) => a.code).toList(growable: false) ??
+            const <String>[];
+
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: _BottomActions(
         onInterested: () {
-          final rentAmount = _parseAmount(widget.price);
+          final rentAmount = _parseAmount(price);
           final advance = (rentAmount * 0.5).round();
           final deposit = (rentAmount * 0.5).round();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => ReservationPaymentScreen(
                 imagePath: _currentImage,
-                title: widget.title,
-                location: widget.location,
-                beds: widget.beds,
-                baths: widget.baths,
-                kitchens: widget.kitchens,
+                title: title,
+                location: location,
+                beds: beds,
+                baths: baths,
+                kitchens: kitchens,
                 advanceAmount: advance,
                 depositAmount: deposit,
               ),
@@ -98,8 +181,8 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (_) => AppointmentBookingScreen(
-                title: widget.title,
-                location: widget.location,
+                title: title,
+                location: location,
               ),
             ),
           );
@@ -113,21 +196,22 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
             gallery: _gallery,
             galleryExpanded: _galleryExpanded,
             favoriteId: _favoriteId,
+            isFavorite: _isFavorite,
             onToggleGallery: () =>
                 setState(() => _galleryExpanded = !_galleryExpanded),
             onSelectImage: (path) => setState(() => _currentImage = path),
             onBack: () => Navigator.of(context).pop(),
-            onFavorite: () => FavoritesStore.instance.toggle(_favoriteId),
+            onFavorite: _toggleFavorite,
             onView360: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (_) => View360Screen(
                     imagePath: _currentImage,
-                    title: widget.title,
-                    location: widget.location,
-                    beds: widget.beds,
-                    baths: widget.baths,
-                    kitchens: widget.kitchens,
+                    title: title,
+                    location: location,
+                    beds: beds,
+                    baths: baths,
+                    kitchens: kitchens,
                   ),
                 ),
               );
@@ -136,16 +220,50 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
           Expanded(
             child: Transform.translate(
               offset: const Offset(0, -8),
-              child: _Content(
-                title: widget.title,
-                price: widget.price,
-                location: widget.location,
-                beds: widget.beds,
-                baths: widget.baths,
-                kitchens: widget.kitchens,
-              ),
+              child: _loading
+                  ? const _DetailsSkeleton()
+                  : _Content(
+                      title: title,
+                      price: price,
+                      location: location,
+                      beds: beds,
+                      baths: baths,
+                      kitchens: kitchens,
+                      description: description,
+                      amenityCodes: amenityCodes,
+                    ),
             ),
           ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DetailsSkeleton extends StatelessWidget {
+  const _DetailsSkeleton();
+
+  @override
+  Widget build(BuildContext context) {
+    Widget block({required double h, double r = 16}) {
+      return Container(
+        height: h,
+        decoration: BoxDecoration(
+          color: const Color(0xFFE2E8F0),
+          borderRadius: BorderRadius.circular(r),
+        ),
+      );
+    }
+
+    return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+      child: Column(
+        children: [
+          block(h: 132, r: 15),
+          const SizedBox(height: 18),
+          block(h: 120),
+          const SizedBox(height: 18),
+          block(h: 180),
         ],
       ),
     );
@@ -282,6 +400,7 @@ class _Header extends StatelessWidget {
     required this.gallery,
     required this.galleryExpanded,
     required this.favoriteId,
+    required this.isFavorite,
     required this.onToggleGallery,
     required this.onSelectImage,
     required this.onBack,
@@ -294,6 +413,7 @@ class _Header extends StatelessWidget {
   final List<String> gallery;
   final bool galleryExpanded;
   final String favoriteId;
+  final bool isFavorite;
   final VoidCallback onToggleGallery;
   final ValueChanged<String> onSelectImage;
   final VoidCallback onBack;
@@ -302,13 +422,16 @@ class _Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork = isNetworkImage(imagePath);
+
     return SizedBox(
       height: height,
-      width: double.infinity,
       child: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(imagePath, fit: BoxFit.cover),
+          isNetwork
+              ? Image.network(imagePath, fit: BoxFit.cover)
+              : Image.asset(imagePath, fit: BoxFit.cover),
           DecoratedBox(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -347,17 +470,11 @@ class _Header extends StatelessWidget {
                     ),
                   ),
                   const Spacer(),
-                  ValueListenableBuilder<Set<String>>(
-                    valueListenable: FavoritesStore.instance.favorites,
-                    builder: (context, favs, _) {
-                      final isFav = favs.contains(favoriteId);
-                      return _CircleIcon(
-                        icon: isFav
-                            ? Icons.favorite_rounded
-                            : Icons.favorite_border_rounded,
-                        onTap: onFavorite,
-                      );
-                    },
+                  _CircleIcon(
+                    icon: isFavorite
+                        ? Icons.favorite_rounded
+                        : Icons.favorite_border_rounded,
+                    onTap: onFavorite,
                   ),
                 ],
               ),
@@ -439,6 +556,8 @@ class _Content extends StatelessWidget {
     required this.beds,
     required this.baths,
     required this.kitchens,
+    required this.description,
+    required this.amenityCodes,
   });
 
   final String title;
@@ -447,6 +566,8 @@ class _Content extends StatelessWidget {
   final int beds;
   final int baths;
   final int kitchens;
+  final String description;
+  final List<String> amenityCodes;
 
   @override
   Widget build(BuildContext context) {
@@ -575,7 +696,7 @@ class _Content extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Text(
-              'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels, cet appartement 3 pièces offre un cadre de vie exceptionnel, pensé pour répondre aux besoins d\'une famille, d\'un cadre ou d\'un investisseur à la recherche d\'un bien de qualité.',
+              description.isEmpty ? '—' : description,
               style: AppTextStyles.regular12.copyWith(
                 color: PropertyDetailsScreen.text,
                 fontWeight: FontWeight.w300,
@@ -589,7 +710,7 @@ class _Content extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const _AmenitiesGrid(),
+            _AmenitiesGrid(codes: amenityCodes),
             const SizedBox(height: 18),
             Text(
               'Localisation',
@@ -608,7 +729,9 @@ class _Content extends StatelessWidget {
 }
 
 class _AmenitiesGrid extends StatelessWidget {
-  const _AmenitiesGrid();
+  const _AmenitiesGrid({required this.codes});
+
+  final List<String> codes;
 
   static const _items = [
     _AmenityData(Icons.open_in_full_rounded, 'Surface', '150m²'),
@@ -624,6 +747,31 @@ class _AmenitiesGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (codes.isNotEmpty) {
+      return Wrap(
+        spacing: 8,
+        runSpacing: 8,
+        children: [
+          for (final c in codes)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+              decoration: BoxDecoration(
+                color: const Color(0xFFF1F5F9),
+                borderRadius: BorderRadius.circular(999),
+              ),
+              child: Text(
+                c,
+                style: AppTextStyles.regular12.copyWith(
+                  color: PropertyDetailsScreen._dark,
+                  fontSize: 11,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+        ],
+      );
+    }
+
     return Column(
       children: List.generate(3, (row) {
         return Padding(
@@ -724,13 +872,19 @@ class _LocationCard extends StatelessWidget {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(14),
-          child: Container(
+          child: Image.asset(
+            'assets/images/Map.png',
             height: 170,
             width: double.infinity,
-            color: const Color(0xFFE9EEF3),
-            alignment: Alignment.center,
-            child: const Icon(Icons.map_rounded,
-                color: Color(0xFFB8C4D0), size: 60),
+            fit: BoxFit.cover,
+            errorBuilder: (_, __, ___) => Container(
+              height: 170,
+              width: double.infinity,
+              color: const Color(0xFFE9EEF3),
+              alignment: Alignment.center,
+              child: const Icon(Icons.map_rounded,
+                  color: Color(0xFFB8C4D0), size: 60),
+            ),
           ),
         ),
         Positioned(
@@ -786,16 +940,25 @@ class _GalleryThumb extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork = isNetworkImage(imagePath);
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: ClipOval(
-        child: Image.asset(
-          imagePath,
-          width: 38,
-          height: 38,
-          fit: BoxFit.cover,
-        ),
+        child: isNetwork
+            ? Image.network(
+                imagePath,
+                width: 38,
+                height: 38,
+                fit: BoxFit.cover,
+              )
+            : Image.asset(
+                imagePath,
+                width: 38,
+                height: 38,
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }

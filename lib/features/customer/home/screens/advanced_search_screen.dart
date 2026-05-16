@@ -245,11 +245,27 @@ class _AdvancedSearchScreenState extends State<AdvancedSearchScreen> {
             DarkButton(
               text: 'Appliquer',
               onPressed: () {
+                final int minPrice;
+                final int maxPrice;
+                if (_rent) {
+                  const low = 100000;
+                  const high = 500000;
+                  minPrice = low + ((high - low) * _price.start).round();
+                  maxPrice = low + ((high - low) * _price.end).round();
+                } else {
+                  const low = 5000000;
+                  const high = 500000000;
+                  minPrice = low + ((high - low) * _price.start).round();
+                  maxPrice = low + ((high - low) * _price.end).round();
+                }
+
                 Navigator.of(context).pop(<String, dynamic>{
                   'rent': _rent,
                   'zone': _zone,
                   'type': _propertyType,
                   'rooms': _propertyType == 'Terrain' ? null : _bedrooms,
+                  'minPrice': minPrice,
+                  'maxPrice': maxPrice,
                 });
               },
               height: 56,

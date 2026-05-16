@@ -63,7 +63,25 @@
     "new_password_subtitle": "Please create a new password to secure your account.",
     "new_password_hint": "New password",
     "confirm_password_hint": "Confirm password",
-    "validate": "Validate"
+    "validate": "Validate",
+    "fill_all_fields": "Please fill in all fields",
+    "invalid_phone": "Invalid phone number",
+    "signing_in": "Signing in…",
+    "login_failed": "Sign-in failed",
+    "sending_otp": "Sending code…",
+    "otp_send_failed": "Failed to send code",
+    "otp_incomplete": "OTP code incomplete",
+    "verifying": "Verifying…",
+    "otp_resent": "New code sent",
+    "otp_invalid": "Invalid or expired code",
+    "resend_code": "Resend code",
+    "passwords_dont_match": "Passwords do not match",
+    "creating_account": "Creating account…",
+    "signup_success": "Account created successfully",
+    "signup_failed": "Sign-up failed",
+    "password_reset_success": "Password updated",
+    "reset_failed": "Password reset failed",
+    "resetting": "Resetting…"
   },
   "profile": {
     "role": {
@@ -144,5 +162,36 @@
       "upToDate": "Up to date",
       "sinceLastMonth": "Since last month"
     }
+  },
+  "favorites": {
+    "title": "Favorites",
+    "search_hint": "Search a property...",
+    "count": {
+      "zero": "No favorites",
+      "one": "1 favorite",
+      "other": "{} favorites"
+    },
+    "categories": {
+      "house": "House",
+      "apartment": "Apartment",
+      "hotel": "Hotel",
+      "land": "Land"
+    },
+    "meta": {
+      "rooms": "Rooms",
+      "bedrooms": "Bedrooms",
+      "bathrooms": "Bath"
+    },
+    "see_details": "See details",
+    "empty_title": "No favorites yet",
+    "empty_message": "Add properties to your favorites by tapping the heart from the search.",
+    "error": "Could not load your favorites.",
+    "retry": "Retry",
+    "delete": "Delete",
+    "delete_confirm_title": "Delete",
+    "delete_confirm_message": "Do you really want to remove this property from your favorites?",
+    "delete_confirm_cancel": "Cancel",
+    "delete_confirm_ok": "Delete",
+    "delete_failed": "Failed to remove favorite."
   }
 }

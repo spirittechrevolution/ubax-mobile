@@ -20,9 +20,11 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     final p = widget.property;
-    final tenants = kMockBailleurTenants
-        .where((t) => t.propertyId == p.id)
-        .toList(growable: false);
+    final tenants = kMockBailleurTenants.where((t) {
+      if (t.propertyId != p.id) return false;
+      if (_rentTab) return t.contractType == BailleurContractType.location;
+      return t.contractType == BailleurContractType.vente;
+    }).toList(growable: false);
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -62,16 +64,36 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               ),
             ),
             const SizedBox(height: 12),
-            SizedBox(
-              height: 269,
-              child: ListView.separated(
-                scrollDirection: Axis.horizontal,
+            if (tenants.isEmpty)
+              Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 14),
-                itemCount: tenants.length,
-                separatorBuilder: (_, __) => const SizedBox(width: 10),
-                itemBuilder: (_, i) => _TenantCard(tenant: tenants[i]),
+                child: SizedBox(
+                  height: 140,
+                  child: Center(
+                    child: Text(
+                      'Aucun client',
+                      style: AppTextStyles.regular12.copyWith(
+                        fontFamily: 'Lexend',
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                        color: AppColors.muted,
+                        height: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            else
+              SizedBox(
+                height: 269,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.symmetric(horizontal: 14),
+                  itemCount: tenants.length,
+                  separatorBuilder: (_, __) => const SizedBox(width: 10),
+                  itemBuilder: (_, i) => _TenantCard(tenant: tenants[i]),
+                ),
               ),
-            ),
           ],
         ),
       ),
@@ -327,7 +349,7 @@ class _StatTile extends StatelessWidget {
               ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 6),
           Text(
             '$percent %',
             style: AppTextStyles.regular12.copyWith(
@@ -338,7 +360,7 @@ class _StatTile extends StatelessWidget {
               height: 1.0,
             ),
           ),
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
           LayoutBuilder(
             builder: (_, c) {
               final w = c.maxWidth;
@@ -354,10 +376,10 @@ class _StatTile extends StatelessWidget {
                   ),
                   Container(
                     width: w * (percent / 100).clamp(0.0, 1.0),
-                    height: 12,
+                    height: 5,
                     decoration: BoxDecoration(
                       color: barColor,
-                      borderRadius: BorderRadius.circular(12),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                   ),
                 ],
@@ -450,6 +472,10 @@ class _TenantCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final badgeLabel = tenant.contractType == BailleurContractType.vente
+        ? 'profile.bailleur.sold'.tr()
+        : 'profile.bailleur.rented'.tr();
+
     return Container(
       width: 192.52,
       height: 269,
@@ -495,7 +521,7 @@ class _TenantCard extends StatelessWidget {
                   ),
                   child: Center(
                     child: Text(
-                      'profile.bailleur.rented'.tr(),
+                      badgeLabel,
                       style: AppTextStyles.regular12.copyWith(
                         fontFamily: 'Lexend',
                         fontSize: 11,

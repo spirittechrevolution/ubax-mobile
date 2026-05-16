@@ -2,6 +2,7 @@ import 'package:country_flags/country_flags.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/advanced_search_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/map_search_tab.dart';
 import 'package:statefulclickcounter/features/customer/favorites/screens/favorites_screen.dart';
@@ -11,11 +12,18 @@ import 'package:statefulclickcounter/features/customer/profile/screens/bailleur_
 import 'package:statefulclickcounter/core/profile/profile_mode.dart';
 import 'package:statefulclickcounter/core/navigation/app_router.dart';
 import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
+import 'package:statefulclickcounter/core/di/injection.dart';
 
+import 'package:statefulclickcounter/features/customer/home/screens/all_properties_screen.dart';
 import 'package:statefulclickcounter/core/widgets/orange_button.dart';
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
+import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
+import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
+
+final ValueNotifier<int?> homeRequestedTabIndex = ValueNotifier<int?>(null);
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -54,8 +62,9 @@ class _HomeMockData {
       'assets/images/villa8.jpg',
       'assets/images/villapiscnie.jpg',
       'assets/images/appartements-luxe.jpg',
-      'assets/images/luxurious-modern-living-room-with-blue-wall-white-sofa.jpg',
-      'assets/images/unfocused-living-room-with-table-couches.jpg',
+      'assets/images/chambre11.jpg',
+      'assets/images/chambre12.jpg',
+      'assets/images/chambre13.jpg',
     ];
 
     final titlesRent = <String>[
@@ -192,6 +201,7 @@ class _PopularMockProperty {
     required this.beds,
     required this.baths,
     required this.kitchens,
+    this.propertyId,
     required this.type,
   });
 
@@ -203,6 +213,7 @@ class _PopularMockProperty {
   final int beds;
   final int baths;
   final int kitchens;
+  final String? propertyId;
   final String type;
 }
 
@@ -277,6 +288,34 @@ class _HomeScreenState extends State<HomeScreen> {
   int _index = 0;
   int _previousIndex = 0;
 
+  @override
+  void initState() {
+    super.initState();
+    homeRequestedTabIndex.addListener(_handleRequestedTab);
+    // Hydrate favorites cache so heart icons across the app reflect the
+    // user's real favorites from the very first frame (not just after the
+    // Favoris tab is opened). Silent on failure — any explicit toggle
+    // will retry against the API.
+    FavoritesStore.instance
+        .refresh()
+        .then<void>((_) {})
+        .catchError((_) {});
+  }
+
+  void _handleRequestedTab() {
+    final requested = homeRequestedTabIndex.value;
+    if (requested == null) return;
+    if (!mounted) return;
+    homeRequestedTabIndex.value = null;
+    _setIndex(requested);
+  }
+
+  @override
+  void dispose() {
+    homeRequestedTabIndex.removeListener(_handleRequestedTab);
+    super.dispose();
+  }
+
   void _setIndex(int next) {
     if (next == _index) return;
     setState(() {
@@ -297,8 +336,11 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             const SafeArea(bottom: false, child: _HomeTab()),
             const SafeArea(top: false, bottom: false, child: HotelsTab()),
-            const SafeArea(bottom: false, child: MapSearchTab()),
-            const SafeArea(bottom: false, child: FavoritesTab()),
+            SafeArea(bottom: false, child: MapSearchTab(isActive: _index == 2)),
+            SafeArea(
+              bottom: false,
+              child: FavoritesTab(isActive: _index == 3),
+            ),
             // Profile/Bailleur tabs let their hero header extend behind the status bar
             mode == ProfileMode.bailleur
                 ? const BailleurProfileTab()
@@ -460,6 +502,9 @@ class _HomeTabState extends State<_HomeTab> {
   bool _rent = true;
   bool _isSwitching = false;
 
+  bool _apiLoading = true;
+  List<PropertyItem> _apiItems = const [];
+
   late _HomeMockData _rentData;
   late _HomeMockData _buyData;
 
@@ -470,6 +515,74 @@ class _HomeTabState extends State<_HomeTab> {
   void initState() {
     super.initState();
     _refreshData();
+    _loadApi();
+  }
+
+  Future<void> _loadApi() async {
+    setState(() {
+      _apiLoading = true;
+    });
+    try {
+      String? apiType;
+      final uiType = _filters.type;
+      if (uiType != null && uiType.trim().isNotEmpty) {
+        final upper = uiType.trim().toUpperCase();
+        if (upper.contains('APPART')) apiType = 'APPARTEMENT';
+        if (upper.contains('APART')) apiType = 'APPARTEMENT';
+        if (upper.contains('VILLA')) apiType = 'VILLA';
+        if (upper.contains('STUDIO')) apiType = 'STUDIO';
+      }
+
+      String? apiCity;
+      final zone = _filters.zoneLabel;
+      if (zone != null && zone.trim().isNotEmpty) {
+        apiCity = zone.trim();
+      }
+
+      final page = await getIt<PropertiesRepository>().getProperties(
+        type: apiType,
+        city: apiCity,
+        minPrice: _filters.minPrice,
+        maxPrice: _filters.maxPrice,
+        bedrooms: _filters.rooms,
+      );
+      if (!mounted) return;
+      setState(() {
+        _apiItems = page.results;
+        _apiLoading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _apiLoading = false;
+      });
+    }
+  }
+
+  bool _matchesTransaction(PropertyItem p) {
+    final tx = p.transactionType.toUpperCase();
+    if (_rent) return tx.startsWith('RENT');
+    return tx == 'SALE';
+  }
+
+  String _fmtFcfa(num value) {
+    final s = value.round().toString();
+    final buf = StringBuffer();
+    for (var i = 0; i < s.length; i++) {
+      final fromEnd = s.length - i;
+      buf.write(s[i]);
+      if (fromEnd > 1 && fromEnd % 3 == 1) buf.write(' ');
+    }
+    return buf.toString();
+  }
+
+  ({List<PropertyItem> popular, List<PropertyItem> recommended}) _splitApi() {
+    final filtered =
+        _apiItems.where(_matchesTransaction).toList(growable: false);
+    final popular = filtered.where((p) => p.boosted).toList(growable: false);
+    final recommended =
+        filtered.where((p) => !p.boosted).toList(growable: false);
+    return (popular: popular, recommended: recommended);
   }
 
   void _refreshData() {
@@ -478,6 +591,23 @@ class _HomeTabState extends State<_HomeTab> {
         _HomeMockData.generate(rent: true, seed: seed, filters: _filters);
     _buyData =
         _HomeMockData.generate(rent: false, seed: seed + 41, filters: _filters);
+  }
+
+  Future<void> _handlePullToRefresh() async {
+    if (_isSwitching) return;
+    setState(() => _isSwitching = true);
+    try {
+      await Future.wait([
+        _loadApi(),
+        Future<void>.delayed(const Duration(milliseconds: 220)),
+      ]);
+    } finally {
+      if (!mounted) return;
+      setState(() {
+        _refreshData();
+        _isSwitching = false;
+      });
+    }
   }
 
   void _handleRentChanged(bool value) {
@@ -504,6 +634,8 @@ class _HomeTabState extends State<_HomeTab> {
       _isSwitching = true;
     });
 
+    _loadApi();
+
     Future<void>.delayed(const Duration(milliseconds: 750), () {
       if (!mounted) return;
       setState(() {
@@ -516,6 +648,7 @@ class _HomeTabState extends State<_HomeTab> {
   @override
   Widget build(BuildContext context) {
     final data = _rent ? _rentData : _buyData;
+    final api = _splitApi();
 
     return ValueListenableBuilder<Set<String>>(
       valueListenable: _favorites.favorites,
@@ -526,31 +659,57 @@ class _HomeTabState extends State<_HomeTab> {
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
               child: Row(
                 children: [
-                  const CircleAvatar(
-                    radius: 22,
-                    backgroundColor: Color(0xFFD9E3EE),
-                    child: Icon(Icons.person, color: AppColors.dark),
+                  BlocBuilder<AuthBloc, AuthState>(
+                    buildWhen: (prev, next) =>
+                        prev.currentUser?.avatarUrl !=
+                        next.currentUser?.avatarUrl,
+                    builder: (context, state) {
+                      final url = state.currentUser?.avatarUrl;
+                      final hasUrl = url != null && url.trim().isNotEmpty;
+                      return CircleAvatar(
+                        radius: 22,
+                        backgroundColor: const Color(0xFFD9E3EE),
+                        backgroundImage:
+                            hasUrl ? NetworkImage(url) as ImageProvider : null,
+                        child: hasUrl
+                            ? null
+                            : const Icon(Icons.person, color: AppColors.dark),
+                      );
+                    },
                   ),
                   const SizedBox(width: 12),
-                  const Expanded(
+                  Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
+                        const Text(
                           'Bonjour',
                           style: TextStyle(
                             color: Color(0xFF6D6D6D),
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        SizedBox(height: 2),
-                        Text(
-                          'Arnaud Koffi',
-                          style: TextStyle(
-                            color: AppColors.textBlack,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 13,
-                          ),
+                        const SizedBox(height: 2),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, next) =>
+                              prev.currentUser != next.currentUser,
+                          builder: (context, state) {
+                            final name =
+                                state.currentUser?.fullName.trim().isNotEmpty ==
+                                        true
+                                    ? state.currentUser!.fullName
+                                    : '—';
+                            return Text(
+                              name,
+                              style: const TextStyle(
+                                color: AppColors.textBlack,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 13,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            );
+                          },
                         ),
                       ],
                     ),
@@ -567,12 +726,23 @@ class _HomeTabState extends State<_HomeTab> {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        ClipOval(
-                          child: CountryFlag.fromCountryCode(
-                            'CI',
-                            width: 28,
-                            height: 28,
-                          ),
+                        BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, next) =>
+                              prev.currentUser?.country !=
+                              next.currentUser?.country,
+                          builder: (context, state) {
+                            final raw = state.currentUser?.country;
+                            final code = (raw == null || raw.trim().length != 2)
+                                ? 'CI'
+                                : raw.trim().toUpperCase();
+                            return ClipOval(
+                              child: CountryFlag.fromCountryCode(
+                                code,
+                                width: 28,
+                                height: 28,
+                              ),
+                            );
+                          },
                         ),
                         const SizedBox(width: 4),
                         const Icon(Icons.keyboard_arrow_down_rounded,
@@ -603,98 +773,186 @@ class _HomeTabState extends State<_HomeTab> {
                 },
                 child: _isSwitching
                     ? const _HomeSkeleton(key: ValueKey<String>('skeleton'))
-                    : SingleChildScrollView(
-                        key: ValueKey<bool>(_rent),
-                        padding: const EdgeInsets.fromLTRB(18, 0, 18, 110),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            _SearchCard(
-                              rent: _rent,
-                              onRentChanged: _handleRentChanged,
-                              onSearch: _handleSearch,
-                            ),
-                            const SizedBox(height: 20),
-                            _SectionHeader(
-                              title: 'Les plus populaires',
-                              onSeeAll: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Voir tout (bientôt disponible)'),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                            SizedBox(
-                              height: 194,
-                              child: ListView.separated(
-                                scrollDirection: Axis.horizontal,
-                                itemCount: data.popular.length,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 12),
-                                itemBuilder: (_, i) {
-                                  final p = data.popular[i];
-                                  return _PropertyCard(
-                                    isFavorite: favs.contains(p.id),
-                                    onFavoriteToggle: () =>
-                                        _favorites.toggle(p.id),
-                                    imagePath: p.imagePath,
-                                    price: p.price,
-                                    title: p.title,
-                                    location: p.location,
-                                    beds: p.beds,
-                                    baths: p.baths,
-                                    kitchens: p.kitchens,
+                    : RefreshIndicator(
+                        onRefresh: _handlePullToRefresh,
+                        child: SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          key: ValueKey<bool>(_rent),
+                          padding: const EdgeInsets.fromLTRB(18, 0, 18, 110),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _SearchCard(
+                                rent: _rent,
+                                onRentChanged: _handleRentChanged,
+                                onSearch: _handleSearch,
+                              ),
+                              const SizedBox(height: 20),
+                              _SectionHeader(
+                                title: 'Les plus populaires',
+                                onSeeAll: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => AllPropertiesScreen(
+                                        title: 'Les plus populaires',
+                                        popular: api.popular,
+                                        recommended: api.recommended,
+                                        onItemTap: (p) {
+                                          final img = p.coverPhotoUrl ??
+                                              'assets/images/chambre12.jpg';
+                                          context.push(
+                                            AppRoutes.propertyDetails,
+                                            extra: PropertyDetailsArgs(
+                                              propertyId: p.id,
+                                              coverImageFallback: img,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
                                   );
                                 },
                               ),
-                            ),
-                            const SizedBox(height: 18),
-                            _SectionHeader(
-                              title: 'Biens recommandés',
-                              onSeeAll: () {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content:
-                                        Text('Voir tout (bientôt disponible)'),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: 12),
-                            ...data.recommended.map(
-                              (p) => Padding(
-                                padding: const EdgeInsets.only(bottom: 12),
-                                child: RecommendedTile(
-                                  imagePath: p.imagePath,
-                                  title: p.title,
-                                  location: p.location,
-                                  beds: p.beds,
-                                  baths: p.baths,
-                                  salons: p.salons,
-                                  isFavorite: favs.contains(p.id),
-                                  onFavoriteToggle: () =>
-                                      _favorites.toggle(p.id),
-                                  onTap: () {
-                                    context.push(
-                                      AppRoutes.propertyDetails,
-                                      extra: PropertyDetailsArgs(
-                                        imagePath: p.imagePath,
+                              const SizedBox(height: 12),
+                              SizedBox(
+                                height: 194,
+                                child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: _apiLoading
+                                      ? 0
+                                      : (api.popular.isNotEmpty
+                                          ? api.popular.length
+                                          : data.popular.length),
+                                  separatorBuilder: (_, __) =>
+                                      const SizedBox(width: 12),
+                                  itemBuilder: (_, i) {
+                                    final useApi = api.popular.isNotEmpty;
+                                    if (useApi) {
+                                      final p = api.popular[i];
+                                      final imagePath = p.coverPhotoUrl ??
+                                          'assets/images/chambre12.jpg';
+                                      return _PropertyCard(
+                                        isFavorite: favs.contains(p.id),
+                                        onFavoriteToggle: () =>
+                                            _favorites.toggle(p.id),
+                                        imagePath: imagePath,
+                                        price: '${_fmtFcfa(p.price)} FCFA',
                                         title: p.title,
-                                        location: p.location,
-                                        price: p.price,
-                                        beds: p.beds,
-                                        baths: p.baths,
-                                        kitchens: p.kitchens,
-                                      ),
+                                        location: p.district.isNotEmpty
+                                            ? '${p.district}, ${p.city}'
+                                            : p.city,
+                                        beds: p.bedrooms,
+                                        baths: p.bathrooms,
+                                        kitchens: 1,
+                                        propertyId: p.id,
+                                      );
+                                    }
+
+                                    final p = data.popular[i];
+                                    return _PropertyCard(
+                                      isFavorite: favs.contains(p.id),
+                                      onFavoriteToggle: () =>
+                                          _favorites.toggle(p.id),
+                                      imagePath: p.imagePath,
+                                      price: p.price,
+                                      title: p.title,
+                                      location: p.location,
+                                      beds: p.beds,
+                                      baths: p.baths,
+                                      kitchens: p.kitchens,
+                                      propertyId: p.id,
                                     );
                                   },
                                 ),
                               ),
-                            ),
-                          ],
+                              const SizedBox(height: 18),
+                              _SectionHeader(
+                                title: 'Biens recommandés',
+                                onSeeAll: () {
+                                  Navigator.of(context).push(
+                                    MaterialPageRoute<void>(
+                                      builder: (_) => AllPropertiesScreen(
+                                        title: 'Biens recommandés',
+                                        popular: api.popular,
+                                        recommended: api.recommended,
+                                        onItemTap: (p) {
+                                          final img = p.coverPhotoUrl ??
+                                              'assets/images/chambre11.jpg';
+                                          context.push(
+                                            AppRoutes.propertyDetails,
+                                            extra: PropertyDetailsArgs(
+                                              propertyId: p.id,
+                                              coverImageFallback: img,
+                                            ),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: 12),
+                              if (_apiLoading)
+                                const SizedBox.shrink()
+                              else if (api.recommended.isNotEmpty)
+                                ...api.recommended.map(
+                                  (p) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: RecommendedTile(
+                                      imagePath: p.coverPhotoUrl ??
+                                          'assets/images/chambre11.jpg',
+                                      title: p.title,
+                                      location: p.district.isNotEmpty
+                                          ? '${p.district}, ${p.city}'
+                                          : p.city,
+                                      beds: p.bedrooms,
+                                      baths: p.bathrooms,
+                                      salons: 1,
+                                      isFavorite: favs.contains(p.id),
+                                      onFavoriteToggle: () =>
+                                          _favorites.toggle(p.id),
+                                      onTap: () {
+                                        context.push(
+                                          AppRoutes.propertyDetails,
+                                          extra: PropertyDetailsArgs(
+                                            propertyId: p.id,
+                                            coverImageFallback: p
+                                                    .coverPhotoUrl ??
+                                                'assets/images/chambre11.jpg',
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                )
+                              else
+                                ...data.recommended.map(
+                                  (p) => Padding(
+                                    padding: const EdgeInsets.only(bottom: 12),
+                                    child: RecommendedTile(
+                                      imagePath: p.imagePath,
+                                      title: p.title,
+                                      location: p.location,
+                                      beds: p.beds,
+                                      baths: p.baths,
+                                      salons: p.salons,
+                                      isFavorite: favs.contains(p.id),
+                                      onFavoriteToggle: () =>
+                                          _favorites.toggle(p.id),
+                                      onTap: () {
+                                        context.push(
+                                          AppRoutes.propertyDetails,
+                                          extra: PropertyDetailsArgs(
+                                            propertyId: p.id,
+                                            coverImageFallback: p.imagePath,
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ),
+                            ],
+                          ),
                         ),
                       ),
               ),
@@ -915,6 +1173,8 @@ class _SearchCardState extends State<_SearchCard> {
     final zone = result['zone'] as String?;
     final type = result['type'] as String?;
     final rooms = result['rooms'] as int?;
+    final minPrice = result['minPrice'] as int?;
+    final maxPrice = result['maxPrice'] as int?;
 
     setState(() {
       if (zone != null) _selectedZone = zone;
@@ -928,6 +1188,8 @@ class _SearchCardState extends State<_SearchCard> {
         zoneLabel: _selectedZone,
         type: _selectedType,
         rooms: _selectedRooms,
+        minPrice: minPrice,
+        maxPrice: maxPrice,
       ),
     );
   }
@@ -1046,12 +1308,21 @@ class _SearchCardState extends State<_SearchCard> {
 }
 
 class _SearchFilters {
-  const _SearchFilters({this.rent, this.zoneLabel, this.rooms, this.type});
+  const _SearchFilters({
+    this.rent,
+    this.zoneLabel,
+    this.rooms,
+    this.type,
+    this.minPrice,
+    this.maxPrice,
+  });
 
   final bool? rent;
   final String? zoneLabel;
   final int? rooms;
   final String? type;
+  final int? minPrice;
+  final int? maxPrice;
 }
 
 class _Segment extends StatelessWidget {
@@ -1178,6 +1449,7 @@ class _PropertyCard extends StatelessWidget {
     required this.beds,
     required this.baths,
     required this.kitchens,
+    this.propertyId,
   });
 
   final bool isFavorite;
@@ -1190,23 +1462,33 @@ class _PropertyCard extends StatelessWidget {
   final int beds;
   final int baths;
   final int kitchens;
+  final String? propertyId;
 
   @override
   Widget build(BuildContext context) {
+    final isNetwork =
+        imagePath.startsWith('http://') || imagePath.startsWith('https://');
+
     return InkWell(
       onTap: () {
-        context.push(
-          AppRoutes.propertyDetails,
-          extra: PropertyDetailsArgs(
-            imagePath: imagePath,
-            title: title,
-            location: location,
-            price: price,
-            beds: beds,
-            baths: baths,
-            kitchens: kitchens,
-          ),
-        );
+        final id = propertyId;
+        if (id != null && id.isNotEmpty) {
+          context.push(
+            AppRoutes.propertyDetails,
+            extra: PropertyDetailsArgs(
+              propertyId: id,
+              coverImageFallback: imagePath,
+              mockTitle: title,
+              mockLocation: location,
+              mockPrice: price,
+              mockDescription:
+                  'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels, ce bien offre un cadre de vie exceptionnel, pensé pour répondre aux besoins d\'une famille, d\'un cadre ou d\'un investisseur à la recherche d\'un bien de qualité.',
+              mockBeds: beds,
+              mockBaths: baths,
+              mockKitchens: kitchens,
+            ),
+          );
+        }
       },
       borderRadius: BorderRadius.circular(18),
       child: Container(
@@ -1220,7 +1502,9 @@ class _PropertyCard extends StatelessWidget {
         child: Stack(
           children: [
             Positioned.fill(
-              child: Image.asset(imagePath, fit: BoxFit.cover),
+              child: isNetwork
+                  ? Image.network(imagePath, fit: BoxFit.cover)
+                  : Image.asset(imagePath, fit: BoxFit.cover),
             ),
             Positioned.fill(
               child: Container(
