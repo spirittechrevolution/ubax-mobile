@@ -28,8 +28,7 @@
       "title": "सुरक्षित भुगतान करें और\nनिश्चिंत रहें",
       "description": "Wave, Orange Money और MTN Money जैसी अफ्रीकी\nइलेक्ट्रॉनिक पेमेंट सॉल्यूशंस के साथ सरल और सुरक्षित भुगतान करें।"
     }
-  }
-  ,
+  },
   "auth": {
     "login_title": "अपने खाते में लॉग इन करें",
     "phone_hint": "07 12 34 56 78",
@@ -102,7 +101,8 @@
       "documents": "Documents",
       "sav": "SAV",
       "ubaxServices": "Services UBAX",
-      "reservations": "Mes reservations"
+      "reservations": "Mes reservations",
+      "become_bailleur": "मकान मालिक बनें"
     },
     "switcher": {
       "title": "Changer de profil",
@@ -192,5 +192,62 @@
     "delete_confirm_cancel": "रद्द करें",
     "delete_confirm_ok": "हटाएं",
     "delete_failed": "पसंदीदा हटाने में विफल।"
+  },
+  "bailleur_apply": {
+    "step1": {
+      "title": "एजेंसी चुनें",
+      "subtitle": "वह एजेंसी चुनें जो आपका साथ देगी",
+      "search_hint": "एजेंसी खोजें",
+      "select": "चुनें",
+      "certified": "UBAX प्रमाणित",
+      "empty": "इस शहर में कोई एजेंसी नहीं मिली",
+      "list_title": "रियल एस्टेट एजेंसियों की सूची",
+      "view_details": "विवरण देखें",
+      "agencies_found": "{} एजेंसियां मिलीं",
+      "filter_country": "देश",
+      "filter_region": "क्षेत्र",
+      "filter_zone": "जोन",
+      "filter_search": "खोजें",
+      "filter_all_countries": "सभी देश",
+      "filter_all_regions": "सभी क्षेत्र",
+      "filter_all_zones": "सभी जोन",
+      "details_title": "एजेंसी विवरण",
+      "member_since": "सदस्य बने",
+      "properties_managed": "प्रबंधित संपत्तियां",
+      "description": "विवरण",
+      "join_as_bailleur": "मकान मालिक के रूप में जुड़ें"
+    },
+    "form": {
+      "title": "सदस्यता फ़ॉर्म",
+      "agency_section": "चयनित एजेंसी",
+      "personal_section": "व्यक्तिगत जानकारी",
+      "id_section": "दस्तावेज़",
+      "full_name": "पूरा नाम",
+      "phone": "फ़ोन",
+      "email": "ईमेल",
+      "email_hint": "आपका@ईमेल.com",
+      "id_type": "दस्तावेज़ प्रकार",
+      "id_type_hint": "चुनें...",
+      "id_number": "दस्तावेज़ संख्या",
+      "id_number_hint": "उदा: CI-2024-XXXXXXXX",
+      "recto": "सामने आयात करें",
+      "verso": "पीछे आयात करें",
+      "desc_section": "संदेश",
+      "desc_hint": "अपना संदेश दर्ज करें",
+      "min_words": "{} और शब्द आवश्यक",
+      "words_ok": "विवरण मान्य ✓",
+      "required": "यह फ़ील्ड आवश्यक है",
+      "invalid_email": "अमान्य ईमेल",
+      "desc_too_short": "विवरण में कम से कम 10 शब्द होने चाहिए",
+      "submit": "जमा करें",
+      "submitting": "भेजा जा रहा है...",
+      "first_name": "पहला नाम",
+      "last_name": "उपनाम"
+    },
+    "confirmation": {
+      "title": "सबमिशन भेजा गया",
+      "message": "आपका आवेदन एजेंसी को भेज दिया गया है। एक सलाहकार आपकी संपत्तियों की जांच के लिए संपर्क करेगा।",
+      "back_home": "होम पर वापस जाएं"
+    }
   }
 }

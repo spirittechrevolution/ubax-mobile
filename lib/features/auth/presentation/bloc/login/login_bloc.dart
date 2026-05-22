@@ -1,3 +1,4 @@
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -56,7 +57,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
       emit(state.copyWith(status: LoginStatus.success));
     } on ApiException catch (e) {
-      emit(state.copyWith(status: LoginStatus.failure, errorMessage: e.message));
+      emit(state.copyWith(status: LoginStatus.failure, errorMessage: AppErrors.translate(e)));
     } catch (e) {
       emit(state.copyWith(
         status: LoginStatus.failure,

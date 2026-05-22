@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 
 import '../../domain/repositories/properties_repository.dart';
 import 'properties_event.dart';
@@ -41,7 +42,7 @@ class PropertiesBloc extends Bloc<PropertiesEvent, PropertiesState> {
       emit(
         state.copyWith(
           status: PropertiesStatus.error,
-          message: e.toString(),
+          message: AppErrors.translate(e),
         ),
       );
     }

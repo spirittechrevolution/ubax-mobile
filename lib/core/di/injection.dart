@@ -10,6 +10,15 @@ import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_b
 import 'package:statefulclickcounter/features/customer/favorites/data/datasources/favorites_remote_data_source.dart';
 import 'package:statefulclickcounter/features/customer/favorites/data/repositories/favorites_repository_impl.dart';
 import 'package:statefulclickcounter/features/customer/favorites/domain/repositories/favorites_repository.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/data/datasources/agencies_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/data/datasources/bailleur_apply_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/data/repositories/agencies_repository_impl.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/data/repositories/bailleur_apply_repository_impl.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/domain/repositories/agencies_repository.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/domain/repositories/bailleur_apply_repository.dart';
+import 'package:statefulclickcounter/features/customer/kyc/data/datasources/tenant_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/kyc/data/repositories/tenant_repository_impl.dart';
+import 'package:statefulclickcounter/features/customer/kyc/domain/repositories/tenant_repository.dart';
 import 'package:statefulclickcounter/features/customer/properties/data/datasources/properties_remote_data_source.dart';
 import 'package:statefulclickcounter/features/customer/properties/data/repositories/properties_repository_impl.dart';
 import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
@@ -52,5 +61,29 @@ Future<void> configureDependencies() async {
 
   getIt.registerLazySingleton<AuthBloc>(
     () => AuthBloc(getIt<AuthRepository>()),
+  );
+
+  getIt.registerLazySingleton<TenantRemoteDataSource>(
+    () => TenantRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<TenantRepository>(
+    () => TenantRepositoryImpl(getIt<TenantRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<AgenciesRemoteDataSource>(
+    () => AgenciesRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<AgenciesRepository>(
+    () => AgenciesRepositoryImpl(getIt<AgenciesRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<BailleurApplyRemoteDataSource>(
+    () => BailleurApplyRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<BailleurApplyRepository>(
+    () => BailleurApplyRepositoryImpl(getIt<BailleurApplyRemoteDataSource>()),
   );
 }

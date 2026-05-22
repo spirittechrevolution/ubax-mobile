@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/chat/screens/chat_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
+import 'package:statefulclickcounter/features/customer/kyc/screens/tenant_kyc_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/payment/reservation_payment_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/proprety/view_360_screen.dart';
 import 'package:statefulclickcounter/core/di/injection.dart';
@@ -127,13 +128,6 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     FavoritesStore.instance.toggle(_favoriteId);
   }
 
-  static int _parseAmount(String raw) {
-    final digits =
-        RegExp(r'\d+').allMatches(raw).map((m) => m.group(0)!).join();
-    if (digits.isEmpty) return 0;
-    return int.tryParse(digits) ?? 0;
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
@@ -159,20 +153,27 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
       backgroundColor: Colors.white,
       bottomNavigationBar: _BottomActions(
         onInterested: () {
-          final rentAmount = _parseAmount(price);
-          final advance = (rentAmount * 0.5).round();
-          final deposit = (rentAmount * 0.5).round();
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (_) => ReservationPaymentScreen(
-                imagePath: _currentImage,
-                title: title,
-                location: location,
-                beds: beds,
-                baths: baths,
-                kitchens: kitchens,
-                advanceAmount: advance,
-                depositAmount: deposit,
+              builder: (_) => TenantKycScreen(
+                propertyId: widget.propertyId,
+                propertyTitle: title,
+                onPayment: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (_) => ReservationPaymentScreen(
+                        imagePath: _currentImage,
+                        title: title,
+                        location: location,
+                        beds: beds,
+                        baths: baths,
+                        kitchens: kitchens,
+                        advanceAmount: ((_property?.price ?? 0) * 0.5).round(),
+                        depositAmount: ((_property?.price ?? 0) * 0.5).round(),
+                      ),
+                    ),
+                  );
+                },
               ),
             ),
           );

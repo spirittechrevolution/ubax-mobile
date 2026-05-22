@@ -22,6 +22,7 @@ import 'package:statefulclickcounter/theme/app_text_styles.dart';
 import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
 import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
+import 'package:statefulclickcounter/features/customer/settings/screens/personal_info_screen.dart';
 
 final ValueNotifier<int?> homeRequestedTabIndex = ValueNotifier<int?>(null);
 
@@ -296,10 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
     // user's real favorites from the very first frame (not just after the
     // Favoris tab is opened). Silent on failure — any explicit toggle
     // will retry against the API.
-    FavoritesStore.instance
-        .refresh()
-        .then<void>((_) {})
-        .catchError((_) {});
+    FavoritesStore.instance.refresh().then<void>((_) {}).catchError((_) {});
   }
 
   void _handleRequestedTab() {
@@ -418,7 +416,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Center(
                       child: _NavItem(
                         icon: Icons.person_rounded,
-                        label: 'Profil',
+                        label: 'Dashbo',
                         selected: _index == 4,
                         onTap: () => _setIndex(4),
                       ),
@@ -577,11 +575,10 @@ class _HomeTabState extends State<_HomeTab> {
   }
 
   ({List<PropertyItem> popular, List<PropertyItem> recommended}) _splitApi() {
-    final filtered =
-        _apiItems.where(_matchesTransaction).toList(growable: false);
-    final popular = filtered.where((p) => p.boosted).toList(growable: false);
-    final recommended =
-        filtered.where((p) => !p.boosted).toList(growable: false);
+    final popular = _apiItems.where((p) => p.boosted).toList(growable: false);
+    final recommended = _apiItems
+        .where((p) => !p.boosted && _matchesTransaction(p))
+        .toList(growable: false);
     return (popular: popular, recommended: recommended);
   }
 
@@ -659,61 +656,75 @@ class _HomeTabState extends State<_HomeTab> {
               padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
               child: Row(
                 children: [
-                  BlocBuilder<AuthBloc, AuthState>(
-                    buildWhen: (prev, next) =>
-                        prev.currentUser?.avatarUrl !=
-                        next.currentUser?.avatarUrl,
-                    builder: (context, state) {
-                      final url = state.currentUser?.avatarUrl;
-                      final hasUrl = url != null && url.trim().isNotEmpty;
-                      return CircleAvatar(
-                        radius: 22,
-                        backgroundColor: const Color(0xFFD9E3EE),
-                        backgroundImage:
-                            hasUrl ? NetworkImage(url) as ImageProvider : null,
-                        child: hasUrl
-                            ? null
-                            : const Icon(Icons.person, color: AppColors.dark),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PersonalInfoScreen(),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        const Text(
-                          'Bonjour',
-                          style: TextStyle(
-                            color: Color(0xFF6D6D6D),
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 2),
                         BlocBuilder<AuthBloc, AuthState>(
                           buildWhen: (prev, next) =>
-                              prev.currentUser != next.currentUser,
+                              prev.currentUser?.avatarUrl !=
+                              next.currentUser?.avatarUrl,
                           builder: (context, state) {
-                            final name =
-                                state.currentUser?.fullName.trim().isNotEmpty ==
+                            final url = state.currentUser?.avatarUrl;
+                            final hasUrl = url != null && url.trim().isNotEmpty;
+                            return CircleAvatar(
+                              radius: 22,
+                              backgroundColor: const Color(0xFFD9E3EE),
+                              backgroundImage: hasUrl
+                                  ? NetworkImage(url) as ImageProvider
+                                  : null,
+                              child: hasUrl
+                                  ? null
+                                  : const Icon(Icons.person,
+                                      color: AppColors.dark),
+                            );
+                          },
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              'Bonjour',
+                              style: TextStyle(
+                                color: Color(0xFF6D6D6D),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            const SizedBox(height: 2),
+                            BlocBuilder<AuthBloc, AuthState>(
+                              buildWhen: (prev, next) =>
+                                  prev.currentUser != next.currentUser,
+                              builder: (context, state) {
+                                final name = state.currentUser?.fullName
+                                            .trim()
+                                            .isNotEmpty ==
                                         true
                                     ? state.currentUser!.fullName
                                     : '—';
-                            return Text(
-                              name,
-                              style: const TextStyle(
-                                color: AppColors.textBlack,
-                                fontWeight: FontWeight.w500,
-                                fontSize: 13,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            );
-                          },
+                                return Text(
+                                  name,
+                                  style: const TextStyle(
+                                    color: AppColors.textBlack,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 13,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
+                  const Spacer(),
                   _NotifButton(count: 5, onTap: () {}),
                   const SizedBox(width: 10),
                   Container(
@@ -788,84 +799,80 @@ class _HomeTabState extends State<_HomeTab> {
                                 onSearch: _handleSearch,
                               ),
                               const SizedBox(height: 20),
-                              _SectionHeader(
-                                title: 'Les plus populaires',
-                                onSeeAll: () {
-                                  Navigator.of(context).push(
-                                    MaterialPageRoute<void>(
-                                      builder: (_) => AllPropertiesScreen(
-                                        title: 'Les plus populaires',
-                                        popular: api.popular,
-                                        recommended: api.recommended,
-                                        onItemTap: (p) {
-                                          final img = p.coverPhotoUrl ??
-                                              'assets/images/chambre12.jpg';
-                                          context.push(
-                                            AppRoutes.propertyDetails,
-                                            extra: PropertyDetailsArgs(
-                                              propertyId: p.id,
-                                              coverImageFallback: img,
-                                            ),
-                                          );
-                                        },
+                              if (_apiLoading || api.popular.isNotEmpty) ...[
+                                _SectionHeader(
+                                  title: 'Les plus populaires',
+                                  onSeeAll: () {
+                                    Navigator.of(context).push(
+                                      MaterialPageRoute<void>(
+                                        builder: (_) => AllPropertiesScreen(
+                                          title: 'Les plus populaires',
+                                          popular: api.popular,
+                                          recommended: api.recommended,
+                                          onItemTap: (p) {
+                                            final img = p.coverPhotoUrl ??
+                                                'assets/images/chambre12.jpg';
+                                            context.push(
+                                              AppRoutes.propertyDetails,
+                                              extra: PropertyDetailsArgs(
+                                                propertyId: p.id,
+                                                coverImageFallback: img,
+                                              ),
+                                            );
+                                          },
+                                        ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(height: 12),
-                              SizedBox(
-                                height: 194,
-                                child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: _apiLoading
-                                      ? 0
-                                      : (api.popular.isNotEmpty
-                                          ? api.popular.length
-                                          : data.popular.length),
-                                  separatorBuilder: (_, __) =>
-                                      const SizedBox(width: 12),
-                                  itemBuilder: (_, i) {
-                                    final useApi = api.popular.isNotEmpty;
-                                    if (useApi) {
-                                      final p = api.popular[i];
-                                      final imagePath = p.coverPhotoUrl ??
-                                          'assets/images/chambre12.jpg';
-                                      return _PropertyCard(
-                                        isFavorite: favs.contains(p.id),
-                                        onFavoriteToggle: () =>
-                                            _favorites.toggle(p.id),
-                                        imagePath: imagePath,
-                                        price: '${_fmtFcfa(p.price)} FCFA',
-                                        title: p.title,
-                                        location: p.district.isNotEmpty
-                                            ? '${p.district}, ${p.city}'
-                                            : p.city,
-                                        beds: p.bedrooms,
-                                        baths: p.bathrooms,
-                                        kitchens: 1,
-                                        propertyId: p.id,
-                                      );
-                                    }
-
-                                    final p = data.popular[i];
-                                    return _PropertyCard(
-                                      isFavorite: favs.contains(p.id),
-                                      onFavoriteToggle: () =>
-                                          _favorites.toggle(p.id),
-                                      imagePath: p.imagePath,
-                                      price: p.price,
-                                      title: p.title,
-                                      location: p.location,
-                                      beds: p.beds,
-                                      baths: p.baths,
-                                      kitchens: p.kitchens,
-                                      propertyId: p.id,
                                     );
                                   },
                                 ),
-                              ),
-                              const SizedBox(height: 18),
+                                const SizedBox(height: 12),
+                                SizedBox(
+                                  height: 194,
+                                  child: _apiLoading
+                                      ? ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: 3,
+                                          separatorBuilder: (_, __) =>
+                                              const SizedBox(width: 12),
+                                          itemBuilder: (_, __) => Container(
+                                            width: 160,
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFE2E8F0),
+                                              borderRadius:
+                                                  BorderRadius.circular(16),
+                                            ),
+                                          ),
+                                        )
+                                      : ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: api.popular.length,
+                                          separatorBuilder: (_, __) =>
+                                              const SizedBox(width: 12),
+                                          itemBuilder: (_, i) {
+                                            final p = api.popular[i];
+                                            final imagePath = p.coverPhotoUrl ??
+                                                'assets/images/chambre12.jpg';
+                                            return _PropertyCard(
+                                              isFavorite: favs.contains(p.id),
+                                              onFavoriteToggle: () =>
+                                                  _favorites.toggle(p.id),
+                                              imagePath: imagePath,
+                                              price:
+                                                  '${_fmtFcfa(p.price)} FCFA',
+                                              title: p.title,
+                                              location: p.district.isNotEmpty
+                                                  ? '${p.district}, ${p.city}'
+                                                  : p.city,
+                                              beds: p.bedrooms,
+                                              baths: p.bathrooms,
+                                              kitchens: 1,
+                                              propertyId: p.id,
+                                            );
+                                          },
+                                        ),
+                                ),
+                                const SizedBox(height: 18),
+                              ],
                               _SectionHeader(
                                 title: 'Biens recommandés',
                                 onSeeAll: () {

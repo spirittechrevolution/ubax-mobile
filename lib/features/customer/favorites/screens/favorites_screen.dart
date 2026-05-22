@@ -1,3 +1,4 @@
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -140,7 +141,7 @@ class _FavoritesTabState extends State<FavoritesTab> {
       if (!mounted) return;
       setState(() {
         _loading = false;
-        _errorMessage = e.toString();
+        _errorMessage = AppErrors.translate(e);
       });
     }
   }
@@ -830,13 +831,13 @@ class _PropertyCard extends StatelessWidget {
                       style: const TextStyle(
                         color: AppColors.textBlack,
                         fontWeight: FontWeight.w400,
-                        fontSize: 13,
+                        fontSize: 11,
                         height: 1.2,
                       ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
                         const Icon(Icons.location_on_outlined,
@@ -857,7 +858,7 @@ class _PropertyCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 10),
                     Wrap(
                       spacing: 6,
                       runSpacing: 2,
@@ -883,6 +884,7 @@ class _PropertyCard extends StatelessWidget {
                     ),
                     const Spacer(),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Expanded(
                           child: Text(
@@ -899,7 +901,7 @@ class _PropertyCard extends StatelessWidget {
                         GestureDetector(
                           onTap: () => _openDetails(context),
                           child: Container(
-                            width: 77,
+                            width: 70,
                             height: 20,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -911,7 +913,7 @@ class _PropertyCard extends StatelessWidget {
                               style: const TextStyle(
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500,
-                                fontSize: 8,
+                                fontSize: 7,
                               ),
                             ),
                           ),
@@ -992,7 +994,7 @@ class _PropertyListCard extends StatelessWidget {
                           data.title,
                           style: AppTextStyles.sectionTitle.copyWith(
                             color: AppColors.text,
-                            fontSize: 14,
+                            fontSize: 11,
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 2,
@@ -1014,18 +1016,18 @@ class _PropertyListCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 8),
                   Row(
                     children: [
                       const Icon(Icons.location_on_outlined,
-                          size: 13, color: AppColors.dark),
+                          size: 11, color: AppColors.dark),
                       const SizedBox(width: 3),
                       Expanded(
                         child: Text(
                           data.city,
                           style: AppTextStyles.regular12.copyWith(
                             color: AppColors.text,
-                            fontSize: 10,
+                            fontSize: 9,
                             fontWeight: FontWeight.w400,
                           ),
                           maxLines: 1,
@@ -1034,7 +1036,7 @@ class _PropertyListCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 7),
                   Wrap(
                     spacing: 10,
                     runSpacing: 4,
@@ -1058,13 +1060,13 @@ class _PropertyListCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  const Spacer(),
+                  const SizedBox(height: 5),
                   Text(
                     '${_fmt(data.price.round())} Fcfa',
                     style: const TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.w500,
-                      fontSize: 13,
+                      fontSize: 12,
                     ),
                   ),
                   const SizedBox(height: 4),

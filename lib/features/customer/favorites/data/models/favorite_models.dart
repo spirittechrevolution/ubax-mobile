@@ -24,27 +24,48 @@ class FavoriteItem {
   final String? coverPhotoUrl;
 
   factory FavoriteItem.fromJson(Map<String, dynamic> json) {
+    // API wraps each item as { "property": {...}, "media": [...] }
+    final prop = (json['property'] as Map<String, dynamic>?) ?? json;
+
     int readInt(String key) {
-      final v = json[key];
+      final v = prop[key];
       if (v is int) return v;
       return int.tryParse(v?.toString() ?? '') ?? 0;
     }
 
+    // Prefer property.coverPhotoUrl, then fall back to media where cover==true
+    String? coverPhotoUrl = (prop['coverPhotoUrl'] ?? '').toString().trim().isEmpty
+        ? null
+        : prop['coverPhotoUrl'].toString();
+
+    if (coverPhotoUrl == null) {
+      final media = json['media'] as List?;
+      if (media != null) {
+        for (final m in media.whereType<Map<String, dynamic>>()) {
+          if (m['cover'] == true) {
+            final url = m['fileUrl']?.toString() ?? '';
+            if (url.isNotEmpty) {
+              coverPhotoUrl = url;
+              break;
+            }
+          }
+        }
+      }
+    }
+
     return FavoriteItem(
-      id: (json['id'] ?? '').toString(),
-      title: (json['title'] ?? '').toString(),
-      city: (json['city'] ?? '').toString(),
-      price: (json['price'] is num)
-          ? (json['price'] as num).toDouble()
-          : double.tryParse(json['price']?.toString() ?? '') ?? 0,
-      propertyType: (json['propertyType'] ?? '').toString(),
-      status: (json['status'] ?? '').toString(),
+      id: (prop['id'] ?? '').toString(),
+      title: (prop['title'] ?? '').toString(),
+      city: (prop['city'] ?? '').toString(),
+      price: (prop['price'] is num)
+          ? (prop['price'] as num).toDouble()
+          : double.tryParse(prop['price']?.toString() ?? '') ?? 0,
+      propertyType: (prop['propertyType'] ?? '').toString(),
+      status: (prop['status'] ?? '').toString(),
       rooms: readInt('rooms'),
       bedrooms: readInt('bedrooms'),
       bathrooms: readInt('bathrooms'),
-      coverPhotoUrl: (json['coverPhotoUrl'] ?? '').toString().trim().isEmpty
-          ? null
-          : (json['coverPhotoUrl'] ?? '').toString(),
+      coverPhotoUrl: coverPhotoUrl,
     );
   }
 }

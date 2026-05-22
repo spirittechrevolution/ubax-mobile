@@ -28,8 +28,7 @@
       "title": "Sicher bezahlen und\nentspannt bleiben",
       "description": "Genieße einfache und sichere Zahlungen mit afrikanischen\nE-Payment-Lösungen wie Wave, Orange\nMoney und MTN Money."
     }
-  }
-  ,
+  },
   "auth": {
     "login_title": "Melde dich bei deinem Konto an",
     "phone_hint": "07 12 34 56 78",
@@ -102,7 +101,8 @@
       "documents": "Documents",
       "sav": "SAV",
       "ubaxServices": "Services UBAX",
-      "reservations": "Mes reservations"
+      "reservations": "Mes reservations",
+      "become_bailleur": "Vermieter werden"
     },
     "switcher": {
       "title": "Changer de profil",
@@ -192,5 +192,62 @@
     "delete_confirm_cancel": "Abbrechen",
     "delete_confirm_ok": "Löschen",
     "delete_failed": "Favorit konnte nicht entfernt werden."
+  },
+  "bailleur_apply": {
+    "step1": {
+      "title": "Agentur wählen",
+      "subtitle": "Wählen Sie die Agentur, die Sie begleiten wird",
+      "search_hint": "Agentur suchen",
+      "select": "Auswählen",
+      "certified": "UBAX Zertifiziert",
+      "empty": "Keine Agentur in dieser Stadt gefunden",
+      "list_title": "Liste der Immobilienmakler",
+      "view_details": "Details ansehen",
+      "agencies_found": "{} Agenturen gefunden",
+      "filter_country": "Land",
+      "filter_region": "Region",
+      "filter_zone": "Zone",
+      "filter_search": "Suchen",
+      "filter_all_countries": "Alle Länder",
+      "filter_all_regions": "Alle Regionen",
+      "filter_all_zones": "Alle Zonen",
+      "details_title": "Agenturdetails",
+      "member_since": "Mitglied seit",
+      "properties_managed": "Verwaltete Objekte",
+      "description": "Beschreibung",
+      "join_as_bailleur": "Als Vermieter beitreten"
+    },
+    "form": {
+      "title": "Beitrittsformular",
+      "agency_section": "Ausgewählte Agentur",
+      "personal_section": "Persönliche Angaben",
+      "id_section": "Dokumente",
+      "full_name": "Vollständiger Name",
+      "phone": "Telefon",
+      "email": "E-Mail",
+      "email_hint": "ihre@email.de",
+      "id_type": "Dokumenttyp",
+      "id_type_hint": "Auswählen...",
+      "id_number": "Dokumentnummer",
+      "id_number_hint": "Bsp: CI-2024-XXXXXXXX",
+      "recto": "Vorderseite importieren",
+      "verso": "Rückseite importieren",
+      "desc_section": "Nachricht",
+      "desc_hint": "Ihre Nachricht eingeben",
+      "min_words": "{} weiteres Wort/Wörter erforderlich",
+      "words_ok": "Beschreibung gültig ✓",
+      "required": "Dieses Feld ist erforderlich",
+      "invalid_email": "Ungültige E-Mail",
+      "desc_too_short": "Die Beschreibung muss mindestens 10 Wörter enthalten",
+      "submit": "Einreichen",
+      "submitting": "Wird gesendet...",
+      "first_name": "Vorname",
+      "last_name": "Nachname"
+    },
+    "confirmation": {
+      "title": "Eingabe gesendet",
+      "message": "Ihr Antrag wurde an die Agentur übermittelt. Ein Berater wird Sie kontaktieren, um Ihre Immobilien zu prüfen.",
+      "back_home": "Zurück zur Startseite"
+    }
   }
 }

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:country_flags/country_flags.dart';
 import 'package:get_it/get_it.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:statefulclickcounter/features/auth/domain/repositories/auth_repository.dart';
 import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
+import 'package:statefulclickcounter/features/auth/widgets/africa_country_code_picker.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -107,7 +109,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erreur lors de l\'upload: $e')),
+          SnackBar(content: Text(AppErrors.translate(e))),
         );
       }
     }
@@ -271,46 +273,60 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     const SizedBox(height: 20),
                     _Label(text: 'Numéro de téléphone'),
                     const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        Container(
-                          width: 110,
-                          height: 52,
-                          padding: const EdgeInsets.symmetric(horizontal: 12),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFECF2F7),
-                            borderRadius: BorderRadius.circular(25),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              ClipOval(
-                                child: CountryFlag.fromCountryCode(
-                                  'CI',
-                                  width: 26,
-                                  height: 26,
-                                ),
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        final user = state.currentUser;
+                        final country = AfricaCountryCodePicker.fromUser(
+                          phone: user?.phone,
+                          country: user?.country,
+                        );
+                        return Row(
+                          children: [
+                            Container(
+                              width: 110,
+                              height: 52,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 12),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFECF2F7),
+                                borderRadius: BorderRadius.circular(25),
                               ),
-                              const SizedBox(width: 8),
-                              Text(
-                                '+225',
-                                style: AppTextStyles.regularlight16.copyWith(
-                                  fontFamily: 'Lexend',
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w400,
-                                  color: AppColors.text,
-                                ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  ClipOval(
+                                    child: CountryFlag.fromCountryCode(
+                                      country.iso2,
+                                      width: 26,
+                                      height: 26,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    country.dialCode,
+                                    style: AppTextStyles.regularlight16
+                                        .copyWith(
+                                      fontFamily: 'Lexend',
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.text,
+                                    ),
+                                  ),
+                                  const Icon(
+                                    Icons.keyboard_arrow_down_rounded,
+                                    color: AppColors.dark,
+                                    size: 18,
+                                  ),
+                                ],
                               ),
-                              const Icon(Icons.keyboard_arrow_down_rounded,
-                                  color: AppColors.dark, size: 18),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: _PillField(controller: _phoneController),
-                        ),
-                      ],
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: _PillField(controller: _phoneController),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                     const SizedBox(height: 20),
                     _Label(text: 'Documents d\'identité'),

@@ -1,3 +1,4 @@
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -111,7 +112,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       emit(state.copyWith(
         status: SignupStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -127,7 +128,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       emit(state.copyWith(
         status: SignupStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -147,7 +148,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       emit(state.copyWith(
         status: SignupStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -175,7 +176,7 @@ class SignupBloc extends Bloc<SignupEvent, SignupState> {
       emit(state.copyWith(
         status: SignupStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }

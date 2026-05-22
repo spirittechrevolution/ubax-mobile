@@ -28,8 +28,7 @@
       "title": "Paga de forma segura\ny con tranquilidad",
       "description": "Disfruta de pagos simples y seguros con soluciones\nde pago electrónico africanas como Wave, Orange\nMoney y MTN Money."
     }
-  }
-  ,
+  },
   "auth": {
     "login_title": "Inicia sesión en tu cuenta",
     "phone_hint": "07 12 34 56 78",
@@ -102,7 +101,8 @@
       "documents": "Documents",
       "sav": "SAV",
       "ubaxServices": "Services UBAX",
-      "reservations": "Mes reservations"
+      "reservations": "Mes reservations",
+      "become_bailleur": "Convertirse en Propietario"
     },
     "switcher": {
       "title": "Changer de profil",
@@ -192,5 +192,62 @@
     "delete_confirm_cancel": "Cancelar",
     "delete_confirm_ok": "Eliminar",
     "delete_failed": "No se pudo eliminar el favorito."
+  },
+  "bailleur_apply": {
+    "step1": {
+      "title": "Elegir una agencia",
+      "subtitle": "Seleccione la agencia que le acompañará",
+      "search_hint": "Buscar una agencia",
+      "select": "Seleccionar",
+      "certified": "Certificada UBAX",
+      "empty": "No se encontró ninguna agencia en esta ciudad",
+      "list_title": "Lista de agencias inmobiliarias",
+      "view_details": "Ver detalles",
+      "agencies_found": "{} agencias encontradas",
+      "filter_country": "País",
+      "filter_region": "Región",
+      "filter_zone": "Zona",
+      "filter_search": "Buscar",
+      "filter_all_countries": "Todos los países",
+      "filter_all_regions": "Todas las regiones",
+      "filter_all_zones": "Todas las zonas",
+      "details_title": "Detalles de agencia",
+      "member_since": "Miembro desde",
+      "properties_managed": "Propiedades gestionadas",
+      "description": "Descripción",
+      "join_as_bailleur": "Unirse como propietario"
+    },
+    "form": {
+      "title": "Formulario de adhesión",
+      "agency_section": "Agencia seleccionada",
+      "personal_section": "Información personal",
+      "id_section": "Documentos",
+      "full_name": "Nombre completo",
+      "phone": "Teléfono",
+      "email": "Correo electrónico",
+      "email_hint": "tu@correo.com",
+      "id_type": "Tipo de documento",
+      "id_type_hint": "Seleccionar...",
+      "id_number": "Número de documento",
+      "id_number_hint": "Ej: CI-2024-XXXXXXXX",
+      "recto": "Importar Anverso",
+      "verso": "Importar Reverso",
+      "desc_section": "Mensaje",
+      "desc_hint": "Introduzca su mensaje",
+      "min_words": "{} palabra(s) más requeridas",
+      "words_ok": "Descripción válida ✓",
+      "required": "Este campo es obligatorio",
+      "invalid_email": "Correo inválido",
+      "desc_too_short": "La descripción debe contener al menos 10 palabras",
+      "submit": "Enviar",
+      "submitting": "Enviando...",
+      "first_name": "Nombre",
+      "last_name": "Apellido"
+    },
+    "confirmation": {
+      "title": "Envío realizado",
+      "message": "Su solicitud ha sido enviada a la agencia. Un asesor le contactará para verificar sus propiedades.",
+      "back_home": "Volver al inicio"
+    }
   }
 }

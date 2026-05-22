@@ -26,4 +26,12 @@ class ApiEndpoints {
   static String userByKeycloakId(String keycloakId) =>
       '/v1/users/keycloak/$keycloakId';
   static const updateAvatar = '/v1/users/me/avatar';
+
+  static const tenantProfile = '/v1/tenants/profile';
+  static const storageUpload = '/v1/storage/upload';
+
+  static const agencies = '/v1/agencies';
+  static const bailleurApply = '/v1/bailleur/apply';
+  static const storagePresignBailleurDocument =
+      '/v1/storage/presign/bailleur-document';
 }

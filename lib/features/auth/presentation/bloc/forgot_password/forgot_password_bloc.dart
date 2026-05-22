@@ -1,3 +1,4 @@
+import 'package:statefulclickcounter/core/network/error_handler.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -116,7 +117,7 @@ class ForgotPasswordBloc
       emit(state.copyWith(
         status: ForgotPasswordStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -135,7 +136,7 @@ class ForgotPasswordBloc
       emit(state.copyWith(
         status: ForgotPasswordStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -163,7 +164,7 @@ class ForgotPasswordBloc
       emit(state.copyWith(
         status: ForgotPasswordStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }
@@ -191,7 +192,7 @@ class ForgotPasswordBloc
       emit(state.copyWith(
         status: ForgotPasswordStatus.failure,
         phone: event.phone,
-        errorMessage: e.message,
+        errorMessage: AppErrors.translate(e),
       ));
     }
   }

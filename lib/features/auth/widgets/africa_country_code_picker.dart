@@ -98,6 +98,34 @@ class AfricaCountryCodePicker extends StatefulWidget {
     return idx == -1 ? countries.first : countries[idx];
   }
 
+  /// Résout le pays depuis un numéro de téléphone (ex: "+225 0102...") ou
+  /// depuis un code ISO2 / nom de pays stocké dans le profil.
+  static AfricaCountry fromUser({String? phone, String? country}) {
+    // 1. Depuis le champ country (ISO2 ou nom)
+    if (country != null && country.trim().isNotEmpty) {
+      final iso = country.trim();
+      if (iso.length == 2) return byIso2(iso);
+      final byName = countries.firstWhere(
+        (c) => c.name.toLowerCase() == iso.toLowerCase(),
+        orElse: () => countries.first,
+      );
+      if (byName != countries.first ||
+          countries.first.name.toLowerCase() == iso.toLowerCase()) {
+        return byName;
+      }
+    }
+    // 2. Depuis l'indicatif en tête du numéro de téléphone
+    if (phone != null && phone.startsWith('+')) {
+      // Trier par longueur décroissante pour matcher "+225" avant "+22"
+      final sorted = [...countries]
+        ..sort((a, b) => b.dialCode.length.compareTo(a.dialCode.length));
+      for (final c in sorted) {
+        if (phone.startsWith(c.dialCode)) return c;
+      }
+    }
+    return byIso2('CI'); // fallback Côte d'Ivoire
+  }
+
   @override
   State<AfricaCountryCodePicker> createState() =>
       _AfricaCountryCodePickerState();

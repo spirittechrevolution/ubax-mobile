@@ -15,6 +15,7 @@ import 'package:statefulclickcounter/theme/app_text_styles.dart';
 import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_bloc.dart';
 import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
 import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
+import 'package:statefulclickcounter/features/customer/settings/screens/personal_info_screen.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -257,37 +258,6 @@ const _kTypes = [
   _TypeData('Résidences', Icons.business_rounded),
 ];
 
-const _kPopulaires = [
-  {
-    'image': 'assets/images/chambre12.jpg',
-    'name': 'Hôtel Azur Cocody',
-    'location': 'Cocody Angré, Abidjan',
-    'price': 45000,
-    'rating': 4.5,
-  },
-  {
-    'image': 'assets/images/chambre11.jpg',
-    'name': 'Résidence Lagune Prestige',
-    'location': 'Zone 4, Marcory – Abidjan',
-    'price': 65000,
-    'rating': 4.7,
-  },
-  {
-    'image': 'assets/images/chambre12.jpg',
-    'name': 'Palm Club Plateau',
-    'location': 'Centre-ville – Abidjan',
-    'price': 55000,
-    'rating': 4.8,
-  },
-  {
-    'image': 'assets/images/villa10.jpg',
-    'name': 'Suite Présidentielle',
-    'location': 'Riviera Golf, Abidjan',
-    'price': 95000,
-    'rating': 4.9,
-  },
-];
-
 const _kRecommandesData = [
   {
     'image': 'assets/images/appartements-luxe.jpg',
@@ -387,7 +357,8 @@ class HotelsTab extends StatefulWidget {
   State<HotelsTab> createState() => _HotelsTabState();
 }
 
-class _HotelsTabState extends State<HotelsTab> {
+class _HotelsTabState extends State<HotelsTab>
+    with SingleTickerProviderStateMixin {
   static const double _kDarkBgHeight = 160.0;
 
   String _selectedType = 'Hotels';
@@ -417,17 +388,49 @@ class _HotelsTabState extends State<HotelsTab> {
   final ScrollController _scrollController = ScrollController();
   double _scrollOffset = 0;
 
+  final GlobalKey _bannerKey = GlobalKey();
+  late AnimationController _buildingController;
+  late Animation<Offset> _buildingSlide;
+  bool _buildingTriggered = false;
+
   @override
   void initState() {
     super.initState();
+    _buildingController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 650),
+    );
+    _buildingSlide = Tween<Offset>(
+      begin: const Offset(0, 1.2),
+      end: Offset.zero,
+    ).animate(CurvedAnimation(
+      parent: _buildingController,
+      curve: Curves.easeOutCubic,
+    ));
+
     _scrollController.addListener(() {
       final clamped = _scrollController.offset.clamp(0.0, _kDarkBgHeight);
       if (clamped != _scrollOffset) {
         setState(() => _scrollOffset = clamped);
       }
+      _checkBannerVisibility();
     });
 
     _loadApi();
+  }
+
+  void _checkBannerVisibility() {
+    if (_buildingTriggered) return;
+    final ctx = _bannerKey.currentContext;
+    if (ctx == null) return;
+    final box = ctx.findRenderObject() as RenderBox?;
+    if (box == null || !box.attached) return;
+    final position = box.localToGlobal(Offset.zero);
+    final screenHeight = MediaQuery.of(context).size.height;
+    if (position.dy < screenHeight * 0.88) {
+      _buildingTriggered = true;
+      _buildingController.forward();
+    }
   }
 
   Future<void> _loadApi() async {
@@ -490,10 +493,10 @@ class _HotelsTabState extends State<HotelsTab> {
   }
 
   ({List<PropertyItem> popular, List<PropertyItem> recommended}) _splitApi() {
-    final filtered = _apiItems.where(_matchesType).toList(growable: false);
-    final popular = filtered.where((p) => p.boosted).toList(growable: false);
-    final recommended =
-        filtered.where((p) => !p.boosted).toList(growable: false);
+    final popular = _apiItems.where((p) => p.boosted).toList(growable: false);
+    final recommended = _apiItems
+        .where((p) => !p.boosted && _matchesType(p))
+        .toList(growable: false);
     return (popular: popular, recommended: recommended);
   }
 
@@ -513,6 +516,7 @@ class _HotelsTabState extends State<HotelsTab> {
   @override
   void dispose() {
     _scrollController.dispose();
+    _buildingController.dispose();
     super.dispose();
   }
 
@@ -581,69 +585,84 @@ class _HotelsTabState extends State<HotelsTab> {
               ),
               child: Row(
                 children: [
-                  BlocBuilder<AuthBloc, AuthState>(
-                    buildWhen: (prev, next) =>
-                        prev.currentUser?.avatarUrl !=
-                        next.currentUser?.avatarUrl,
-                    builder: (context, state) {
-                      final url = state.currentUser?.avatarUrl;
-                      final hasUrl = url != null && url.trim().isNotEmpty;
-                      return CircleAvatar(
-                        radius: 22,
-                        backgroundColor: const Color(0xFF2D4A65),
-                        backgroundImage:
-                            hasUrl ? NetworkImage(url) as ImageProvider : null,
-                        child: hasUrl
-                            ? null
-                            : const Icon(Icons.person, color: Colors.white),
-                      );
-                    },
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const PersonalInfoScreen(),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
                       children: [
-                        Row(
-                          children: [
-                            Text(
-                              'Bonjour ',
-                              style: AppTextStyles.regular12.copyWith(
-                                color: const Color(0xFF94A3B8),
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            const Text(
-                              '👋',
-                              style: AppTextStyles.regular12,
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 2),
                         BlocBuilder<AuthBloc, AuthState>(
                           buildWhen: (prev, next) =>
-                              prev.currentUser != next.currentUser,
+                              prev.currentUser?.avatarUrl !=
+                              next.currentUser?.avatarUrl,
                           builder: (context, state) {
-                            final name =
-                                state.currentUser?.fullName.trim().isNotEmpty ==
-                                        true
-                                    ? state.currentUser!.fullName
-                                    : '—';
-                            return Text(
-                              name,
-                              style: AppTextStyles.regularlight16.copyWith(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
+                            final url = state.currentUser?.avatarUrl;
+                            final hasUrl =
+                                url != null && url.trim().isNotEmpty;
+                            return CircleAvatar(
+                              radius: 22,
+                              backgroundColor: const Color(0xFF2D4A65),
+                              backgroundImage: hasUrl
+                                  ? NetworkImage(url) as ImageProvider
+                                  : null,
+                              child: hasUrl
+                                  ? null
+                                  : const Icon(Icons.person,
+                                      color: Colors.white),
                             );
                           },
+                        ),
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Bonjour ',
+                                  style: AppTextStyles.regular12.copyWith(
+                                    color: const Color(0xFF94A3B8),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  '👋',
+                                  style: AppTextStyles.regular12,
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 2),
+                            BlocBuilder<AuthBloc, AuthState>(
+                              buildWhen: (prev, next) =>
+                                  prev.currentUser != next.currentUser,
+                              builder: (context, state) {
+                                final name = state.currentUser?.fullName
+                                                .trim()
+                                                .isNotEmpty ==
+                                            true
+                                    ? state.currentUser!.fullName
+                                    : '—';
+                                return Text(
+                                  name,
+                                  style: AppTextStyles.regularlight16.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                );
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
                   ),
+                  const Spacer(),
                   // Bell
                   Stack(
                     clipBehavior: Clip.none,
@@ -909,52 +928,52 @@ class _HotelsTabState extends State<HotelsTab> {
                         const SizedBox(height: 24),
 
                         // ── Populaires
-                        _SectionRow(
-                          title: 'Populaires',
-                          onMore: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute<void>(
-                                builder: (_) => AllPropertiesScreen(
-                                  title: 'Populaires',
-                                  popular: api.popular,
-                                  recommended: api.recommended,
-                                  onItemTap: (p) {
-                                    Navigator.of(context).push(
-                                      MaterialPageRoute<void>(
-                                        builder: (_) => HotelDetailsScreen(
-                                          imagePath: p.coverPhotoUrl ??
-                                              'assets/images/chambre12.jpg',
-                                          name: p.title,
-                                          location: p.district.isNotEmpty
-                                              ? '${p.district}, ${p.city}'
-                                              : p.city,
-                                          price: p.price.round(),
-                                          rating: 4.7,
+                        if (_apiLoading ||
+                            _isRefreshing ||
+                            api.popular.isNotEmpty) ...[
+                          _SectionRow(
+                            title: 'Populaires',
+                            onMore: () {
+                              Navigator.of(context).push(
+                                MaterialPageRoute<void>(
+                                  builder: (_) => AllPropertiesScreen(
+                                    title: 'Populaires',
+                                    popular: api.popular,
+                                    recommended: api.recommended,
+                                    onItemTap: (p) {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute<void>(
+                                          builder: (_) => HotelDetailsScreen(
+                                            imagePath: p.coverPhotoUrl ??
+                                                'assets/images/chambre12.jpg',
+                                            name: p.title,
+                                            location: p.district.isNotEmpty
+                                                ? '${p.district}, ${p.city}'
+                                                : p.city,
+                                            price: p.price.round(),
+                                            rating: 4.7,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
+                                      );
+                                    },
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: 12),
-                        SizedBox(
-                          height: 220,
-                          child: _apiLoading || _isRefreshing
-                              ? const _PopularSkeleton(
-                                  key: ValueKey<String>('popular_skeleton'),
-                                )
-                              : ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: api.popular.isNotEmpty
-                                      ? api.popular.length
-                                      : _kPopulaires.length,
-                                  separatorBuilder: (_, __) =>
-                                      const SizedBox(width: 12),
-                                  itemBuilder: (_, i) {
-                                    if (api.popular.isNotEmpty) {
+                              );
+                            },
+                          ),
+                          const SizedBox(height: 12),
+                          SizedBox(
+                            height: 220,
+                            child: _apiLoading || _isRefreshing
+                                ? const _PopularSkeleton(
+                                    key: ValueKey<String>('popular_skeleton'),
+                                  )
+                                : ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemCount: api.popular.length,
+                                    separatorBuilder: (_, __) =>
+                                        const SizedBox(width: 12),
+                                    itemBuilder: (_, i) {
                                       final p = api.popular[i];
                                       final imagePath = p.coverPhotoUrl ??
                                           'assets/images/chambre12.jpg';
@@ -986,39 +1005,11 @@ class _HotelsTabState extends State<HotelsTab> {
                                           favoriteId: 'popular-${p.id}',
                                         ),
                                       );
-                                    }
-
-                                    final p = _kPopulaires[i];
-                                    return GestureDetector(
-                                      onTap: () {
-                                        Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                            builder: (_) => HotelDetailsScreen(
-                                              imagePath: p['image'] as String,
-                                              name: p['name'] as String,
-                                              location: p['location'] as String,
-                                              price: p['price'] as int,
-                                              rating: (p['rating'] as num)
-                                                  .toDouble(),
-                                            ),
-                                          ),
-                                        );
-                                      },
-                                      child: _PopularCard(
-                                        imagePath: p['image'] as String,
-                                        name: p['name'] as String,
-                                        location: p['location'] as String,
-                                        pricePerNight: p['price'] as int,
-                                        rating: (p['rating'] as num).toDouble(),
-                                        favoriteId:
-                                            'popular-${p['name'] as String}-${p['location'] as String}',
-                                      ),
-                                    );
-                                  },
-                                ),
-                        ),
-
-                        const SizedBox(height: 24),
+                                    },
+                                  ),
+                          ),
+                          const SizedBox(height: 24),
+                        ],
 
                         // ── Recommandés
                         _SectionRow(
@@ -1053,13 +1044,36 @@ class _HotelsTabState extends State<HotelsTab> {
                         ),
                         const SizedBox(height: 12),
 
-                        // UBAX banner
-                        // _UbaxBanner(onTap: () {}),
+                        // UBAX banner avec immeuble animé
                         ClipRRect(
+                          key: _bannerKey,
                           borderRadius: BorderRadius.circular(18),
-                          child: SvgPicture.asset(
-                            'assets/images/Promo.svg',
-                            fit: BoxFit.cover,
+                          child: SizedBox(
+                            height: 110,
+                            child: Stack(
+                              clipBehavior: Clip.hardEdge,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/images/banners.svg',
+                                  width: double.infinity,
+                                  height: 110,
+                                  fit: BoxFit.cover,
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: SlideTransition(
+                                    position: _buildingSlide,
+                                    child: SvgPicture.asset(
+                                      'assets/images/immeuble-2.svg',
+                                      width: 139,
+                                      height: 110,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
 
@@ -1251,7 +1265,7 @@ class _HotelHorizontalCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                          '${_fmt(price)}',
+                          _fmt(price),
                           style: const TextStyle(
                             color: AppColors.primary,
                             fontWeight: FontWeight.w600,
@@ -1546,45 +1560,54 @@ class _PopularCard extends StatelessWidget {
                   const SizedBox(height: 8),
                   Row(
                     children: [
-                      Text(
-                        '${_fmt(pricePerNight)} ',
-                        style: AppTextStyles.regular12.copyWith(
-                          color: AppColors.background,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.06,
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                '${_fmt(pricePerNight)} ',
+                                style: AppTextStyles.regular12.copyWith(
+                                  color: AppColors.background,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0.06,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                              ),
+                            ),
+                            Text(
+                              'FCFA/',
+                              style: AppTextStyles.regular12.copyWith(
+                                color: const Color(0xAAFFFFFF),
+                                fontSize: 7,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.05,
+                              ),
+                            ),
+                            Text(
+                              ' nuit',
+                              style: AppTextStyles.regular12.copyWith(
+                                color: Colors.white,
+                                fontSize: 7,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0.05,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      Text(
-                        'FCFA/',
-                        style: AppTextStyles.regular12.copyWith(
-                          color: const Color(0xAAFFFFFF),
-                          fontSize: 7,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.05,
-                        ),
-                      ),
-                      Text(
-                        ' nuit',
-                        style: AppTextStyles.regular12.copyWith(
-                          color: Colors.white,
-                          fontSize: 7,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0.05,
-                        ),
-                      ),
-                      const Spacer(),
-                      const Icon(Icons.star_rounded,
-                          color: Color(0xFFFACC15), size: 14),
-                      const SizedBox(width: 2),
-                      Text(
-                        rating.toString(),
-                        style: AppTextStyles.regular12.copyWith(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      // const Icon(Icons.star_rounded,
+                      //     color: Color(0xFFFACC15), size: 14),
+                      // const SizedBox(width: 2),
+                      // Text(
+                      //   rating.toString(),
+                      //   style: AppTextStyles.regular12.copyWith(
+                      //     color: Colors.white,
+                      //     fontSize: 12,
+                      //     fontWeight: FontWeight.w400,
+                      //   ),
+                      // ),
                     ],
                   ),
                 ],
@@ -1605,36 +1628,6 @@ class _PopularCard extends StatelessWidget {
       if (fromEnd > 1 && fromEnd % 3 == 1) buf.write(' ');
     }
     return buf.toString().trim();
-  }
-}
-
-// ─── UBAX banner ──────────────────────────────────────────────────────────────
-
-class _UbaxBanner extends StatelessWidget {
-  const _UbaxBanner({required this.onTap});
-
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        height: 120,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(18),
-        ),
-        child: Image.asset(
-          'assets/images/bannerhotel.png',
-          width: double.infinity,
-          height: double.infinity,
-          fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
-            color: AppColors.dark,
-          ),
-        ),
-      ),
-    );
   }
 }
 

@@ -28,8 +28,7 @@
       "title": "Pay securely and\nwith peace of mind",
       "description": "Enjoy simple and secure payments with African\ne-payment solutions like Wave, Orange\nMoney and MTN Money."
     }
-  }
-  ,
+  },
   "auth": {
     "login_title": "Sign in to your account",
     "phone_hint": "07 12 34 56 78",
@@ -103,7 +102,8 @@
       "documents": "Documents",
       "sav": "Support",
       "ubaxServices": "UBAX Services",
-      "reservations": "My reservations"
+      "reservations": "My reservations",
+      "become_bailleur": "Become a Landlord"
     },
     "switcher": {
       "title": "Switch profile",
@@ -193,5 +193,62 @@
     "delete_confirm_cancel": "Cancel",
     "delete_confirm_ok": "Delete",
     "delete_failed": "Failed to remove favorite."
+  },
+  "bailleur_apply": {
+    "step1": {
+      "title": "Choose an agency",
+      "subtitle": "Select the agency that will support you",
+      "search_hint": "Search an agency",
+      "select": "Select",
+      "certified": "UBAX Certified",
+      "empty": "No agency found for this city",
+      "list_title": "List of real estate agencies",
+      "view_details": "View details",
+      "agencies_found": "{} agencies found",
+      "filter_country": "Country",
+      "filter_region": "Region",
+      "filter_zone": "Zone",
+      "filter_search": "Search",
+      "filter_all_countries": "All countries",
+      "filter_all_regions": "All regions",
+      "filter_all_zones": "All zones",
+      "details_title": "Agency details",
+      "member_since": "Member since",
+      "properties_managed": "Properties managed",
+      "description": "Description",
+      "join_as_bailleur": "Join as landlord"
+    },
+    "form": {
+      "title": "Membership form",
+      "agency_section": "Selected agency",
+      "personal_section": "Personal information",
+      "id_section": "Documents",
+      "full_name": "Full name",
+      "phone": "Phone",
+      "email": "Email",
+      "email_hint": "your@email.com",
+      "id_type": "Document type",
+      "id_type_hint": "Select...",
+      "id_number": "Document number",
+      "id_number_hint": "Ex: CI-2024-XXXXXXXX",
+      "recto": "Import Front",
+      "verso": "Import Back",
+      "desc_section": "Message",
+      "desc_hint": "Enter your message",
+      "min_words": "{} more word(s) required",
+      "words_ok": "Description valid ✓",
+      "required": "This field is required",
+      "invalid_email": "Invalid email",
+      "desc_too_short": "Description must contain at least 10 words",
+      "submit": "Submit",
+      "submitting": "Sending...",
+      "first_name": "First name",
+      "last_name": "Last name"
+    },
+    "confirmation": {
+      "title": "Submission sent",
+      "message": "Your application has been sent to the agency. An advisor will contact you to verify your properties.",
+      "back_home": "Return to home"
+    }
   }
 }

@@ -41,17 +41,23 @@ class FavoritesStore {
   Future<void> toggle(String id) async {
     final wasFav = favorites.value.contains(id);
     _setLocal(id, !wasFav);
+    debugPrint('[Favoris] ${wasFav ? 'Retiré' : 'Ajouté'} — id: $id');
 
     if (!_isRemoteId(id)) return;
 
     try {
       if (wasFav) {
         await _repo.removeFavorite(id);
+        debugPrint('[Favoris] API confirmé — retiré propertyId: $id');
       } else {
-        await _repo.addFavorite(id);
+        final ref = await _repo.addFavorite(id);
+        debugPrint(
+          '[Favoris] API confirmé — favoriteId: ${ref.favoriteId} | propertyId: ${ref.propertyId} | addedAt: ${ref.addedAt}',
+        );
       }
-    } catch (_) {
+    } catch (e) {
       _setLocal(id, wasFav);
+      debugPrint('[Favoris] Erreur API — rollback propertyId: $id | $e');
       rethrow;
     }
   }

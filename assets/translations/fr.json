@@ -28,8 +28,7 @@
       "title": "Payez en toute sécurité et\nen toute tranquillité",
       "description": "Profitez de paiements simples et sécurisés grâce aux\nsolutions électroniques africaines comme Wave, Orange\nMoney et MTN Money."
     }
-  }
-  ,
+  },
   "auth": {
     "login_title": "Connectez-vous à votre compte",
     "phone_hint": "07 12 34 56 78",
@@ -103,7 +102,8 @@
       "documents": "Documents",
       "sav": "SAV",
       "ubaxServices": "Services UBAX",
-      "reservations": "Mes reservations"
+      "reservations": "Mes reservations",
+      "become_bailleur": "Devenir Bailleur"
     },
     "switcher": {
       "title": "Changer de profil",
@@ -193,5 +193,62 @@
     "delete_confirm_cancel": "Annuler",
     "delete_confirm_ok": "Supprimer",
     "delete_failed": "Échec de la suppression du favori."
+  },
+  "bailleur_apply": {
+    "step1": {
+      "title": "Choisir une agence",
+      "subtitle": "Sélectionnez l'agence qui vous accompagnera",
+      "search_hint": "Rechercher une agence",
+      "select": "Sélectionner",
+      "certified": "Certifiée UBAX",
+      "empty": "Aucune agence trouvée pour cette ville",
+      "list_title": "Liste des agences immobilières",
+      "view_details": "Voir les détails",
+      "agencies_found": "{} agences trouvées",
+      "filter_country": "Pays",
+      "filter_region": "Région",
+      "filter_zone": "Zone",
+      "filter_search": "Rechercher",
+      "filter_all_countries": "Tous les pays",
+      "filter_all_regions": "Toutes les régions",
+      "filter_all_zones": "Toutes les zones",
+      "details_title": "Détails agence",
+      "member_since": "Membre depuis",
+      "properties_managed": "Biens en gestion",
+      "description": "Description",
+      "join_as_bailleur": "Rejoindre comme bailleur"
+    },
+    "form": {
+      "title": "Formulaire d'adhésion",
+      "agency_section": "Agence sélectionnée",
+      "personal_section": "Informations personelles",
+      "id_section": "Documents",
+      "full_name": "Nom complet",
+      "phone": "Téléphone",
+      "email": "Email",
+      "email_hint": "votre@email.com",
+      "id_type": "Type de document",
+      "id_type_hint": "Sélectionner...",
+      "id_number": "Numéro du document",
+      "id_number_hint": "Ex: CI-2024-XXXXXXXX",
+      "recto": "Importer Recto",
+      "verso": "Importer Verso",
+      "desc_section": "Message",
+      "desc_hint": "Saisir votre message",
+      "min_words": "{} mot(s) encore requis",
+      "words_ok": "Description valide ✓",
+      "required": "Ce champ est requis",
+      "invalid_email": "Email invalide",
+      "desc_too_short": "La description doit contenir au moins 10 mots",
+      "submit": "Soumettre",
+      "submitting": "Envoi en cours...",
+      "first_name": "Prénom",
+      "last_name": "Nom"
+    },
+    "confirmation": {
+      "title": "Soumission envoyée",
+      "message": "Votre demande a été transmise à l'agence. Un conseiller vous contactera pour vérifier vos biens.",
+      "back_home": "Retourner vers l'accueil"
+    }
   }
 }

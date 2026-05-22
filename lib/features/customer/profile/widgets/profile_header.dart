@@ -3,6 +3,30 @@ import 'package:flutter/material.dart';
 import 'package:statefulclickcounter/features/customer/profile/data/mock_tenant_profile.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 
+class _DiamondPatternPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Colors.white.withValues(alpha: 0.09)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 0.7;
+
+    const step = 26.0;
+    final h = size.height;
+    final w = size.width;
+
+    for (double x = -h; x < w + h; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x + h, h), paint);
+    }
+    for (double x = 0; x < w + h; x += step) {
+      canvas.drawLine(Offset(x, 0), Offset(x - h, h), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
 class ProfileHeader extends StatelessWidget {
   const ProfileHeader({
     super.key,
@@ -28,24 +52,32 @@ class ProfileHeader extends StatelessWidget {
     return Stack(
       clipBehavior: Clip.none,
       children: [
-        // Background image
-        Container(
-          height: headerHeight,
-          width: double.infinity,
-          decoration: hasContract
-              ? const BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/villa.jpg'),
-                    fit: BoxFit.cover,
-                    alignment: Alignment.topCenter,
-                  ),
-                )
-              : const BoxDecoration(color: Color(0xFFA65B2E)),
-          child: Container(
-            color:
-                hasContract ? const Color(0xAA1A3047) : const Color(0x33000000),
+        // Background
+        if (hasContract)
+          Container(
+            height: headerHeight,
+            width: double.infinity,
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/villa.jpg'),
+                fit: BoxFit.cover,
+                alignment: Alignment.topCenter,
+              ),
+            ),
+            child: Container(color: const Color(0xAA1A3047)),
+          )
+        else
+          SizedBox(
+            height: headerHeight,
+            width: double.infinity,
+            child: ColoredBox(
+              color: const Color(0xFFA65B2E),
+              child: CustomPaint(
+                painter: _DiamondPatternPainter(),
+                child: const ColoredBox(color: Color(0x22000000)),
+              ),
+            ),
           ),
-        ),
 
         // Settings icon
         Positioned(

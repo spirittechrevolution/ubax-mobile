@@ -7,9 +7,9 @@ import 'package:statefulclickcounter/features/customer/profile/data/mock_tenant_
 import 'package:statefulclickcounter/features/customer/profile/screens/documents_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/formalities_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/payment_invoice_screen.dart';
-import 'package:statefulclickcounter/features/customer/profile/screens/reservations_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/sav_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/services_ubax_screen.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/screens/agency_selection_screen.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/settings_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/dashboard_card.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/empty_dashboard.dart';
@@ -26,10 +26,10 @@ class ProfileTab extends StatefulWidget {
 }
 
 class _ProfileTabState extends State<ProfileTab> {
-  bool _hasContract = true;
+  bool _hasContract = false;
 
   List<ServiceItem> _services() {
-    final always = [
+    final base = [
       ServiceItem(
         icon: Icons.settings_suggest_rounded,
         labelKey: 'profile.services.ubaxServices',
@@ -38,14 +38,14 @@ class _ProfileTabState extends State<ProfileTab> {
         ),
       ),
       ServiceItem(
-        icon: Icons.apartment_rounded,
-        labelKey: 'profile.services.reservations',
+        icon: Icons.home_work_rounded,
+        labelKey: 'profile.services.become_bailleur',
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const ReservationsScreen()),
+          MaterialPageRoute(builder: (_) => const AgencySelectionScreen()),
         ),
       ),
     ];
-    if (!_hasContract) return always;
+    if (!_hasContract) return base;
     return [
       ServiceItem(
         icon: Icons.folder_copy_outlined,
@@ -68,7 +68,14 @@ class _ProfileTabState extends State<ProfileTab> {
           MaterialPageRoute(builder: (_) => const SavScreen()),
         ),
       ),
-      ...always,
+      ...base,
+      ServiceItem(
+        icon: Icons.home_work_rounded,
+        labelKey: 'profile.services.become_bailleur',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const AgencySelectionScreen()),
+        ),
+      ),
     ];
   }
 
