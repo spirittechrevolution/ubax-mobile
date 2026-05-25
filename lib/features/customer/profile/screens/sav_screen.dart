@@ -1,62 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import 'package:statefulclickcounter/features/customer/profile/data/datasources/tickets_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/profile/data/models/ticket_models.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/create_ticket_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
-
-enum _TicketStatus { enCours, resolu }
-
-class _Ticket {
-  const _Ticket({
-    required this.category,
-    required this.residence,
-    required this.apartment,
-    required this.number,
-    required this.date,
-    required this.status,
-  });
-
-  final String category;
-  final String residence;
-  final String apartment;
-  final String number;
-  final String date;
-  final _TicketStatus status;
-}
-
-const _kTickets = [
-  _Ticket(
-    category: 'Electricité',
-    residence: 'Résidence Azalai',
-    apartment: 'Appartement 0025',
-    number: 'UBX-SAV-0265',
-    date: '30 Avril 2026',
-    status: _TicketStatus.enCours,
-  ),
-  _Ticket(
-    category: 'Plomberie',
-    residence: 'Résidence Azalai',
-    apartment: 'Appartement 0025',
-    number: 'UBX-SAV-0262',
-    date: '18 Mars 2026',
-    status: _TicketStatus.resolu,
-  ),
-  _Ticket(
-    category: 'Electricité',
-    residence: 'Résidence Azalai',
-    apartment: 'Appartement 0025',
-    number: 'UBX-SAV-0261',
-    date: '',
-    status: _TicketStatus.resolu,
-  ),
-];
-
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
-class SavScreen extends StatelessWidget {
+class SavScreen extends StatefulWidget {
   const SavScreen({super.key});
+
+  @override
+  State<SavScreen> createState() => _SavScreenState();
+}
+
+class _SavScreenState extends State<SavScreen> {
+  final _ds = GetIt.instance<TicketsRemoteDataSource>();
+  List<TicketItem> _tickets = [];
+  bool _loading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _load();
+  }
+
+  Future<void> _load() async {
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final tickets = await _ds.getMyTickets();
+      if (mounted) setState(() => _tickets = tickets);
+    } catch (e) {
+      if (mounted) setState(() => _error = e.toString());
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,13 +126,33 @@ class SavScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 14),
 
-                  // Ticket list
-                  ..._kTickets.map(
-                    (t) => Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: _TicketCard(ticket: t),
+                  if (_loading)
+                    const Center(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(vertical: 32),
+                        child: CircularProgressIndicator(),
+                      ),
+                    )
+                  else if (_error != null)
+                    _RetryBlock(onRetry: _load)
+                  else if (_tickets.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: Text(
+                          'Aucun ticket pour le moment.',
+                          style: AppTextStyles.regular12
+                              .copyWith(color: AppColors.text),
+                        ),
+                      ),
+                    )
+                  else
+                    ..._tickets.map(
+                      (t) => Padding(
+                        padding: const EdgeInsets.only(bottom: 12),
+                        child: _TicketCard(ticket: t),
+                      ),
                     ),
-                  ),
                 ],
               ),
             ),
@@ -170,12 +175,13 @@ class SavScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
+                  onPressed: () async {
+                    await Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (_) => const CreateTicketScreen(),
                       ),
                     );
+                    _load();
                   },
                   child: const Text(
                     'Créer un ticket',
@@ -191,19 +197,78 @@ class SavScreen extends StatelessWidget {
   }
 }
 
+// ─── Retry block ──────────────────────────────────────────────────────────────
+
+class _RetryBlock extends StatelessWidget {
+  const _RetryBlock({required this.onRetry});
+  final VoidCallback onRetry;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 32),
+        child: Column(
+          children: [
+            Text(
+              'Impossible de charger les tickets.',
+              style: AppTextStyles.regular12.copyWith(color: AppColors.text),
+            ),
+            const SizedBox(height: 12),
+            TextButton(
+              onPressed: onRetry,
+              child: const Text('Réessayer'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 // ─── Ticket card ──────────────────────────────────────────────────────────────
 
 class _TicketCard extends StatelessWidget {
   const _TicketCard({required this.ticket});
 
-  final _Ticket ticket;
+  final TicketItem ticket;
+
+  String _label(String category) {
+    switch (category.toUpperCase()) {
+      case 'PLOMBIER':
+        return 'Plomberie';
+      case 'ELECTRICIEN':
+        return 'Electricité';
+      case 'SERRURIER':
+        return 'Serrurerie';
+      case 'MACON':
+        return 'Maçonnerie';
+      default:
+        return category.isNotEmpty ? category : 'Autre';
+    }
+  }
+
+  String _formattedDate(String iso) {
+    if (iso.isEmpty) return '';
+    try {
+      final dt = DateTime.parse(iso).toLocal();
+      const months = [
+        'Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Juin',
+        'Juil', 'Août', 'Sep', 'Oct', 'Nov', 'Déc'
+      ];
+      return '${dt.day} ${months[dt.month - 1]} ${dt.year}';
+    } catch (_) {
+      return iso;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    final isResolu = ticket.status == _TicketStatus.resolu;
+    final isResolu = ticket.isResolved;
     final accent = isResolu ? const Color(0xFF22C55E) : AppColors.primary;
     final accentBg =
         isResolu ? const Color(0xFFDCFCE7) : const Color(0xFFFFE7D3);
+    final date = _formattedDate(ticket.createdAt);
 
     return Container(
       decoration: BoxDecoration(
@@ -215,7 +280,6 @@ class _TicketCard extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Left colored strip
             Container(width: 5, color: accent),
             Expanded(
               child: Padding(
@@ -223,7 +287,6 @@ class _TicketCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Category + number
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -232,46 +295,49 @@ class _TicketCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                ticket.category,
+                                _label(ticket.category),
                                 style: AppTextStyles.sectionTitle.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
                                   fontSize: 15,
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                ticket.residence,
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.text,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 13,
+                              if (ticket.residence.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  ticket.residence,
+                                  style: AppTextStyles.sectionTitle.copyWith(
+                                    color: AppColors.text,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                ticket.apartment,
-                                style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 11,
+                              ],
+                              if (ticket.apartment.isNotEmpty)
+                                Text(
+                                  ticket.apartment,
+                                  style: AppTextStyles.regular12.copyWith(
+                                    color: AppColors.text,
+                                    fontSize: 11,
+                                  ),
                                 ),
-                              ),
                             ],
                           ),
                         ),
-                        Text(
-                          ticket.number,
-                          style: AppTextStyles.regular12.copyWith(
-                            color: AppColors.text,
-                            fontWeight: FontWeight.w600,
+                        if (ticket.reference.isNotEmpty)
+                          Text(
+                            ticket.reference,
+                            style: AppTextStyles.regular12.copyWith(
+                              color: AppColors.text,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
-                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    // Date + status + details
                     Row(
                       children: [
-                        if (ticket.date.isNotEmpty) ...[
+                        if (date.isNotEmpty) ...[
                           Container(
                             width: 22,
                             height: 22,
@@ -288,7 +354,7 @@ class _TicketCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            ticket.date,
+                            date,
                             style: AppTextStyles.regular12.copyWith(
                               color: AppColors.text,
                               fontWeight: FontWeight.w500,
@@ -296,7 +362,6 @@ class _TicketCard extends StatelessWidget {
                           ),
                         ],
                         const Spacer(),
-                        // Status pill (filled)
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 6),
@@ -305,7 +370,7 @@ class _TicketCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            isResolu ? 'Résolu' : 'En cour',
+                            isResolu ? 'Résolu' : 'En cours',
                             style: AppTextStyles.regular12.copyWith(
                               color: accent,
                               fontWeight: FontWeight.w600,
@@ -313,13 +378,13 @@ class _TicketCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        // Details button
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 14, vertical: 6),
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
-                            border: Border.all(color: const Color(0xFFE5E7EB)),
+                            border:
+                                Border.all(color: const Color(0xFFE5E7EB)),
                           ),
                           child: Text(
                             'Détails',

@@ -13,4 +13,6 @@ abstract class PropertiesRepository {
   });
 
   Future<PropertyItem> getPropertyById(String propertyId);
+
+  Future<PropertyDetailResponse> getPropertyDetails(String propertyId);
 }

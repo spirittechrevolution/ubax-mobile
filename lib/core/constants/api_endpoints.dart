@@ -34,4 +34,15 @@ class ApiEndpoints {
   static const bailleurApply = '/v1/bailleur/apply';
   static const storagePresignBailleurDocument =
       '/v1/storage/presign/bailleur-document';
+
+  static const reservations = '/v1/reservations';
+  static const reservationsMine = '/v1/reservations/mine';
+  static String reservationById(String id) => '/v1/reservations/$id';
+
+  static const propertyVisits = '/v1/property-visits';
+  static String propertyVisitSlots(String propertyId) =>
+      '/v1/property-visits/available-slots/$propertyId';
+
+  static const ticketsMine = '/v1/tickets/mine';
+  static const tickets = '/v1/tickets';
 }

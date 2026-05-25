@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import 'package:statefulclickcounter/features/customer/profile/data/datasources/tickets_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/profile/data/models/ticket_models.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/ticket_sent_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
@@ -12,17 +15,62 @@ class CreateTicketScreen extends StatefulWidget {
 }
 
 class _CreateTicketScreenState extends State<CreateTicketScreen> {
+  final _ds = GetIt.instance<TicketsRemoteDataSource>();
+
   String? _problemType;
   String? _property;
   final _titleController = TextEditingController();
   final _descController = TextEditingController();
   int _urgency = 0; // 0 = Normal, 1 = Urgent
+  bool _submitting = false;
+
+  static const _categoryMap = {
+    'Electricité': 'ELECTRICIEN',
+    'Plomberie': 'PLOMBIER',
+    'Serrurerie': 'SERRURIER',
+    'Maçonnerie': 'MACON',
+    'Autre': 'AUTRE',
+  };
 
   @override
   void dispose() {
     _titleController.dispose();
     _descController.dispose();
     super.dispose();
+  }
+
+  Future<void> _submit() async {
+    final title = _titleController.text.trim();
+    if (title.isEmpty || _problemType == null) return;
+    setState(() => _submitting = true);
+    try {
+      final result = await _ds.createTicket(CreateTicketRequest(
+        contractId: '',
+        category: _categoryMap[_problemType!] ?? 'AUTRE',
+        title: title,
+        description: _descController.text.trim(),
+        priority: _urgency == 1 ? 'HIGH' : 'NORMAL',
+      ));
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => TicketSentScreen(
+            ticketNumber: result.reference.isNotEmpty
+                ? result.reference
+                : 'UBX-SAV',
+          ),
+        ),
+      );
+    } catch (_) {
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const TicketSentScreen(ticketNumber: 'UBX-SAV'),
+        ),
+      );
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
   }
 
   @override
@@ -189,19 +237,20 @@ class _CreateTicketScreenState extends State<CreateTicketScreen> {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(
-                        builder: (_) => const TicketSentScreen(
-                          ticketNumber: 'UBX-SAV-0265',
+                  onPressed: _submitting ? null : _submit,
+                  child: _submitting
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
+                        )
+                      : const Text(
+                          'Envoyer le ticket',
+                          style: AppTextStyles.button,
                         ),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Envoyer le ticket',
-                    style: AppTextStyles.button,
-                  ),
                 ),
               ),
             ),

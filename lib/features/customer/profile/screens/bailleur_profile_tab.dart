@@ -12,7 +12,9 @@ import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 class BailleurProfileTab extends StatelessWidget {
-  const BailleurProfileTab({super.key});
+  const BailleurProfileTab({super.key, required this.onViewChanged});
+
+  final ValueChanged<bool> onViewChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class BailleurProfileTab extends StatelessWidget {
             onSettingsTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const SettingsScreen()),
             ),
-            onGestionBailTap: () => debugPrint('gestion bail'),
+            onViewChanged: onViewChanged,
           ),
           const SizedBox(height: 48),
           Padding(

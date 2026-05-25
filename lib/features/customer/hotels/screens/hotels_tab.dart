@@ -99,6 +99,7 @@ class _ApiRecommendedList extends StatelessWidget {
                                 : p.city,
                             price: _asInt(p.price),
                             rating: 4.7,
+                            propertyId: p.id,
                           ),
                         ),
                       );
@@ -398,15 +399,33 @@ class _HotelsTabState extends State<HotelsTab>
     super.initState();
     _buildingController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 650),
+      duration: const Duration(milliseconds: 3800),
     );
-    _buildingSlide = Tween<Offset>(
-      begin: const Offset(0, 1.2),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(
-      parent: _buildingController,
-      curve: Curves.easeOutCubic,
-    ));
+    // Sequence: slide in from bottom → hold → slide out to right → pause off-screen
+    _buildingSlide = TweenSequence<Offset>([
+      TweenSequenceItem(
+        tween: Tween<Offset>(
+          begin: const Offset(0, 1.5),
+          end: Offset.zero,
+        ).chain(CurveTween(curve: Curves.easeOutCubic)),
+        weight: 22,
+      ),
+      TweenSequenceItem(
+        tween: ConstantTween<Offset>(Offset.zero),
+        weight: 40,
+      ),
+      TweenSequenceItem(
+        tween: Tween<Offset>(
+          begin: Offset.zero,
+          end: const Offset(1.5, 0),
+        ).chain(CurveTween(curve: Curves.easeInCubic)),
+        weight: 22,
+      ),
+      TweenSequenceItem(
+        tween: ConstantTween<Offset>(const Offset(1.5, 0)),
+        weight: 16,
+      ),
+    ]).animate(_buildingController);
 
     _scrollController.addListener(() {
       final clamped = _scrollController.offset.clamp(0.0, _kDarkBgHeight);
@@ -416,6 +435,7 @@ class _HotelsTabState extends State<HotelsTab>
       _checkBannerVisibility();
     });
 
+    WidgetsBinding.instance.addPostFrameCallback((_) => _checkBannerVisibility());
     _loadApi();
   }
 
@@ -429,7 +449,7 @@ class _HotelsTabState extends State<HotelsTab>
     final screenHeight = MediaQuery.of(context).size.height;
     if (position.dy < screenHeight * 0.88) {
       _buildingTriggered = true;
-      _buildingController.forward();
+      _buildingController.repeat();
     }
   }
 
@@ -1064,8 +1084,8 @@ class _HotelsTabState extends State<HotelsTab>
                                   bottom: 0,
                                   child: SlideTransition(
                                     position: _buildingSlide,
-                                    child: SvgPicture.asset(
-                                      'assets/images/immeuble-2.svg',
+                                    child: Image.asset(
+                                      'assets/images/immeuble-2.png',
                                       width: 139,
                                       height: 110,
                                       fit: BoxFit.fill,

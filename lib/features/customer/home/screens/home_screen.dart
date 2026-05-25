@@ -341,7 +341,9 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             // Profile/Bailleur tabs let their hero header extend behind the status bar
             mode == ProfileMode.bailleur
-                ? const BailleurProfileTab()
+                ? BailleurProfileTab(
+                    onViewChanged: (_) {},
+                  )
                 : const ProfileTab(),
           ],
         ),

@@ -6,12 +6,13 @@ import 'package:statefulclickcounter/features/auth/presentation/bloc/auth/auth_b
 import 'package:statefulclickcounter/features/customer/profile/data/mock_tenant_profile.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/documents_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/formalities_screen.dart';
-import 'package:statefulclickcounter/features/customer/profile/screens/payment_invoice_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/sav_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/services_ubax_screen.dart';
 import 'package:statefulclickcounter/features/customer/bailleur_apply/screens/agency_selection_screen.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/reservations_screen.dart';
 import 'package:statefulclickcounter/features/customer/settings/screens/settings_screen.dart';
-import 'package:statefulclickcounter/features/customer/profile/widgets/dashboard_card.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/all_properties_screen.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/bailleur_profile_tab.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/empty_dashboard.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/profile_header.dart';
 import 'package:statefulclickcounter/features/customer/profile/widgets/profile_switcher_sheet.dart';
@@ -42,6 +43,20 @@ class _ProfileTabState extends State<ProfileTab> {
         labelKey: 'profile.services.become_bailleur',
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute(builder: (_) => const AgencySelectionScreen()),
+        ),
+      ),
+      ServiceItem(
+        icon: Icons.hotel_outlined,
+        labelKey: 'profile.services.reservations',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const ReservationsScreen()),
+        ),
+      ),
+      ServiceItem(
+        icon: Icons.handyman_rounded,
+        labelKey: 'profile.services.sav',
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const SavScreen()),
         ),
       ),
     ];
@@ -93,6 +108,12 @@ class _ProfileTabState extends State<ProfileTab> {
             phone: currentUser.phone,
           );
 
+    if (_hasContract) {
+      return BailleurProfileTab(
+        onViewChanged: (v) => setState(() => _hasContract = v),
+      );
+    }
+
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -104,7 +125,7 @@ class _ProfileTabState extends State<ProfileTab> {
               MaterialPageRoute(builder: (_) => const SettingsScreen()),
             ),
             onAgencyTap: () => showProfileSwitcherSheet(context),
-            onMyLocalTap: () => setState(() => _hasContract = !_hasContract),
+            onViewChanged: (v) => setState(() => _hasContract = v),
           ),
           const SizedBox(height: 49),
           Padding(
@@ -123,20 +144,15 @@ class _ProfileTabState extends State<ProfileTab> {
           const SizedBox(height: 12),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 18),
-            child: _hasContract
-                ? DashboardCard(
-                    profile: profile,
-                    onPayRent: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                            builder: (_) => const PaymentInvoiceScreen()),
-                      );
-                    },
-                    onViewHistory: () => print('view history'),
-                  )
-                : EmptyDashboard(
-                    onFindHome: () => print('find home'),
+            child: EmptyDashboard(
+              onFindHome: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const AllPropertiesScreen(
+                    title: 'Les biens',
                   ),
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 18),
           Padding(

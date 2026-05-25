@@ -16,6 +16,11 @@ import 'package:statefulclickcounter/features/customer/bailleur_apply/data/repos
 import 'package:statefulclickcounter/features/customer/bailleur_apply/data/repositories/bailleur_apply_repository_impl.dart';
 import 'package:statefulclickcounter/features/customer/bailleur_apply/domain/repositories/agencies_repository.dart';
 import 'package:statefulclickcounter/features/customer/bailleur_apply/domain/repositories/bailleur_apply_repository.dart';
+import 'package:statefulclickcounter/features/customer/home/data/datasources/property_visits_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/profile/data/datasources/tickets_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/hotels/data/datasources/reservation_remote_data_source.dart';
+import 'package:statefulclickcounter/features/customer/hotels/data/repositories/reservation_repository_impl.dart';
+import 'package:statefulclickcounter/features/customer/hotels/domain/repositories/reservation_repository.dart';
 import 'package:statefulclickcounter/features/customer/kyc/data/datasources/tenant_remote_data_source.dart';
 import 'package:statefulclickcounter/features/customer/kyc/data/repositories/tenant_repository_impl.dart';
 import 'package:statefulclickcounter/features/customer/kyc/domain/repositories/tenant_repository.dart';
@@ -85,5 +90,21 @@ Future<void> configureDependencies() async {
 
   getIt.registerLazySingleton<BailleurApplyRepository>(
     () => BailleurApplyRepositoryImpl(getIt<BailleurApplyRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<ReservationRemoteDataSource>(
+    () => ReservationRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<PropertyVisitsRemoteDataSource>(
+    () => PropertyVisitsRemoteDataSource(getIt<Dio>()),
+  );
+
+  getIt.registerLazySingleton<ReservationRepository>(
+    () => ReservationRepositoryImpl(getIt<ReservationRemoteDataSource>()),
+  );
+
+  getIt.registerLazySingleton<TicketsRemoteDataSource>(
+    () => TicketsRemoteDataSource(getIt<Dio>()),
   );
 }

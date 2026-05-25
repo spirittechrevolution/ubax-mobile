@@ -10,12 +10,12 @@ class BailleurHeader extends StatelessWidget {
     super.key,
     required this.profile,
     required this.onSettingsTap,
-    required this.onGestionBailTap,
+    required this.onViewChanged,
   });
 
   final BailleurProfile profile;
   final VoidCallback onSettingsTap;
-  final VoidCallback onGestionBailTap;
+  final ValueChanged<bool> onViewChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -169,37 +169,86 @@ class BailleurHeader extends StatelessWidget {
           ),
         ),
 
-        // "Gestion de Bail" pill
+        // View switcher pill
         Positioned(
           bottom: -34,
           left: 18,
           right: 18,
-          child: GestureDetector(
-            onTap: onGestionBailTap,
-            child: Container(
-              height: 52,
-              decoration: BoxDecoration(
-                color: AppColors.dark,
-                borderRadius: BorderRadius.circular(26),
-              ),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.assignment_outlined,
-                      color: Colors.white, size: 20),
-                  const SizedBox(width: 10),
-                  Text(
-                    'profile.bailleur.gestionBail'.tr(),
-                    style: AppTextStyles.regularlight16.copyWith(
-                      fontFamily: 'Lexend',
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 14,
+          child: Container(
+            height: 52,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(26),
+              boxShadow: const [
+                BoxShadow(
+                    color: Color(0x14000000),
+                    blurRadius: 8,
+                    offset: Offset(0, 2)),
+              ],
+            ),
+            child: Row(
+              children: [
+                // Mon local
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => onViewChanged(false),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.home_outlined,
+                              color: AppColors.muted, size: 18),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Mon local',
+                            style: AppTextStyles.regular12.copyWith(
+                              fontFamily: 'Lexend',
+                              color: AppColors.muted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                // Gestion de Bail (selected)
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => onViewChanged(true),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.receipt_long_outlined,
+                              color: Colors.white, size: 18),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Gestion de Bail',
+                            style: AppTextStyles.regular12.copyWith(
+                              fontFamily: 'Lexend',
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

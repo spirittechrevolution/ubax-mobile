@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 
+import 'package:statefulclickcounter/core/network/error_handler.dart';
+import 'package:statefulclickcounter/features/customer/hotels/data/models/reservation_models.dart';
+import 'package:statefulclickcounter/features/customer/hotels/domain/repositories/reservation_repository.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/leave_review_screen.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/reservation_detail_screen.dart';
 import 'package:statefulclickcounter/features/customer/profile/screens/reservation_invoice_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
-enum _ResStatus { annulee, terminee }
+enum _ResStatus { enAttente, terminee, annulee }
 
 class _ReservationsSkeleton extends StatelessWidget {
   const _ReservationsSkeleton({super.key});
@@ -37,6 +42,7 @@ enum _ResType { hotel, villa, residence }
 
 class _Reservation {
   _Reservation({
+    required this.id,
     required this.image,
     required this.type,
     required this.title,
@@ -48,6 +54,7 @@ class _Reservation {
     required this.status,
   });
 
+  final String id;
   final String image;
   final _ResType type;
   final String title;
@@ -59,52 +66,31 @@ class _Reservation {
   final _ResStatus status;
 }
 
-final _kReservations = [
-  _Reservation(
-    image: 'assets/images/chambre.jpg',
-    type: _ResType.residence,
-    title: 'Appartement 3 pièces',
-    location: 'Cocody Angré, Abidjan',
-    arrival: '15 Mars 2026',
-    departure: '18 Mars 2026',
-    arrivalAt: DateTime(2026, 3, 15, 14, 0),
-    departureAt: DateTime(2026, 3, 18, 11, 0),
-    status: _ResStatus.annulee,
-  ),
-  _Reservation(
-    image: 'assets/images/chambre11.jpg',
+_ResStatus _mapStatus(String s) {
+  switch (s.toUpperCase()) {
+    case 'CONFIRMED':
+      return _ResStatus.terminee;
+    case 'CANCELLED':
+      return _ResStatus.annulee;
+    default:
+      return _ResStatus.enAttente;
+  }
+}
+
+_Reservation _fromApi(ReservationResponse r) {
+  return _Reservation(
+    id: r.id,
+    image: '',
     type: _ResType.hotel,
-    title: 'Chambre de luxe',
-    location: 'Cocody Angré, Abidjan',
-    arrival: '15 Mars 2026',
-    departure: '18 Mars 2026',
-    arrivalAt: DateTime(2026, 3, 15, 12, 0),
-    departureAt: DateTime(2026, 3, 18, 10, 0),
-    status: _ResStatus.terminee,
-  ),
-  _Reservation(
-    image: 'assets/images/chambre.jpg',
-    type: _ResType.villa,
-    title: 'Chambre de luxe',
-    location: 'Cocody Angré, Abidjan',
-    arrival: '15 Mars 2026',
-    departure: '18 Mars 2026',
-    arrivalAt: DateTime(2026, 3, 15, 16, 30),
-    departureAt: DateTime(2026, 3, 18, 9, 0),
-    status: _ResStatus.annulee,
-  ),
-  _Reservation(
-    image: 'assets/images/chambre11.jpg',
-    type: _ResType.hotel,
-    title: 'Chambre de luxe',
-    location: 'Cocody Angré, Abidjan',
-    arrival: '15 Mars 2026',
-    departure: '18 Mars 2026',
-    arrivalAt: DateTime(2026, 3, 15, 9, 0),
-    departureAt: DateTime(2026, 3, 18, 14, 0),
-    status: _ResStatus.terminee,
-  ),
-];
+    title: r.propertyTitle,
+    location: r.propertyCity,
+    arrival: r.checkInDate,
+    departure: r.checkOutDate,
+    arrivalAt: DateTime.tryParse(r.checkInDate) ?? DateTime.now(),
+    departureAt: DateTime.tryParse(r.checkOutDate) ?? DateTime.now(),
+    status: _mapStatus(r.status),
+  );
+}
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 
@@ -123,17 +109,37 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   DateTime? _arrivalFilter;
   DateTime? _departureFilter;
   bool _loading = true;
+  String? _apiError;
+  List<_Reservation> _reservations = [];
   late final TextEditingController _searchController;
 
   @override
   void initState() {
     super.initState();
     _searchController = TextEditingController();
+    _loadReservations();
+  }
 
-    Future.delayed(const Duration(milliseconds: 700), () {
-      if (!mounted) return;
-      setState(() => _loading = false);
+  Future<void> _loadReservations() async {
+    setState(() {
+      _loading = true;
+      _apiError = null;
     });
+    try {
+      final repo = GetIt.instance<ReservationRepository>();
+      final list = await repo.getMyReservations();
+      if (!mounted) return;
+      setState(() {
+        _reservations = list.map(_fromApi).toList();
+        _loading = false;
+      });
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _apiError = AppErrors.translate(e);
+        _loading = false;
+      });
+    }
   }
 
   @override
@@ -218,17 +224,17 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
     List<_Reservation> base;
     switch (_tab) {
       case 1:
-        base = _kReservations
+        base = _reservations
             .where((r) => r.status == _ResStatus.terminee)
             .toList();
         break;
       case 2:
-        base = _kReservations
+        base = _reservations
             .where((r) => r.status == _ResStatus.annulee)
             .toList();
         break;
       default:
-        base = _kReservations;
+        base = _reservations;
     }
 
     bool matchType(_Reservation r) => r.type == _type;
@@ -351,36 +357,79 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                       ? const _ReservationsSkeleton(
                           key: ValueKey<String>('reservations_skeleton'),
                         )
-                      : Builder(
-                          key: const ValueKey<String>('reservations_list'),
-                          builder: (_) {
-                            final items = _filtered;
-                            if (items.isEmpty) {
-                              return Center(
-                                child: Text(
-                                  'Aucune réservation',
-                                  style: AppTextStyles.regular12.copyWith(
-                                    color: AppColors.muted,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                  ),
+                      : _apiError != null
+                          ? Center(
+                              key: const ValueKey<String>('reservations_error'),
+                              child: Padding(
+                                padding: const EdgeInsets.all(24),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    const Icon(Icons.error_outline,
+                                        color: AppColors.muted, size: 40),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      _apiError!,
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyles.regular12.copyWith(
+                                          color: AppColors.muted, fontSize: 13),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    TextButton(
+                                      onPressed: _loadReservations,
+                                      child: Text('Réessayer',
+                                          style: AppTextStyles.regular12
+                                              .copyWith(
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 13)),
+                                    ),
+                                  ],
                                 ),
-                              );
-                            }
-                            return ListView.separated(
-                              padding: const EdgeInsets.fromLTRB(10, 0, 10, 24),
-                              itemCount: items.length,
-                              separatorBuilder: (_, __) =>
-                                  const SizedBox(height: 12),
-                              itemBuilder: (_, i) => _SlidableCard(
-                                reservation: items[i],
-                                swipeEnabled: _tab == 0,
-                                onCancel: () =>
-                                    print('cancel ${items[i].title}'),
                               ),
-                            );
-                          },
-                        ),
+                            )
+                          : Builder(
+                              key: const ValueKey<String>('reservations_list'),
+                              builder: (_) {
+                                final items = _filtered;
+                                if (items.isEmpty) {
+                                  return Center(
+                                    child: Text(
+                                      'Aucune réservation',
+                                      style: AppTextStyles.regular12.copyWith(
+                                        color: AppColors.muted,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return RefreshIndicator(
+                                  color: AppColors.primary,
+                                  onRefresh: _loadReservations,
+                                  child: ListView.separated(
+                                    padding: const EdgeInsets.fromLTRB(
+                                        10, 0, 10, 24),
+                                    itemCount: items.length,
+                                    separatorBuilder: (_, __) =>
+                                        const SizedBox(height: 12),
+                                    itemBuilder: (_, i) => _SlidableCard(
+                                      reservation: items[i],
+                                      swipeEnabled: items[i].status ==
+                                          _ResStatus.enAttente,
+                                      onCancel: () {},
+                                      onCardTap: () => Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (_) => ReservationDetailScreen(
+                                          reservationId: items[i].id,
+                                          initialTitle: items[i].title,
+                                        ),
+                                      )),
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                 ),
               ),
             ],
@@ -838,11 +887,13 @@ class _SlidableCard extends StatefulWidget {
     required this.reservation,
     required this.swipeEnabled,
     required this.onCancel,
+    this.onCardTap,
   });
 
   final _Reservation reservation;
   final bool swipeEnabled;
   final VoidCallback onCancel;
+  final VoidCallback? onCardTap;
 
   @override
   State<_SlidableCard> createState() => _SlidableCardState();
@@ -872,7 +923,7 @@ class _SlidableCardState extends State<_SlidableCard> {
     return GestureDetector(
       onHorizontalDragUpdate: _onUpdate,
       onHorizontalDragEnd: _onEnd,
-      onTap: _dx > 0 ? () => setState(() => _dx = 0) : null,
+      onTap: _dx > 0 ? () => setState(() => _dx = 0) : widget.onCardTap,
       child: Stack(
         children: [
           // Revealed "Annuler" button
@@ -923,11 +974,21 @@ class _ReservationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isAnnulee = reservation.status == _ResStatus.annulee;
-    final statusBg =
-        isAnnulee ? const Color(0xFFFFDAD6) : const Color(0xFFD7F5DD);
-    final statusColor =
-        isAnnulee ? const Color(0xFFE53935) : const Color(0xFF22C55E);
+    final statusBg = switch (reservation.status) {
+      _ResStatus.annulee => const Color(0xFFFFDAD6),
+      _ResStatus.terminee => const Color(0xFFD7F5DD),
+      _ResStatus.enAttente => const Color(0xFFFFF7ED),
+    };
+    final statusColor = switch (reservation.status) {
+      _ResStatus.annulee => const Color(0xFFE53935),
+      _ResStatus.terminee => const Color(0xFF22C55E),
+      _ResStatus.enAttente => AppColors.primary,
+    };
+    final statusLabel = switch (reservation.status) {
+      _ResStatus.annulee => 'Annulée',
+      _ResStatus.terminee => 'Terminée',
+      _ResStatus.enAttente => 'En attente',
+    };
 
     return Container(
       height: 139,
@@ -983,7 +1044,7 @@ class _ReservationCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: Text(
-                        isAnnulee ? 'Annulée' : 'Terminée',
+                        statusLabel,
                         style: AppTextStyles.regular12.copyWith(
                           color: statusColor,
                           fontSize: 8,

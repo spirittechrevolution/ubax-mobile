@@ -34,4 +34,9 @@ class PropertiesRepositoryImpl implements PropertiesRepository {
   Future<PropertyItem> getPropertyById(String propertyId) {
     return _remote.getPropertyById(propertyId);
   }
+
+  @override
+  Future<PropertyDetailResponse> getPropertyDetails(String propertyId) {
+    return _remote.getPropertyDetails(propertyId);
+  }
 }

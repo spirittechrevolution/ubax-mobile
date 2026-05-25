@@ -41,7 +41,8 @@ class AgencyDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Stats
-                  if (agency.memberSince != null || agency.propertiesCount != null)
+                  if (agency.memberSince != null ||
+                      agency.propertiesCount != null)
                     _StatsRow(agency: agency),
 
                   // Description
@@ -147,25 +148,12 @@ class _HeroSection extends StatelessWidget {
             height: 260 + topPadding,
             width: double.infinity,
             child: Image.asset(
-              'assets/images/appartements-luxe.jpg',
+              'assets/images/image_back.png',
               fit: BoxFit.cover,
             ),
           ),
 
           // ── Overlay sombre
-          Container(
-            height: 260 + topPadding,
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0x99000000),
-                  Color(0xCC1A3047),
-                ],
-              ),
-            ),
-          ),
 
           // ── Contenu hero
           Positioned(
@@ -231,8 +219,7 @@ class _HeroSection extends StatelessWidget {
                           icon: Icons.phone_outlined,
                           label: agency.phone!,
                         ),
-                        if (agency.email != null)
-                          const SizedBox(width: 20),
+                        if (agency.email != null) const SizedBox(width: 20),
                       ],
                       if (agency.email != null)
                         _ContactChip(

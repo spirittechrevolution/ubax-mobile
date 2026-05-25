@@ -34,14 +34,14 @@ class ProfileHeader extends StatelessWidget {
     required this.hasContract,
     required this.onSettingsTap,
     required this.onAgencyTap,
-    required this.onMyLocalTap,
+    required this.onViewChanged,
   });
 
   final TenantProfile profile;
   final bool hasContract;
   final VoidCallback onSettingsTap;
   final VoidCallback onAgencyTap;
-  final VoidCallback onMyLocalTap;
+  final ValueChanged<bool> onViewChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -235,36 +235,101 @@ class ProfileHeader extends StatelessWidget {
           ),
         ),
 
-        // "Mon local" pill
+        // View switcher pill
         Positioned(
           bottom: -34,
           left: 18,
           right: 18,
-          child: GestureDetector(
-            onTap: onMyLocalTap,
-            child: Container(
-              height: 52,
-              decoration: BoxDecoration(
-                color: AppColors.dark,
-                borderRadius: BorderRadius.circular(26),
-              ),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.home_outlined,
-                      color: Colors.white, size: 22),
-                  const SizedBox(width: 10),
-                  Text(
-                    hasContract ? 'profile.myLocal'.tr() : 'Ma maison',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 15,
+          child: Container(
+            height: 52,
+            padding: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(26),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color(0x14000000),
+                  blurRadius: 8,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                // Mon local
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => onViewChanged(false),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        color: !hasContract
+                            ? AppColors.primary
+                            : Colors.transparent,
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.home_outlined,
+                            color: !hasContract ? Colors.white : AppColors.text,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Mon local',
+                            style: TextStyle(
+                              fontFamily: 'Lexend',
+                              color:
+                                  !hasContract ? Colors.white : AppColors.text,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ],
-              ),
+                ),
+                // Gestion de Bail
+                Expanded(
+                  child: GestureDetector(
+                    onTap: () => onViewChanged(true),
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 200),
+                      decoration: BoxDecoration(
+                        color:
+                            hasContract ? AppColors.dark : Colors.transparent,
+                        borderRadius: BorderRadius.circular(22),
+                      ),
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.receipt_long_outlined,
+                            color: hasContract ? Colors.white : AppColors.muted,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            'Gestion de Bail',
+                            style: TextStyle(
+                              fontFamily: 'Lexend',
+                              color:
+                                  hasContract ? Colors.white : AppColors.muted,
+                              fontWeight: FontWeight.w600,
+                              fontSize: 13,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),

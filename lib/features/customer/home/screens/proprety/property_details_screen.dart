@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/data/models/agency_models.dart';
+import 'package:statefulclickcounter/features/customer/bailleur_apply/screens/agency_details_screen.dart';
 import 'package:statefulclickcounter/features/customer/chat/screens/chat_screen.dart';
 import 'package:statefulclickcounter/features/customer/home/screens/appointment_booking_screen.dart';
 import 'package:statefulclickcounter/features/customer/kyc/screens/tenant_kyc_screen.dart';
@@ -48,8 +50,7 @@ class PropertyDetailsScreen extends StatefulWidget {
 
 class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
   String get _favoriteId => widget.propertyId;
-  late bool _isFavorite =
-      FavoritesStore.instance.isFavorite(widget.propertyId);
+  late bool _isFavorite = FavoritesStore.instance.isFavorite(widget.propertyId);
 
   static const _extraGallery = [
     'assets/images/chambre11.jpg',
@@ -152,6 +153,21 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       bottomNavigationBar: _BottomActions(
+        agencyName: _property?.agencyName,
+        onAgencyTap: () {
+          final name = _property?.agencyName ?? 'Agence Immobilière';
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (_) => AgencyDetailsScreen(
+                agency: AgencyItem(
+                  id: '',
+                  name: name,
+                  verified: false,
+                ),
+              ),
+            ),
+          );
+        },
         onInterested: () {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -184,6 +200,7 @@ class _PropertyDetailsScreenState extends State<PropertyDetailsScreen> {
               builder: (_) => AppointmentBookingScreen(
                 title: title,
                 location: location,
+                propertyId: widget.propertyId,
               ),
             ),
           );
@@ -272,10 +289,17 @@ class _DetailsSkeleton extends StatelessWidget {
 }
 
 class _BottomActions extends StatelessWidget {
-  const _BottomActions({required this.onInterested, required this.onBookVisit});
+  const _BottomActions({
+    required this.onInterested,
+    required this.onBookVisit,
+    required this.onAgencyTap,
+    this.agencyName,
+  });
 
   final VoidCallback onInterested;
   final VoidCallback onBookVisit;
+  final VoidCallback onAgencyTap;
+  final String? agencyName;
 
   @override
   Widget build(BuildContext context) {
@@ -315,7 +339,7 @@ class _BottomActions extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Aigle Immobilier',
+                            agencyName ?? 'Agence Immobilière',
                             style: AppTextStyles.sectionTitle.copyWith(
                                 color: PropertyDetailsScreen.text,
                                 fontSize: 13),
@@ -332,14 +356,17 @@ class _BottomActions extends StatelessWidget {
                       ),
                     ),
                   ),
-                  _MiniAction(
-                    icon: Icons.chat_bubble_outline,
-                    onTap: () => Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => const ChatScreen()),
-                    ),
-                  ),
+                  // _MiniAction(
+                  //   icon: Icons.chat_bubble_outline,
+                  //   onTap: () => Navigator.of(context).push(
+                  //     MaterialPageRoute(builder: (_) => const ChatScreen()),
+                  //   ),
+                  // ),
                   const SizedBox(width: 10),
-                  _MiniAction(icon: Icons.person_outline_rounded),
+                  _MiniAction(
+                    icon: Icons.person_outline_rounded,
+                    onTap: onAgencyTap,
+                  ),
                 ],
               ),
             ),

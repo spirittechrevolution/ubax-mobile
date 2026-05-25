@@ -303,7 +303,7 @@ class _SearchHeader extends StatelessWidget {
                   child: Container(
                     height: 46,
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(255, 40, 50, 60),
+                      color: const Color(0xFF243D53),
                       borderRadius: BorderRadius.circular(23),
                     ),
                     child: TextField(
@@ -647,7 +647,7 @@ class _AgencyCard extends StatelessWidget {
                               Text(
                                 agency.phone!,
                                 style: AppTextStyles.regular12.copyWith(
-                                    fontSize: 9, color: AppColors.text),
+                                    fontSize: 10, color: AppColors.text),
                               ),
                             ],
                             if (agency.phone != null && agency.email != null)
@@ -659,7 +659,7 @@ class _AgencyCard extends StatelessWidget {
                                 child: Text(
                                   agency.email!,
                                   style: AppTextStyles.regular12.copyWith(
-                                      fontSize: 9, color: AppColors.text),
+                                      fontSize: 10, color: AppColors.text),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),

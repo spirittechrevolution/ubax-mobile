@@ -1,25 +1,81 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+
 import 'package:statefulclickcounter/core/favorites/favorites_store.dart';
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
 import 'package:statefulclickcounter/core/widgets/recommended_tile.dart';
 import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
+import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
-class AllPropertiesScreen extends StatelessWidget {
+class AllPropertiesScreen extends StatefulWidget {
   const AllPropertiesScreen({
     super.key,
-    required this.title,
-    required this.popular,
-    required this.recommended,
-    required this.onItemTap,
+    this.title = 'Les biens',
+    this.popular = const [],
+    this.recommended = const [],
+    this.onItemTap,
   });
 
   final String title;
   final List<PropertyItem> popular;
   final List<PropertyItem> recommended;
 
-  /// Called when user taps a property card or list tile.
-  final void Function(PropertyItem) onItemTap;
+  /// If null, navigates to PropertyDetailsScreen via go_router.
+  final void Function(PropertyItem)? onItemTap;
+
+  @override
+  State<AllPropertiesScreen> createState() => _AllPropertiesScreenState();
+}
+
+class _AllPropertiesScreenState extends State<AllPropertiesScreen> {
+  late List<PropertyItem> _popular;
+  late List<PropertyItem> _recommended;
+  bool _loading = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _popular = widget.popular;
+    _recommended = widget.recommended;
+    if (_popular.isEmpty && _recommended.isEmpty) {
+      _loadFromApi();
+    }
+  }
+
+  Future<void> _loadFromApi() async {
+    setState(() => _loading = true);
+    try {
+      final page = await GetIt.instance<PropertiesRepository>().getProperties();
+      if (!mounted) return;
+      setState(() {
+        _popular = page.results.where((p) => p.boosted).toList(growable: false);
+        _recommended =
+            page.results.where((p) => !p.boosted).toList(growable: false);
+      });
+    } catch (_) {
+      // keep empty — shows "Aucun bien disponible"
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
+  void _onTap(PropertyItem p) {
+    if (widget.onItemTap != null) {
+      widget.onItemTap!(p);
+      return;
+    }
+    final img = p.coverPhotoUrl ?? 'assets/images/chambre12.jpg';
+    context.push(
+      AppRoutes.propertyDetails,
+      extra: PropertyDetailsArgs(
+        propertyId: p.id,
+        coverImageFallback: img,
+      ),
+    );
+  }
 
   static String _fmtFcfa(num value) {
     final s = value.round().toString();
@@ -34,8 +90,8 @@ class AllPropertiesScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPopular = popular.take(3).toList(growable: false);
-    final rest = [...popular.skip(3), ...recommended];
+    final topPopular = _popular.take(3).toList(growable: false);
+    final rest = [..._popular.skip(3), ..._recommended];
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -51,7 +107,7 @@ class AllPropertiesScreen extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          "Les biens",
+          widget.title,
           style: AppTextStyles.regular20.copyWith(
             color: AppColors.dark,
             fontSize: 16,
@@ -59,111 +115,116 @@ class AllPropertiesScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: ValueListenableBuilder<Set<String>>(
-        valueListenable: FavoritesStore.instance.favorites,
-        builder: (context, favs, _) {
-          if (popular.isEmpty && recommended.isEmpty) {
-            return Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.home_work_outlined,
-                    size: 64,
-                    color: AppColors.muted,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Aucun bien disponible',
-                    style: AppTextStyles.regular20.copyWith(
-                      color: AppColors.text,
-                      fontSize: 16,
+      body: _loading
+          ? const Center(child: CircularProgressIndicator())
+          : ValueListenableBuilder<Set<String>>(
+              valueListenable: FavoritesStore.instance.favorites,
+              builder: (context, favs, _) {
+                if (_popular.isEmpty && _recommended.isEmpty) {
+                  return Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.home_work_outlined,
+                          size: 64,
+                          color: AppColors.muted,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Aucun bien disponible',
+                          style: AppTextStyles.regular20.copyWith(
+                            color: AppColors.text,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
-              ),
-            );
-          }
+                  );
+                }
 
-          return SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(18, 16, 18, 100),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                if (topPopular.isNotEmpty) ...[
-                  Text(
-                    'Populaires',
-                    style: AppTextStyles.regular20.copyWith(
-                      color: AppColors.text,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
+                return SingleChildScrollView(
+                  padding: const EdgeInsets.fromLTRB(18, 16, 18, 100),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (topPopular.isNotEmpty) ...[
+                        Text(
+                          'Populaires',
+                          style: AppTextStyles.regular20.copyWith(
+                            color: AppColors.text,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        SizedBox(
+                          height: 194,
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: topPopular.length,
+                            separatorBuilder: (_, __) =>
+                                const SizedBox(width: 12),
+                            itemBuilder: (_, i) {
+                              final p = topPopular[i];
+                              final img = p.coverPhotoUrl ??
+                                  'assets/images/chambre12.jpg';
+                              return _PopularCard(
+                                property: p,
+                                imagePath: img,
+                                price: _fmtFcfa(p.price),
+                                isFavorite: favs.contains(p.id),
+                                onFavoriteToggle: () =>
+                                    FavoritesStore.instance.toggle(p.id),
+                                onTap: () => _onTap(p),
+                              );
+                            },
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                      ],
+                      if (rest.isNotEmpty) ...[
+                        Text(
+                          'Tous les biens',
+                          style: AppTextStyles.regular20.copyWith(
+                            color: AppColors.text,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        ...rest.map((p) {
+                          final img = p.coverPhotoUrl ??
+                              'assets/images/chambre11.jpg';
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 12),
+                            child: RecommendedTile(
+                              imagePath: img,
+                              title: p.title,
+                              location: p.district.isNotEmpty
+                                  ? '${p.district}, ${p.city}'
+                                  : p.city,
+                              beds: p.bedrooms,
+                              baths: p.bathrooms,
+                              salons: 1,
+                              isFavorite: favs.contains(p.id),
+                              onFavoriteToggle: () =>
+                                  FavoritesStore.instance.toggle(p.id),
+                              onTap: () => _onTap(p),
+                            ),
+                          );
+                        }),
+                      ],
+                    ],
                   ),
-                  const SizedBox(height: 12),
-                  SizedBox(
-                    height: 194,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      itemCount: topPopular.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 12),
-                      itemBuilder: (_, i) {
-                        final p = topPopular[i];
-                        final img =
-                            p.coverPhotoUrl ?? 'assets/images/chambre12.jpg';
-                        return _PopularCard(
-                          property: p,
-                          imagePath: img,
-                          price: _fmtFcfa(p.price),
-                          isFavorite: favs.contains(p.id),
-                          onFavoriteToggle: () =>
-                              FavoritesStore.instance.toggle(p.id),
-                          onTap: () => onItemTap(p),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
-                if (rest.isNotEmpty) ...[
-                  Text(
-                    'Tous les biens',
-                    style: AppTextStyles.regular20.copyWith(
-                      color: AppColors.text,
-                      fontSize: 15,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ...rest.map((p) {
-                    final img =
-                        p.coverPhotoUrl ?? 'assets/images/chambre11.jpg';
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: RecommendedTile(
-                        imagePath: img,
-                        title: p.title,
-                        location: p.district.isNotEmpty
-                            ? '${p.district}, ${p.city}'
-                            : p.city,
-                        beds: p.bedrooms,
-                        baths: p.bathrooms,
-                        salons: 1,
-                        isFavorite: favs.contains(p.id),
-                        onFavoriteToggle: () =>
-                            FavoritesStore.instance.toggle(p.id),
-                        onTap: () => onItemTap(p),
-                      ),
-                    );
-                  }),
-                ],
-              ],
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }
+
+// ─── Popular card ─────────────────────────────────────────────────────────────
 
 class _PopularCard extends StatelessWidget {
   const _PopularCard({

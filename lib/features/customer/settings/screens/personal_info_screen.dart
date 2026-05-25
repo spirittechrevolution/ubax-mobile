@@ -254,7 +254,7 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
               padding: const EdgeInsets.symmetric(horizontal: 14),
               child: Container(
                 padding: const EdgeInsets.all(20),
-                height: 430,
+                height: 390,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(18),
@@ -266,11 +266,11 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                     _Label(text: 'Nom'),
                     const SizedBox(height: 8),
                     _PillField(controller: _nameController),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     _Label(text: 'Email'),
                     const SizedBox(height: 6),
                     _PillField(controller: _emailController),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 30),
                     _Label(text: 'Numéro de téléphone'),
                     const SizedBox(height: 6),
                     BlocBuilder<AuthBloc, AuthState>(
@@ -304,8 +304,8 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                                   const SizedBox(width: 8),
                                   Text(
                                     country.dialCode,
-                                    style: AppTextStyles.regularlight16
-                                        .copyWith(
+                                    style:
+                                        AppTextStyles.regularlight16.copyWith(
                                       fontFamily: 'Lexend',
                                       fontSize: 13,
                                       fontWeight: FontWeight.w400,
@@ -328,43 +328,43 @@ class _PersonalInfoScreenState extends State<PersonalInfoScreen> {
                         );
                       },
                     ),
-                    const SizedBox(height: 20),
-                    _Label(text: 'Documents d\'identité'),
-                    const SizedBox(height: 6),
-                    Container(
-                      height: 52,
-                      padding: const EdgeInsets.only(left: 18, right: 6),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFFECF2F7),
-                        borderRadius: BorderRadius.circular(25),
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Téléverser vos documents',
-                              style: AppTextStyles.regularlight16.copyWith(
-                                fontFamily: 'Lexend',
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.text,
-                              ),
-                            ),
-                          ),
-                          Container(
-                            width: 40,
-                            height: 40,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            alignment: Alignment.center,
-                            child: const Icon(Icons.upload_rounded,
-                                color: AppColors.dark, size: 20),
-                          ),
-                        ],
-                      ),
-                    ),
+                    // const SizedBox(height: 20),
+                    // _Label(text: 'Documents d\'identité'),
+                    // const SizedBox(height: 6),
+                    // Container(
+                    //   height: 52,
+                    //   padding: const EdgeInsets.only(left: 18, right: 6),
+                    //   decoration: BoxDecoration(
+                    //     color: const Color(0xFFECF2F7),
+                    //     borderRadius: BorderRadius.circular(25),
+                    //   ),
+                    //   child: Row(
+                    //     children: [
+                    //       Expanded(
+                    //         child: Text(
+                    //           'Téléverser vos documents',
+                    //           style: AppTextStyles.regularlight16.copyWith(
+                    //             fontFamily: 'Lexend',
+                    //             fontSize: 12,
+                    //             fontWeight: FontWeight.w400,
+                    //             color: AppColors.text,
+                    //           ),
+                    //         ),
+                    //       ),
+                    //       Container(
+                    //         width: 40,
+                    //         height: 40,
+                    //         decoration: const BoxDecoration(
+                    //           color: Colors.white,
+                    //           shape: BoxShape.circle,
+                    //         ),
+                    //         alignment: Alignment.center,
+                    //         child: const Icon(Icons.upload_rounded,
+                    //             color: AppColors.dark, size: 20),
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                   ],
                 ),
               ),

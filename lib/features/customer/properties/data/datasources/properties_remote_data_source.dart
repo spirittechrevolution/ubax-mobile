@@ -86,4 +86,30 @@ class PropertiesRemoteDataSource {
       throw ApiException.fromDio(e);
     }
   }
+
+  Future<PropertyDetailResponse> getPropertyDetails(String propertyId) async {
+    try {
+      final response = await _dio.get(ApiEndpoints.propertyById(propertyId));
+      final raw =
+          (response.data as Map<String, dynamic>)['data'] as Map<String, dynamic>;
+
+      final propertyMap = raw['property'] as Map<String, dynamic>;
+      final property = PropertyItem.fromJson(propertyMap);
+
+      final mediaRaw = raw['media'];
+      final List<PropertyMedia> media;
+      if (mediaRaw is List) {
+        media = mediaRaw
+            .whereType<Map<String, dynamic>>()
+            .map(PropertyMedia.fromJson)
+            .toList(growable: false);
+      } else {
+        media = const [];
+      }
+
+      return PropertyDetailResponse(property: property, media: media);
+    } on DioException catch (e) {
+      throw ApiException.fromDio(e);
+    }
+  }
 }

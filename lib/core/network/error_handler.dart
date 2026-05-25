@@ -62,6 +62,23 @@ abstract final class AppErrors {
       return 'Les mots de passe ne correspondent pas.';
     }
 
+    // Réservation
+    if (_any(msg, ['propertyid', 'property id', 'property not found',
+        'bien introuvable'])) {
+      return 'Bien introuvable ou non disponible à la réservation.';
+    }
+    if (_any(msg, ['checkindate', 'checkoutdate', 'date invalide',
+        'date in the past', 'past date', 'future date'])) {
+      return 'Les dates sélectionnées sont invalides. Choisissez des dates futures.';
+    }
+    if (_any(msg, ['overlap', 'already booked', 'not available',
+        'non disponible', 'chevauchement'])) {
+      return 'Ce bien n\'est pas disponible pour ces dates. Essayez d\'autres dates.';
+    }
+    if (_any(msg, ['guestcount', 'guest count', 'nombre d\'invités'])) {
+      return 'Le nombre de personnes doit être d\'au moins 1.';
+    }
+
     // Bailleur / demande
     if (_any(msg, ['already applied', 'already submitted', 'application exists',
         'demande existe', 'already a bailleur'])) {

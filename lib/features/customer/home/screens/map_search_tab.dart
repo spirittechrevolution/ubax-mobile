@@ -122,7 +122,8 @@ class _MapSearchTabState extends State<MapSearchTab> {
   void _toggleFavorite(String propertyId) {
     FavoritesStore.instance.toggle(propertyId);
     setState(() {
-      _favoriteStates[propertyId] = FavoritesStore.instance.isFavorite(propertyId);
+      _favoriteStates[propertyId] =
+          FavoritesStore.instance.isFavorite(propertyId);
     });
   }
 
@@ -186,7 +187,9 @@ class _MapSearchTabState extends State<MapSearchTab> {
                   beds: 6,
                   baths: 4,
                   salons: 2,
-                  isFavorite: _favoriteStates['map-${selected.title}-${selected.location}'] ?? false,
+                  isFavorite: _favoriteStates[
+                          'map-${selected.title}-${selected.location}'] ??
+                      false,
                   onFavoriteToggle: () => _toggleFavorite(
                     'map-${selected.title}-${selected.location}',
                   ),
@@ -506,7 +509,7 @@ class _MapOverlayState extends State<_MapOverlay>
                     //     ),
                     //   ),
                     // ),
-                    // Avatar (center) — white ring + photo, sits on inner radius
+                    // Avatar (center) — orange ring + photo
                     Positioned(
                       left: center.dx - 98 / 2,
                       top: center.dy - 98 / 2,
@@ -514,7 +517,6 @@ class _MapOverlayState extends State<_MapOverlay>
                         width: 98,
                         height: 98,
                         alignment: Alignment.center,
-                        // Outer orange ring
                         decoration: BoxDecoration(
                           color: AppColors.primary,
                           shape: BoxShape.circle,
@@ -526,51 +528,40 @@ class _MapOverlayState extends State<_MapOverlay>
                             ),
                           ],
                         ),
-                        child: Container(
-                          width: 86,
-                          height: 86,
-                          alignment: Alignment.center,
-                          // white ring
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          padding: const EdgeInsets.all(6),
-                          child: BlocBuilder<AuthBloc, AuthState>(
-                            buildWhen: (prev, next) =>
-                                prev.currentUser?.avatarUrl !=
-                                next.currentUser?.avatarUrl,
-                            builder: (context, state) {
-                              final rawUrl = state.currentUser?.avatarUrl;
-                              final hasUrl =
-                                  rawUrl != null && rawUrl.trim().isNotEmpty;
-                              final cacheKey = (state.currentUser?.updatedAt ??
-                                  state.currentUser?.userId ??
-                                  '');
-                              final url = rawUrl ?? '';
-                              final cacheBustedUrl = hasUrl
-                                  ? (url.contains('?')
-                                      ? '$url&v=$cacheKey'
-                                      : '$url?v=$cacheKey')
-                                  : null;
+                        child: BlocBuilder<AuthBloc, AuthState>(
+                          buildWhen: (prev, next) =>
+                              prev.currentUser?.avatarUrl !=
+                              next.currentUser?.avatarUrl,
+                          builder: (context, state) {
+                            final rawUrl = state.currentUser?.avatarUrl;
+                            final hasUrl =
+                                rawUrl != null && rawUrl.trim().isNotEmpty;
+                            final cacheKey = (state.currentUser?.updatedAt ??
+                                state.currentUser?.userId ??
+                                '');
+                            final url = rawUrl ?? '';
+                            final cacheBustedUrl = hasUrl
+                                ? (url.contains('?')
+                                    ? '$url&v=$cacheKey'
+                                    : '$url?v=$cacheKey')
+                                : null;
 
-                              return CircleAvatar(
-                                radius: 37,
-                                backgroundColor: const Color(0xFFD0DDE8),
-                                backgroundImage: hasUrl
-                                    ? NetworkImage(cacheBustedUrl!)
-                                        as ImageProvider
-                                    : null,
-                                child: hasUrl
-                                    ? null
-                                    : const Icon(
-                                        Icons.person,
-                                        color: Colors.white,
-                                        size: 30,
-                                      ),
-                              );
-                            },
-                          ),
+                            return CircleAvatar(
+                              radius: 37,
+                              backgroundColor: const Color(0xFFD0DDE8),
+                              backgroundImage: hasUrl
+                                  ? NetworkImage(cacheBustedUrl!)
+                                      as ImageProvider
+                                  : null,
+                              child: hasUrl
+                                  ? null
+                                  : const Icon(
+                                      Icons.person,
+                                      color: Colors.white,
+                                      size: 30,
+                                    ),
+                            );
+                          },
                         ),
                       ),
                     ),
@@ -610,8 +601,8 @@ class _MapOverlayState extends State<_MapOverlay>
     required bool selected,
     required VoidCallback onTap,
   }) {
-    const pinW = 50.0;
-    const pinH = 64.0;
+    const pinW = 58.0;
+    const pinH = 72.0;
     // Pin tip (dx, dy) maps to (center + dx, center + dy).
     final tipX = center.dx + dx;
     final tipY = center.dy + dy;
@@ -665,8 +656,8 @@ class _Pin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 50,
-      height: 64,
+      width: 58,
+      height: 72,
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
@@ -675,28 +666,28 @@ class _Pin extends StatelessWidget {
               child: Opacity(
                 opacity: 0.18,
                 child: CustomPaint(
-                  size: const Size(50, 64),
+                  size: const Size(58, 72),
                   painter: _PinPainter(color: AppColors.primary),
                 ),
               ),
             ),
           // Teardrop background
           CustomPaint(
-            size: const Size(50, 64),
+            size: const Size(58, 72),
             painter: _PinPainter(
                 color: selected ? AppColors.primary : AppColors.dark),
           ),
           // Image disc with white + orange rings
           Positioned(
-            top: 6,
+            top: 4,
             child: Container(
-              width: 44,
-              height: 44,
+              width: 48,
+              height: 52,
               alignment: Alignment.center,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.primary,
-                boxShadow: const [
+                boxShadow: [
                   BoxShadow(
                     color: Color(0x22000000),
                     blurRadius: 6,

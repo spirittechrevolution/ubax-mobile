@@ -210,16 +210,16 @@ class _SignupFormScreenState extends State<SignupFormScreen> {
                                     keyboardType: TextInputType.emailAddress,
                                   ),
                                 ),
-                                const SizedBox(width: 12),
-                                Expanded(
-                                  child: _DropdownField(
-                                    value: _accountType,
-                                    items: const ['Particulier'],
-                                    onChanged: (v) =>
-                                        setState(() => _accountType = v),
-                                    hint: 'auth.account_type'.tr(),
-                                  ),
-                                ),
+                                // const SizedBox(width: 12),
+                                // Expanded(
+                                //   child: _DropdownField(
+                                //     value: _accountType,
+                                //     items: const ['Particulier'],
+                                //     onChanged: (v) =>
+                                //         setState(() => _accountType = v),
+                                //     hint: 'auth.account_type'.tr(),
+                                //   ),
+                                // ),
                               ],
                             ),
                             const SizedBox(height: 12),

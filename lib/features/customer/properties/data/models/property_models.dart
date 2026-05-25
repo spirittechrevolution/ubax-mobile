@@ -1,13 +1,62 @@
+class PropertyMedia {
+  PropertyMedia({
+    required this.id,
+    required this.fileUrl,
+    required this.mediaType,
+    required this.cover,
+    required this.sortOrder,
+  });
+
+  final String id;
+  final String fileUrl;
+  final String mediaType;
+  final bool cover;
+  final int sortOrder;
+
+  factory PropertyMedia.fromJson(Map<String, dynamic> json) {
+    return PropertyMedia(
+      id: (json['id'] ?? '').toString(),
+      fileUrl: (json['fileUrl'] ?? '').toString(),
+      mediaType: (json['mediaType'] ?? '').toString(),
+      cover: json['cover'] == true,
+      sortOrder: (json['sortOrder'] is int)
+          ? json['sortOrder'] as int
+          : int.tryParse(json['sortOrder']?.toString() ?? '') ?? 0,
+    );
+  }
+}
+
+class PropertyDetailResponse {
+  PropertyDetailResponse({required this.property, required this.media});
+
+  final PropertyItem property;
+  final List<PropertyMedia> media;
+
+  List<String> get photoUrls {
+    final photos = media.where((m) => m.mediaType == 'PHOTO').toList()
+      ..sort((a, b) {
+        if (a.cover && !b.cover) return -1;
+        if (!a.cover && b.cover) return 1;
+        return a.sortOrder.compareTo(b.sortOrder);
+      });
+    return photos.map((m) => m.fileUrl).where((u) => u.isNotEmpty).toList();
+  }
+}
+
 class PropertyAmenity {
-  PropertyAmenity({required this.id, required this.code});
+  PropertyAmenity({required this.id, required this.code, this.description});
 
   final String id;
   final String code;
+  final String? description;
 
   factory PropertyAmenity.fromJson(Map<String, dynamic> json) {
     return PropertyAmenity(
       id: (json['id'] ?? '').toString(),
       code: (json['code'] ?? '').toString(),
+      description: (json['description'] ?? '').toString().trim().isEmpty
+          ? null
+          : (json['description'] ?? '').toString(),
     );
   }
 }

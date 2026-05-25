@@ -18,18 +18,8 @@ String _fmt(int value) {
 }
 
 const _kMonths = [
-  'Janvier',
-  'Février',
-  'Mars',
-  'Avril',
-  'Mai',
-  'Juin',
-  'Juillet',
-  'Août',
-  'Septembre',
-  'Octobre',
-  'Novembre',
-  'Décembre',
+  'Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin',
+  'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre',
 ];
 
 String _formatDate(DateTime d) => '${d.day} ${_kMonths[d.month - 1]} ${d.year}';
@@ -42,6 +32,7 @@ class HotelReservationDetailsScreen extends StatefulWidget {
     required this.location,
     required this.price,
     required this.rating,
+    this.propertyId = '',
   });
 
   final String imagePath;
@@ -49,6 +40,7 @@ class HotelReservationDetailsScreen extends StatefulWidget {
   final String location;
   final int price;
   final double rating;
+  final String propertyId;
 
   @override
   State<HotelReservationDetailsScreen> createState() =>
@@ -57,72 +49,66 @@ class HotelReservationDetailsScreen extends StatefulWidget {
 
 class _HotelReservationDetailsScreenState
     extends State<HotelReservationDetailsScreen> {
-  DateTime _arrival = DateTime(2026, 3, 15);
-  DateTime _departure = DateTime(2026, 3, 18);
+  late DateTime _arrival;
+  late DateTime _departure;
   int _guests = 1;
+  final _notesController = TextEditingController();
 
-  String _paymentMethod = 'Visa';
-  String _paymentTitle = 'carte visa';
-  String _paymentMask = '******6587';
+  @override
+  void initState() {
+    super.initState();
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    _arrival = DateTime(tomorrow.year, tomorrow.month, tomorrow.day);
+    _departure = _arrival.add(const Duration(days: 1));
+  }
+
+  @override
+  void dispose() {
+    _notesController.dispose();
+    super.dispose();
+  }
 
   int get _nights => _departure.difference(_arrival).inDays.clamp(1, 365);
-  int get _totalNights => _nights * widget.price;
-  int get _adminFees => 2000;
-  int get _totalPayment => _totalNights + _adminFees;
+  int get _totalAmount => _nights * widget.price;
 
-  Future<void> _openCalendar() async {
+  Future<void> _openArrivalPicker() async {
+    final firstDate = DateTime.now().add(const Duration(days: 1));
     final result = await showDialog<List<DateTime>>(
       context: context,
       builder: (_) => HotelCalendarDialog(
         initialStart: _arrival,
-        initialEnd: _departure,
+        firstDate: firstDate,
+        singleDate: true,
       ),
     );
-    if (result != null && result.length == 2) {
+    if (result != null && result.isNotEmpty) {
       setState(() {
         _arrival = result[0];
-        _departure = result[1];
+        if (!_departure.isAfter(_arrival)) {
+          _departure = _arrival.add(const Duration(days: 1));
+        }
       });
     }
   }
 
-  Future<void> _openPaymentMethodSheet() async {
-    final result = await showModalBottomSheet<String>(
+  Future<void> _openDeparturePicker() async {
+    final firstDate = _arrival.add(const Duration(days: 1));
+    final result = await showDialog<List<DateTime>>(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => HotelPaymentMethodSheet(currentMethod: _paymentMethod),
+      builder: (_) => HotelCalendarDialog(
+        initialStart: _departure,
+        firstDate: firstDate,
+        singleDate: true,
+      ),
     );
-    if (result == null) return;
-    setState(() {
-      _paymentMethod = result;
-      switch (result) {
-        case 'Wave':
-          _paymentTitle = 'Wave';
-          _paymentMask = '******1234';
-          break;
-        case 'Orange Money':
-          _paymentTitle = 'Orange Money';
-          _paymentMask = '******5678';
-          break;
-        case 'MTN':
-          _paymentTitle = 'MTN';
-          _paymentMask = '******9012';
-          break;
-        case 'Visa':
-          _paymentTitle = 'carte visa';
-          _paymentMask = '******6587';
-          break;
-        case 'Master Card':
-          _paymentTitle = 'Master Card';
-          _paymentMask = '******3456';
-          break;
-        default:
-          _paymentTitle = result;
-          _paymentMask = '';
-      }
-    });
+    if (result != null && result.isNotEmpty) {
+      setState(() => _departure = result[0]);
+    }
   }
+
+  bool get _isValid =>
+      _departure.isAfter(_arrival) &&
+      _arrival.isAfter(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +123,7 @@ class _HotelReservationDetailsScreenState
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
-          'Détails de la reservation',
+          'Demande de réservation',
           style: AppTextStyles.sectionTitle.copyWith(
             color: AppColors.text,
             fontSize: 15,
@@ -148,47 +134,61 @@ class _HotelReservationDetailsScreenState
       ),
       body: Column(
         children: [
-          SizedBox(
-            height: 20,
-          ),
+          const SizedBox(height: 12),
           Expanded(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 18),
-              child: Container(
-                height: 521,
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _sectionTitle('Date'),
-                    const SizedBox(height: 12),
-                    Row(
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 18),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // ── Dates
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: _DatePill(
-                            label: 'Arrivée',
-                            date: _formatDate(_arrival),
-                            onTap: _openCalendar,
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: _DatePill(
-                            label: 'Départ',
-                            date: _formatDate(_departure),
-                            onTap: _openCalendar,
-                          ),
+                        _sectionTitle('Date'),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: _DatePill(
+                                label: 'Arrivée',
+                                date: _formatDate(_arrival),
+                                onTap: _openArrivalPicker,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: _DatePill(
+                                label: 'Départ',
+                                date: _formatDate(_departure),
+                                onTap: _openDeparturePicker,
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                    const SizedBox(height: 30),
-                    Row(
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // ── Guests
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 18, vertical: 14),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
                       children: [
-                        _sectionTitle('Invité'),
+                        _sectionTitle('Invités'),
                         const Spacer(),
                         _CounterButton(
                           icon: Icons.remove,
@@ -198,7 +198,8 @@ class _HotelReservationDetailsScreenState
                           },
                         ),
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 14),
+                          padding:
+                              const EdgeInsets.symmetric(horizontal: 14),
                           child: Text(
                             '$_guests',
                             style: AppTextStyles.sectionTitle.copyWith(
@@ -215,41 +216,92 @@ class _HotelReservationDetailsScreenState
                         ),
                       ],
                     ),
-                    const SizedBox(height: 22),
-                    _sectionTitle('Payé avec'),
-                    const SizedBox(height: 12),
-                    _PaymentMethodTile(
-                      title: _paymentTitle,
-                      mask: _paymentMask,
-                      onEdit: _openPaymentMethodSheet,
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // ── Notes
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    const SizedBox(height: 30),
-                    _sectionTitle('Détails du paiement'),
-                    const SizedBox(height: 12),
-                    _PayRow(
-                      label: 'Total : $_nights Nuités',
-                      value: '${_fmt(_totalNights)} Fcfa',
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _sectionTitle('Demandes spéciales (optionnel)'),
+                        const SizedBox(height: 10),
+                        TextField(
+                          controller: _notesController,
+                          maxLines: 4,
+                          maxLength: 1000,
+                          style: AppTextStyles.regular12.copyWith(
+                            color: AppColors.text,
+                            fontSize: 13,
+                          ),
+                          decoration: InputDecoration(
+                            hintText:
+                                'Ex: lit king-size, étage élevé, arrivée tardive…',
+                            hintStyle: AppTextStyles.regular12.copyWith(
+                              color: AppColors.muted,
+                              fontSize: 12,
+                            ),
+                            filled: true,
+                            fillColor: const Color(0xFFECF2F7),
+                            border: OutlineInputBorder(
+                              borderSide: BorderSide.none,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            contentPadding: const EdgeInsets.all(14),
+                            counterStyle: AppTextStyles.regular12.copyWith(
+                              color: AppColors.muted,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 10),
-                    _PayRow(
-                      label: 'Frais administratifs',
-                      value: '${_fmt(_adminFees)} Fcfa',
+                  ),
+
+                  const SizedBox(height: 14),
+
+                  // ── Price recap
+                  Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 10),
-                      child: Divider(color: Color(0xFFE5E7EB), height: 1),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _sectionTitle('Récapitulatif'),
+                        const SizedBox(height: 12),
+                        _PayRow(
+                          label:
+                              '${_fmt(widget.price)} Fcfa × $_nights nuit${_nights > 1 ? 's' : ''}',
+                          value: '${_fmt(_totalAmount)} Fcfa',
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 10),
+                          child:
+                              Divider(color: Color(0xFFE5E7EB), height: 1),
+                        ),
+                        _PayRow(
+                          label: 'Total estimé',
+                          value: '${_fmt(_totalAmount)} Fcfa',
+                          isBold: true,
+                        ),
+                      ],
                     ),
-                    _PayRow(
-                      label: 'Paiement totale:',
-                      value: '${_fmt(_totalPayment)} Fcfa',
-                      isBold: true,
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          // Suivant
+
+          // ── Suivant
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 6, 18, 18),
             child: SafeArea(
@@ -266,28 +318,30 @@ class _HotelReservationDetailsScreenState
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => HotelReservationSummaryScreen(
-                          imagePath: widget.imagePath,
-                          name: widget.name,
-                          location: widget.location,
-                          price: widget.price,
-                          rating: widget.rating,
-                          arrivalDate: _arrival,
-                          departureDate: _departure,
-                          guestCount: _guests,
-                          totalNights: _totalNights,
-                          adminFees: _adminFees,
-                          totalPayment: _totalPayment,
-                          nights: _nights,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: _isValid
+                      ? () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (_) => HotelReservationSummaryScreen(
+                                imagePath: widget.imagePath,
+                                name: widget.name,
+                                location: widget.location,
+                                price: widget.price,
+                                rating: widget.rating,
+                                arrivalDate: _arrival,
+                                departureDate: _departure,
+                                guestCount: _guests,
+                                nights: _nights,
+                                totalAmount: _totalAmount,
+                                notes: _notesController.text.trim(),
+                                propertyId: widget.propertyId,
+                              ),
+                            ),
+                          );
+                        }
+                      : null,
                   child: Text(
-                    'Suivant',
+                    'Voir le récapitulatif',
                     style: AppTextStyles.button.copyWith(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -302,16 +356,14 @@ class _HotelReservationDetailsScreenState
     );
   }
 
-  Widget _sectionTitle(String text) {
-    return Text(
-      text,
-      style: AppTextStyles.sectionTitle.copyWith(
-        color: AppColors.text,
-        fontSize: 14,
-        fontWeight: FontWeight.w400,
-      ),
-    );
-  }
+  Widget _sectionTitle(String text) => Text(
+        text,
+        style: AppTextStyles.sectionTitle.copyWith(
+          color: AppColors.text,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      );
 }
 
 // ─── Date pill ───────────────────────────────────────────────────────────────
@@ -333,7 +385,6 @@ class _DatePill extends StatelessWidget {
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Container(
-        width: 165,
         height: 85,
         padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
         decoration: BoxDecoration(
@@ -352,7 +403,7 @@ class _DatePill extends StatelessWidget {
                   label,
                   style: AppTextStyles.sectionTitle.copyWith(
                     color: AppColors.text,
-                    fontSize: 16,
+                    fontSize: 13,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
@@ -363,8 +414,8 @@ class _DatePill extends StatelessWidget {
               date,
               style: AppTextStyles.regular12.copyWith(
                 color: AppColors.text,
-                fontSize: 14,
-                fontWeight: FontWeight.w400,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -409,94 +460,7 @@ class _CounterButton extends StatelessWidget {
   }
 }
 
-// ─── Payment method tile ─────────────────────────────────────────────────────
-
-class _PaymentMethodTile extends StatelessWidget {
-  const _PaymentMethodTile({
-    required this.title,
-    required this.mask,
-    required this.onEdit,
-  });
-
-  final String title;
-  final String mask;
-  final VoidCallback onEdit;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(10, 10, 14, 10),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF7FAFC),
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 36,
-            height: 36,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFFEDF2F7),
-            ),
-            alignment: Alignment.center,
-            child: const Icon(Icons.account_balance_wallet_outlined,
-                color: AppColors.dark, size: 18),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  title,
-                  style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.text,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                if (mask.isNotEmpty) ...[
-                  const SizedBox(height: 2),
-                  Text(
-                    mask,
-                    style: AppTextStyles.regular12.copyWith(
-                      color: AppColors.text,
-                      fontSize: 10,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ),
-          GestureDetector(
-            onTap: onEdit,
-            child: Container(
-              height: 30,
-              padding: const EdgeInsets.symmetric(horizontal: 18),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: AppColors.primary, width: 1),
-              ),
-              alignment: Alignment.center,
-              child: Text(
-                'Edit',
-                style: AppTextStyles.regular12.copyWith(
-                  color: AppColors.primary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// ─── Payment row ─────────────────────────────────────────────────────────────
+// ─── Pay row ─────────────────────────────────────────────────────────────────
 
 class _PayRow extends StatelessWidget {
   const _PayRow({
@@ -525,9 +489,9 @@ class _PayRow extends StatelessWidget {
         Text(
           value,
           style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.text,
+            color: isBold ? AppColors.primary : AppColors.text,
             fontSize: 13,
-            fontWeight: isBold ? FontWeight.w500 : FontWeight.w300,
+            fontWeight: isBold ? FontWeight.w600 : FontWeight.w300,
           ),
         ),
       ],

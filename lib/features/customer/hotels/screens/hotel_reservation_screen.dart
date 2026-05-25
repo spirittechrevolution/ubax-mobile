@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:statefulclickcounter/core/network/error_handler.dart';
+import 'package:statefulclickcounter/features/customer/hotels/data/models/reservation_models.dart';
+import 'package:statefulclickcounter/features/customer/hotels/domain/repositories/reservation_repository.dart';
+import 'package:statefulclickcounter/features/customer/profile/screens/reservations_screen.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
 
@@ -30,11 +35,13 @@ const _kMonths = [
   'Décembre',
 ];
 
-String _formatDate(DateTime d) {
-  return '${d.day} ${_kMonths[d.month - 1]} ${d.year}';
-}
+String _formatDateFull(DateTime d) =>
+    '${d.day} ${_kMonths[d.month - 1]} ${d.year}';
 
-// ─── Screen 1: HotelReservationScreen ────────────────────────────────────────
+String _isoDate(DateTime d) =>
+    '${d.year}-${d.month.toString().padLeft(2, '0')}-${d.day.toString().padLeft(2, '0')}';
+
+// ─── Screen 1: HotelReservationScreen (kept for backward compat) ──────────────
 
 class HotelReservationScreen extends StatefulWidget {
   const HotelReservationScreen({
@@ -44,6 +51,7 @@ class HotelReservationScreen extends StatefulWidget {
     required this.location,
     required this.price,
     required this.rating,
+    this.propertyId = '',
   });
 
   final String imagePath;
@@ -51,68 +59,43 @@ class HotelReservationScreen extends StatefulWidget {
   final String location;
   final int price;
   final double rating;
+  final String propertyId;
 
   @override
   State<HotelReservationScreen> createState() => _HotelReservationScreenState();
 }
 
 class _HotelReservationScreenState extends State<HotelReservationScreen> {
-  DateTime _arrivalDate = DateTime(2026, 3, 15);
-  DateTime _departureDate = DateTime(2026, 3, 18);
+  late DateTime _arrivalDate;
+  late DateTime _departureDate;
   int _guestCount = 1;
-  String _paymentMethod = 'Master Card';
-  String _paymentDisplay = 'carte visa ******6587';
+
+  @override
+  void initState() {
+    super.initState();
+    final tomorrow = DateTime.now().add(const Duration(days: 1));
+    _arrivalDate = DateTime(tomorrow.year, tomorrow.month, tomorrow.day);
+    _departureDate = _arrivalDate.add(const Duration(days: 1));
+  }
 
   int get _nights =>
       _departureDate.difference(_arrivalDate).inDays.clamp(1, 365);
-
-  int get _totalNights => _nights * widget.price;
-
-  int get _adminFees => 2000;
-
-  int get _totalPayment => _totalNights + _adminFees;
+  int get _totalAmount => _nights * widget.price;
 
   void _openCalendar() async {
+    final firstDate = DateTime.now().add(const Duration(days: 1));
     final result = await showDialog<List<DateTime>>(
       context: context,
       builder: (_) => HotelCalendarDialog(
         initialStart: _arrivalDate,
         initialEnd: _departureDate,
+        firstDate: firstDate,
       ),
     );
     if (result != null && result.length == 2) {
       setState(() {
         _arrivalDate = result[0];
         _departureDate = result[1];
-      });
-    }
-  }
-
-  void _openPaymentMethodSheet() async {
-    final result = await showModalBottomSheet<String>(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (_) => HotelPaymentMethodSheet(
-        currentMethod: _paymentMethod,
-      ),
-    );
-    if (result != null) {
-      setState(() {
-        _paymentMethod = result;
-        if (result == 'Wave') {
-          _paymentDisplay = 'Wave ******1234';
-        } else if (result == 'Orange Money') {
-          _paymentDisplay = 'Orange Money ******5678';
-        } else if (result == 'MTN') {
-          _paymentDisplay = 'MTN ******9012';
-        } else if (result == 'Visa') {
-          _paymentDisplay = 'carte visa ******6587';
-        } else if (result == 'Master Card') {
-          _paymentDisplay = 'Master Card ******3456';
-        } else {
-          _paymentDisplay = result;
-        }
       });
     }
   }
@@ -146,7 +129,6 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Date card
                   GestureDetector(
                     onTap: _openCalendar,
                     child: Container(
@@ -172,29 +154,24 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      'Arrivée',
-                                      style: AppTextStyles.regular12.copyWith(
-                                        color: AppColors.text,
-                                      ),
-                                    ),
+                                    Text('Arrivée',
+                                        style: AppTextStyles.regular12
+                                            .copyWith(color: AppColors.text)),
                                     const SizedBox(height: 4),
                                     Text(
-                                      _formatDate(_arrivalDate),
-                                      style:
-                                          AppTextStyles.sectionTitle.copyWith(
-                                        color: AppColors.text,
-                                        fontSize: 14,
-                                      ),
+                                      _formatDateFull(_arrivalDate),
+                                      style: AppTextStyles.sectionTitle
+                                          .copyWith(
+                                              color: AppColors.text,
+                                              fontSize: 14),
                                     ),
                                   ],
                                 ),
                               ),
                               Container(
-                                width: 1,
-                                height: 40,
-                                color: const Color(0xFFE5E7EB),
-                              ),
+                                  width: 1,
+                                  height: 40,
+                                  color: const Color(0xFFE5E7EB)),
                               Expanded(
                                 child: Padding(
                                   padding: const EdgeInsets.only(left: 16),
@@ -202,20 +179,16 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        'Départ',
-                                        style: AppTextStyles.regular12.copyWith(
-                                          color: AppColors.text,
-                                        ),
-                                      ),
+                                      Text('Départ',
+                                          style: AppTextStyles.regular12
+                                              .copyWith(color: AppColors.text)),
                                       const SizedBox(height: 4),
                                       Text(
-                                        _formatDate(_departureDate),
-                                        style:
-                                            AppTextStyles.sectionTitle.copyWith(
-                                          color: AppColors.text,
-                                          fontSize: 14,
-                                        ),
+                                        _formatDateFull(_departureDate),
+                                        style: AppTextStyles.sectionTitle
+                                            .copyWith(
+                                                color: AppColors.text,
+                                                fontSize: 14),
                                       ),
                                     ],
                                   ),
@@ -229,10 +202,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                       ),
                     ),
                   ),
-
                   const SizedBox(height: 16),
-
-                  // ── Invité row
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
@@ -242,13 +212,9 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                     ),
                     child: Row(
                       children: [
-                        Text(
-                          'Invité',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.text,
-                            fontSize: 15,
-                          ),
-                        ),
+                        Text('Invité',
+                            style: AppTextStyles.sectionTitle
+                                .copyWith(color: AppColors.text, fontSize: 15)),
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
@@ -271,14 +237,11 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
-                          child: Text(
-                            '$_guestCount',
-                            style: const TextStyle(
-                              color: AppColors.text,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                            ),
-                          ),
+                          child: Text('$_guestCount',
+                              style: const TextStyle(
+                                  color: AppColors.text,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16)),
                         ),
                         GestureDetector(
                           onTap: () => setState(() => _guestCount++),
@@ -286,9 +249,8 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                             width: 36,
                             height: 36,
                             decoration: const BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: AppColors.primary,
-                            ),
+                                shape: BoxShape.circle,
+                                color: AppColors.primary),
                             alignment: Alignment.center,
                             child: const Icon(Icons.add,
                                 color: Colors.white, size: 18),
@@ -297,103 +259,37 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 16),
-
-                  // ── Payé avec
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      children: [
-                        const Icon(Icons.credit_card_rounded,
-                            color: AppColors.dark, size: 22),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Payé avec',
-                                style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.text,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                _paymentDisplay,
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 14,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: _openPaymentMethodSheet,
-                          child: const Text(
-                            'Edit',
-                            style: TextStyle(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
                   const SizedBox(height: 24),
-
-                  // ── Détails du paiement
-                  Text(
-                    'Détails du paiement',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.text,
-                      fontSize: 15,
-                    ),
-                  ),
+                  Text('Détails du paiement',
+                      style: AppTextStyles.sectionTitle
+                          .copyWith(color: AppColors.text, fontSize: 15)),
                   const SizedBox(height: 14),
                   _PaymentRow(
                     label: 'Total $_nights Nuitées',
-                    value: '${_fmt(_totalNights)} Fcfa',
-                  ),
-                  const SizedBox(height: 10),
-                  _PaymentRow(
-                    label: 'Frais administratifs',
-                    value: '${_fmt(_adminFees)} Fcfa',
+                    value: '${_fmt(_totalAmount)} Fcfa',
                   ),
                   const Padding(
                     padding: EdgeInsets.symmetric(vertical: 12),
                     child: Divider(color: Color(0xFFE5E7EB)),
                   ),
                   _PaymentRow(
-                    label: 'Paiement totale',
-                    value: '${_fmt(_totalPayment)} Fcfa',
+                    label: 'Total estimé',
+                    value: '${_fmt(_totalAmount)} Fcfa',
                     isBold: true,
                   ),
                 ],
               ),
             ),
           ),
-
-          // ── Bottom button
           Container(
             padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
             decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 10,
-                  offset: Offset(0, -4),
-                ),
+                    color: Color(0x14000000),
+                    blurRadius: 10,
+                    offset: Offset(0, -4))
               ],
             ),
             child: SafeArea(
@@ -407,8 +303,7 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                        borderRadius: BorderRadius.circular(50)),
                   ),
                   onPressed: () {
                     Navigator.of(context).push(
@@ -422,18 +317,14 @@ class _HotelReservationScreenState extends State<HotelReservationScreen> {
                           arrivalDate: _arrivalDate,
                           departureDate: _departureDate,
                           guestCount: _guestCount,
-                          totalNights: _totalNights,
-                          adminFees: _adminFees,
-                          totalPayment: _totalPayment,
                           nights: _nights,
+                          totalAmount: _totalAmount,
+                          propertyId: widget.propertyId,
                         ),
                       ),
                     );
                   },
-                  child: const Text(
-                    'Suivant',
-                    style: AppTextStyles.button,
-                  ),
+                  child: const Text('Suivant', style: AppTextStyles.button),
                 ),
               ),
             ),
@@ -465,7 +356,7 @@ class _PaymentRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: isBold ? Color(0xFF171725) : Color(0xFF171725),
+            color: const Color(0xFF171725),
             fontWeight: isBold ? FontWeight.w500 : FontWeight.w300,
             fontSize: 14,
           ),
@@ -473,7 +364,7 @@ class _PaymentRow extends StatelessWidget {
         Text(
           value,
           style: TextStyle(
-            color: Color(0xFF171725),
+            color: const Color(0xFF171725),
             fontWeight: isBold ? FontWeight.w500 : FontWeight.w300,
             fontSize: 14,
           ),
@@ -483,7 +374,7 @@ class _PaymentRow extends StatelessWidget {
   }
 }
 
-// ─── Screen 2: Payment Method Bottom Sheet ───────────────────────────────────
+// ─── Payment Method Bottom Sheet ─────────────────────────────────────────────
 
 class HotelPaymentMethodSheet extends StatefulWidget {
   const HotelPaymentMethodSheet({super.key, required this.currentMethod});
@@ -517,28 +408,22 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Handle
             Container(
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: const Color(0xFFD0DDE8),
-                borderRadius: BorderRadius.circular(2),
-              ),
+                  color: const Color(0xFFD0DDE8),
+                  borderRadius: BorderRadius.circular(2)),
             ),
             const SizedBox(height: 14),
-            // Title + close
             Row(
               children: [
                 Expanded(
-                  child: Text(
-                    'Selectionner votre methode de paiement',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.text,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  child: Text('Selectionner votre methode de paiement',
+                      style: AppTextStyles.sectionTitle.copyWith(
+                          color: AppColors.text,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500)),
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pop(),
@@ -547,93 +432,36 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
               ],
             ),
             const SizedBox(height: 20),
-
-            // Mobile money options
             _PaymentTile(
-              iconAsset: 'assets/icons/wave.png',
-              label: 'Wave',
-              isSelected: _selected == 'Wave',
-              onTap: () => setState(() => _selected = 'Wave'),
-            ),
+                iconAsset: 'assets/icons/wave.png',
+                label: 'Wave',
+                isSelected: _selected == 'Wave',
+                onTap: () => setState(() => _selected = 'Wave')),
             const SizedBox(height: 10),
             _PaymentTile(
-              iconAsset: 'assets/icons/orangemoney.png',
-              label: 'Orange Money',
-              isSelected: _selected == 'Orange Money',
-              onTap: () => setState(() => _selected = 'Orange Money'),
-            ),
+                iconAsset: 'assets/icons/orangemoney.png',
+                label: 'Orange Money',
+                isSelected: _selected == 'Orange Money',
+                onTap: () => setState(() => _selected = 'Orange Money')),
             const SizedBox(height: 10),
             _PaymentTile(
-              iconAsset: 'assets/icons/mtn.png',
-              label: 'MTN',
-              isSelected: _selected == 'MTN',
-              onTap: () => setState(() => _selected = 'MTN'),
-            ),
-
-            const SizedBox(height: 10),
-
-            // Card options
-            _PaymentTile(
-              iconAsset: 'assets/icons/Visa.png',
-              label: 'Visa',
-              isSelected: _selected == 'Visa',
-              onTap: () => setState(() => _selected = 'Visa'),
-            ),
+                iconAsset: 'assets/icons/mtn.png',
+                label: 'MTN',
+                isSelected: _selected == 'MTN',
+                onTap: () => setState(() => _selected = 'MTN')),
             const SizedBox(height: 10),
             _PaymentTile(
-              iconAsset: 'assets/icons/mastercard.png',
-              label: 'Master Card',
-              isSelected: _selected == 'Master Card',
-              onTap: () => setState(() => _selected = 'Master Card'),
-            ),
-
+                iconAsset: 'assets/icons/Visa.png',
+                label: 'Visa',
+                isSelected: _selected == 'Visa',
+                onTap: () => setState(() => _selected = 'Visa')),
             const SizedBox(height: 10),
-
-            // Add card
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const AddCardScreen()),
-                );
-              },
-              child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                decoration: BoxDecoration(
-                  color: AppColors.background,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      alignment: Alignment.center,
-                      child: const Icon(Icons.add,
-                          color: AppColors.primary, size: 20),
-                    ),
-                    const SizedBox(width: 12),
-                    const Text(
-                      'Ajouter une carte de débit',
-                      style: TextStyle(
-                        color: AppColors.text,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 13,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
+            _PaymentTile(
+                iconAsset: 'assets/icons/mastercard.png',
+                label: 'Master Card',
+                isSelected: _selected == 'Master Card',
+                onTap: () => setState(() => _selected = 'Master Card')),
             const SizedBox(height: 20),
-
-            // Choose button
             SizedBox(
               width: double.infinity,
               height: 52,
@@ -643,14 +471,10 @@ class HotelPaymentMethodSheetState extends State<HotelPaymentMethodSheet> {
                   foregroundColor: Colors.white,
                   elevation: 0,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(50),
-                  ),
+                      borderRadius: BorderRadius.circular(50)),
                 ),
                 onPressed: () => Navigator.of(context).pop(_selected),
-                child: const Text(
-                  'Choisir',
-                  style: AppTextStyles.button,
-                ),
+                child: const Text('Choisir', style: AppTextStyles.button),
               ),
             ),
           ],
@@ -690,44 +514,37 @@ class _PaymentTile extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image.asset(
-                iconAsset,
-                width: 36,
-                height: 36,
-                fit: BoxFit.contain,
-                errorBuilder: (_, __, ___) => Container(
+              child: Image.asset(iconAsset,
                   width: 36,
                   height: 36,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFD0DDE8),
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  alignment: Alignment.center,
-                  child: const Icon(Icons.payment, size: 18),
-                ),
-              ),
+                  fit: BoxFit.contain,
+                  errorBuilder: (_, __, ___) => Container(
+                        width: 36,
+                        height: 36,
+                        decoration: BoxDecoration(
+                            color: const Color(0xFFD0DDE8),
+                            borderRadius: BorderRadius.circular(8)),
+                        alignment: Alignment.center,
+                        child: const Icon(Icons.payment, size: 18),
+                      )),
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  color: AppColors.text,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
-              ),
-            ),
+                child: Text(label,
+                    style: const TextStyle(
+                        color: AppColors.text,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 13))),
             Container(
               width: 22,
               height: 22,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color:
-                      isSelected ? AppColors.primary : const Color(0xFFD0DDE8),
-                  width: 2,
-                ),
+                    color: isSelected
+                        ? AppColors.primary
+                        : const Color(0xFFD0DDE8),
+                    width: 2),
                 color: isSelected ? AppColors.primary : Colors.transparent,
               ),
               alignment: Alignment.center,
@@ -742,7 +559,7 @@ class _PaymentTile extends StatelessWidget {
   }
 }
 
-// ─── Screen 3: AddCardScreen ─────────────────────────────────────────────────
+// ─── AddCardScreen ────────────────────────────────────────────────────────────
 
 class AddCardScreen extends StatefulWidget {
   const AddCardScreen({super.key});
@@ -755,8 +572,8 @@ class _AddCardScreenState extends State<AddCardScreen> {
   final _cardNumberController =
       TextEditingController(text: '2894 - 4389 - 4432 - 9432');
   final _nameController = TextEditingController(text: 'Franck Ouattara');
-  final _expirationController = TextEditingController(text: '');
-  final _cvvController = TextEditingController(text: '');
+  final _expirationController = TextEditingController();
+  final _cvvController = TextEditingController();
 
   @override
   void dispose() {
@@ -779,13 +596,9 @@ class _AddCardScreenState extends State<AddCardScreen> {
               color: AppColors.dark, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Ajouter une carte',
-          style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.text,
-            fontSize: 17,
-          ),
-        ),
+        title: Text('Ajouter une carte',
+            style: AppTextStyles.sectionTitle
+                .copyWith(color: AppColors.text, fontSize: 17)),
         centerTitle: true,
       ),
       body: Column(
@@ -796,7 +609,6 @@ class _AddCardScreenState extends State<AddCardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ── Card preview
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(24),
@@ -805,33 +617,24 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       gradient: const LinearGradient(
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
-                        colors: [
-                          Color(0xFF1A3047),
-                          Color(0xFF2C4A63),
-                        ],
+                        colors: [Color(0xFF1A3047), Color(0xFF2C4A63)],
                       ),
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Maestro Kard',
-                          style: TextStyle(
-                            color: Colors.white70,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
+                        const Text('Maestro Kard',
+                            style: TextStyle(
+                                color: Colors.white70,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500)),
                         const SizedBox(height: 24),
-                        Text(
-                          _cardNumberController.text,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 2,
-                          ),
-                        ),
+                        Text(_cardNumberController.text,
+                            style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 2)),
                         const SizedBox(height: 24),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -839,24 +642,18 @@ class _AddCardScreenState extends State<AddCardScreen> {
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Prenom',
-                                  style: TextStyle(
-                                    color: Colors.white54,
-                                    fontSize: 11,
-                                  ),
-                                ),
+                                const Text('Prenom',
+                                    style: TextStyle(
+                                        color: Colors.white54, fontSize: 11)),
                                 const SizedBox(height: 2),
                                 Text(
-                                  _nameController.text.isEmpty
-                                      ? 'Prenom'
-                                      : _nameController.text,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
+                                    _nameController.text.isEmpty
+                                        ? 'Prenom'
+                                        : _nameController.text,
+                                    style: const TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600)),
                               ],
                             ),
                             Row(
@@ -865,7 +662,6 @@ class _AddCardScreenState extends State<AddCardScreen> {
                                 (i) => Container(
                                   width: 28,
                                   height: 28,
-                                  margin: EdgeInsets.only(left: i == 0 ? 0 : 0),
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle,
                                     color: i == 0
@@ -880,105 +676,19 @@ class _AddCardScreenState extends State<AddCardScreen> {
                       ],
                     ),
                   ),
-
-                  const SizedBox(height: 28),
-
-                  // ── Card number field
-                  Text(
-                    'Numéro de la carte',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.text,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _cardNumberController,
-                    hint: '0000 - 0000 - 0000 - 0000',
-                    keyboardType: TextInputType.number,
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // ── Name field
-                  Text(
-                    'Prenom',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: AppColors.text,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  _buildTextField(
-                    controller: _nameController,
-                    hint: 'Nom complet',
-                  ),
-
-                  const SizedBox(height: 18),
-
-                  // ── Expiration + CVV
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Expiration',
-                              style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.text,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                              controller: _expirationController,
-                              hint: 'MM/YY',
-                              keyboardType: TextInputType.datetime,
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 14),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'CVV Code',
-                              style: AppTextStyles.sectionTitle.copyWith(
-                                color: AppColors.text,
-                                fontSize: 14,
-                              ),
-                            ),
-                            const SizedBox(height: 8),
-                            _buildTextField(
-                              controller: _cvvController,
-                              hint: '***',
-                              keyboardType: TextInputType.number,
-                              obscureText: true,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
           ),
-
-          // ── Bottom button
           Container(
             padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
             decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 10,
-                  offset: Offset(0, -4),
-                ),
+                    color: Color(0x14000000),
+                    blurRadius: 10,
+                    offset: Offset(0, -4))
               ],
             ),
             child: SafeArea(
@@ -992,16 +702,11 @@ class _AddCardScreenState extends State<AddCardScreen> {
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                        borderRadius: BorderRadius.circular(50)),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text(
-                    'Ajouter la carte',
-                    style: AppTextStyles.button,
-                  ),
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: const Text('Ajouter la carte',
+                      style: AppTextStyles.button),
                 ),
               ),
             ),
@@ -1010,65 +715,23 @@ class _AddCardScreenState extends State<AddCardScreen> {
       ),
     );
   }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String hint,
-    TextInputType? keyboardType,
-    bool obscureText = false,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
-      ),
-      child: TextField(
-        controller: controller,
-        keyboardType: keyboardType,
-        obscureText: obscureText,
-        onChanged: (_) => setState(() {}),
-        style: const TextStyle(
-          color: AppColors.text,
-          fontWeight: FontWeight.w600,
-          fontSize: 14,
-        ),
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: const TextStyle(
-            color: AppColors.text,
-            fontWeight: FontWeight.w400,
-          ),
-          contentPadding:
-              const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: Color(0xFFE5E7EB)),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
-          ),
-        ),
-      ),
-    );
-  }
 }
 
-// ─── Screen 4: Calendar Dialog ───────────────────────────────────────────────
+// ─── Calendar Dialog ──────────────────────────────────────────────────────────
 
 class HotelCalendarDialog extends StatefulWidget {
   const HotelCalendarDialog({
     super.key,
     required this.initialStart,
-    required this.initialEnd,
+    this.initialEnd,
+    this.firstDate,
+    this.singleDate = false,
   });
 
   final DateTime initialStart;
-  final DateTime initialEnd;
+  final DateTime? initialEnd;
+  final DateTime? firstDate;
+  final bool singleDate;
 
   @override
   State<HotelCalendarDialog> createState() => HotelCalendarDialogState();
@@ -1089,7 +752,20 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
     _endDate = widget.initialEnd;
   }
 
+  bool _isDisabled(DateTime date) {
+    final min = widget.firstDate;
+    if (min == null) return false;
+    final minDay = DateTime(min.year, min.month, min.day);
+    final day = DateTime(date.year, date.month, date.day);
+    return day.isBefore(minDay);
+  }
+
   void _onDayTap(DateTime day) {
+    if (_isDisabled(day)) return;
+    if (widget.singleDate) {
+      Navigator.of(context).pop([day]);
+      return;
+    }
     setState(() {
       if (!_selectingEnd || (_startDate != null && day.isBefore(_startDate!))) {
         _startDate = day;
@@ -1102,14 +778,11 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
     });
   }
 
-  int _daysInMonth(DateTime month) {
-    return DateTime(month.year, month.month + 1, 0).day;
-  }
+  int _daysInMonth(DateTime month) =>
+      DateTime(month.year, month.month + 1, 0).day;
 
-  int _firstWeekday(DateTime month) {
-    // Sunday = 0
-    return DateTime(month.year, month.month, 1).weekday % 7;
-  }
+  int _firstWeekday(DateTime month) =>
+      DateTime(month.year, month.month, 1).weekday % 7;
 
   @override
   Widget build(BuildContext context) {
@@ -1125,51 +798,33 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Title
-            Text(
-              'Selectionner Date',
-              style: AppTextStyles.sectionTitle.copyWith(
-                color: AppColors.text,
-                fontSize: 17,
-              ),
-            ),
+            Text('Selectionner Date',
+                style: AppTextStyles.sectionTitle
+                    .copyWith(color: AppColors.text, fontSize: 17)),
             const SizedBox(height: 18),
-
-            // Month navigation
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _displayMonth =
-                          DateTime(_displayMonth.year, _displayMonth.month - 1);
-                    });
-                  },
+                  onTap: () => setState(() => _displayMonth =
+                      DateTime(_displayMonth.year, _displayMonth.month - 1)),
                   child: const Icon(Icons.chevron_left,
                       color: AppColors.dark, size: 28),
                 ),
                 Text(
                   '${_kMonths[_displayMonth.month - 1]} ${_displayMonth.year}',
-                  style: AppTextStyles.sectionTitle.copyWith(
-                    color: AppColors.text,
-                  ),
+                  style: AppTextStyles.sectionTitle
+                      .copyWith(color: AppColors.text),
                 ),
                 GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _displayMonth =
-                          DateTime(_displayMonth.year, _displayMonth.month + 1);
-                    });
-                  },
+                  onTap: () => setState(() => _displayMonth =
+                      DateTime(_displayMonth.year, _displayMonth.month + 1)),
                   child: const Icon(Icons.chevron_right,
                       color: AppColors.dark, size: 28),
                 ),
               ],
             ),
             const SizedBox(height: 16),
-
-            // Weekday headers
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: const [
@@ -1183,8 +838,6 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
               ],
             ),
             const SizedBox(height: 8),
-
-            // Calendar grid
             GridView.builder(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -1195,44 +848,44 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
               ),
               itemCount: firstWeekday + daysInMonth,
               itemBuilder: (context, index) {
-                if (index < firstWeekday) {
-                  return const SizedBox();
-                }
+                if (index < firstWeekday) return const SizedBox();
                 final day = index - firstWeekday + 1;
                 final date =
                     DateTime(_displayMonth.year, _displayMonth.month, day);
+                final disabled = _isDisabled(date);
 
                 final isStart = _startDate != null &&
                     date.year == _startDate!.year &&
                     date.month == _startDate!.month &&
                     date.day == _startDate!.day;
-
                 final isEnd = _endDate != null &&
                     date.year == _endDate!.year &&
                     date.month == _endDate!.month &&
                     date.day == _endDate!.day;
-
                 final isBetween = _startDate != null &&
                     _endDate != null &&
                     date.isAfter(_startDate!) &&
                     date.isBefore(_endDate!);
 
                 Color? bgColor;
-                Color textColor = AppColors.dark;
+                Color textColor =
+                    disabled ? const Color(0xFFCBD5E1) : AppColors.dark;
 
-                if (isStart) {
-                  bgColor = AppColors.primary;
-                  textColor = Colors.white;
-                } else if (isEnd) {
-                  bgColor = const Color(0xFFE85D3A);
-                  textColor = Colors.white;
-                } else if (isBetween) {
-                  bgColor = AppColors.dark;
-                  textColor = Colors.white;
+                if (!disabled) {
+                  if (isStart) {
+                    bgColor = AppColors.primary;
+                    textColor = Colors.white;
+                  } else if (isEnd) {
+                    bgColor = const Color(0xFFE85D3A);
+                    textColor = Colors.white;
+                  } else if (isBetween) {
+                    bgColor = AppColors.dark;
+                    textColor = Colors.white;
+                  }
                 }
 
                 return GestureDetector(
-                  onTap: () => _onDayTap(date),
+                  onTap: disabled ? null : () => _onDayTap(date),
                   child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
@@ -1253,21 +906,15 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                 );
               },
             ),
-
             const SizedBox(height: 20),
-
-            // Buttons
             Row(
               children: [
                 Expanded(
                   child: TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: Text(
-                      'Annuler',
-                      style: AppTextStyles.button.copyWith(
-                        color: AppColors.primary,
-                      ),
-                    ),
+                    child: Text('Annuler',
+                        style: AppTextStyles.button
+                            .copyWith(color: AppColors.primary)),
                   ),
                 ),
                 const SizedBox(width: 12),
@@ -1280,19 +927,19 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
                         foregroundColor: Colors.white,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
+                            borderRadius: BorderRadius.circular(50)),
                       ),
-                      onPressed: (_startDate != null && _endDate != null)
-                          ? () {
-                              Navigator.of(context)
-                                  .pop([_startDate!, _endDate!]);
-                            }
+                      onPressed: _startDate != null
+                          ? () => Navigator.of(context).pop(
+                                widget.singleDate
+                                    ? [_startDate!]
+                                    : (_endDate != null
+                                        ? [_startDate!, _endDate!]
+                                        : null),
+                              )
                           : null,
-                      child: const Text(
-                        'Appliquer',
-                        style: AppTextStyles.button,
-                      ),
+                      child:
+                          const Text('Appliquer', style: AppTextStyles.button),
                     ),
                   ),
                 ),
@@ -1307,7 +954,6 @@ class HotelCalendarDialogState extends State<HotelCalendarDialog> {
 
 class _WeekdayLabel extends StatelessWidget {
   const _WeekdayLabel(this.label);
-
   final String label;
 
   @override
@@ -1317,18 +963,16 @@ class _WeekdayLabel extends StatelessWidget {
       child: Text(
         label,
         textAlign: TextAlign.center,
-        style: AppTextStyles.regular12.copyWith(
-          color: AppColors.text,
-          fontWeight: FontWeight.w600,
-        ),
+        style: AppTextStyles.regular12
+            .copyWith(color: AppColors.text, fontWeight: FontWeight.w600),
       ),
     );
   }
 }
 
-// ─── Screen 5: HotelReservationSummaryScreen ─────────────────────────────────
+// ─── Summary Screen ───────────────────────────────────────────────────────────
 
-class HotelReservationSummaryScreen extends StatelessWidget {
+class HotelReservationSummaryScreen extends StatefulWidget {
   const HotelReservationSummaryScreen({
     super.key,
     required this.imagePath,
@@ -1339,10 +983,10 @@ class HotelReservationSummaryScreen extends StatelessWidget {
     required this.arrivalDate,
     required this.departureDate,
     required this.guestCount,
-    required this.totalNights,
-    required this.adminFees,
-    required this.totalPayment,
     required this.nights,
+    required this.totalAmount,
+    this.notes = '',
+    this.propertyId = '',
   });
 
   final String imagePath;
@@ -1353,15 +997,76 @@ class HotelReservationSummaryScreen extends StatelessWidget {
   final DateTime arrivalDate;
   final DateTime departureDate;
   final int guestCount;
-  final int totalNights;
-  final int adminFees;
-  final int totalPayment;
   final int nights;
+  final int totalAmount;
+  final String notes;
+  final String propertyId;
+
+  @override
+  State<HotelReservationSummaryScreen> createState() =>
+      _HotelReservationSummaryScreenState();
+}
+
+class _HotelReservationSummaryScreenState
+    extends State<HotelReservationSummaryScreen> {
+  bool _loading = false;
+  String? _error;
+  String _paymentMethod = 'Sélectionner paiement';
+
+  Future<void> _openPaymentMethodSheet() async {
+    final result = await showModalBottomSheet<String>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (_) => HotelPaymentMethodSheet(currentMethod: _paymentMethod),
+    );
+    if (result != null && mounted) {
+      setState(() => _paymentMethod = result);
+    }
+  }
+
+  Future<void> _submit() async {
+    if (widget.propertyId.isEmpty) {
+      setState(() {
+        _error =
+            'Ce bien n\'est pas disponible à la réservation en ligne. Contactez l\'hôtel directement.';
+      });
+      return;
+    }
+    setState(() {
+      _loading = true;
+      _error = null;
+    });
+    try {
+      final repo = GetIt.instance<ReservationRepository>();
+      final response = await repo.createReservation(
+        ReservationRequest(
+          propertyId: widget.propertyId,
+          checkInDate: _isoDate(widget.arrivalDate),
+          checkOutDate: _isoDate(widget.departureDate),
+          guestCount: widget.guestCount,
+          notes: widget.notes.isEmpty ? null : widget.notes,
+        ),
+      );
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => ReservationSuccessScreen(reservation: response),
+        ),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() {
+        _error = AppErrors.translate(e);
+        _loading = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     final dateRange =
-        '${arrivalDate.day} - ${departureDate.day} ${_kMonths[departureDate.month - 1]} ${departureDate.year}';
+        '${_formatDateFull(widget.arrivalDate)} → ${_formatDateFull(widget.departureDate)}';
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -1373,13 +1078,9 @@ class HotelReservationSummaryScreen extends StatelessWidget {
               color: AppColors.dark, size: 20),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text(
-          'Resumé',
-          style: AppTextStyles.sectionTitle.copyWith(
-            color: AppColors.text,
-            fontSize: 17,
-          ),
-        ),
+        title: Text('Récapitulatif',
+            style: AppTextStyles.sectionTitle
+                .copyWith(color: AppColors.text, fontSize: 17)),
         centerTitle: true,
       ),
       body: Column(
@@ -1392,70 +1093,40 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                 children: [
                   // ── Property card
                   Container(
-                    width: 380,
-                    height: 123,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(18),
-                    ),
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(18)),
                     child: Row(
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(7.88),
+                          borderRadius: BorderRadius.circular(10),
                           child: Image.asset(
-                            imagePath,
-                            width: 108,
-                            height: 98,
+                            widget.imagePath,
+                            width: 90,
+                            height: 80,
                             fit: BoxFit.cover,
                             errorBuilder: (_, __, ___) => Container(
-                              width: 108,
-                              height: 98,
-                              color: const Color(0xFFE2E8F0),
-                            ),
+                                width: 90,
+                                height: 80,
+                                color: const Color(0xFFE2E8F0)),
                           ),
                         ),
                         const SizedBox(width: 14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              SizedBox(
-                                height: 3,
+                              Text(
+                                widget.name,
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                    color: AppColors.text,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      name,
-                                      style:
-                                          AppTextStyles.sectionTitle.copyWith(
-                                        color: AppColors.text,
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600,
-                                        height: 1.2,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 6),
-                                  const Icon(Icons.star_rounded,
-                                      color: Color(0xFFFACC15), size: 15),
-                                  const SizedBox(width: 2),
-                                  Text(
-                                    rating.toString(),
-                                    style: AppTextStyles.regular12.copyWith(
-                                      color: AppColors.text,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 6),
+                              const SizedBox(height: 4),
                               Row(
                                 children: [
                                   const Icon(Icons.location_on_outlined,
@@ -1463,52 +1134,34 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                                   const SizedBox(width: 3),
                                   Expanded(
                                     child: Text(
-                                      location,
+                                      widget.location,
                                       style: AppTextStyles.regular12.copyWith(
-                                        color: AppColors.text,
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.w400,
-                                      ),
+                                          color: AppColors.text, fontSize: 11),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
-                              const SizedBox(height: 10),
-                              Text.rich(
+                              const SizedBox(height: 6),
+                              Text.rich(TextSpan(children: [
                                 TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: '${_fmt(price)} ',
-                                      style: const TextStyle(
-                                        fontFamily: 'Lexend',
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: 14,
-                                      ),
-                                    ),
-                                    const TextSpan(
-                                      text: 'FCFA',
-                                      style: TextStyle(
-                                        fontFamily: 'Lexend',
-                                        color: AppColors.primary,
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                    const TextSpan(
-                                      text: '/ nuit',
-                                      style: TextStyle(
-                                        fontFamily: 'Lexend',
-                                        color: AppColors.text,
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 10,
-                                      ),
-                                    ),
-                                  ],
+                                  text: '${_fmt(widget.price)} ',
+                                  style: const TextStyle(
+                                      fontFamily: 'Lexend',
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: 14),
                                 ),
-                              ),
+                                const TextSpan(
+                                  text: 'FCFA / nuit',
+                                  style: TextStyle(
+                                      fontFamily: 'Lexend',
+                                      color: AppColors.text,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 11),
+                                ),
+                              ])),
                             ],
                           ),
                         ),
@@ -1516,11 +1169,14 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 18),
 
-                  // ── Votre réservation + Détails du prix (unified card)
+                  // ── Payment method
+
+                  const SizedBox(height: 18),
+
+                  // ── Reservation details
                   Container(
-                    height: 362,
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -1531,12 +1187,9 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          'Votre réservation',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.primary,
-                          ),
-                        ),
+                        Text('Votre réservation',
+                            style: AppTextStyles.sectionTitle
+                                .copyWith(color: AppColors.primary)),
                         const SizedBox(height: 14),
                         _SummaryRow(
                           icon: Icons.calendar_month_outlined,
@@ -1545,97 +1198,107 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 10),
                         _SummaryRow(
+                          icon: Icons.nights_stay_outlined,
+                          label: 'Durée',
+                          value:
+                              '${widget.nights} nuit${widget.nights > 1 ? 's' : ''}',
+                        ),
+                        const SizedBox(height: 10),
+                        _SummaryRow(
                           icon: Icons.person_outline_rounded,
-                          label: 'invité',
-                          value: '$guestCount Guests (1 Room)',
+                          label: 'Invités',
+                          value: '${widget.guestCount} '
+                              'personne${widget.guestCount > 1 ? 's' : ''}',
                         ),
-                        const SizedBox(height: 10),
-                        const _SummaryRow(
-                          icon: Icons.article_outlined,
-                          label: 'Type de chambre',
-                          value: 'Queen Room',
-                        ),
-                        const SizedBox(height: 10),
-                        const _SummaryRow(
-                          icon: Icons.phone_outlined,
-                          label: 'Téléphone',
-                          value: '+225 01 02 03 04 05',
-                        ),
-                        const SizedBox(height: 18),
-                        // Dashed divider
-                        SizedBox(
-                          width: double.infinity,
-                          height: 1,
-                          child: CustomPaint(
-                            painter: _DashedLinePainter(),
+                        if (widget.notes.isNotEmpty) ...[
+                          const SizedBox(height: 10),
+                          _SummaryRow(
+                            icon: Icons.notes_rounded,
+                            label: 'Demandes',
+                            value: widget.notes,
                           ),
-                        ),
-                        const SizedBox(height: 18),
-                        Text(
-                          'Détails du prix',
-                          style: AppTextStyles.sectionTitle.copyWith(
-                            color: AppColors.primary,
-                          ),
-                        ),
+                        ],
                         const SizedBox(height: 14),
+                        const Divider(color: Color(0xFFE5E7EB), height: 1),
+                        const SizedBox(height: 14),
+                        Text('Détails du prix',
+                            style: AppTextStyles.sectionTitle
+                                .copyWith(color: AppColors.primary)),
+                        const SizedBox(height: 12),
                         _PaymentRow(
-                          label: 'Prix',
-                          value: '${_fmt(totalNights)} Fcfa',
-                        ),
-                        const SizedBox(height: 10),
-                        _PaymentRow(
-                          label: 'frais administratifs',
-                          value: '${_fmt(adminFees)} Fcfa',
+                          label:
+                              '${_fmt(widget.price)} Fcfa × ${widget.nights} nuit${widget.nights > 1 ? 's' : ''}',
+                          value: '${_fmt(widget.totalAmount)} Fcfa',
                         ),
                         const Padding(
                           padding: EdgeInsets.symmetric(vertical: 10),
                           child: Divider(color: Color(0xFFE5E7EB), height: 1),
                         ),
                         _PaymentRow(
-                          label: 'Prix total',
-                          value: '${_fmt(totalPayment)} Fcfa',
+                          label: 'Total estimé',
+                          value: '${_fmt(widget.totalAmount)} Fcfa',
                           isBold: true,
                         ),
                       ],
                     ),
                   ),
 
-                  const SizedBox(height: 24),
-
-                  // ── Promo section
-                  Text(
-                    'Promo',
-                    style: AppTextStyles.sectionTitle.copyWith(
-                      color: Color(0xFF171725),
-                      fontSize: 15,
-                      fontWeight: FontWeight.w300,
-                    ),
-                  ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 18),
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 16, vertical: 14),
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.circular(14),
+                      border:
+                          Border.all(color: const Color(0xFFE5E7EB), width: 1),
                     ),
                     child: Row(
                       children: [
-                        const Icon(Icons.local_offer_outlined,
-                            color: Color(0xFF2563EB), size: 20),
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: AppColors.background,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          alignment: Alignment.center,
+                          child: const Icon(Icons.payment_rounded,
+                              color: AppColors.dark, size: 20),
+                        ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: Text(
-                            'Select',
-                            style: AppTextStyles.regular12.copyWith(
-                              color: const Color(0xFF2563EB),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w300,
-                            ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Méthode de paiement',
+                                style: AppTextStyles.regular12.copyWith(
+                                    color: AppColors.muted,
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.w400),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                _paymentMethod,
+                                style: AppTextStyles.sectionTitle.copyWith(
+                                    color: AppColors.text,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ],
                           ),
                         ),
-                        const Icon(Icons.chevron_right,
-                            color: AppColors.dark, size: 22),
+                        GestureDetector(
+                          onTap: _openPaymentMethodSheet,
+                          child: Text(
+                            'Modifier',
+                            style: AppTextStyles.regular12.copyWith(
+                                color: AppColors.primary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -1644,17 +1307,36 @@ class HotelReservationSummaryScreen extends StatelessWidget {
             ),
           ),
 
-          // ── Bottom button
+          // ── Error banner
+          if (_error != null)
+            Container(
+              width: double.infinity,
+              color: Colors.red.shade50,
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              child: Row(
+                children: [
+                  const Icon(Icons.error_outline, color: Colors.red, size: 18),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _error!,
+                      style: const TextStyle(color: Colors.red, fontSize: 13),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+          // ── Submit button
           Container(
             padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
             decoration: const BoxDecoration(
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Color(0x14000000),
-                  blurRadius: 10,
-                  offset: Offset(0, -4),
-                ),
+                    color: Color(0x14000000),
+                    blurRadius: 10,
+                    offset: Offset(0, -4))
               ],
             ),
             child: SafeArea(
@@ -1668,20 +1350,17 @@ class HotelReservationSummaryScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                        borderRadius: BorderRadius.circular(50)),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => const ReservationSuccessScreen(),
-                      ),
-                    );
-                  },
-                  child: const Text(
-                    'Finaliser et payer',
-                    style: AppTextStyles.button,
-                  ),
+                  onPressed: _loading ? null : _submit,
+                  child: _loading
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                              color: Colors.white, strokeWidth: 2.5),
+                        )
+                      : const Text('Soumettre', style: AppTextStyles.button),
                 ),
               ),
             ),
@@ -1693,11 +1372,7 @@ class HotelReservationSummaryScreen extends StatelessWidget {
 }
 
 class _SummaryRow extends StatelessWidget {
-  const _SummaryRow({
-    required this.label,
-    required this.value,
-    this.icon,
-  });
+  const _SummaryRow({required this.label, required this.value, this.icon});
 
   final String label;
   final String value;
@@ -1706,31 +1381,26 @@ class _SummaryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
-              Icon(icon, color: const Color(0xFF171725), size: 16),
-              const SizedBox(width: 10),
-            ],
-            Text(
-              label,
-              style: AppTextStyles.regular12.copyWith(
+        if (icon != null) ...[
+          Icon(icon, color: const Color(0xFF171725), size: 16),
+          const SizedBox(width: 10),
+        ],
+        Text(label,
+            style: AppTextStyles.regular12.copyWith(
                 color: const Color(0xFF171725),
                 fontWeight: FontWeight.w300,
-                fontSize: 13,
-              ),
-            ),
-          ],
-        ),
-        Text(
-          value,
-          style: AppTextStyles.sectionTitle.copyWith(
-            color: const Color(0xFF171725),
-            fontWeight: FontWeight.w400,
-            fontSize: 13,
+                fontSize: 13)),
+        const Spacer(),
+        Flexible(
+          child: Text(
+            value,
+            textAlign: TextAlign.end,
+            style: AppTextStyles.sectionTitle.copyWith(
+                color: const Color(0xFF171725),
+                fontWeight: FontWeight.w400,
+                fontSize: 13),
           ),
         ),
       ],
@@ -1738,103 +1408,113 @@ class _SummaryRow extends StatelessWidget {
   }
 }
 
-class _DashedLinePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = const Color(0xFFD0DDE8)
-      ..strokeWidth = 1;
-
-    const dashWidth = 6.0;
-    const dashSpace = 4.0;
-    double startX = 0;
-
-    while (startX < size.width) {
-      canvas.drawLine(
-        Offset(startX, 0),
-        Offset(startX + dashWidth, 0),
-        paint,
-      );
-      startX += dashWidth + dashSpace;
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
-}
-
-// ─── Screen 6: ReservationSuccessScreen ──────────────────────────────────────
+// ─── Success Screen ───────────────────────────────────────────────────────────
 
 class ReservationSuccessScreen extends StatelessWidget {
-  const ReservationSuccessScreen({super.key});
+  const ReservationSuccessScreen({super.key, this.reservation});
+
+  final ReservationResponse? reservation;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           children: [
             const Spacer(),
             Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Success image
-                  Container(
-                    width: 220,
-                    height: 220,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      // color: Color(0xFFE8ECF0),
-                    ),
-                    alignment: Alignment.center,
-                    child: Image.asset(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 32),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Image.asset(
                       'assets/images/recu.png',
-                      width: 180,
-                      height: 180,
+                      width: 160,
+                      height: 160,
                       fit: BoxFit.contain,
                       errorBuilder: (_, __, ___) => const Icon(
-                        Icons.check_circle_outline,
-                        color: Color(0xFF22C55E),
-                        size: 80,
+                          Icons.check_circle_outline,
+                          color: Color(0xFF22C55E),
+                          size: 80),
+                    ),
+                    const SizedBox(height: 28),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFFF7ED),
+                        borderRadius: BorderRadius.circular(20),
+                        border: Border.all(
+                            color: AppColors.primary.withValues(alpha: 0.4)),
+                      ),
+                      child: Text(
+                        'Statut : EN ATTENTE',
+                        style: AppTextStyles.regular12.copyWith(
+                            color: AppColors.primary,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(
-                      'votre réservation a été effectuée avec succès',
+                    const SizedBox(height: 18),
+                    Text(
+                      'Demande envoyée !',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.sectionTitle.copyWith(
-                        fontWeight: FontWeight.w500,
-                        color: const Color(0xFF22C55E),
-                        fontSize: 15,
-                      ),
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.text,
+                          fontSize: 20),
                     ),
-                  ),
-                  const SizedBox(height: 14),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 40),
-                    child: Text(
-                      'Un reçu de paiement a été envoyé à votre adresse e-mail.',
+                    const SizedBox(height: 12),
+                    Text(
+                      'Votre demande a été transmise à l\'hôtel. Vous serez notifié dès confirmation.',
                       textAlign: TextAlign.center,
                       style: AppTextStyles.regular12.copyWith(
-                        color: AppColors.text,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w300,
-                      ),
+                          color: AppColors.muted,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w400),
                     ),
-                  ),
-                ],
+                    if (reservation != null) ...[
+                      const SizedBox(height: 20),
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFECF2F7),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Column(
+                          children: [
+                            _InfoRow(
+                                label: 'Bien',
+                                value: reservation!.propertyTitle),
+                            const SizedBox(height: 6),
+                            _InfoRow(
+                                label: 'Arrivée',
+                                value: reservation!.checkInDate),
+                            const SizedBox(height: 6),
+                            _InfoRow(
+                                label: 'Départ',
+                                value: reservation!.checkOutDate),
+                            const SizedBox(height: 6),
+                            _InfoRow(
+                                label: 'Nuits',
+                                value: '${reservation!.numberOfNights}'),
+                            const SizedBox(height: 6),
+                            _InfoRow(
+                                label: 'Total',
+                                value:
+                                    '${_fmt(reservation!.totalAmount.round())} Fcfa'),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
               ),
             ),
             const Spacer(),
-
-            // ── Bottom button
             Padding(
-              padding: const EdgeInsets.fromLTRB(18, 12, 18, 18),
+              padding: const EdgeInsets.fromLTRB(18, 12, 18, 6),
               child: SizedBox(
                 width: double.infinity,
                 height: 52,
@@ -1844,15 +1524,29 @@ class ReservationSuccessScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     elevation: 0,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(50),
-                    ),
+                        borderRadius: BorderRadius.circular(50)),
                   ),
-                  onPressed: () {
-                    Navigator.of(context).popUntil((route) => route.isFirst);
-                  },
-                  child: const Text(
-                    'Voir mes reservations',
-                    style: AppTextStyles.button,
+                  onPressed: () => Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                        builder: (_) => const ReservationsScreen()),
+                  ),
+                  child: const Text('Voir mes réservations',
+                      style: AppTextStyles.button),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(18, 4, 18, 18),
+              child: SizedBox(
+                width: double.infinity,
+                height: 48,
+                child: TextButton(
+                  onPressed: () =>
+                      Navigator.of(context).popUntil((r) => r.isFirst),
+                  child: Text(
+                    'Retourner à l\'accueil',
+                    style: AppTextStyles.button.copyWith(
+                        color: AppColors.dark, fontWeight: FontWeight.w500),
                   ),
                 ),
               ),
@@ -1860,6 +1554,32 @@ class ReservationSuccessScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(label,
+            style: AppTextStyles.regular12.copyWith(
+                color: AppColors.muted,
+                fontSize: 12,
+                fontWeight: FontWeight.w400)),
+        Text(value,
+            style: AppTextStyles.regular12.copyWith(
+                color: AppColors.text,
+                fontSize: 12,
+                fontWeight: FontWeight.w600)),
+      ],
     );
   }
 }

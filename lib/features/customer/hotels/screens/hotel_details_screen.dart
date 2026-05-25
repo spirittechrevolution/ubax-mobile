@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 
+import 'package:statefulclickcounter/core/navigation/app_router.dart';
+import 'package:statefulclickcounter/features/customer/home/screens/home_screen.dart';
+import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_details_screen.dart';
+import 'package:statefulclickcounter/features/customer/properties/data/models/property_models.dart';
+import 'package:statefulclickcounter/features/customer/properties/domain/repositories/properties_repository.dart';
 import 'package:statefulclickcounter/theme/app_colors.dart';
 import 'package:statefulclickcounter/theme/app_text_styles.dart';
-import 'package:statefulclickcounter/features/customer/hotels/screens/hotel_reservation_details_screen.dart';
-import 'package:statefulclickcounter/features/customer/home/screens/home_screen.dart';
-import 'package:statefulclickcounter/core/navigation/app_router.dart';
 
 // ─── Data ─────────────────────────────────────────────────────────────────────
 
@@ -93,6 +96,8 @@ class HotelDetailsScreen extends StatefulWidget {
     required this.location,
     required this.price,
     required this.rating,
+    this.propertyId = '',
+    this.description = '',
   });
 
   final String imagePath;
@@ -100,6 +105,8 @@ class HotelDetailsScreen extends StatefulWidget {
   final String location;
   final int price;
   final double rating;
+  final String propertyId;
+  final String description;
 
   @override
   State<HotelDetailsScreen> createState() => _HotelDetailsScreenState();
@@ -118,12 +125,61 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
   late List<String> _gallery;
   late String _currentImage;
   bool _galleryExpanded = false;
+  PropertyDetailResponse? _detail;
 
   @override
   void initState() {
     super.initState();
     _gallery = [widget.imagePath, ..._extraGallery];
     _currentImage = widget.imagePath;
+    if (widget.propertyId.isNotEmpty) _loadDetails();
+  }
+
+  Future<void> _loadDetails() async {
+    try {
+      final detail = await GetIt.instance<PropertiesRepository>()
+          .getPropertyDetails(widget.propertyId);
+      if (!mounted) return;
+      final photos = detail.photoUrls;
+      setState(() {
+        _detail = detail;
+        if (photos.isNotEmpty) {
+          _gallery = photos;
+          _currentImage = photos.first;
+        }
+      });
+    } catch (_) {}
+  }
+
+  static IconData _amenityIcon(String code) {
+    switch (code) {
+      case 'AC':
+        return Icons.ac_unit_rounded;
+      case 'GENERATOR':
+        return Icons.electric_bolt_rounded;
+      case 'WATER_TANK':
+        return Icons.water_drop_rounded;
+      case 'POOL':
+        return Icons.pool_rounded;
+      case 'WIFI':
+        return Icons.wifi_rounded;
+      case 'PARKING':
+        return Icons.local_parking_rounded;
+      case 'RESTAURANT':
+        return Icons.restaurant_rounded;
+      case 'GYM':
+        return Icons.fitness_center_rounded;
+      case 'ELEVATOR':
+        return Icons.elevator_rounded;
+      case 'SECURITY':
+        return Icons.security_rounded;
+      case 'BALCONY':
+        return Icons.balcony_rounded;
+      case 'GARDEN':
+        return Icons.park_rounded;
+      default:
+        return Icons.check_circle_outline_rounded;
+    }
   }
 
   @override
@@ -142,16 +198,27 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                   // ── Hero image
                   Stack(
                     children: [
-                      Image.asset(
-                        _currentImage,
-                        height: 280,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Container(
-                          height: 280,
-                          color: const Color(0xFFD0DDE8),
-                        ),
-                      ),
+                      _currentImage.startsWith('http')
+                          ? Image.network(
+                              _currentImage,
+                              height: 280,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                height: 280,
+                                color: const Color(0xFFD0DDE8),
+                              ),
+                            )
+                          : Image.asset(
+                              _currentImage,
+                              height: 280,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                height: 280,
+                                color: const Color(0xFFD0DDE8),
+                              ),
+                            ),
                       // Gradient overlay
                       Container(
                         height: 100,
@@ -319,13 +386,25 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           ),
                           const SizedBox(height: 14),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: _kAmenities
-                                .map((a) => _AmenityIcon(
-                                      icon: a.icon,
-                                      label: a.label,
-                                    ))
-                                .toList(),
+                            children: (_detail != null &&
+                                    _detail!.property.amenities.isNotEmpty
+                                ? _detail!.property.amenities
+                                    .take(4)
+                                    .map((a) => Expanded(
+                                          child: _AmenityIcon(
+                                            icon: _amenityIcon(a.code),
+                                            label: a.description ?? a.code,
+                                          ),
+                                        ))
+                                    .toList()
+                                : _kAmenities
+                                    .map((a) => Expanded(
+                                          child: _AmenityIcon(
+                                            icon: a.icon,
+                                            label: a.label,
+                                          ),
+                                        ))
+                                    .toList()),
                           ),
 
                           const SizedBox(height: 24),
@@ -340,7 +419,9 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                           ),
                           const SizedBox(height: 10),
                           Text(
-                            'Situé au cœur de Cocody Angré, l\'un des quartiers les plus recherchés pour son équilibre entre confort moderne, sécurité et proximité avec les services essentiels',
+                            _detail?.property.description?.isNotEmpty == true
+                                ? _detail!.property.description!
+                                : widget.description,
                             style: AppTextStyles.regular12.copyWith(
                               color: AppColors.text,
                               fontSize: 13,
@@ -408,67 +489,71 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               const Icon(Icons.location_on_outlined,
                                   color: AppColors.primary, size: 16),
                               const SizedBox(width: 4),
-                              Text(
-                                widget.location,
-                                style: AppTextStyles.regular12.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 13,
-                                ),
-                              ),
-                            ],
-                          ),
-
-                          const SizedBox(height: 24),
-
-                          // ── Reviews
-                          Row(
-                            children: [
-                              Text(
-                                'Reviews',
-                                style: AppTextStyles.sectionTitle.copyWith(
-                                  color: AppColors.text,
-                                  fontSize: 15,
-                                ),
-                              ),
-                              const Spacer(),
-                              GestureDetector(
-                                onTap: () {},
-                                child: const Text(
-                                  'Tout voir',
-                                  style: TextStyle(
-                                    color: AppColors.primary,
-                                    fontWeight: FontWeight.w600,
+                              Expanded(
+                                child: Text(
+                                  _detail?.property.address.isNotEmpty == true
+                                      ? _detail!.property.address
+                                      : widget.location,
+                                  style: AppTextStyles.regular12.copyWith(
+                                    color: AppColors.text,
                                     fontSize: 13,
                                   ),
                                 ),
                               ),
                             ],
                           ),
-                          const SizedBox(height: 12),
-                          ..._kReviews.map(
-                            (r) => Padding(
-                              padding: const EdgeInsets.only(bottom: 14),
-                              child: _ReviewCard(review: r),
-                            ),
-                          ),
 
-                          const SizedBox(height: 10),
+                          // const SizedBox(height: 24),
 
-                          // ── Recommandés
-                          Text(
-                            'Recommandés pour vous',
-                            style: AppTextStyles.sectionTitle.copyWith(
-                              color: AppColors.text,
-                              fontSize: 15,
-                            ),
-                          ),
-                          const SizedBox(height: 12),
-                          ..._kRecommended.map(
-                            (h) => Padding(
-                              padding: const EdgeInsets.only(bottom: 12),
-                              child: _RecommendedCard(hotel: h),
-                            ),
-                          ),
+                          // // ── Reviews
+                          // Row(
+                          //   children: [
+                          //     Text(
+                          //       'Reviews',
+                          //       style: AppTextStyles.sectionTitle.copyWith(
+                          //         color: AppColors.text,
+                          //         fontSize: 15,
+                          //       ),
+                          //     ),
+                          //     const Spacer(),
+                          //     GestureDetector(
+                          //       onTap: () {},
+                          //       child: const Text(
+                          //         'Tout voir',
+                          //         style: TextStyle(
+                          //           color: AppColors.primary,
+                          //           fontWeight: FontWeight.w600,
+                          //           fontSize: 13,
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
+                          // const SizedBox(height: 12),
+                          // ..._kReviews.map(
+                          //   (r) => Padding(
+                          //     padding: const EdgeInsets.only(bottom: 14),
+                          //     child: _ReviewCard(review: r),
+                          //   ),
+                          // ),
+
+                          // const SizedBox(height: 10),
+
+                          // // ── Recommandés
+                          // Text(
+                          //   'Recommandés pour vous',
+                          //   style: AppTextStyles.sectionTitle.copyWith(
+                          //     color: AppColors.text,
+                          //     fontSize: 15,
+                          //   ),
+                          // ),
+                          // const SizedBox(height: 12),
+                          // ..._kRecommended.map(
+                          //   (h) => Padding(
+                          //     padding: const EdgeInsets.only(bottom: 12),
+                          //     child: _RecommendedCard(hotel: h),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),
@@ -563,6 +648,7 @@ class _HotelDetailsScreenState extends State<HotelDetailsScreen> {
                               location: widget.location,
                               price: widget.price,
                               rating: widget.rating,
+                              propertyId: widget.propertyId,
                             ),
                           ),
                         );
@@ -621,6 +707,8 @@ class _AmenityIcon extends StatelessWidget {
         Text(
           label,
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             color: AppColors.text,
             fontSize: 11,
@@ -838,22 +926,26 @@ class _ThumbCircle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      behavior: HitTestBehavior.opaque,
-      child: ClipOval(
-        child: Image.asset(
-          image,
+    Widget img;
+    final placeholder = Container(
+        width: 38, height: 38, color: const Color(0xFFD0DDE8));
+    if (image.startsWith('http')) {
+      img = Image.network(image,
           width: 38,
           height: 38,
           fit: BoxFit.cover,
-          errorBuilder: (_, __, ___) => Container(
-            width: 38,
-            height: 38,
-            color: const Color(0xFFD0DDE8),
-          ),
-        ),
-      ),
+          errorBuilder: (_, __, ___) => placeholder);
+    } else {
+      img = Image.asset(image,
+          width: 38,
+          height: 38,
+          fit: BoxFit.cover,
+          errorBuilder: (_, __, ___) => placeholder);
+    }
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: ClipOval(child: img),
     );
   }
 }
